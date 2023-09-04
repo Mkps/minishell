@@ -45,6 +45,7 @@ typedef struct s_AST {
 
 typedef struct s_data {
 	int		is_interactive;
+	char	**envv;
 	int		parse_status;
 	int		exit_status;
 	t_token	**token_root;
@@ -73,5 +74,6 @@ void	signals_no_interact(void);
 
 /**		lexer.c		**/
 int		scan_input(t_data *data);
+char	*ft_str_extract(char *str, int n);
 
 #endif
