@@ -74,6 +74,7 @@ int	main(int ac, char **av, char **envv)
 	data.token_root = (t_token **)ft_calloc(1, sizeof(t_token *));
 	tmp = data.token_root;
 	data.parse_status = NONE;
+	data.envv = envv;
 	*tmp = NULL;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
