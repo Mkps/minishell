@@ -69,13 +69,17 @@ int	main(int ac, char **av, char **envv)
 	char	*input;
 	pid_t	pid;		
 	t_token **tmp;
+	t_cmd	*tmp_cmd;
 
 	ft_memset(&data, '0', sizeof(data));
 	data.token_root = (t_token **)ft_calloc(1, sizeof(t_token *));
 	tmp = data.token_root;
+	data.cmd_list = (t_cmd **)ft_calloc(1, sizeof(t_cmd *));
+	*data.cmd_list = NULL;
 	data.parse_status = NONE;
 	data.envv = envv;
 	*tmp = NULL;
+	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
 	input = NULL;
@@ -87,14 +91,28 @@ int	main(int ac, char **av, char **envv)
 		if (data.user_input == 0 || !strcmp(data.user_input, "exit"))
 			break ;
 		scan_input(&data);
-		pid = fork();
-		if (pid == 0)
+		parse_token(&data);
+		build_cmd_list(&data, *data.token_root);
+		cmd = *data.cmd_list;
+		while (cmd != NULL)
 		{
-			exec_cmd(data.user_input,envv);
-			free(data.user_input);
-			exit (1);
+			pid = fork();
+			if (pid == 0)
+			{
+				printf("cmd %s\n", cmd->cmd);
+				for (int i = 0; cmd->args[i]; i++)
+					printf("arg is %s\n", cmd->args[i]);
+				exec_cmd(cmd, envv);
+				free(data.user_input);
+				exit (1);
+			}
+			waitpid(pid, NULL, 0);
+			tmp_cmd = cmd;
+			cmd = cmd->next;
+			free(tmp_cmd);
 		}
-		waitpid(pid, NULL, 0);
+		free(cmd);
+		*data.cmd_list = NULL;
 		free(input);
 		if (data.parse_status == ODQUOTE)
 				printf("still need to close the dquotes mate...\n");

@@ -37,8 +37,8 @@ void	handle_sigint(void)
 
 void	signals_interact(void)
 {
-	ignore_sigquit();
-	handle_sigint();
+	// ignore_sigquit();
+	// handle_sigint();
 }
 
 void	signal_nl(int signum)
@@ -49,10 +49,10 @@ void	signal_nl(int signum)
 
 void	signals_no_interact(void)
 {
-	struct sigaction act;
+	// struct sigaction act;
 
-	ft_memset(&act, 0, sizeof(act));	
-	act.sa_handler = &signal_nl;
-	sigaction(SIGINT, &act, NULL);
-	sigaction(SIGQUIT, &act, NULL);
+	// ft_memset(&act, 0, sizeof(act));	
+	// act.sa_handler = &signal_nl;
+	// sigaction(SIGINT, &act, NULL);
+	// sigaction(SIGQUIT, &act, NULL);
 }

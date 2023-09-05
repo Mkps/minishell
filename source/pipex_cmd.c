@@ -12,18 +12,20 @@
 
 #include "../include/minishell.h"
 
-void	exec_pipe(t_pipex *p, char **cmd, char **envv)
+void	exec_pipe(t_pipex *p, t_cmd *cmd, char **envv)
 {
 	int	index;
 
 	index = 1;
-	first_child(p, *cmd, envv);
-	while (index < p->nb_cmd - 1)
+	first_child(p, cmd, envv);
+	cmd = cmd->next;
+	while (index < p->nb_cmd - 1 && cmd->next != NULL)
 	{
-		middle_child(index, p, *(cmd + index), envv);
+		middle_child(index, p, cmd, envv);
+		cmd = cmd->next;
 		index++;
 	}
-	last_child(index, p, *(cmd + index), envv);
+	last_child(index, p, cmd, envv);
 	parent_handler(p);
 }
 
@@ -58,26 +60,23 @@ void	cmd_error(char *cmd, int error)
 		ft_putendl_fd(strerror(error), 2);
 }
 
-void	exec_cmd(char *cmd, char **envv)
+void	exec_cmd(t_cmd *cmd_node, char **envv)
 {
-	char	**cmd_split;
 	char	*cmd_p;
 	char	**sq;
 	char	sep;
 	char	**env_p;
 
 	env_p = get_path(envv);
-	cmd_split = ft_split(cmd, ' ');
 	sep = 0;
-	sq = escape_quote(cmd, &cmd_split, &sep);
-	cmd_p = get_cmd(cmd_split[0], env_p);
-	if (!cmd_p || execve(cmd_p, cmd_split, envv) == -1)
+	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);
+	cmd_p = get_cmd(cmd_node->cmd, env_p);
+	if (!cmd_p || execve(cmd_p, cmd_node->args, envv) == -1)
 	{
-		cmd_error(cmd_split[0], errno);
+		cmd_error(cmd_node->cmd, errno);
 		ft_free_tab(env_p);
 		if (sep)
 			ft_free_tab(sq);
-		ft_free_tab(cmd_split);
 		if (cmd_p != NULL)
 			free(cmd_p);
 	}

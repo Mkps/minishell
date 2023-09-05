@@ -42,8 +42,10 @@ char	*ft_getenv(char **env, const char *str)
 	i = 0;
 	while (env && env[i])
 	{
+		// printf("listing env i %i = %s\n", i, env[i]);
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
-			tmp = env[i] + ft_strlen(str) + 1;
+			if (*(env[i] + ft_strlen(str)) == '=')
+				tmp = env[i] + ft_strlen(str) + 1;
 		i++;
 	}
 	return (tmp);

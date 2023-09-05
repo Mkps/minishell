@@ -31,7 +31,7 @@ void	close_pipe(t_pipex *p, int cmd_index)
 	}
 }
 
-void	first_child(t_pipex *p, char *cmd, char **envv)
+void	first_child(t_pipex *p, t_cmd *cmd, char **envv)
 {
 	p->pid[0] = fork();
 	if (p->pid[0] == -1)
@@ -60,7 +60,7 @@ void	first_child(t_pipex *p, char *cmd, char **envv)
 	}
 }
 
-void	middle_child(int cmd_index, t_pipex *p, char *cmd, char **envv)
+void	middle_child(int cmd_index, t_pipex *p, t_cmd *cmd, char **envv)
 {
 	p->pid[cmd_index] = fork();
 	if (p->pid[cmd_index] == -1)
@@ -84,7 +84,7 @@ void	middle_child(int cmd_index, t_pipex *p, char *cmd, char **envv)
 	}
 }
 
-void	last_child(int cmd_index, t_pipex *p, char *cmd, char **envv)
+void	last_child(int cmd_index, t_pipex *p, t_cmd *cmd, char **envv)
 {
 	p->pid[cmd_index] = fork();
 	if (p->pid[cmd_index] == -1)
