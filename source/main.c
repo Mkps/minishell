@@ -54,10 +54,12 @@ void	print_token(t_token **root)
 	while (current != NULL)
 	{
 		printf("token type %i | value %s\n", current->token_type, current->value);
-		free(current->value);
+		// free(current->value);
+		// if (current->prev != NULL)
+		// 	printf("token prev %i | value %s\n", current->prev->token_type, current->prev->value);
 		tmp = current;
 		current = current->next;
-		free(tmp);
+		// free(tmp);
 	}
 	free(current);
 	*root = NULL;
@@ -102,6 +104,7 @@ int	main(int ac, char **av, char **envv)
 				printf("cmd %s\n", cmd->cmd);
 				for (int i = 0; cmd->args[i]; i++)
 					printf("arg is %s\n", cmd->args[i]);
+				printf("cmd_node->fd[0] %i\n", cmd->fd[0]);
 				exec_cmd(cmd, envv);
 				free(data.user_input);
 				exit (1);

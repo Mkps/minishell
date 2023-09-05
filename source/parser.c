@@ -111,9 +111,6 @@ void	parse_token(t_data *data)
 	}
 }
 
-// t_cmd	*set_io_cmd(t_cmd *cmd)
-// {
-// }
 t_cmd	*create_cmd(t_data *data)
 {
 	t_cmd	*ret;
@@ -163,6 +160,15 @@ t_cmd	*last_cmd(t_cmd **root)
 	return (current);
 }
 
+int		get_cmd_type(char *value)
+{
+	if (!value)
+		return (EMPTY);
+	if (*value == '#')
+		return (COMMENT);
+	return (CMD);
+}
+
 t_token	*add_cmd(t_data *data, t_token *token)
 {
 	t_cmd	*new_cmd;
@@ -175,6 +181,9 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
 	new_cmd->cmd = token->value; 
+	new_cmd->type = get_cmd_type(token->value);
+	new_cmd->fd[0] = -1;
+	new_cmd->fd[1] = -1;
 	tmp = ";";
 	while (current->token_type == WORD )
 	{
@@ -204,6 +213,56 @@ void	add_assign_cmd(t_data *data)
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
 }
+t_token	*get_cmd_first(t_token *current_t)
+{
+	t_token	*current;
+
+	current = current_t;
+	while(current != NULL && current->prev != NULL && current->prev->token_type != PIPE)
+		current = current->prev;
+	return (current);
+}
+
+t_token *get_input_token(t_token *current_t)
+{
+	t_token	*tmp;
+	t_token *input_token;
+
+	input_token = NULL;
+	tmp = current_t;
+	while(tmp != NULL && tmp->token_type != PIPE)
+	{
+		if (tmp->token_type == IO_INPUT)
+			input_token = tmp;
+		tmp = tmp->next;
+	}
+	return (input_token);
+}
+
+int		set_input_fd(t_token *current)
+{
+	if (current->next->token_type == ODQUOTE)
+		current = current->next;
+	if (current->next->token_type != WORD)
+		return (-2);
+	return (open_fd(0, current->next->value));
+}
+
+void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
+{
+	t_token	*input_token;
+	// t_token	*output_token;
+
+	input_token = get_input_token(get_cmd_first(current_t));
+	while (input_token != NULL)
+	{
+		printf("input_token %i", input_token->token_type);
+		cmd->fd[0] = set_input_fd(input_token);
+		input_token = get_input_token(input_token->next);	
+		if (cmd->fd[0] < 0)
+			return ;
+	}
+}
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
@@ -212,12 +271,20 @@ void	build_cmd_list(t_data *data, t_token *token)
 		current_t  = *data->token_root;
 	else
 		current_t = token;
-	if (current_t != NULL)
+	while (current_t != NULL)
 	{
-		if (is_assign(current_t->value))
+		// printf("current token type %i | value %s\n", current_t->token_type, current_t->value);
+		if (is_assign(current_t->value) || current_t->prev == NULL || current_t->prev->token_type == PIPE)
+		{
 			add_assign_cmd(data);
-		else if (!is_assign(current_t->value))
+		}
+		if (current_t->token_type == WORD && (current_t->prev != NULL && current_t->prev->token_type != IO_INPUT))
+		{
 			current_t = add_cmd(data, current_t);
+			printf("test\n");
+			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
+			current_t = current_t->next;
+		}
 		else
 		 	current_t = current_t->next;
 	}

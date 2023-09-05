@@ -35,6 +35,7 @@ t_token	*create_token(int type, char *value)
 	return (ret);
 }
 
+t_token *last_token(t_token **root);
 // Add token to the end of the provided t_token linked list.
 void	add_token_back(t_token **root, int type, char *value)
 {
@@ -49,7 +50,7 @@ void	add_token_back(t_token **root, int type, char *value)
 	while (current->next != NULL)
 		current = current->next;
 	current->next = create_token(type, value);
-	current->next->prev = current;
+	last_token(root)->prev = current;
 }
 
 // Duplicates the string from the starting position to n char then null-terminates it.
@@ -122,7 +123,7 @@ t_token	*ft_new_token(t_token **root, char *value, int type)
 	t_token *t;
 
 	t = *root;
-	while (t->next != NULL)
+	while (t != NULL)
 		t = t->next;	
 	t = malloc(sizeof(t_token));
 	if (!t)

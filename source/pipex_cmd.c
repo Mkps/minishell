@@ -67,6 +67,8 @@ void	exec_cmd(t_cmd *cmd_node, char **envv)
 	char	sep;
 	char	**env_p;
 
+	dup2(cmd_node->fd[0], 0);
+	printf("cmd_node->fd[0] %i\n", cmd_node->fd[0]);
 	env_p = get_path(envv);
 	sep = 0;
 	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);
