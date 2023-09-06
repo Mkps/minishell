@@ -44,6 +44,8 @@ typedef struct s_cmd {
 	struct s_cmd	*next;
 	int		type;
 	int		fd[2];
+	int		pipe_status;
+	int		pipe_fd
 	char	*cmd;
 	char	**args;
 	
@@ -70,7 +72,7 @@ char	*ft_getenv(char **env, const char *str);
 void	argc_error(int error_code);
 void	error_exit(int exit_code);
 int		open_fd(int mode, char *filename);
-void	here_doc_handler(char *limiter, t_pipex *p);
+void	here_doc_handler(char *limiter);
 void	exec_pipe(t_pipex *handler, t_cmd *cmd, char **envv);
 void	exec_cmd(t_cmd *cmd, char **envv);
 char	*get_cmd(char *cmd, char **env_p);
