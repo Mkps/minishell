@@ -19,7 +19,7 @@
 
 enum escape_type{NONE, SQUOTE, DQUOTE, BACKSLASH};
 enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, OSQUOTE, ODQUOTE, BSLASH};
-enum cmd_type {CMD_ASSIGN = 1, CMD};
+enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_pipex {
 	int		here_doc;
@@ -35,6 +35,7 @@ typedef struct s_token {
 	struct s_token	*next;
 	struct s_token	*prev;
 	char			*value;
+	char			*raw_value;
 	int				token_type;
 } t_token;
 
