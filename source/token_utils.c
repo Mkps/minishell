@@ -1,0 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/06 12:33:33 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/06 12:48:06 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+
+int token_is_quote(t_token *token)
+{
+    if (token == NULL)
+        return (0);
+    if (token->token_type == ODQUOTE || token ->token_type == OSQUOTE)
+        return (1);
+    return (0);
+}
+
+int token_is_input(t_token *token)
+{
+	if (token == NULL)
+        return (0);
+    if (token->token_type == IO_INPUT || token->token_type == IO_HEREDOC)
+        return (1);
+    return (0);
+}
+
+int token_is_term(t_token *token)
+{
+	if (token == NULL)
+        return (0);
+    if (token->token_type >= TERM_END && token->token_type <= TERM_OR)
+        return (1);
+    if (token->token_type == PIPE || token->token_type == PIPE_STDERR)
+        return (1);
+    return (0);
+}

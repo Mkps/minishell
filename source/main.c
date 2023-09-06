@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/04 09:04:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:17:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int	main(int ac, char **av, char **envv)
 				printf("cmd %s\n", cmd->cmd);
 				for (int i = 0; cmd->args[i]; i++)
 					printf("arg is %s\n", cmd->args[i]);
-				printf("cmd_node->fd[0] %i\n", cmd->fd[0]);
 				exec_cmd(cmd, envv);
 				free(data.user_input);
 				exit (1);

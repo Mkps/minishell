@@ -232,11 +232,33 @@ t_token *get_input_token(t_token *current_t)
 	tmp = current_t;
 	while(tmp != NULL && tmp->token_type != PIPE)
 	{
-		if (tmp->token_type == IO_INPUT)
+		if (token_is_input(tmp))
+		{	
 			input_token = tmp;
+			return (input_token);
+		}
 		tmp = tmp->next;
 	}
-	return (input_token);
+	return (NULL);
+}
+
+t_token	*get_output_token(t_token *current)
+{
+	t_token *tmp;
+	t_token *output_token;
+
+	output_token = NULL;
+	tmp = current;
+	while (tmp != NULL && tmp->token_type != PIPE)
+	{
+		if (tmp != NULL && tmp->token_type != PIPE)
+		{
+			if (tmp->token_type == IO_TRUNC || tmp->token_type == IO_APPEND)
+				output_token = tmp;
+			tmp = tmp->next;
+		}
+	}
+	return (output_token);
 }
 
 int		set_input_fd(t_token *current)
@@ -244,7 +266,7 @@ int		set_input_fd(t_token *current)
 	if (current->next->token_type == ODQUOTE)
 		current = current->next;
 	if (current->next->token_type != WORD)
-		return (-2);
+		return (-1);
 	return (open_fd(0, current->next->value));
 }
 
@@ -253,11 +275,12 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 	t_token	*input_token;
 	// t_token	*output_token;
 
+	cmd->fd[0] = 0;
 	input_token = get_input_token(get_cmd_first(current_t));
 	while (input_token != NULL)
 	{
-		printf("input_token %i", input_token->token_type);
 		cmd->fd[0] = set_input_fd(input_token);
+		printf("received fd is cmd->fd[0] %i\n", cmd->fd[0]);
 		input_token = get_input_token(input_token->next);	
 		if (cmd->fd[0] < 0)
 			return ;
@@ -296,11 +319,11 @@ void	build_cmd_list(t_data *data, t_token *token)
 		}
 		if (current_t->token_type == WORD)
 		{
-			if ((current_t->prev != NULL && current_t->prev->token_type == IO_INPUT) || (current_t->prev != NULL && current_t->quote_status == ODQUOTE && current_t->prev->prev != NULL && current_t->prev->prev->token_type == IO_INPUT))
+			if (token_is_input(current_t->prev) || (current_t->quote_status != NONE && token_is_input(current_t->prev->prev)))
 			{
-				if (current_t->prev->token_type == IO_INPUT)
+				if (token_is_input(current_t->prev))
 					current_t = current_t->next;
-				else if (current_t->prev->prev != NULL && current_t->prev->prev->token_type == IO_INPUT)
+				else if (token_is_input(current_t->prev->prev))
 					current_t = current_t->next;
 			}
 			else

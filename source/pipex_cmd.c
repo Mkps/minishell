@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/04 09:04:09 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:18:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ void	exec_cmd(t_cmd *cmd_node, char **envv)
 	char	sep;
 	char	**env_p;
 
+	if (cmd_node->fd[0] == -1)
+		return ;
 	dup2(cmd_node->fd[0], 0);
-	printf("cmd_node->fd[0] %i\n", cmd_node->fd[0]);
 	env_p = get_path(envv);
 	sep = 0;
 	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);
