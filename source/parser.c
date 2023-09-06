@@ -264,7 +264,7 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 	}
 }
 // Returns the first encountered cmd token
-t_token	*find_cmd(t_token *src)
+t_token	*get_next_cmd(t_token *src)
 {
 	t_token	*current;
 
