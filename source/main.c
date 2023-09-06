@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/06 13:17:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/06 14:16:34 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	main(int ac, char **av, char **envv)
 		signals_interact();
 		data.user_input = readline("$ ");
 		signals_no_interact();
-		if (data.user_input == 0 || !strcmp(data.user_input, "exit"))
+		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
 			break ;
 		scan_input(&data);
 		parse_token(&data);

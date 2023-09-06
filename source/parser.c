@@ -263,11 +263,18 @@ t_token	*get_output_token(t_token *current)
 
 int		set_input_fd(t_token *current)
 {
+	int	token_type;
+
+	token_type = current->token_type;
 	if (token_is_quote(current->next))
 		current = current->next;
 	if (current->next->token_type != WORD)
 		return (-1);
-	return (open_fd(0, current->next->value));
+	if (token_type == IO_INPUT)
+		return (open_fd(0, current->next->value));
+	if (token_type == IO_HEREDOC)
+		here_doc_handler(current->next->value);
+	return (0);
 }
 int		set_output_fd(t_token *current)
 {

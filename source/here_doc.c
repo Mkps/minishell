@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/04 09:04:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:56:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /** Get the input */
-void	here_doc_input(t_pipex *p, char *limiter, int *fd)
+void	here_doc_input(char *limiter, int *fd)
 {
 	char	*str;
 
 	close(fd[0]);
-	close(p->fd[1]);
 	str = "str";
 	while (str)
 	{
@@ -27,7 +26,6 @@ void	here_doc_input(t_pipex *p, char *limiter, int *fd)
 				&& (ft_strlen(limiter) == ft_strlen(str) - 1)))
 		{
 			free(str);
-			free(p);
 			close(fd[1]);
 			if (!str)
 				exit(2);
@@ -40,7 +38,7 @@ void	here_doc_input(t_pipex *p, char *limiter, int *fd)
 	free(str);
 }
 
-void	here_doc_handler(char *limiter, t_pipex *p)
+void	here_doc_handler(char *limiter)
 {
 	int		p_fd[2];
 	pid_t	pid;
@@ -53,7 +51,7 @@ void	here_doc_handler(char *limiter, t_pipex *p)
 		error_exit(6);
 	status = 0;
 	if (!pid)
-		here_doc_input(p, limiter, p_fd);
+		here_doc_input(limiter, p_fd);
 	else
 	{
 		close(p_fd[1]);

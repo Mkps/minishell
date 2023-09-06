@@ -234,6 +234,8 @@ int	scan_input(t_data *data)
 	input = data->user_input;
 	escape_type = NONE;
 	i = 0;
+	if (input == NULL)
+		return (EXIT_FAILURE);
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 	{
