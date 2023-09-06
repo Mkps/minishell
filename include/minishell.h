@@ -36,6 +36,7 @@ typedef struct s_token {
 	struct s_token	*prev;
 	char			*value;
 	char			*raw_value;
+	int				quote_status;
 	int				token_type;
 } t_token;
 
@@ -95,5 +96,10 @@ int		ft_get_sep_type(char *str);
 void	parse_token(t_data *data);
 char	*var_expander(t_data *data, char *str);
 void	build_cmd_list(t_data *data, t_token *token);
+
+/**		token_utils.c	**/
+int token_is_quote(t_token *token);
+int token_is_io(t_token *token);
+int token_is_term(t_token *token);
 
 #endif

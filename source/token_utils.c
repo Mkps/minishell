@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:33:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/06 12:48:06 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:31:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ int token_is_quote(t_token *token)
     return (0);
 }
 
-int token_is_input(t_token *token)
+int token_is_io(t_token *token)
 {
 	if (token == NULL)
         return (0);
-    if (token->token_type == IO_INPUT || token->token_type == IO_HEREDOC)
+    if (token->token_type == IO_INPUT || token->token_type == IO_HEREDOC
+		|| token->token_type == IO_APPEND || token->token_type == IO_TRUNC)
         return (1);
     return (0);
 }

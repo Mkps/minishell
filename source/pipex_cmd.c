@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/06 13:18:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:33:40 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	exec_cmd(t_cmd *cmd_node, char **envv)
 	if (cmd_node->fd[0] == -1)
 		return ;
 	dup2(cmd_node->fd[0], 0);
+	dup2(cmd_node->fd[1], 1);
 	env_p = get_path(envv);
 	sep = 0;
 	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);
