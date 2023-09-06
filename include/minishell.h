@@ -45,7 +45,7 @@ typedef struct s_cmd {
 	int		type;
 	int		fd[2];
 	int		pipe_status;
-	int		pipe_fd
+	int		pipe_fd;
 	char	*cmd;
 	char	**args;
 	
