@@ -31,7 +31,9 @@ t_token	*create_token(int type, char *value)
 	ret->next = NULL;
 	ret->prev = NULL;
 	ret->value = value;
+	ret->raw_value = value;
 	ret->token_type = type;
+	ret->quote_status = NONE;
 	return (ret);
 }
 
@@ -171,6 +173,7 @@ int	ft_get_word(char *input, t_data *data)
 			i++;
 	}
 	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
+	last_token(data->token_root)->quote_status = current_status;
 	return (i);
 }
 
@@ -195,7 +198,7 @@ int	ft_get_token(char *input, t_data *data)
 	type = ft_get_sep_type(input);
 	if (type)
 	{
-		if (ft_get_sep_type(input + i) == 2)
+		if (ft_get_sep_type(input + i) == WORD)
 		{
 			i = ft_get_word(input, data);
 			return (i); 
