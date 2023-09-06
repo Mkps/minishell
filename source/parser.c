@@ -263,6 +263,20 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 			return ;
 	}
 }
+// Returns the first encountered cmd token
+t_token	*find_cmd(t_token *src)
+{
+	t_token	*current;
+
+	current = src;
+	while (current != NULL && current->token_type != PIPE)
+	{
+		if (current->token_type == WORD && !is_assign(current->value))
+			return (current);
+		current = current->next;
+	}
+	return (NULL);
+}
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
@@ -278,10 +292,9 @@ void	build_cmd_list(t_data *data, t_token *token)
 		{
 			add_assign_cmd(data);
 		}
-		if (current_t->token_type == WORD && (current_t->prev != NULL && current_t->prev->token_type != IO_INPUT))
+		if (current_t->token_type == WORD && (current_t->prev != NULL || current_t->prev->token_type != IO_INPUT))
 		{
 			current_t = add_cmd(data, current_t);
-			printf("test\n");
 			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
 			current_t = current_t->next;
 		}
