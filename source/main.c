@@ -71,6 +71,8 @@ void	free_token(t_data *data)
 	t_token	*current;
 	t_token	*tmp;
 
+	if (*data->token_root == NULL)
+		return ;
 	current = *data->token_root;
 	while (current != NULL)
 	{
@@ -78,7 +80,7 @@ void	free_token(t_data *data)
 		current = current->next;
 		free(tmp);
 	}
-	free(data->token_root);
+	*data->token_root = NULL;
 }
 
 void	free_cmd_list(t_data *data)
@@ -91,12 +93,15 @@ void	free_cmd_list(t_data *data)
 	{
 		tmp = current;
 		current = current->next;
-		free(tmp->cmd);
-		free(tmp->args);
-		free(tmp->pipe_fd);
+		if (tmp->cmd)
+			free(tmp->cmd);
+		if (tmp->args)
+			free(tmp->args);
+		if (tmp->pipe_fd)
+			free(tmp->pipe_fd);
 		free(tmp);
 	}
-	free(data->cmd_list);
+	*data->cmd_list = NULL;
 }
 int	free_data(t_data *data)
 {
@@ -182,5 +187,8 @@ int	main(int ac, char **av, char **envv)
 		// 	print_token(data.token_root);
 		// }
 	}
+	free_data(&data);
+	free(data.token_root);
+	free(data.cmd_list);
 	return (0);
 }
