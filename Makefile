@@ -23,7 +23,7 @@ SRC = $(SRCDIR)/main.c $(SRCDIR)/signal.c
 SRC_NAME = child.c here_doc.c \
 	  main.c pipex.c pipex_cmd.c \
 	  pipex_utils.c signal.c \
-	  lexer.c parser.c
+	  lexer.c parser.c token_utils.c
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
 
