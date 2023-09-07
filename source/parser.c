@@ -335,7 +335,6 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && !token_is_term(current))
 	{
-		printf("test\n");
 		if (current != NULL && current->token_type == WORD && !is_assign(current->value))
 		{
 			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev) )
@@ -375,8 +374,6 @@ void	build_cmd_list(t_data *data, t_token *token)
 		}
 		if ((current_t = get_next_cmd(current_t)) != NULL)
 		{
-			printf("cmd %s\n", current_t->value);
-			printf("test\n");
 			current_t = add_cmd(data, current_t);
 			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
 			while (!token_is_term(current_t))

@@ -54,7 +54,7 @@ void	print_token(t_token **root)
 	current = *root;
 	while (current != NULL)
 	{
-		printf("token type %i | value %s\n", current->token_type, current->value);
+		// printf("token type %i | value %s\n", current->token_type, current->value);
 		// free(current->value);
 		// if (current->prev != NULL)
 		// 	printf("token prev %i | value %s\n", current->prev->token_type, current->prev->value);
