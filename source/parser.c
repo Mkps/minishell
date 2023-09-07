@@ -335,17 +335,18 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && current->token_type != PIPE)
 	{
-		if (current->token_type == WORD && !is_assign(current->value))
+		printf("test\n");
+		if (current != NULL && current->token_type == WORD && !is_assign(current->value))
 		{
-			if (token_is_io(current->prev) || (current->quote_status != NONE && token_is_io(current->prev->prev)))
+			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev) )
 			{
-				if (token_is_io(current->prev))
-					current = current->next;
-				else if (token_is_io(current->prev->prev))
-					current = current->next;
-			}
-			else
 				return (current);
+			}
+			if (current->quote_status != NONE && current->prev != NULL && current->prev->prev != NULL && !token_is_io(current->prev->prev))
+			{
+				printf("qs is %i !token_is_io %i\n", current->quote_status, !token_is_io(current->prev->prev));
+				return (current);
+			}
 		}
 		current = current->next;
 	}
@@ -370,17 +371,20 @@ void	build_cmd_list(t_data *data, t_token *token)
 		if (is_assign(current_t->value))
 		{
 			// add_assign_cmd(data);
-			putenv(current_t->value);
+			// putenv(current_t->value);
 			current_t = current_t->next;
 		}
 		if ((current_t = get_next_cmd(current_t)) != NULL)
 		{
+			printf("cmd %s\n", current_t->value);
+			printf("test\n");
 			current_t = add_cmd(data, current_t);
 			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
 			while (!token_is_term(current_t))
 				current_t = current_t->next;
 			if (current_t && current_t->token_type == PIPE)
 				set_pipe(last_cmd(data->cmd_list));
+			current_t = current_t->next;
 		}
 		else
 		 	current_t = current_t->next;
