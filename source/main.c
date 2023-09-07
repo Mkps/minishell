@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdint.h>
 #include <sys/types.h>
 
 // Get path from the env variable. 
@@ -72,6 +73,8 @@ int	main(int ac, char **av, char **envv)
 	pid_t	pid;		
 	t_token **tmp;
 	t_cmd	*tmp_cmd;
+	int		status;
+	int		exit_status;
 
 	ft_memset(&data, '0', sizeof(data));
 	data.token_root = (t_token **)ft_calloc(1, sizeof(t_token *));
@@ -94,26 +97,37 @@ int	main(int ac, char **av, char **envv)
 			break ;
 		scan_input(&data);
 		parse_token(&data);
+		*data.cmd_list = NULL;
 		build_cmd_list(&data, *data.token_root);
 		cmd = *data.cmd_list;
-		while (cmd != NULL)
+		if (cmd)
 		{
-			pid = fork();
-			if (pid == 0)
+			while(data.pid != 0 && cmd) 
 			{
-				printf("cmd %s\n", cmd->cmd);
-				for (int i = 0; cmd->args[i]; i++)
-					printf("arg is %s\n", cmd->args[i]);
-				exec_cmd(cmd, envv);
-				free(data.user_input);
-				exit (1);
+				data.pid = fork();
+				if (data.pid == 0)
+				{
+					exec_cmd(cmd, &data);
+					free(data.user_input);
+					exit (1);
+				}
+				cmd = cmd->next;
 			}
-			waitpid(pid, NULL, 0);
-			tmp_cmd = cmd;
-			cmd = cmd->next;
-			free(tmp_cmd);
+			int	wpid = 0;
+			cmd = *data.cmd_list;
+			while(wpid != -1 || errno != ECHILD) 
+			{
+				close_pipes(data.cmd_list, NULL);
+				wpid = waitpid(-1, &status, 0);
+				if (pid == cmd->pid)
+					exit_status = status;
+				continue ;
+			}
+			// tmp_cmd = cmd;
+			// cmd = cmd->next;
+			// free(tmp_cmd);
 		}
-		free(cmd);
+		// free(cmd);
 		*data.cmd_list = NULL;
 		free(input);
 		if (data.parse_status == ODQUOTE)

@@ -119,6 +119,8 @@ t_cmd	*create_cmd(t_data *data)
 	if (!ret)
 		return (NULL); 
 	ret->next = NULL;
+	ret->prev = NULL;
+	ret->pipe_status = 0;
 	return (ret);
 }
 void	add_cmd_back(t_data *data)
@@ -134,6 +136,7 @@ void	add_cmd_back(t_data *data)
 	while (last->next != NULL)
 		last = last->next;
 	last->next = create_cmd(data);
+	last_cmd(data->cmd_list)->prev = last;
 }
 
 int	is_assign(char	*str)
@@ -344,11 +347,6 @@ t_token	*get_next_cmd(t_token *src)
 			}
 			if (current->prev != NULL && current->quote_status != NONE && !token_is_io(current->prev->prev))
 				return (current);
-			// if (current->quote_status != NONE && current->prev != NULL && current->prev->prev != NULL && !token_is_io(current->prev->prev))
-			// {
-			// 	printf("qs is %i !token_is_io %i\n", current->quote_status, !token_is_io(current->prev->prev));
-			// 	return (current);
-			// }
 		}
 		current = current->next;
 	}
@@ -356,7 +354,9 @@ t_token	*get_next_cmd(t_token *src)
 }
 void	set_pipe(t_cmd *cmd)
 {
-	(void)cmd;
+	cmd->pipe_status = 1;
+	cmd->pipe_fd = (int *)malloc(sizeof(int *) * 2);
+	pipe(cmd->pipe_fd);
 	return ;	
 }
 void	build_cmd_list(t_data *data, t_token *token)

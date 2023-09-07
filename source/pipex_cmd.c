@@ -59,8 +59,44 @@ void	cmd_error(char *cmd, int error)
 	else
 		ft_putendl_fd(strerror(error), 2);
 }
+void	set_fd(t_cmd *cmd)
+{
+	if (cmd->fd[0] != 0 || (cmd->prev && !cmd->prev->pipe_status))
+		dup2(cmd->fd[0], 0);
+	if (cmd->fd[1] != 1 || !cmd->pipe_status)
+		dup2(cmd->fd[1], 1);
+}
+void	close_pipes(t_cmd **root, t_cmd *cmd)
+{
+	t_cmd	*current;
+	current = *root;
+	while (current)
+	{
+		if (current != cmd && current->pipe_status)
+		{
+			close(current->pipe_fd[1]);
+			close(current->pipe_fd[0]);
+		}
+		current = current->next;
+	}
+}
 
-void	exec_cmd(t_cmd *cmd_node, char **envv)
+void	set_pipes(t_data *data, t_cmd *cmd)
+{
+	if (!cmd)
+		return ;
+	int res = (cmd && cmd->prev && cmd->prev->pipe_status);
+	if (cmd && cmd->prev && cmd->prev->pipe_status)
+	{
+		dup2(cmd->prev->pipe_fd[0], STDIN_FILENO);
+	}
+	if (cmd && cmd->pipe_status)
+	{
+		dup2(cmd->pipe_fd[1], STDOUT_FILENO);
+	}
+	close_pipes(data->cmd_list, cmd);
+}
+void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
 	char	**sq;
@@ -69,13 +105,14 @@ void	exec_cmd(t_cmd *cmd_node, char **envv)
 
 	if (cmd_node->fd[0] == -1)
 		return ;
-	dup2(cmd_node->fd[0], 0);
-	dup2(cmd_node->fd[1], 1);
-	env_p = get_path(envv);
+	set_pipes(data, cmd_node);
+	set_fd(cmd_node);
+	close_pipes(data->cmd_list, NULL);
+	env_p = get_path(data->envv);
 	sep = 0;
 	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);
 	cmd_p = get_cmd(cmd_node->cmd, env_p);
-	if (!cmd_p || execve(cmd_p, cmd_node->args, envv) == -1)
+	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
 	{
 		cmd_error(cmd_node->cmd, errno);
 		ft_free_tab(env_p);
