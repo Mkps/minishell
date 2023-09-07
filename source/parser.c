@@ -103,7 +103,7 @@ void	parse_token(t_data *data)
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD && current->quote_status != SQUOTE)
+		if (current->token_type == WORD & current->quote_status != OSQUOTE)
 		{
 			current->value = var_expander(data, current->value);	
 		}
@@ -201,9 +201,6 @@ t_token	*add_cmd(t_data *data, t_token *token)
 			current = current->next;
 	}
 	new_cmd->args = ft_split(tmp, ';');
-	// printf("strtmp %s\n", tmp);
-	// for (int i = 0; new_cmd->args[i]; i++)
-	// 	printf("arg is %s\n", new_cmd->args[i]);
 	return (current);
 }
 
