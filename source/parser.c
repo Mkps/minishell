@@ -333,7 +333,7 @@ t_token	*get_next_cmd(t_token *src)
 	t_token	*current;
 
 	current = src;
-	while (current != NULL && current->token_type != PIPE)
+	while (current != NULL && !token_is_term(current))
 	{
 		printf("test\n");
 		if (current != NULL && current->token_type == WORD && !is_assign(current->value))
@@ -342,11 +342,13 @@ t_token	*get_next_cmd(t_token *src)
 			{
 				return (current);
 			}
-			if (current->quote_status != NONE && current->prev != NULL && current->prev->prev != NULL && !token_is_io(current->prev->prev))
-			{
-				printf("qs is %i !token_is_io %i\n", current->quote_status, !token_is_io(current->prev->prev));
+			if (current->prev != NULL && current->quote_status != NONE && !token_is_io(current->prev->prev))
 				return (current);
-			}
+			// if (current->quote_status != NONE && current->prev != NULL && current->prev->prev != NULL && !token_is_io(current->prev->prev))
+			// {
+			// 	printf("qs is %i !token_is_io %i\n", current->quote_status, !token_is_io(current->prev->prev));
+			// 	return (current);
+			// }
 		}
 		current = current->next;
 	}
