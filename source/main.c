@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include <stdint.h>
+#include <stdlib.h>
 #include <sys/types.h>
 
 // Get path from the env variable. 
@@ -62,8 +63,47 @@ void	print_token(t_token **root)
 		current = current->next;
 		// free(tmp);
 	}
-	free(current);
+	// free(current);
 	*root = NULL;
+}
+void	free_token(t_data *data)
+{
+	t_token	*current;
+	t_token	*tmp;
+
+	current = *data->token_root;
+	while (current != NULL)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+	free(data->token_root);
+}
+
+void	free_cmd_list(t_data *data)
+{
+	t_cmd	*current;
+	t_cmd	*tmp;
+
+	current = *data->cmd_list;
+	while (current != NULL)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp->cmd);
+		free(tmp->args);
+		free(tmp->pipe_fd);
+		free(tmp);
+	}
+	free(data->cmd_list);
+}
+int	free_data(t_data *data)
+{
+	free_token(data);
+	free_cmd_list(data);
+	free(data->user_input);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int ac, char **av, char **envv)
@@ -91,13 +131,17 @@ int	main(int ac, char **av, char **envv)
 	while(1)
 	{
 		signals_interact();
-		data.user_input = readline("$ ");
+		// data.user_input = readline("$ ");
+		ft_printf("%s$ ", ft_getenv(envv, "PWD"));
+		input = get_next_line(0);
+		data.user_input = ft_substr(input, 0, ft_strlen(input) - 1);
+		free(input);
+		ft_printf("userinput %s\n", data.user_input);
 		signals_no_interact();
 		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
 			break ;
 		scan_input(&data);
 		parse_token(&data);
-		*data.cmd_list = NULL;
 		build_cmd_list(&data, *data.token_root);
 		cmd = *data.cmd_list;
 		if (cmd)
@@ -108,7 +152,6 @@ int	main(int ac, char **av, char **envv)
 				if (data.pid == 0)
 				{
 					exec_cmd(cmd, &data);
-					free(data.user_input);
 					exit (1);
 				}
 				cmd = cmd->next;
@@ -119,7 +162,7 @@ int	main(int ac, char **av, char **envv)
 			{
 				close_pipes(data.cmd_list, NULL);
 				wpid = waitpid(-1, &status, 0);
-				if (pid == cmd->pid)
+				if (wpid == data.pid)
 					exit_status = status;
 				continue ;
 			}
@@ -129,16 +172,15 @@ int	main(int ac, char **av, char **envv)
 		}
 		// free(cmd);
 		*data.cmd_list = NULL;
-		free(input);
-		if (data.parse_status == ODQUOTE)
-				printf("still need to close the dquotes mate...\n");
-		else if (data.parse_status == OSQUOTE)
-				printf("still need to close the squotes mate...\n");
-		else 
-		{
-			print_token(data.token_root);
-		}
+		free_data(&data);
+		// if (data.parse_status == ODQUOTE)
+		// 		printf("still need to close the dquotes mate...\n");
+		// else if (data.parse_status == OSQUOTE)
+		// 		printf("still need to close the squotes mate...\n");
+		// else 
+		// {
+		// 	print_token(data.token_root);
+		// }
 	}
-	free(input);
 	return (0);
 }
