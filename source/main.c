@@ -78,6 +78,8 @@ void	free_token(t_data *data)
 	{
 		tmp = current;
 		current = current->next;
+		if (tmp->value)
+			free(tmp->value);
 		free(tmp);
 	}
 	*data->token_root = NULL;
@@ -88,21 +90,24 @@ void	free_cmd_list(t_data *data)
 	t_cmd	*current;
 	t_cmd	*tmp;
 
+	if (*data->cmd_list == NULL)
+		return ;
 	current = *data->cmd_list;
 	while (current != NULL)
 	{
 		tmp = current;
 		current = current->next;
-		if (tmp->cmd)
-			free(tmp->cmd);
+		// if (tmp->cmd)
+		// 	free(tmp->cmd);
 		if (tmp->args)
-			free(tmp->args);
-		if (tmp->pipe_fd)
-			free(tmp->pipe_fd);
+			ft_free_tab(tmp->args);
+		// if (tmp->pipe_fd)
+		// 	free(tmp->pipe_fd);
 		free(tmp);
 	}
 	*data->cmd_list = NULL;
 }
+
 int	free_data(t_data *data)
 {
 	free_token(data);
@@ -157,6 +162,7 @@ int	main(int ac, char **av, char **envv)
 				if (data.pid == 0)
 				{
 					exec_cmd(cmd, &data);
+					free_data(&data);
 					exit (1);
 				}
 				cmd = cmd->next;
@@ -176,7 +182,7 @@ int	main(int ac, char **av, char **envv)
 			// free(tmp_cmd);
 		}
 		// free(cmd);
-		*data.cmd_list = NULL;
+		// *data.cmd_list = NULL;
 		free_data(&data);
 		// if (data.parse_status == ODQUOTE)
 		// 		printf("still need to close the dquotes mate...\n");

@@ -1,5 +1,41 @@
 #include "../include/minishell.h"
 
+char	*ft_strappend(char *s1, char *s2, int mode)
+{
+	char	*tmp;
+	int		tmp_len;
+	int		i;
+	int		j;
+
+	tmp_len = ft_strlen(s1) + ft_strlen(s2);
+	tmp = (char *)malloc(sizeof(char) * (tmp_len + 1));
+	if (!tmp)
+		return (NULL);
+	i = 0;
+	while(s1[i])
+	{
+		tmp[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		tmp[i + j] = s2[j];
+		j++;
+	}
+	tmp[i + j] = 0;
+	if (mode == 1)
+		free(s2);
+	if (mode == 2)
+		free(s1);
+	if (mode == 3)
+	{
+		free(s1);
+		free(s2);
+	}
+	return (tmp);
+}
+
 char	*str_env(t_data *data, char *str)
 {
 	int		i;
@@ -178,20 +214,22 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	t_token	*current;
 	int		type;
 	char	*tmp;
+	char	*new_tmp;
 	char	**args;
 
-	current = token;
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
 	new_cmd->cmd = token->value; 
 	new_cmd->type = get_cmd_type(token->value);
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
-	tmp = ";";
+	tmp = "";
+	tmp = ft_strappend(tmp, ";", 0);
+	current = token;
 	while (current->token_type == WORD )
 	{
-		tmp = ft_strjoin(tmp, ";");
-		tmp = ft_strjoin(tmp, current->value);	
+		tmp = ft_strappend(tmp, ";", 2);	
+		tmp = ft_strappend(tmp, current->value, 2);	
 		if (current->next->token_type == OSQUOTE || current->next->token_type == ODQUOTE)
 		{
 			type = current->next->token_type;
@@ -201,6 +239,7 @@ t_token	*add_cmd(t_data *data, t_token *token)
 			current = current->next;
 	}
 	new_cmd->args = ft_split(tmp, ';');
+	free(tmp);
 	return (current);
 }
 
@@ -301,7 +340,6 @@ void	handle_cmd_input(t_data *data, t_token *current_t, t_cmd *cmd)
 	while (input_token != NULL)
 	{
 		cmd->fd[0] = set_input_fd(input_token);
-		printf("received fd is cmd->fd[0] %i\n", cmd->fd[0]);
 		input_token = get_input_token(input_token->next);	
 		if (cmd->fd[0] < 0)
 			return ;
@@ -316,7 +354,6 @@ void	handle_cmd_output(t_data *data, t_token *current_t, t_cmd *cmd)
 	while (output_token != NULL)
 	{
 		cmd->fd[1] = set_output_fd(output_token);
-		printf("received fd is cmd->fd[1] %i\n", cmd->fd[1]);
 		output_token = get_output_token(output_token->next);	
 		if (cmd->fd[1] < 0)
 			return ;

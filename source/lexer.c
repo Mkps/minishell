@@ -137,13 +137,16 @@ t_token	*ft_new_token(t_token **root, char *value, int type)
 
 int	ft_get_sep(char *input, t_data *data)
 {
+	char	*tmp;
 	if (ft_get_sep_type(input) > 2)
 	{
 		if (ft_get_sep_type(input) == PIPE_STDERR || ft_get_sep_type(input) == IO_HEREDOC
 			|| ft_get_sep_type(input) == IO_APPEND || ft_get_sep_type(input) == TERM_2AND
 			|| ft_get_sep_type(input) == TERM_OR)
 		{
-			add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, 2));
+			tmp = ft_str_extract(input, 2);
+			add_token_back(data->token_root, ft_get_sep_type(input), tmp);
+			free(tmp);
 			return (2);
 		}
 		else
