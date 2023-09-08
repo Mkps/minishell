@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 13:58:25 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 14:04:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ int	main(int ac, char **av, char **envv)
 			}
 		}
 		free_data(&data);
+		sleep(1);
 	}
 	free_data(&data);
 	free(data.token_root);
