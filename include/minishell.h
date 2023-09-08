@@ -83,6 +83,7 @@ char	**get_path(char **envv);
 void	free_pipex(t_pipex *p);
 void	pipex_init(t_pipex *p);
 void	close_pipes(t_cmd **root, t_cmd *cmd);
+char	*ft_readline(char *str);
 
 /** 	signal.c	**/
 void	signals_interact(void);

@@ -6,24 +6,11 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:23:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 11:42:31 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 13:59:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	argc_error(int error_code)
-{
-	ft_putendl_fd("pipex: error: incorrect number of arguments.", 2);
-	if (error_code == 0)
-		ft_putendl_fd("Standard use is ./pipex infile cmd cmd outfile", 2);
-	if (error_code == 1)
-	{
-		ft_putstr_fd("Use with here_doc is ", 2);
-		ft_putendl_fd("./pipex here_doc LIMITER cmd cmd1 file", 2);
-	}
-	exit(1);
-}
 
 //Use perror to display the errno and exit with the specified code.
 void	error_exit(int exit_code)
@@ -32,6 +19,20 @@ void	error_exit(int exit_code)
 	exit(exit_code);
 }
 
+char	*ft_readline(char *str)
+{
+	char	*tmp;
+	char	*ret;
+
+	ft_printf("%s", str);
+	tmp = get_next_line(0);
+	if (tmp)
+		ret = ft_substr(tmp, 0, ft_strlen(tmp) - 1);
+	else
+		ret = NULL;
+	free(tmp);
+	return (ret);
+}
 
 int	open_fd(int mode, char *filename)
 {

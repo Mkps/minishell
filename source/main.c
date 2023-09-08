@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 13:33:52 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 13:58:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,7 @@ int	main(int ac, char **av, char **envv)
 	{
 		signals_interact();
 		// data.user_input = readline("$ ");
-		ft_printf("%s$ ", ft_getenv(envv, "PWD"));
-		input = get_next_line(0);
-		data.user_input = ft_substr(input, 0, ft_strlen(input) - 1);
+		data.user_input = ft_readline("$ ");
 		free(input);
 		signals_no_interact();
 		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
@@ -179,21 +177,8 @@ int	main(int ac, char **av, char **envv)
 					exit_status = status;
 				cmd = cmd->next;
 			}
-			// tmp_cmd = cmd;
-			// cmd = cmd->next;
-			// free(tmp_cmd);
 		}
-		// free(cmd);
-		// *data.cmd_list = NULL;sh
 		free_data(&data);
-		// if (data.parse_status == ODQUOTE)
-		// 		printf("still need to close the dquotes mate...\n");
-		// else if (data.parse_status == OSQUOTE)
-		// 		printf("still need to close the squotes mate...\n");
-		// else 
-		// {
-		// 	print_token(data.token_root);
-		// }
 	}
 	free_data(&data);
 	free(data.token_root);
