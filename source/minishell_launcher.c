@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 17:25:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:36:41 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 void	minishell_inline(t_data *data, char *user_input)
 {
-	data->user_input = user_input;
+	data->user_input = ft_strdup(user_input);
 	scan_input(data);
 	parse_token(data);
 	build_cmd_list(data, *data->token_root);
 	execute(data);
-	free_data(data);
 	dup2(data->old_fd[0], 0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 17:30:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:35:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,9 @@ int	main(int ac, char **av, char **envv)
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
-	if (ac == 3 && ft_strncmp(av[1], "-c", 3))
+	if (ac == 3)
 		minishell_inline(&data, av[2]);
-	else
+	else if (ac == 1)
 		minishell_prompt(&data);
 	data_cleanup(&data);
 	return (WEXITSTATUS(data.exit_status));
