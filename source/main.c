@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 16:57:29 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:05:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,8 @@ int	main(int ac, char **av, char **envv)
 	int		status;
 	int		exit_status;
 
-	ft_memset(&data, '0', sizeof(data));
-	data.token_root = (t_token **)ft_calloc(1, sizeof(t_token *));
-	data.cmd_list = (t_cmd **)ft_calloc(1, sizeof(t_cmd *));
-	*data.token_root = NULL;
-	*data.cmd_list = NULL;
-	data.parse_status = NONE;
-	data.exit_status = 0;
+	init_data(&data);
 	import_envv(&data, envv);
-	data.old_fd[0] = dup(STDIN_FILENO);
-	data.old_fd[1] = dup(STDOUT_FILENO);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);

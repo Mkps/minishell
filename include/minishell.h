@@ -81,8 +81,6 @@ void	exec_pipe(t_pipex *handler, t_cmd *cmd, char **envv);
 void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
-void	free_pipex(t_pipex *p);
-void	pipex_init(t_pipex *p);
 void	close_pipes(t_cmd **root, t_cmd *cmd);
 char	*ft_readline(char *str);
 int		free_data(t_data *data);
@@ -115,5 +113,8 @@ void	ft_setenv(t_data *data, char *value);
 
 /**		execute.c		**/
 void	execute(t_data *data);
+
+/**		data_utils.c	**/
+int	init_data(t_data *data);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:23:46 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/04 04:52:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:02:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,5 @@ void	last_child(int cmd_index, t_pipex *p, char *cmd, char **envv);
 void	middle_child(int cmd_index, t_pipex *p, char *cmd, char **envv);
 void	first_child(t_pipex *p, char *cmd, char **envv);
 void	parent_handler(t_pipex *p);
-void	free_pipex(t_pipex *p);
-void	pipex_init(t_pipex *p);
 
 #endif
