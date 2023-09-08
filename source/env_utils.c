@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:39:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 12:19:40 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 13:08:00 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ char	**add_env_value(char **envv, char *value)
 		}
 		i++;
 	}
-	ret[i] = value;
-	ret[i + 1] = value;
+	ret[i] = ft_strdup(value);
+	ret[i + 1] = 0;
 	ft_free_tab(envv);
 	return (ret);
 }
@@ -134,12 +134,9 @@ void    ft_setenv(t_data *data, char *value)
     if (i == 0 || value[i] != '=')
         return ;
     key = ft_substr(value, 0, i);
-	if (value[i + 1] == 0)
-		k_value = NULL;
-	else
-		k_value = ft_substr(value, i + i, ft_strlen(value));
 	if (!ft_getenv(envv, key))
 		data->envv = add_env_value(envv, value);
 	else
 		data->envv = replace_env_value(envv, value);
+	free(key);
 }

@@ -409,7 +409,6 @@ void	build_cmd_list(t_data *data, t_token *token)
 			ft_setenv(data, current_t->value);
 			current_t = current_t->next;
 		}
-		printf("test\n");
 		if (current_t && (current_t = get_next_cmd(current_t)) != NULL)
 		{
 			current_t = add_cmd(data, current_t);
