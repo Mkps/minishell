@@ -108,5 +108,6 @@ int token_is_term(t_token *token);
 /**		env_utils.c		**/
 int		import_envv(t_data *data, char **envv);
 char	*ft_getenv(char **env, const char *str);
+void    ft_setenv(t_data *data, char *value);
 
 #endif
