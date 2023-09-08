@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 17:14:00 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:30:36 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	arg_check(int ac, char **av)
 		printf("%s\n", USAGE_MSG);
 		return (0);
 	}
-	if (ac == 3 && (ft_strlen(av[1]) != 2 || ft_strncmp(av[1], "-c", 2)))
+	if (ac == 3 && ft_strncmp(av[1], "-c", 3))
 	{
 		printf("%s\n", USAGE_MSG);
 		return (0);
@@ -123,21 +123,10 @@ int	main(int ac, char **av, char **envv)
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
-	while(1)
-	{
-		signals_interact();
-		get_next_line(-1);
-		data.user_input = ft_readline("$ ");
-		signals_no_interact();
-		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
-			break ;
-		scan_input(&data);
-		parse_token(&data);
-		build_cmd_list(&data, *data.token_root);
-		execute(&data);
-		free_data(&data);
-		dup2(data.old_fd[0], 0);
-	}
+	if (ac == 3 && ft_strncmp(av[1], "-c", 3))
+		minishell_inline(&data, av[2]);
+	else
+		minishell_prompt(&data);
 	data_cleanup(&data);
 	return (WEXITSTATUS(data.exit_status));
 }

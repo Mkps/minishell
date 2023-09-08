@@ -118,4 +118,8 @@ void	execute(t_data *data);
 int		init_data(t_data *data);
 void	data_cleanup(t_data *data);
 
+/**		minishell_launcher.c	**/
+void	minishell_prompt(t_data *data);
+void	minishell_inline(t_data *data, char *user_input);
+
 #endif
