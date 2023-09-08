@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 15:23:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:37:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ int	main(int ac, char **av, char **envv)
 		signals_interact();
 		get_next_line(-1);
 		data.user_input = ft_readline("$ ");
-		printf("data.user_input %s\n", data.user_input);
 		signals_no_interact();
 		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
 			break ;
@@ -181,7 +180,6 @@ int	main(int ac, char **av, char **envv)
 		}
 		free_data(&data);
 		dup2(data.old_stdin, 0);
-		sleep(1);
 	}
 	free_data(&data);
 	free(data.token_root);

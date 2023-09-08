@@ -6,12 +6,13 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 14:12:29 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:42:35 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+#define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file(wanted `"
 /** Get the input */
 void	here_doc_input(char *limiter, int *fd)
 {
@@ -21,6 +22,7 @@ void	here_doc_input(char *limiter, int *fd)
 	str = "str";
 	while (str)
 	{
+		ft_printf("heredoc> ");
 		str = get_next_line(0);
 		if (str == NULL || (!ft_strncmp(str, limiter, ft_strlen(limiter)) 
 				&& (ft_strlen(limiter) == ft_strlen(str) - 1)))
@@ -57,8 +59,7 @@ void	here_doc_handler(char *limiter)
 		close(p_fd[1]);
 		waitpid(pid, &status, 0);
 		if (status != 256)
-			ft_printf("minishell: warning: here-doc end /w EOF(wanted `%s').\n",
-				limiter);
+			ft_printf("%s%s')\n", HEREDOC_WARNING_EOF, limiter);
 		dup2(p_fd[0], 0);
 		close(p_fd[0]);
 	}
