@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 10:48:55 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 14:55:40 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:16:21 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ char	*read_file(int fd, char *str)
 	while (byte_read > 0)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
-		printf("bytes read = %i\n", byte_read);
 		if (byte_read == -1)
 		{
 			free(str);
