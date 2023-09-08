@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 13:01:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 13:33:52 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ void	free_cmd_list(t_data *data)
 		// 	free(tmp->cmd);
 		if (tmp->args)
 			ft_free_tab(tmp->args);
-		// if (tmp->pipe_fd)
-		// 	free(tmp->pipe_fd);
+		if (tmp->pipe_status)
+			free(tmp->pipe_fd);
 		free(tmp);
 	}
 	*data->cmd_list = NULL;
@@ -146,7 +146,6 @@ int	main(int ac, char **av, char **envv)
 		input = get_next_line(0);
 		data.user_input = ft_substr(input, 0, ft_strlen(input) - 1);
 		free(input);
-		ft_printf("userinput %s\n", data.user_input);
 		signals_no_interact();
 		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
 			break ;
@@ -156,33 +155,36 @@ int	main(int ac, char **av, char **envv)
 		cmd = *data.cmd_list;
 		if (cmd)
 		{
-			while(data.pid != 0 && cmd) 
+			while(cmd) 
 			{
-				data.pid = fork();
-				if (data.pid == 0)
+				cmd->pid = fork();
+				if (cmd->pid == 0)
 				{
 					exec_cmd(cmd, &data);
 					free_data(&data);
+					free(data.token_root);
+					free(data.cmd_list);
+					ft_free_tab(data.envv);
 					exit (1);
 				}
 				cmd = cmd->next;
 			}
 			int	wpid = 0;
 			cmd = *data.cmd_list;
-			while(wpid != -1 || errno != ECHILD) 
+			while(cmd) 
 			{
 				close_pipes(data.cmd_list, NULL);
-				wpid = waitpid(-1, &status, 0);
-				if (wpid == data.pid)
+				wpid = waitpid(cmd->pid, &status, 0);
+				if (wpid == last_cmd(data.cmd_list)->pid)
 					exit_status = status;
-				continue ;
+				cmd = cmd->next;
 			}
 			// tmp_cmd = cmd;
 			// cmd = cmd->next;
 			// free(tmp_cmd);
 		}
 		// free(cmd);
-		// *data.cmd_list = NULL;
+		// *data.cmd_list = NULL;sh
 		free_data(&data);
 		// if (data.parse_status == ODQUOTE)
 		// 		printf("still need to close the dquotes mate...\n");
