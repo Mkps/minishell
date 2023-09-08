@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:23:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/08/04 09:04:11 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:08:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	argc_error(int error_code)
 //Use perror to display the errno and exit with the specified code.
 void	error_exit(int exit_code)
 {
-	perror("pipex: an error occured.");
+	perror("minishell: an error occured.");
 	exit(exit_code);
 }
 

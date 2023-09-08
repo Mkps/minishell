@@ -6,28 +6,11 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/06 13:33:40 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:05:17 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	exec_pipe(t_pipex *p, t_cmd *cmd, char **envv)
-{
-	int	index;
-
-	index = 1;
-	first_child(p, cmd, envv);
-	cmd = cmd->next;
-	while (index < p->nb_cmd - 1 && cmd->next != NULL)
-	{
-		middle_child(index, p, cmd, envv);
-		cmd = cmd->next;
-		index++;
-	}
-	last_child(index, p, cmd, envv);
-	parent_handler(p);
-}
 
 static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
 {
