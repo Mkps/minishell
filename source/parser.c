@@ -345,7 +345,7 @@ void	handle_cmd_input(t_data *data, t_token *current_t, t_cmd *cmd)
 		p_type = input_token->token_type;
 		input_token = get_input_token(input_token->next);
 		if (p_type == IO_HEREDOC && input_token && input_token->token_type == IO_HEREDOC)
-			dup2(data->old_stdin, 0);
+			dup2(data->old_fd[0], 0);
 		if (cmd->fd[0] < 0)
 			return ;
 	}

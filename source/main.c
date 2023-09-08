@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 15:37:46 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 16:19:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,8 @@ int	main(int ac, char **av, char **envv)
 	data.parse_status = NONE;
 	import_envv(&data, envv);
 	*tmp = NULL;
-	data.old_stdin = dup(STDIN_FILENO);
+	data.old_fd[0] = dup(STDIN_FILENO);
+	data.old_fd[1] = dup(STDOUT_FILENO);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
@@ -179,7 +180,7 @@ int	main(int ac, char **av, char **envv)
 			}
 		}
 		free_data(&data);
-		dup2(data.old_stdin, 0);
+		dup2(data.old_fd[0], 0);
 	}
 	free_data(&data);
 	free(data.token_root);
