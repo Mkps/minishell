@@ -66,6 +66,7 @@ typedef struct s_data {
 	char	**envv;
 	int		parse_status;
 	int		exit_status;
+	int		old_stdin;
 	t_token	**token_root;
 	t_cmd	**cmd_list;
 	char	*user_input;	
