@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/08 17:17:41 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/08 17:31:26 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC_NAME = here_doc.c env_utils.c\
 	  pipex_utils.c signal.c \
 	  lexer.c parser.c token_utils.c \
 	  execute.c data_utils.c \
+	  minishell_launcher.c
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
