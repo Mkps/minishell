@@ -334,13 +334,18 @@ int		set_output_fd(t_token *current)
 void	handle_cmd_input(t_data *data, t_token *current_t, t_cmd *cmd)
 {
 	t_token	*input_token;
+	int		p_type;
 
 	cmd->fd[0] = 0;
+	p_type = NONE;
 	input_token = get_input_token(get_cmd_first(current_t));
 	while (input_token != NULL)
 	{
 		cmd->fd[0] = set_input_fd(input_token);
-		input_token = get_input_token(input_token->next);	
+		p_type = input_token->token_type;
+		input_token = get_input_token(input_token->next);
+		if (p_type == IO_HEREDOC && input_token && input_token->token_type == IO_HEREDOC)
+			dup2(data->old_stdin, 0);
 		if (cmd->fd[0] < 0)
 			return ;
 	}
@@ -362,6 +367,7 @@ void	handle_cmd_output(t_data *data, t_token *current_t, t_cmd *cmd)
 void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 {
 	handle_cmd_input(data, current_t, cmd);
+
 	handle_cmd_output(data, current_t, cmd);
 }
 // Returns the first encountered cmd token

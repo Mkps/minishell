@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 15:05:17 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:23:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,13 @@ int	main(int ac, char **av, char **envv)
 	data.parse_status = NONE;
 	import_envv(&data, envv);
 	*tmp = NULL;
-	int old_stdin = dup(STDIN_FILENO);
+	data.old_stdin = dup(STDIN_FILENO);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
 	while(1)
 	{
 		signals_interact();
-		dup2(old_stdin, 0);
 		get_next_line(-1);
 		data.user_input = ft_readline("$ ");
 		printf("data.user_input %s\n", data.user_input);
@@ -181,6 +180,7 @@ int	main(int ac, char **av, char **envv)
 			}
 		}
 		free_data(&data);
+		dup2(data.old_stdin, 0);
 		sleep(1);
 	}
 	free_data(&data);
