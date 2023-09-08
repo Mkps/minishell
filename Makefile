@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/08 16:36:29 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/08 16:48:04 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ_DIR = build
 SRC = $(SRCDIR)/main.c $(SRCDIR)/signal.c
 
 SRC_NAME = here_doc.c env_utils.c\
-	  main.c pipex.c pipex_cmd.c \
+	  main.c pipex_cmd.c \
 	  pipex_utils.c signal.c \
 	  lexer.c parser.c token_utils.c \
 	  execute.c
