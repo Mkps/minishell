@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/06 14:16:34 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:31:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	main(int ac, char **av, char **envv)
 	data.cmd_list = (t_cmd **)ft_calloc(1, sizeof(t_cmd *));
 	*data.cmd_list = NULL;
 	data.parse_status = NONE;
-	data.envv = envv;
+	import_envv(&data, envv);
 	*tmp = NULL;
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:23:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 11:08:14 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:31:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,41 @@ char	*ft_getenv(char **env, const char *str)
 		i++;
 	}
 	return (tmp);
+}
+
+char	**ft_strsdup(char	**strs)
+{
+	int		i;
+	char	**ret;
+	
+	i = 0;
+	while (strs[i] != 0) i++;
+	if (i == 0)
+		return (NULL);
+	ret = ft_calloc(i, sizeof(char *));
+	if (!ret)
+		return (NULL);
+	i = 0;
+	while (strs[i])
+	{
+		ret[i] = ft_strdup(strs[i]);
+		if (!ret[i])
+		{
+			ft_free_tab(ret);
+			free(ret);
+			return (NULL);
+		}
+		i++;
+	}
+	ret[i] = 0;
+	return (ret);
+}
+int	import_envv(t_data *data, char **envv)
+{
+	data->envv = ft_strsdup(envv);
+	if (!data->envv)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	open_fd(int mode, char *filename)
