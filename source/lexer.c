@@ -144,9 +144,7 @@ int	ft_get_sep(char *input, t_data *data)
 			|| ft_get_sep_type(input) == IO_APPEND || ft_get_sep_type(input) == TERM_2AND
 			|| ft_get_sep_type(input) == TERM_OR)
 		{
-			tmp = ft_str_extract(input, 2);
-			add_token_back(data->token_root, ft_get_sep_type(input), tmp);
-			free(tmp);
+			add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, 2));
 			return (2);
 		}
 		else

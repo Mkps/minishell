@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alx <alx@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 10:48:55 by aloubier          #+#    #+#             */
-/*   Updated: 2023/07/25 05:49:31 by alx              ###   ########.fr       */
+/*   Updated: 2023/09/08 14:55:40 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ char	*read_file(int fd, char *str)
 	while (byte_read > 0)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
+		printf("bytes read = %i\n", byte_read);
 		if (byte_read == -1)
 		{
 			free(str);
@@ -113,6 +114,8 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 
+	if (fd == -1)
+		free(buffer);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_file(fd, buffer);

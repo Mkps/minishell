@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 13:58:25 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:05:17 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	print_token(t_token **root)
 	current = *root;
 	while (current != NULL)
 	{
-		// printf("token type %i | value %s\n", current->token_type, current->value);
+		printf("token type %i | value %s\n", current->token_type, current->value);
 		// free(current->value);
 		// if (current->prev != NULL)
 		// 	printf("token prev %i | value %s\n", current->prev->token_type, current->prev->value);
@@ -134,21 +134,23 @@ int	main(int ac, char **av, char **envv)
 	data.parse_status = NONE;
 	import_envv(&data, envv);
 	*tmp = NULL;
+	int old_stdin = dup(STDIN_FILENO);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
-	input = NULL;
 	while(1)
 	{
 		signals_interact();
-		// data.user_input = readline("$ ");
+		dup2(old_stdin, 0);
+		get_next_line(-1);
 		data.user_input = ft_readline("$ ");
-		free(input);
+		printf("data.user_input %s\n", data.user_input);
 		signals_no_interact();
 		if (data.user_input != NULL && !strcmp(data.user_input, "exit"))
 			break ;
 		scan_input(&data);
 		parse_token(&data);
+		// print_token(data.token_root);
 		build_cmd_list(&data, *data.token_root);
 		cmd = *data.cmd_list;
 		if (cmd)
@@ -179,6 +181,7 @@ int	main(int ac, char **av, char **envv)
 			}
 		}
 		free_data(&data);
+		sleep(1);
 	}
 	free_data(&data);
 	free(data.token_root);

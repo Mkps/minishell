@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/06 13:56:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 14:12:29 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	here_doc_handler(char *limiter)
 		close(p_fd[1]);
 		waitpid(pid, &status, 0);
 		if (status != 256)
-			ft_printf("pipex: warning: here-doc end /w EOF(wanted `%s').\n",
+			ft_printf("minishell: warning: here-doc end /w EOF(wanted `%s').\n",
 				limiter);
 		dup2(p_fd[0], 0);
 		close(p_fd[0]);
