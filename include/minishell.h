@@ -115,6 +115,7 @@ void	ft_setenv(t_data *data, char *value);
 void	execute(t_data *data);
 
 /**		data_utils.c	**/
-int	init_data(t_data *data);
+int		init_data(t_data *data);
+void	data_cleanup(t_data *data);
 
 #endif

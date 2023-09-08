@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 17:05:46 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 17:14:00 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,16 @@ int	arg_check(int ac, char **av)
 void	print_token(t_token **root)
 {
 	t_token *current;
-	t_token	*tmp;
 
 	current = *root;
 	while (current != NULL)
 	{
 		printf("token type %i | value %s\n", current->token_type, current->value);
-		// free(current->value);
-		// if (current->prev != NULL)
-		// 	printf("token prev %i | value %s\n", current->prev->token_type, current->prev->value);
-		tmp = current;
 		current = current->next;
-		// free(tmp);
 	}
-	// free(current);
 	*root = NULL;
 }
+
 void	free_token(t_data *data)
 {
 	t_token	*current;
@@ -97,8 +91,6 @@ void	free_cmd_list(t_data *data)
 	{
 		tmp = current;
 		current = current->next;
-		// if (tmp->cmd)
-		// 	free(tmp->cmd);
 		if (tmp->args)
 			ft_free_tab(tmp->args);
 		if (tmp->pipe_status)
@@ -146,9 +138,6 @@ int	main(int ac, char **av, char **envv)
 		free_data(&data);
 		dup2(data.old_fd[0], 0);
 	}
-	free_data(&data);
-	free(data.token_root);
-	free(data.cmd_list);
-	ft_free_tab(data.envv);
+	data_cleanup(&data);
 	return (WEXITSTATUS(data.exit_status));
 }
