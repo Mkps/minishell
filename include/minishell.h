@@ -85,6 +85,7 @@ void	free_pipex(t_pipex *p);
 void	pipex_init(t_pipex *p);
 void	close_pipes(t_cmd **root, t_cmd *cmd);
 char	*ft_readline(char *str);
+int		free_data(t_data *data);
 
 /** 	signal.c	**/
 void	signals_interact(void);
@@ -110,6 +111,9 @@ int token_is_term(t_token *token);
 /**		env_utils.c		**/
 int		import_envv(t_data *data, char **envv);
 char	*ft_getenv(char **env, const char *str);
-void    ft_setenv(t_data *data, char *value);
+void	ft_setenv(t_data *data, char *value);
+
+/**		execute.c		**/
+void	execute(t_data *data);
 
 #endif
