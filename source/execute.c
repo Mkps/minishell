@@ -6,12 +6,38 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 16:38:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/08 16:45:45 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+int		execute_builtin(t_cmd *cmd, t_data *data)
+{
+	return (0);
+}
+
+void	execute_cmd(t_cmd *cmd, t_data *data)
+{
+	if (execute_builtin(cmd, data))
+	{
+		free_data(data);
+		free(data->token_root);
+		free(data->cmd_list);
+		ft_free_tab(data->envv);
+		exit (1);
+	}
+	else
+	{
+		exec_cmd(cmd, data);
+		free_data(data);
+		free(data->token_root);
+		free(data->cmd_list);
+		ft_free_tab(data->envv);
+		exit (1);
+	}
+
+}
 void	execute(t_data *data)	
 {
 	int		status;
@@ -25,14 +51,7 @@ void	execute(t_data *data)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
-		{
-			exec_cmd(cmd, data);
-			free_data(data);
-			free(data->token_root);
-			free(data->cmd_list);
-			ft_free_tab(data->envv);
-			exit (1);
-		}
+			execute_cmd(cmd, data);
 		cmd = cmd->next;
 	}
 	int	wpid = 0;
