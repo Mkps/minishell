@@ -71,7 +71,7 @@ typedef struct s_data {
 	char	*user_input;	
 	
 }	t_data;
-char	*ft_getenv(char **env, const char *str);
+
 void	argc_error(int error_code);
 void	error_exit(int exit_code);
 int		open_fd(int mode, char *filename);
@@ -83,7 +83,6 @@ char	**get_path(char **envv);
 void	free_pipex(t_pipex *p);
 void	pipex_init(t_pipex *p);
 void	close_pipes(t_cmd **root, t_cmd *cmd);
-int		import_envv(t_data *data, char **envv);
 
 /** 	signal.c	**/
 void	signals_interact(void);
@@ -105,5 +104,9 @@ t_cmd	*last_cmd(t_cmd **root);
 int token_is_quote(t_token *token);
 int token_is_io(t_token *token);
 int token_is_term(t_token *token);
+
+/**		env_utils.c		**/
+int		import_envv(t_data *data, char **envv);
+char	*ft_getenv(char **env, const char *str);
 
 #endif
