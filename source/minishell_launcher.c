@@ -30,8 +30,12 @@ void	minishell_prompt(t_data *data)
 		get_next_line(-1);
 		data->user_input = ft_readline("$ ");
 		signals_no_interact();
-		if (data->user_input != NULL && !strcmp(data->user_input, "exit"))
+		if ((data->user_input != NULL && !strcmp(data->user_input, "exit")) || !data->user_input)
+		{
+			if (!data->user_input)
+				write(1, "\n", 1);
 			break ;
+		}
 		scan_input(data);
 		parse_token(data);
 		build_cmd_list(data, *data->token_root);
