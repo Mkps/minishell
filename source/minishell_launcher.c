@@ -28,12 +28,11 @@ void	minishell_prompt(t_data *data)
 	{
 		signals_interact();
 		get_next_line(-1);
-		data->user_input = "str";
 		data->user_input = ft_readline("$ ");
 		signals_no_interact();
-		if (data->user_input != NULL && (!strcmp(data->user_input, "exit") || data->user_input[0] == 0))
+		if (data->user_input != NULL && (!strcmp(data->user_input, "exit") || data->user_input[0] == 4))
 		{
-			if (data->user_input[0] == 0)
+			if (data->user_input[0] == 4)
 				write(1, "\n", 1);
 			break ;
 		}

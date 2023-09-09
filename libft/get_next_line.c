@@ -60,13 +60,18 @@ char	*ft_getline(char *buffer)
 	int		i;
 
 	i = 0;
-	if (!buffer[i])
-		return (NULL);
+	// if (!buffer[i])
+	// 	return (NULL);
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof (char));
 	if (!line)
 		return (NULL);
+	if (buffer[0] == 0)
+	{
+		line[0] = 4;
+		return (line);
+	}
 	line[i] = 0;
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')

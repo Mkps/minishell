@@ -26,10 +26,12 @@ char	*ft_readline(char *str)
 
 	ft_printf("%s", str);
 	tmp = get_next_line(0);
-	if (tmp)
+	if (!tmp)
+		return (NULL);
+	if (ft_strlen(tmp) > 1)
 		ret = ft_substr(tmp, 0, ft_strlen(tmp) - 1);
 	else
-		ret = NULL;
+		ret = ft_strdup(tmp);
 	free(tmp);
 	return (ret);
 }
