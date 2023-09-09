@@ -132,6 +132,7 @@ char	*var_expander(t_data *data, char *str)
 	return (str);
 }
 
+//	Parses tokens looking for VAR to expand.
 void	parse_token(t_data *data)
 {
 	t_token	*current;
@@ -147,6 +148,7 @@ void	parse_token(t_data *data)
 	}
 }
 
+// Creating a cmd.
 t_cmd	*create_cmd(t_data *data)
 {
 	t_cmd	*ret;
@@ -159,6 +161,8 @@ t_cmd	*create_cmd(t_data *data)
 	ret->pipe_status = 0;
 	return (ret);
 }
+
+//	Adds a cmd to the back of the cmd list.
 void	add_cmd_back(t_data *data)
 {
 	t_cmd	*last;
@@ -175,6 +179,7 @@ void	add_cmd_back(t_data *data)
 	last_cmd(data->cmd_list)->prev = last;
 }
 
+// Checks if the str(cmd->cmd or token->value) represents an assign command.
 int	is_assign(char	*str)
 {
 	if (!ft_isalpha(*str) && *str != '_')
@@ -187,6 +192,8 @@ int	is_assign(char	*str)
 	}
 	return (0);
 }
+
+// Returns the last cmd of the cmd_list
 t_cmd	*last_cmd(t_cmd **root)
 {
 	t_cmd	*current;
@@ -199,6 +206,7 @@ t_cmd	*last_cmd(t_cmd **root)
 	return (current);
 }
 
+//	Checks if the cmd is a comment. NOTE: will be reworked
 int		get_cmd_type(char *value)
 {
 	if (!value)
@@ -364,12 +372,15 @@ void	handle_cmd_output(t_data *data, t_token *current_t, t_cmd *cmd)
 			return ;
 	}
 }
+
+//	Looks for and then handles the io
 void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 {
 	handle_cmd_input(data, current_t, cmd);
 
 	handle_cmd_output(data, current_t, cmd);
 }
+
 // Returns the first encountered cmd token
 t_token	*get_next_cmd(t_token *src)
 {
@@ -391,6 +402,8 @@ t_token	*get_next_cmd(t_token *src)
 	}
 	return (NULL);
 }
+
+// Sets up the pipe and sets pipe_status to 1.
 void	set_pipe(t_cmd *cmd)
 {
 	cmd->pipe_status = 1;
@@ -398,6 +411,7 @@ void	set_pipe(t_cmd *cmd)
 	pipe(cmd->pipe_fd);
 	return ;	
 }
+
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
@@ -408,10 +422,8 @@ void	build_cmd_list(t_data *data, t_token *token)
 		current_t = token;
 	while (current_t != NULL)
 	{
-		// printf("current token type %i | value %s\n", current_t->token_type, current_t->value);
-		if (current_t && is_assign(current_t->value))
+		if (current_t && !current_t->prev && is_assign(current_t->value))
 		{
-			// add_assign_cmd(data);
 			ft_setenv(data, current_t->value);
 			current_t = current_t->next;
 		}
