@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+
 void	redisplay_prompt(int signum)
 {
 	(void)signum;
