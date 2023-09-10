@@ -25,7 +25,8 @@ SRC_NAME = here_doc.c env_utils.c\
 	  pipex_utils.c signal.c \
 	  lexer.c parser.c token_utils.c \
 	  execute.c data_utils.c \
-	  minishell_launcher.c
+	  minishell_launcher.c token.c \
+	  env.c
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
