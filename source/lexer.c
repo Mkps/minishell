@@ -22,39 +22,6 @@ int	ft_escape_seq(char *str)
 	return (NONE);
 }
 
-// Token constructor with type and value
-t_token	*create_token(int type, char *value)
-{
-	t_token	*ret;
-
-	ret = malloc(sizeof(t_token));
-	ret->next = NULL;
-	ret->prev = NULL;
-	ret->value = value;
-	ret->raw_value = value;
-	ret->token_type = type;
-	ret->quote_status = NONE;
-	return (ret);
-}
-
-t_token *last_token(t_token **root);
-// Add token to the end of the provided t_token linked list.
-void	add_token_back(t_token **root, int type, char *value)
-{
-	t_token *current;
-
-	if (*root == NULL)
-	{
-		*root = create_token(type, value);
-		return ;
-	}
-	current = *root;
-	while (current->next != NULL)
-		current = current->next;
-	current->next = create_token(type, value);
-	last_token(root)->prev = current;
-}
-
 // Duplicates the string from the starting position to n char then null-terminates it.
 char	*ft_str_extract(char *str, int n)
 {
@@ -72,18 +39,6 @@ char	*ft_str_extract(char *str, int n)
 	return (ret);
 }
 
-// Returns a pointer to the last token.
-t_token *last_token(t_token **root)
-{
-	t_token *current;
-
-	current = *root;
-	if (!current)
-		return (NULL);
-	while (current->next != NULL)
-		current = current->next;
-	return (current);
-}
 //	Returns 0 if not a separator. token_type otherwise.
 int	ft_get_sep_type(char *str)
 {
@@ -119,21 +74,6 @@ int	ft_get_sep_type(char *str)
 		return (0);
 }
 
-//Creates a new token then adds it to the end of the list.
-t_token	*ft_new_token(t_token **root, char *value, int type)
-{
-	t_token *t;
-
-	t = *root;
-	while (t != NULL)
-		t = t->next;	
-	t = malloc(sizeof(t_token));
-	if (!t)
-		return (NULL);
-	t->value = value;
-	t->token_type = type;
-	return (t);
-}
 
 int	ft_get_sep(char *input, t_data *data)
 {
