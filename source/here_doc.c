@@ -13,7 +13,7 @@
 #include "../include/minishell.h"
 
 #define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file(wanted `"
-/** Get the input */
+/** Gets the input */
 void	here_doc_input(char *limiter, int *fd)
 {
 	char	*str;
@@ -40,6 +40,7 @@ void	here_doc_input(char *limiter, int *fd)
 	free(str);
 }
 
+// Creates a child process to get the heredoc and then duplicates the read end of the pipe on the STDIN_FILENO
 void	here_doc_handler(char *limiter)
 {
 	int		p_fd[2];
