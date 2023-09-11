@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 16:45:45 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/11 14:44:35 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,42 @@
 
 int		execute_builtin(t_cmd *cmd, t_data *data)
 {
+	//printf("builtin\n");
+	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+	    ft_echo(cmd);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
+    {
+		ft_cd(cmd, data);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+		   int i = 0;
+    while(data->envv[i])
+    {
+        printf("%s\n", data->envv[i]);
+        i++;
+    }
+		ft_pwd(data);
+		return (1);
+	}
+	/*else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
+        ft_env(data);
+    else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
+        exit(0);
+    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd + 1)) == 0)
+        ft_export(cmd, data);
+	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd + 1)) == 0)
+		ft_unset(cmd, data);*/
 	return (0);
 }
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
-	if (execute_builtin(cmd, data))
+	if (execute_builtin(cmd, data) == 1)
 	{
 		free_data(data);
 		free(data->token_root);
@@ -36,8 +66,8 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		ft_free_tab(data->envv);
 		exit (1);
 	}
-
 }
+
 void	execute(t_data *data)	
 {
 	int		status;

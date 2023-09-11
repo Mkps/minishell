@@ -70,7 +70,6 @@ typedef struct s_data {
 	t_token	**token_root;
 	t_cmd	**cmd_list;
 	char	*user_input;	
-	
 }	t_data;
 
 void	argc_error(int error_code);
@@ -139,5 +138,11 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 
 /**		parser.c		**/
 t_token	*get_cmd_first(t_token *current_t);
+
+/**		execution builtin	**/
+void    ft_echo(t_cmd *cmd);
+int		execute_builtin(t_cmd *cmd, t_data *data);
+void	ft_cd(t_cmd *cmd, t_data *data);
+void    ft_pwd(t_data *data);
 
 #endif
