@@ -155,6 +155,18 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	return (current);
 }
 
+void	add_empty_cmd(t_data *data)
+{
+	t_cmd	*new_cmd;
+
+	add_cmd_back(data);
+	new_cmd = last_cmd(data->cmd_list);
+	new_cmd->cmd = NULL; 
+	new_cmd->type = EMPTY;
+	new_cmd->fd[0] = -1;
+	new_cmd->fd[1] = -1;
+}
+
 void	add_assign_cmd(t_data *data)
 {
 	t_cmd	*new_cmd;
@@ -164,6 +176,7 @@ void	add_assign_cmd(t_data *data)
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
 }
+
 t_token	*get_cmd_first(t_token *current_t)
 {
 	t_token	*current;
@@ -196,6 +209,20 @@ t_token	*get_next_cmd(t_token *src)
 	return (NULL);
 }
 
+int		is_empty_cmd(t_token *start)
+{
+	t_token *tmp;
+
+	tmp = start;
+	while (tmp->prev && !token_is_term(tmp->prev))
+		tmp = tmp->prev;
+	while (tmp && !token_is_term(tmp))
+	{
+		if (token_is_io(tmp))
+			return (1);
+	}
+	return (0);
+}
 // Sets up the pipe and sets pipe_status to 1.
 void	set_pipe(t_cmd *cmd)
 {
@@ -220,9 +247,20 @@ void	build_cmd_list(t_data *data, t_token *token)
 			ft_setenv(data, current_t->value);
 			current_t = current_t->next;
 		}
-		if (current_t && (current_t = get_next_cmd(current_t)) != NULL)
+		if (current_t && (get_next_cmd(current_t) != NULL))
 		{
+			current_t = get_next_cmd(current_t);
 			current_t = add_cmd(data, current_t);
+			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
+			while (!token_is_term(current_t))
+				current_t = current_t->next;
+			if (current_t && current_t->token_type == PIPE)
+				set_pipe(last_cmd(data->cmd_list));
+			current_t = current_t->next;
+		}
+		if (current_t && is_empty_cmd(current_t))
+		{
+			add_empty_cmd(data);
 			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
 			while (!token_is_term(current_t))
 				current_t = current_t->next;

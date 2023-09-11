@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 17:35:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/11 14:15:20 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	free_cmd_list(t_data *data)
 	{
 		tmp = current;
 		current = current->next;
-		if (tmp->args)
+		if (tmp->type != EMPTY && tmp->args)
 			ft_free_tab(tmp->args);
 		if (tmp->pipe_status)
 			free(tmp->pipe_fd);

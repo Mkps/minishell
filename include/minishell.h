@@ -139,6 +139,9 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 /**		parser.c		**/
 t_token	*get_cmd_first(t_token *current_t);
 
+/**		error.c			**/
+int	check_io_error(t_token **root);
+
 /**		execution builtin	**/
 void    ft_echo(t_cmd *cmd);
 int		execute_builtin(t_cmd *cmd, t_data *data);
