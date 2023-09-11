@@ -260,7 +260,6 @@ void	build_cmd_list(t_data *data, t_token *token)
 		}
 		if (current_t && is_empty_cmd(current_t))
 		{
-			ft_printf("test\n");
 			add_empty_cmd(data);
 			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
 			while (!token_is_term(current_t))
