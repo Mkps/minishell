@@ -122,4 +122,19 @@ void	data_cleanup(t_data *data);
 void	minishell_prompt(t_data *data);
 void	minishell_inline(t_data *data, char *user_input);
 
+/**		token.c			**/
+t_token	*create_token(int type, char *value);
+void	add_token_back(t_token **root, int type, char *value);
+t_token *last_token(t_token **root);
+t_token	*ft_new_token(t_token **root, char *value, int type);
+
+/**		lexer_utils.c	**/
+int		ft_get_sep_type(char *str);
+char	*ft_str_extract(char *str, int n);
+int		ft_escape_seq(char *str);
+char	evaluate_bslash(char	*str, t_data *data);
+
+/**		cmd_io.c		**/
+void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
+
 #endif
