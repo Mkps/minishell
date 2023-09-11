@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 16:45:45 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/11 14:13:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
+	if (cmd->type == EMPTY)
+	{
+		free_data(data);
+		free(data->token_root);
+		free(data->cmd_list);
+		ft_free_tab(data->envv);
+		exit (1);
+	}
 	if (execute_builtin(cmd, data))
 	{
 		free_data(data);
