@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/11 14:32:21 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/11 15:30:52 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,6 @@ void ft_pwd(t_data *data)
         return;
     }
     printf("%s\n", pwd_value);
-    // i = 0;
-    // while(data->envv[i])
-    // {
-    //     printf("%s\n", data->envv[i]);
-    //     i++;
-    // }
 }
 
 /*

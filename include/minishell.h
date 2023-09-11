@@ -145,4 +145,8 @@ int		execute_builtin(t_cmd *cmd, t_data *data);
 void	ft_cd(t_cmd *cmd, t_data *data);
 void    ft_pwd(t_data *data);
 
+/**		minishell_cmd.c		**/
+void	set_fd(t_cmd *cmd);
+void	set_pipes(t_data *data, t_cmd *cmd);
+
 #endif
