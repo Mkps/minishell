@@ -17,8 +17,11 @@ void	minishell_inline(t_data *data, char *user_input)
 	data->user_input = ft_strdup(user_input);
 	scan_input(data);
 	parse_token(data);
-	build_cmd_list(data, *data->token_root);
-	execute(data);
+	if (check_error(data) == EXIT_SUCCESS)
+	{
+		build_cmd_list(data, *data->token_root);
+		execute(data);
+	}
 	dup2(data->old_fd[0], 0);
 }
 
@@ -38,9 +41,17 @@ void	minishell_prompt(t_data *data)
 		}
 		scan_input(data);
 		parse_token(data);
-		check_io_error(data->token_root);
-		build_cmd_list(data, *data->token_root);
-		execute(data);
+		t_token *tmp = *data->token_root;
+		while (tmp)
+		{
+			printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
+			tmp = tmp->next;
+		}
+		if (check_error(data) == EXIT_SUCCESS)
+		{
+			build_cmd_list(data, *data->token_root);
+			execute(data);
+		}
 		free_data(data);
 		dup2(data->old_fd[0], 0);
 	}
