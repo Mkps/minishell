@@ -18,7 +18,7 @@
 # define ERR_FORK	"minishell: error creating child process\n"
 
 enum escape_type{NONE, SQUOTE, DQUOTE, BACKSLASH};
-enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, OSQUOTE, ODQUOTE, BSLASH};
+enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, OSQUOTE, ODQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_pipex {
@@ -51,6 +51,7 @@ typedef struct s_cmd {
 	int		*pipe_fd;
 	char	*cmd;
 	char	**args;
+	int		background;
 	
 }	t_cmd;
 
@@ -139,9 +140,10 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 
 /**		parser.c		**/
 t_token	*get_cmd_first(t_token *current_t);
+char	*ft_strappend(char *s1, char *s2, int mode);
 
 /**		error.c			**/
-int	check_io_error(t_token **root);
+int		check_error(t_data *data);
 
 /**		execution builtin	**/
 void    ft_echo(t_cmd *cmd);
@@ -149,8 +151,10 @@ int		execute_builtin(t_cmd *cmd, t_data *data);
 void	ft_cd(t_cmd *cmd, t_data *data);
 void    ft_pwd(t_data *data);
 
-/**		minishell_cmd.c		**/
+/**		minishell_cmd.c	**/
 void	set_fd(t_cmd *cmd);
 void	set_pipes(t_data *data, t_cmd *cmd);
 
+/**		var.c			**/
+int		is_valid_var(char *str);
 #endif
