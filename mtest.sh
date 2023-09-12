@@ -19,7 +19,9 @@ then
 	exit 1;
 fi
 bash -c "$1" > ./tmp_b
+exit_code_b=$?
 ./mshell -c "$1" > ./tmp_m
+exit_code_m=$?
 diff ./tmp_b ./tmp_m
 exit_code=$?
 if [ $exit_code -eq 0 ]
@@ -31,4 +33,13 @@ else
 	color=$RED
 fi
 printf "Output matches bash:	${color}[%s]\n${NC}" $result
+if [ $exit_code_b -eq $exit_code_m ]
+then
+	result="OK"
+	color=$GREEN
+else
+	result="KO"
+	color=$RED
+fi
+printf "Exit code matches bash:	${color}[%s]\n${NC}" $result
 rm ./tmp_b ./tmp_m
