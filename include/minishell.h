@@ -98,12 +98,15 @@ int		ft_get_sep_type(char *str);
 
 /**		parser.c	**/
 void	parse_token(t_data *data);
+void	parse_near_quote(t_data *data);
 char	*var_expander(t_data *data, char *str);
 void	build_cmd_list(t_data *data, t_token *token);
 t_cmd	*last_cmd(t_cmd **root);
+t_token	*get_cmd_first(t_token *current_t);
+char	*ft_strappend(char *s1, char *s2, int mode);
 
 /**		token_utils.c	**/
-int token_is_quote(t_token *token);
+int 	token_is_quote(t_token *token);
 int token_is_io(t_token *token);
 int token_is_term(t_token *token);
 
@@ -137,10 +140,6 @@ char	evaluate_bslash(char	*str, t_data *data);
 
 /**		cmd_io.c		**/
 void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
-
-/**		parser.c		**/
-t_token	*get_cmd_first(t_token *current_t);
-char	*ft_strappend(char *s1, char *s2, int mode);
 
 /**		error.c			**/
 int		check_error(t_data *data);

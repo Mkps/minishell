@@ -69,6 +69,22 @@ char	*str_replace(char *src, int r_index, int n, char *str)
 	return (ret);
 }
 
+int		is_valid_var(char *str)
+{
+	int	i;
+
+	if (*str == 0 || (!ft_isalnum(*str) && *str != '_'))
+		return (0);
+	i = 0;
+	while(str[i])
+	{
+		if (!ft_isalnum(*str))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
 char	*var_expander(t_data *data, char *str)
 {
