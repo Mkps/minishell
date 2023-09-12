@@ -18,6 +18,8 @@ then
 	echo "Use with ./mtests.sh [Cmd to be tested]"
 	exit 1;
 fi
+echo > ./tmp_b
+echo > ./tmp_m
 bash -c "$1" > ./tmp_b
 exit_code_b=$?
 ./mshell -c "$1" > ./tmp_m
