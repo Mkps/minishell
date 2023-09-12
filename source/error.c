@@ -82,17 +82,21 @@ int	check_par_error(t_token **root)
 	while (tmp)
 	{
 		if (par_status == 0 && tmp->token_type == C_PAR)
+		{
 			output_err("syntax error near unexpected token `)'", NULL, 0);
+			return (EXIT_FAILURE);
+		}
 		if (tmp->prev && tmp->token_type == O_PAR && !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
 		{
 			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
 				output_err("syntax error near unexpected token ", tmp->next , 1);
 			else
 				output_err("syntax error near unexpected token `(' \n", NULL, 0);
+			return (EXIT_FAILURE);
 		}
 		tmp = tmp->next;
 	}
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	check_error(t_data *data)
