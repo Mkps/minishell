@@ -78,6 +78,17 @@ void	parse_near_quote(t_data *data)
 //	Parses tokens looking for VAR to expand.
 void	parse_token(t_data *data)
 {
+	t_token	*current;
+
+	current = *data->token_root;
+	while (current != NULL)
+	{
+		if (current->token_type == WORD & current->quote_status != SQUOTE)
+		{
+			current->value = var_expander(data, current->value);	
+		}
+		current = current->next;
+	}
 }
 
 // Creating a cmd.
