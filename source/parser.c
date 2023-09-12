@@ -35,21 +35,46 @@ char	*ft_strappend(char *s1, char *s2, int mode)
 	}
 	return (tmp);
 }
-
-//	Parses tokens looking for VAR to expand.
-void	parse_token(t_data *data)
+void	parse_near_quote(t_data *data)
 {
 	t_token	*current;
+	t_token	*tmp;
+	t_token	*tmp_tmp;
 
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD & current->quote_status != SQUOTE)
+		if (current->token_type == WORD & current->near_quote == 1)
 		{
-			current->value = var_expander(data, current->value);	
+			if (current->next && current->next->next && current->next->next->token_type == WORD)
+				current->value = ft_strappend(current->value, current->next->next->value, 0);
+			else
+				current->value = ft_strappend(current->value,"", 0); 
+			tmp = current->next;
+			if (current->next && current->next->next && token_is_quote(current->next->next))
+			{
+				current->next = current->next->next->next;
+				current->next->prev = current;
+			}
+			else
+			{
+				current->next = current->next->next->next->next;
+				current->next->prev = current;
+			}
+			while (tmp != current->next)
+			{
+				tmp_tmp = tmp;
+				tmp = tmp->next;
+				free(tmp_tmp);
+			}
 		}
-		current = current->next;
+		if (current)
+			current = current->next;
 	}
+}
+//	Parses tokens looking for VAR to expand.
+void	parse_token(t_data *data)
+{
 }
 
 // Creating a cmd.
