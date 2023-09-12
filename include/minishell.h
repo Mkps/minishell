@@ -16,9 +16,9 @@
 # define USAGE_MSG	"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
 # define PROG_NAME	"minishell: "
 # define ERR_FORK	"minishell: error creating child process\n"
+# define NONE		0
 
-enum escape_type{NONE, SQUOTE, DQUOTE, BACKSLASH};
-enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, OSQUOTE, ODQUOTE, O_PAR, C_PAR, BSLASH};
+enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_pipex {
@@ -157,4 +157,6 @@ void	set_pipes(t_data *data, t_cmd *cmd);
 
 /**		var.c			**/
 int		is_valid_var(char *str);
+char	*str_replace(char *src, int r_index, int n, char *str);
+
 #endif

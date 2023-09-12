@@ -44,7 +44,7 @@ void	parse_token(t_data *data)
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD & current->quote_status != OSQUOTE)
+		if (current->token_type == WORD & current->quote_status != SQUOTE)
 		{
 			current->value = var_expander(data, current->value);	
 		}
@@ -145,7 +145,7 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	{
 		tmp = ft_strappend(tmp, ";", 2);	
 		tmp = ft_strappend(tmp, current->value, 2);	
-		if (current->next->token_type == OSQUOTE || current->next->token_type == ODQUOTE)
+		if (current->next->token_type == SQUOTE || current->next->token_type == DQUOTE)
 		{
 			type = current->next->token_type;
 			current = current->next->next;

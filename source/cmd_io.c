@@ -61,7 +61,7 @@ int		set_output_fd(t_token *current)
 	int	token_type;
 
 	token_type = current->token_type;
-	if (current->next->token_type == ODQUOTE)
+	if (current->next->token_type == DQUOTE)
 		current = current->next;
 	if (current->next->token_type != WORD)
 		return (-1);
