@@ -63,6 +63,7 @@ t_cmd	*create_cmd(t_data *data)
 	ret->next = NULL;
 	ret->prev = NULL;
 	ret->pipe_status = 0;
+	ret->background = 0;
 	return (ret);
 }
 
@@ -92,6 +93,8 @@ int	is_assign(char	*str)
 	{
 		if (*str == '=' && *str + 1)
 			return (1); 
+		if (!ft_isalnum(*str))
+			return (0);
 		str++;
 	}
 	return (0);
@@ -195,7 +198,7 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && !token_is_term(current))
 	{
-		if (current != NULL && current->token_type == WORD && !is_assign(current->value))
+		if (current != NULL && current->token_type == WORD)
 		{
 			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev) )
 			{
