@@ -79,6 +79,7 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	}
 	close_pipes(data->cmd_list, cmd);
 }
+
 void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
@@ -88,9 +89,6 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 
 	if (cmd_node->fd[0] == -1)
 		return ;
-	set_pipes(data, cmd_node);
-	set_fd(cmd_node);
-	close_pipes(data->cmd_list, NULL);
 	env_p = get_path(data->envv);
 	sep = 0;
 	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);

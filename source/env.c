@@ -22,7 +22,6 @@ char	*ft_getenv(char **env, const char *str)
 	i = 0;
 	while (env && env[i])
 	{
-		// printf("listing env i %i = %s\n", i, env[i]);
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
 			if (*(env[i] + ft_strlen(str)) == '=')
 				tmp = env[i] + ft_strlen(str) + 1;
@@ -80,6 +79,7 @@ char	**replace_env_value(char **envv, char *value)
 		}
 		i++;
 	}
+	free(value);
 	return (envv);
 
 

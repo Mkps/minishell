@@ -206,6 +206,8 @@ t_token	*get_next_cmd(t_token *src)
 		}
 		current = current->next;
 	}
+	if (token_is_term(current))
+		return (current);
 	return (NULL);
 }
 
@@ -214,12 +216,15 @@ int		is_empty_cmd(t_token *start)
 	t_token *tmp;
 
 	tmp = start;
-	while (tmp->prev && !token_is_term(tmp->prev))
-		tmp = tmp->prev;
 	while (tmp && !token_is_term(tmp))
 	{
 		if (token_is_io(tmp))
 			return (1);
+		tmp = tmp->next;
+	}
+	while (tmp && tmp != start)
+	{
+		tmp = tmp->prev;
 	}
 	return (0);
 }
@@ -231,10 +236,29 @@ void	set_pipe(t_cmd *cmd)
 	pipe(cmd->pipe_fd);
 	return ;	
 }
+char	*set_assign(t_token *token)
+{
+	char	*ret;
 
+	ret = ft_strdup(token->value);
+	if (token->near_quote == 0)
+	{
+		return (ret);
+	}
+	int	i = 0;
+	while (i <= 3)
+	{
+		ret = ft_strjoin(ret, token->next->value);
+		token = token->next;
+		token->token_type = CMD_ASSIGN;
+		i++;
+	}
+	return (ret);
+}
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
+	t_token *tmp;
 
 	if (token == NULL)
 		current_t  = *data->token_root;
@@ -242,34 +266,32 @@ void	build_cmd_list(t_data *data, t_token *token)
 		current_t = token;
 	while (current_t != NULL)
 	{
+		tmp = current_t;
 		if (current_t && !current_t->prev && is_assign(current_t->value))
 		{
-			ft_setenv(data, current_t->value);
-			current_t = current_t->next;
-		}
-		if (current_t && (get_next_cmd(current_t) != NULL))
-		{
-			current_t = get_next_cmd(current_t);
-			current_t = add_cmd(data, current_t);
-			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
-			while (!token_is_term(current_t))
-				current_t = current_t->next;
-			if (current_t && current_t->token_type == PIPE)
-				set_pipe(last_cmd(data->cmd_list));
-			current_t = current_t->next;
-		}
-		if (current_t && is_empty_cmd(current_t))
-		{
-			add_empty_cmd(data);
-			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
-			while (!token_is_term(current_t))
-				current_t = current_t->next;
-			if (current_t && current_t->token_type == PIPE)
-				set_pipe(last_cmd(data->cmd_list));
+			ft_setenv(data, set_assign(current_t));
 			current_t = current_t->next;
 		}
 		else if (current_t)
-		 	current_t = current_t->next;
+		{
+			tmp = get_next_cmd(tmp);
+			current_t = tmp;
+			if (tmp && tmp->token_type != WORD)
+				add_empty_cmd(data);
+			else
+				current_t = add_cmd(data, current_t);
+			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
+			while (current_t && !token_is_term(current_t))
+				current_t = current_t->next;
+			if (current_t && current_t->token_type == PIPE)
+				set_pipe(last_cmd(data->cmd_list));
+			current_t = current_t->next;
+		}
+		else
+		{
+			if (current_t)
+		 		current_t = current_t->next;
+		}
 	}
 
 }

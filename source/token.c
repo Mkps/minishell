@@ -56,6 +56,7 @@ t_token	*create_token(int type, char *value)
 	ret->value = value;
 	ret->raw_value = value;
 	ret->token_type = type;
+	ret->near_quote = 0;
 	ret->quote_status = NONE;
 	return (ret);
 }

@@ -40,6 +40,8 @@ int	ft_get_word(char *input, t_data *data)
 	}
 	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
 	last_token(data->token_root)->quote_status = current_status;
+	if (ft_get_sep_type(input + i) == ODQUOTE)
+		last_token(data->token_root)->near_quote = 1;
 	return (i);
 }
 

@@ -38,6 +38,7 @@ typedef struct s_token {
 	char			*raw_value;
 	int				quote_status;
 	int				token_type;
+	int				near_quote;
 } t_token;
 
 typedef struct s_cmd {
