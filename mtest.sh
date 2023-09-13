@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Performs a simple diff between the bash inline output and the mshell inline output
 RED="\033[31m"
 GREEN="\033[32m"
