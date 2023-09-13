@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 14:44:35 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/12 12:55:00 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,20 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 	}
 	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
 	{
-		   int i = 0;
-    while(data->envv[i])
-    {
-        printf("%s\n", data->envv[i]);
-        i++;
-    }
 		ft_pwd(data);
 		return (1);
 	}
-	/*else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-        ft_env(data);
-    else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
+	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
+    {
+	    ft_env(data);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
+    {
+	    ft_export(data);
+		return (1);
+	}
+	/*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
         exit(0);
     else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd + 1)) == 0)
         ft_export(cmd, data);
@@ -94,4 +96,15 @@ void	execute(t_data *data)
 			data->exit_status = status;
 		cmd = cmd->next;
 	}
+}
+
+void 	ft_env(t_data *data)
+{
+    t_env *current = data->env_cpy;
+
+    while (current != NULL)
+    {
+        printf("%s=%s\n", current->key, current->value);
+        current = current->next;
+    }
 }

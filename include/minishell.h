@@ -60,10 +60,27 @@ typedef struct s_AST {
 	void			*data;
 }	t_AST;
 
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+	struct s_env	*next;
+}	t_env;
+
+typedef struct s_export
+{
+	char 	*export;
+	char	*key;
+	char	*value;
+	struct s_export	*next;
+}	t_export;
+
 typedef struct s_data {
 	int		pid;
 	int		is_interactive;
 	char	**envv;
+	t_env	*env_cpy;
+	t_export	*export;
 	int		parse_status;
 	int		exit_status;
 	int		old_fd[2];
@@ -139,10 +156,28 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 /**		parser.c		**/
 t_token	*get_cmd_first(t_token *current_t);
 
+/**		variable d environnement->liste chainee **/
+void copy_env_to_list(t_data *data);
+t_env	*ft_lstnew_two(char *key, char *value);
+void ft_lstadd_back_two(t_env **lst, t_env *new);
+void free_env_lst(t_env *env_lst);
+void print_env_list(t_env *env_lst);
+
 /**		execution builtin	**/
-void    ft_echo(t_cmd *cmd);
 int		execute_builtin(t_cmd *cmd, t_data *data);
+void    ft_echo(t_cmd *cmd);
 void	ft_cd(t_cmd *cmd, t_data *data);
 void    ft_pwd(t_data *data);
+void	ft_env(t_data *data);
 
+/**			export			**/
+void free_export_list(t_export *export_lst);
+t_export *ft_lstnew_export(char *key, char *value);
+void ft_lstadd_back_export(t_export **lst, t_export *new);
+void env_to_export(t_data *data);
+void print_export(t_data *data);
+void    ft_export(t_data *data);
+void sort_export_list(t_data *data);
+void insert_sorted(t_export **sorted, t_export *new_export);
+void    execute_export(t_data *data);
 #endif
