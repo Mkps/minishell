@@ -73,12 +73,12 @@ int		is_valid_var(char *str)
 {
 	int	i;
 
-	if (*str == 0 || (!ft_isalnum(*str) && *str != '_'))
+	if (*str == 0 || (!ft_isalpha(*str) && *str != '_'))
 		return (0);
 	i = 0;
 	while(str[i])
 	{
-		if (!ft_isalnum(*str))
+		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
 		i++;
 	}

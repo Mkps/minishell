@@ -132,7 +132,7 @@ int	is_assign(char	*str)
 	{
 		if (*str == '=' && *str + 1)
 			return (1); 
-		if (!ft_isalnum(*str))
+		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
 		str++;
 	}
