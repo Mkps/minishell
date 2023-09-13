@@ -162,4 +162,8 @@ void	set_pipes(t_data *data, t_cmd *cmd);
 int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 
+/**		dummies.c			**/
+int		ft_true(void);
+int		ft_false(void);
+
 #endif
