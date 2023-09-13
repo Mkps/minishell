@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 13:17:39 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:50:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,14 @@ void	execute(t_data *data)
 	int		status;
 	t_cmd	*cmd;
 	t_cmd	*start;
+	t_cmd	*last;
 	int		i;
 
 	status = 0;
 	start = *data->cmd_list;
 	if (!start)
 		return ;
+	i = 1;
 	while(start) 
 	{
 		cmd = start;
@@ -112,15 +114,19 @@ void	execute(t_data *data)
 			execute_cmd(cmd, data);
 			cmd = cmd->next;
 		}
+		if (cmd == NULL)
+			last = last_cmd(data->cmd_list);
+		else
+			last = cmd;
 		int	wpid = 0;
 		cmd = start;
 		i = 1;
-		while(i) 
+		while(i)
 		{
 			i -= cmd->is_term;
 			close_pipes(data->cmd_list, NULL);
 			wpid = waitpid(cmd->pid, &status, 0);
-			if (wpid == last_cmd(data->cmd_list)->pid)
+			if (wpid == last->pid)
 				data->exit_status = status;
 			cmd = cmd->next;
 		}
