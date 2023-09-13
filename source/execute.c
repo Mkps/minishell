@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 10:44:02 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/13 16:02:29 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
     {
 	    ft_export(data);
+		//printf("entre dans ft_export\n");
 		return (1);
 	}
 	/*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
@@ -69,7 +70,7 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 }
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
-{
+{	
 	if (cmd->type == EMPTY)
 	{
 		set_fd(cmd);
@@ -82,6 +83,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
+		printf("execute_cmd\n");
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{

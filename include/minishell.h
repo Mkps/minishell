@@ -192,5 +192,10 @@ void print_export(t_data *data);
 void    ft_export(t_data *data);
 void sort_export_list(t_data *data);
 void insert_sorted(t_export **sorted, t_export *new_export);
-void    execute_export(t_data *data);
+void    execute_export(t_data *data, t_cmd *cmd);
+char    **ft_split2(char *s, char c);
+int    ft_wordsize(char *s, char c, int pos);
+void    free_tabs(char **tab);
+void set_in_export(t_data *data, char *variable);
+
 #endif
