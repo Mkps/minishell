@@ -101,7 +101,8 @@ t_cmd	*create_cmd(t_data *data)
 	ret->next = NULL;
 	ret->prev = NULL;
 	ret->pipe_status = 0;
-	ret->background = 0;
+	ret->is_bg = 0;
+	ret->is_term = 0;
 	return (ret);
 }
 
@@ -326,6 +327,8 @@ void	build_cmd_list(t_data *data, t_token *token)
 				current_t = current_t->next;
 			if (current_t && current_t->token_type == PIPE)
 				set_pipe(last_cmd(data->cmd_list));
+			if (current_t && current_t->token_type >= TERM_END && current_t->token_type <= TERM_OR)
+				last_cmd(data->cmd_list)->is_term = 1;
 			current_t = current_t->next;
 		}
 		else

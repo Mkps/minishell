@@ -52,7 +52,8 @@ typedef struct s_cmd {
 	int		*pipe_fd;
 	char	*cmd;
 	char	**args;
-	int		background;
+	int		is_term;
+	int		is_bg;
 	
 }	t_cmd;
 
@@ -108,8 +109,8 @@ char	*ft_strappend(char *s1, char *s2, int mode);
 
 /**		token_utils.c	**/
 int 	token_is_quote(t_token *token);
-int token_is_io(t_token *token);
-int token_is_term(t_token *token);
+int 	token_is_io(t_token *token);
+int 	token_is_term(t_token *token);
 
 /**		env_utils.c		**/
 int		import_envv(t_data *data, char **envv);

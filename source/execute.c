@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 16:17:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:17:39 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,24 +95,35 @@ void	execute(t_data *data)
 {
 	int		status;
 	t_cmd	*cmd;
+	t_cmd	*start;
+	int		i;
 
 	status = 0;
-	cmd = *data->cmd_list;
-	if (!cmd)
+	start = *data->cmd_list;
+	if (!start)
 		return ;
-	while(cmd) 
+	while(start) 
 	{
-		execute_cmd(cmd, data);
-		cmd = cmd->next;
-	}
-	int	wpid = 0;
-	cmd = *data->cmd_list;
-	while(cmd) 
-	{
-		close_pipes(data->cmd_list, NULL);
-		wpid = waitpid(cmd->pid, &status, 0);
-		if (wpid == last_cmd(data->cmd_list)->pid)
-			data->exit_status = status;
-		cmd = cmd->next;
+		cmd = start;
+		i = 1;
+		while(i) 
+		{
+			i -= cmd->is_term;
+			execute_cmd(cmd, data);
+			cmd = cmd->next;
+		}
+		int	wpid = 0;
+		cmd = start;
+		i = 1;
+		while(i) 
+		{
+			i -= cmd->is_term;
+			close_pipes(data->cmd_list, NULL);
+			wpid = waitpid(cmd->pid, &status, 0);
+			if (wpid == last_cmd(data->cmd_list)->pid)
+				data->exit_status = status;
+			cmd = cmd->next;
+		}
+		start = cmd;
 	}
 }
