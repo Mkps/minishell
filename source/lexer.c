@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <stdlib.h>
 
 int	ft_get_sep(char *input, t_data *data)
 {
@@ -107,8 +108,13 @@ int	scan_input(t_data *data)
 	input = data->user_input;
 	data->parse_status = NONE;
 	i = 0;
+	if (*input == '#')
+	{
+		add_history(input);
+		return (EXIT_FAILURE);
+	}
 	while (*input && ft_is_ws(*input)) input++;
-	if (input == NULL || *input == 0)
+	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
 	add_history(input);
 	input_length = ft_strlen(input);
