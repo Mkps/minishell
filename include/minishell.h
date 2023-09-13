@@ -136,6 +136,7 @@ t_token	*ft_new_token(t_token **root, char *value, int type);
 /**		lexer_utils.c	**/
 int		ft_get_sep_type(char *str);
 char	*ft_str_extract(char *str, int n);
+char	*ft_str_extract_free(char *str, int n);
 int		ft_escape_seq(char *str);
 char	evaluate_bslash(char	*str, t_data *data);
 

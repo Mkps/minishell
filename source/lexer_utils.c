@@ -37,6 +37,23 @@ char	*ft_str_extract(char *str, int n)
 	return (ret);
 }
 
+char	*ft_str_extract_free(char *str, int n)
+{
+	char	*ret;
+	int		i;
+
+	ret = malloc(sizeof(char) * (n + 1));
+	i = 0;
+	while (i < n)
+	{
+		ret[i] = str[i];
+		i++;
+	}
+	ret[i] = 0;
+	free(str);
+	return (ret);
+}
+
 //	Returns 0 if not a separator. token_type otherwise.
 int	ft_get_sep_type(char *str)
 {
