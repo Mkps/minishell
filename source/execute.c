@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 16:07:01 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:18:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 		ft_pwd(data);
 		return (1);
 	}
+	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
+		ft_true();
+	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
+		ft_false();
 	/*else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
         ft_env(data);
     else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
@@ -57,6 +61,10 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 		return (1);
 	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
 		return (1);
+	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
+		return (0);
+	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
+		return (0);
 	return (0);
 }
 
