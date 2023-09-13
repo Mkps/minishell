@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 17:18:25 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:24:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 }
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
-{
+{	
 	if (cmd->type == EMPTY)
 	{
 		cmd->pid = fork();
@@ -90,6 +90,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
+		printf("execute_cmd\n");
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
@@ -122,30 +123,17 @@ void	execute(t_data *data)
 	i = 1;
 	while(start) 
 	{
-		cmd = start;
-		i = 1;
-		while(i) 
-		{
-			i -= cmd->is_term;
-			execute_cmd(cmd, data);
-			cmd = cmd->next;
-		}
-		if (cmd == NULL)
-			last = last_cmd(data->cmd_list);
-		else
-			last = cmd;
-		int	wpid = 0;
-		cmd = start;
-		i = 1;
-		while(i)
-		{
-			i -= cmd->is_term;
-			close_pipes(data->cmd_list, NULL);
-			wpid = waitpid(cmd->pid, &status, 0);
-			if (wpid == last->pid)
-				data->exit_status = WEXITSTATUS(status);
-			cmd = cmd->next;
-		}
-		start = cmd;
+		execute_cmd(cmd, data);
+		cmd = cmd->next;
+	}
+	int	wpid = 0;
+	cmd = *data->cmd_list;
+	while(cmd) 
+	{
+		close_pipes(data->cmd_list, NULL);
+		wpid = waitpid(cmd->pid, &status, 0);
+		if (wpid == last_cmd(data->cmd_list)->pid)
+			data->exit_status = status;
+		cmd = cmd->next;
 	}
 }

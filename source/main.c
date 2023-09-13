@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 14:15:20 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 10:44:22 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,9 @@ int	main(int ac, char **av, char **envv)
 
 	init_data(&data);
 	import_envv(&data, envv);
+	copy_env_to_list(&data);
+	sort_export_list(&data);
+	//print_env_list(data.export);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
