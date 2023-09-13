@@ -11,6 +11,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <signal.h>
 
 # define USAGE_MSG	"Correct use is ./mshell or ./mshell -c \"commands to be executed\""

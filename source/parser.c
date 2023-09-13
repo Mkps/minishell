@@ -44,19 +44,19 @@ void	parse_near_quote(t_data *data)
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD & current->near_quote == 1)
+		if (current->token_type == WORD && current->near_quote == 1)
 		{
 			if (current->next && current->next->next && current->next->next->token_type == WORD)
 				current->value = ft_strappend(current->value, current->next->next->value, 3);
 			else
-				current->value = ft_strappend(current->value,"", 3); 
+				current->value = ft_strappend(current->value,"", 0); 
 			tmp = current->next;
 			if (current->next && current->next->next && token_is_quote(current->next->next))
 			{
 				current->next = current->next->next->next;
 				current->next->prev = current;
 			}
-			else
+			else if (current->next && current->next->next && current->next->next->next)
 			{
 				current->next = current->next->next->next->next;
 				current->next->prev = current;
@@ -65,9 +65,8 @@ void	parse_near_quote(t_data *data)
 			{
 				tmp_tmp = tmp;
 				tmp = tmp->next;
-				free(tmp_tmp->value);
-				if (tmp_tmp->token_type == WORD)
-					free(tmp_tmp->raw_value);
+				if (tmp_tmp->token_type != WORD)
+					free(tmp_tmp->value);
 				free(tmp_tmp);
 			}
 		}
