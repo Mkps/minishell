@@ -26,7 +26,6 @@ char	*get_var(t_data *data,char *str)
 	char	**env_p;
 	char	*tmp;
 
-	printf ("looking for %s\n", str);
 	env = ft_getenv(data->envv, str);
 	if (env == NULL)
 	{
@@ -70,6 +69,22 @@ char	*str_replace(char *src, int r_index, int n, char *str)
 	return (ret);
 }
 
+int		is_valid_var(char *str)
+{
+	int	i;
+
+	if (*str == 0 || (!ft_isalnum(*str) && *str != '_'))
+		return (0);
+	i = 0;
+	while(str[i])
+	{
+		if (!ft_isalnum(*str))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
 char	*var_expander(t_data *data, char *str)
 {
@@ -82,8 +97,12 @@ char	*var_expander(t_data *data, char *str)
 	{
 		if (str[i] == '$')
 		{
+			if (str[i + 1] == '?')
+				return (var_expander(data, str_replace(str, i, 2, ft_itoa(data->exit_status))));
 			while (*(str + i + n) && ft_get_sep_type(str + i + n) == WORD)
 				n++;
+			if (n == 0)
+				return (var_expander(data, str + 1));
 			return (var_expander(data, str_replace(str, i, n, get_var(data, ft_str_extract(str + i + 1, n - 1)))));	
 		}
 		if (str[i] == 92)

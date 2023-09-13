@@ -43,9 +43,13 @@ int	ft_get_sep_type(char *str)
 	if ((*str > 8 && *str < 14) || *str == 32)
 		return (WSPACE);
 	else if (*str == '\'')
-		return (OSQUOTE);
+		return (SQUOTE);
 	else if (*str == '"')
-		return (ODQUOTE);
+		return (DQUOTE);
+	else if (*str == '(')
+		return (O_PAR);
+	else if (*str == ')')
+		return (C_PAR);
 	else if (*str == '\\')
 		return (BSLASH);
 	else if (*str == '|' && *(str + 1) == '&')

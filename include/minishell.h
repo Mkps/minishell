@@ -16,9 +16,9 @@
 # define USAGE_MSG	"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
 # define PROG_NAME	"minishell: "
 # define ERR_FORK	"minishell: error creating child process\n"
+# define NONE		0
 
-enum escape_type{NONE, SQUOTE, DQUOTE, BACKSLASH};
-enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, OSQUOTE, ODQUOTE, BSLASH};
+enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_pipex {
@@ -38,6 +38,7 @@ typedef struct s_token {
 	char			*raw_value;
 	int				quote_status;
 	int				token_type;
+	int				near_quote;
 } t_token;
 
 typedef struct s_cmd {
@@ -50,6 +51,7 @@ typedef struct s_cmd {
 	int		*pipe_fd;
 	char	*cmd;
 	char	**args;
+	int		background;
 	
 }	t_cmd;
 
@@ -113,12 +115,15 @@ int		ft_get_sep_type(char *str);
 
 /**		parser.c	**/
 void	parse_token(t_data *data);
+void	parse_near_quote(t_data *data);
 char	*var_expander(t_data *data, char *str);
 void	build_cmd_list(t_data *data, t_token *token);
 t_cmd	*last_cmd(t_cmd **root);
+t_token	*get_cmd_first(t_token *current_t);
+char	*ft_strappend(char *s1, char *s2, int mode);
 
 /**		token_utils.c	**/
-int token_is_quote(t_token *token);
+int 	token_is_quote(t_token *token);
 int token_is_io(t_token *token);
 int token_is_term(t_token *token);
 
@@ -153,8 +158,8 @@ char	evaluate_bslash(char	*str, t_data *data);
 /**		cmd_io.c		**/
 void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 
-/**		parser.c		**/
-t_token	*get_cmd_first(t_token *current_t);
+/**		error.c			**/
+int		check_error(t_data *data);
 
 /**		variable d environnement->liste chainee **/
 void copy_env_to_list(t_data *data);
@@ -168,6 +173,14 @@ int		execute_builtin(t_cmd *cmd, t_data *data);
 void    ft_echo(t_cmd *cmd);
 void	ft_cd(t_cmd *cmd, t_data *data);
 void    ft_pwd(t_data *data);
+
+/**		minishell_cmd.c	**/
+void	set_fd(t_cmd *cmd);
+void	set_pipes(t_data *data, t_cmd *cmd);
+
+/**		var.c			**/
+int		is_valid_var(char *str);
+char	*str_replace(char *src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
 
 /**			export			**/

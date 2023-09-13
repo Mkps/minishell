@@ -16,7 +16,7 @@ int token_is_quote(t_token *token)
 {
     if (token == NULL)
         return (0);
-    if (token->token_type == ODQUOTE || token ->token_type == OSQUOTE)
+    if (token->token_type == DQUOTE || token ->token_type == SQUOTE)
         return (1);
     return (0);
 }

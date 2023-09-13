@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 12:21:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/11 16:19:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	}
 	close_pipes(data->cmd_list, cmd);
 }
+
 void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
@@ -88,9 +89,6 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 
 	if (cmd_node->fd[0] == -1)
 		return ;
-	set_pipes(data, cmd_node);
-	set_fd(cmd_node);
-	close_pipes(data->cmd_list, NULL);
 	env_p = get_path(data->envv);
 	sep = 0;
 	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);

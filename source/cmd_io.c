@@ -45,10 +45,13 @@ int		set_input_fd(t_token *current)
 	token_type = current->token_type;
 	if (token_is_quote(current->next))
 		current = current->next;
-	if (current->next->token_type != WORD)
-		return (-1);
 	if (token_type == IO_INPUT)
+	{
+		char *str = "";
+		if (token_is_quote(current) && current->next && token_is_quote(current->next))
+			return (open_fd(0, str));
 		return (open_fd(0, current->next->value));
+	}
 	if (token_type == IO_HEREDOC)
 		here_doc_handler(current->next->value);
 	return (0);
@@ -58,7 +61,7 @@ int		set_output_fd(t_token *current)
 	int	token_type;
 
 	token_type = current->token_type;
-	if (current->next->token_type == ODQUOTE)
+	if (current->next->token_type == DQUOTE)
 		current = current->next;
 	if (current->next->token_type != WORD)
 		return (-1);
