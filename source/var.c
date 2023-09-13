@@ -109,7 +109,7 @@ char	*var_expander(t_data *data, char *str)
 				ret = str_replace(ret, i, 2, exit_code);
 				free(tmp);
 			}
-			else
+			else if (ft_isalnum(str[i]) || str[i] == '_')
 			{
 				while (*(str + i + n) && ft_get_sep_type(str + i + n) == WORD)
 					n++;
