@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 14:29:40 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 16:07:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,15 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 {
 	if (cmd->type == EMPTY)
 	{
-		set_fd(cmd);
+		cmd->pid = fork();
+		if (cmd->pid == 0)
+		{		
+			set_fd(cmd);
+			cmd->pid = -2;
+			cmd->pipe_status = 0;
+			set_pipes(data, cmd);
+			exit (1);
+		}
 		return ;
 	}
 	if (is_builtin(cmd, data) == 1)
@@ -76,9 +84,9 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
-		{
-			set_pipes(data, cmd);
+		{		
 			set_fd(cmd);
+			set_pipes(data, cmd);
 			close_pipes(data->cmd_list, NULL);
 			if (!execute_builtin(cmd,data))
 				exec_cmd(cmd, data);

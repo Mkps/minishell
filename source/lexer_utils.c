@@ -89,6 +89,8 @@ int	ft_get_sep_type(char *str)
 		return (IO_TRUNC);
 	else if (*str == 0)
 		return (TERM_END);
+	else if (*str == ';' && *(str + 1) == ';')
+		return (TERM_2SC);
 	else if (*str == ';')
 		return (TERM_SC);
 	else if (*str <= 126 || *str >= 33)

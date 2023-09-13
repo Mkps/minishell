@@ -1,6 +1,24 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
+//returns the token as a str
+// char	*get_str_token(int token_type)
+// {
+// 	if (token_type == PIPE)
+// 		return ("|");
+// 	if (token_type == TERM_END)
+// 		return ("newline");
+// 	if (token_type == IO_APPEND)
+// 		return (">");
+// 	if (token_type == IO_INPUT)
+// 		return ("<");
+// 	if (token_type == IO_APPEND)
+// 		return (">>");
+// 	if (token_type == IO_HEREDOC)
+// 		return ("<<");
+// 	if (token_type == TERM_SC)
+// 		return (";");
+// }
 void	output_err(char *msg, t_token *token, int squotes)
 {
 	char	*name_str;
@@ -14,6 +32,8 @@ void	output_err(char *msg, t_token *token, int squotes)
 		return ;
 	}
 	token_str = token->value;
+	if (token->token_type == TERM_END)
+		token_str = "newline";
 	tmp_str = ft_strappend(name_str, msg, 0);
 	if (squotes == 1)
 		tmp_str = ft_strappend(tmp_str, "'", 0);
@@ -36,10 +56,7 @@ int	check_io_error(t_token **root)
 		{
 			if (tmp->next && (tmp->next->token_type != WORD && !token_is_quote(tmp->next)))
 			{
-				if (tmp->next->token_type == TERM_END)
-					ft_printf("syntax error near unexpected token `newline'\n");
-				if (tmp->next->token_type == PIPE)
-					ft_printf("syntax error near unexpected token `|'\n");
+				output_err("syntax error near unexpected token ", tmp->next, 1);
 				return (EXIT_FAILURE);
 			}
 		}
@@ -72,6 +89,23 @@ int	check_quote_error(t_token **root)
 	return (EXIT_FAILURE);
 }
 
+int	check_term_error(t_token **root)
+{
+	t_token	*tmp;
+
+	tmp = *root;
+	while (tmp)
+	{
+		if (token_is_term(tmp) && tmp->token_type != TERM_END && !tmp->prev)
+		{
+			output_err("syntax error near unexpected token ", tmp, 1);
+			return (EXIT_FAILURE);
+		}
+		tmp = tmp->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	check_par_error(t_token **root)
 {
 	t_token *tmp;
@@ -97,7 +131,13 @@ int	check_par_error(t_token **root)
 			return (EXIT_FAILURE);
 		}
 		if (tmp->token_type == C_PAR)
+		{
+			if (tmp->prev->token_type == O_PAR)
+			{
+				output_err("syntax error near unexpected token `)'\n", NULL, 0);
+			}
 			par_status--;
+		}
 		tmp = tmp->next;
 	}
 	if (par_status != 0)
@@ -115,6 +155,8 @@ int	check_error(t_data *data)
 	if (check_quote_error(data->token_root) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (check_par_error(data->token_root) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (check_term_error(data->token_root) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

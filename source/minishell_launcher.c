@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 13:27:44 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 15:32:04 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	minishell_prompt(t_data *data)
 		signals_interact();
 		get_next_line(-1);
 		data->user_input = readline("$ ");
-		// signals_no_interact();
+		signals_no_interact();
 		if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
 		{
 			if (!data->user_input)
