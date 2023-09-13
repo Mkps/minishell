@@ -88,7 +88,7 @@ int	check_par_error(t_token **root)
 			output_err("syntax error near unexpected token `)'\n", NULL, 0);
 			return (EXIT_FAILURE);
 		}
-		if (tmp->prev && tmp->token_type == O_PAR && !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
+		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR && !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
 		{
 			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
 				output_err("syntax error near unexpected token ", tmp->next , 1);

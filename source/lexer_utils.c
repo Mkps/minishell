@@ -71,6 +71,8 @@ int	ft_get_sep_type(char *str)
 		return (BSLASH);
 	else if (*str == '|' && *(str + 1) == '&')
 		return (PIPE_STDERR);
+	else if (*str == '&' && *(str + 1) == '&')
+			return (TERM_2AND);
 	else if (*str == '|' && *(str + 1) == '|')
 		return (TERM_OR);
 	else if (*str == '<' && *(str + 1) == '<')
@@ -79,6 +81,8 @@ int	ft_get_sep_type(char *str)
 		return (IO_APPEND);
 	else if (*str == '|')
 		return (PIPE);
+	else if (*str == '&')
+		return (TERM_AND);
 	else if (*str == '<')
 		return (IO_INPUT);
 	else if (*str == '>')
