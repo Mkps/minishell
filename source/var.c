@@ -125,11 +125,16 @@ char	*var_expander(t_data *data, char *str)
 			}
 			i = 0;
 		}
-		// else if (str[i] == 92)
-		// {
-		// 	if (str[i + 1] && str[i + 1] == 34)
-		// 	 return (var_expander(data, str_replace(str, i, 2, "\"")));
-		// }
+		else if (ret[i] == 92)
+		{
+			if (ret[i + 1] && ret[i + 1] == 92)
+			{
+				tmp = ret;
+				ret = str_replace(ret, i, 2, "\\");
+				free(tmp);
+			}
+			i++;
+		}
 		else
 			i++;
 	}

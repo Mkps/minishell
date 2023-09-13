@@ -19,7 +19,7 @@
 # define ERR_FORK	"minishell: error creating child process\n"
 # define NONE		0
 
-enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
+enum token_type{WSPACE = 1, WORD, VAR, NOT, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_2SC,TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_pipex {
@@ -146,6 +146,7 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 
 /**		error.c			**/
 int		check_error(t_data *data);
+void	output_err(char *msg, t_token *token, int squotes);
 
 /**		execution builtin	**/
 void    ft_echo(t_cmd *cmd);

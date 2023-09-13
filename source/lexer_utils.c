@@ -67,8 +67,10 @@ int	ft_get_sep_type(char *str)
 		return (O_PAR);
 	else if (*str == ')')
 		return (C_PAR);
-	else if (*str == '\\')
-		return (BSLASH);
+	// else if (*str == '\\')
+	// 	return (BSLASH);
+	else if (*str == '!')
+		return (NOT);
 	else if (*str == '|' && *(str + 1) == '&')
 		return (PIPE_STDERR);
 	else if (*str == '&' && *(str + 1) == '&')
