@@ -73,12 +73,12 @@ int		is_valid_var(char *str)
 {
 	int	i;
 
-	if (*str == 0 || (!ft_isalnum(*str) && *str != '_'))
+	if (*str == 0 || (!ft_isalpha(*str) && *str != '_'))
 		return (0);
 	i = 0;
 	while(str[i])
 	{
-		if (!ft_isalnum(*str))
+		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
 		i++;
 	}
@@ -88,29 +88,57 @@ int		is_valid_var(char *str)
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
 char	*var_expander(t_data *data, char *str)
 {
-	int	i;
-	int	n;
+	int		i;
+	int		n;
+	char	*ret;
+	char	*tmp;
+	char	*tmp_str;
+	char	*exit_code;
 	
 	i = 0;
-	n = 0;
-	while (str[i])
+	n = 1;
+	ret = ft_strdup(str);
+	exit_code = ft_itoa(data->exit_status);
+	while (ret[i])
 	{
-		if (str[i] == '$')
+		if (ret[i] == '$')
 		{
-			if (str[i + 1] == '?')
-				return (var_expander(data, str_replace(str, i, 2, ft_itoa(data->exit_status))));
-			while (*(str + i + n) && ft_get_sep_type(str + i + n) == WORD)
-				n++;
-			if (n == 0)
-				return (var_expander(data, str + 1));
-			return (var_expander(data, str_replace(str, i, n, get_var(data, ft_str_extract(str + i + 1, n - 1)))));	
+			if (ret[i + 1] == '?')
+			{
+				tmp = ret;
+				ret = str_replace(ret, i, 2, exit_code);
+				free(tmp);
+			}
+			else if (ft_isalnum(ret[i + 1]) || ret[i + 1] == '_')
+			{
+				n = 1;
+				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i + n] == '_'))
+					n++;
+				if (n != 1)
+				{
+					tmp = ret;
+					tmp_str = ft_str_extract(ret + i + 1, n - 1);
+					ret = str_replace(ret, i, n, get_var(data, tmp_str));
+					free(tmp_str);
+					free(tmp);
+				}
+			}
+			i = 0;
 		}
-		if (str[i] == 92)
+		else if (ret[i] == 92)
 		{
-			if (str[i + 1] && str[i + 1] == 34)
-			 return (var_expander(data, str_replace(str, i, 2, "\"")));
+			if (ret[i + 1] && ret[i + 1] == 92)
+			{
+				tmp = ret;
+				ret = str_replace(ret, i, 2, "\\");
+				free(tmp);
+			}
+			i++;
 		}
-		i++;
+		else
+			i++;
 	}
-	return (str);
+	free(exit_code);
+	free(str);
+	return (ret);
 }

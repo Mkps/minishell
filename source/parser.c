@@ -44,7 +44,7 @@ void	parse_near_quote(t_data *data)
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD & current->near_quote == 1)
+		if (current->token_type == WORD && current->near_quote == 1)
 		{
 			if (current->next && current->next->next && current->next->next->token_type == WORD)
 				current->value = ft_strappend(current->value, current->next->next->value, 3);
@@ -56,7 +56,7 @@ void	parse_near_quote(t_data *data)
 				current->next = current->next->next->next;
 				current->next->prev = current;
 			}
-			else
+			else if (current->next && current->next->next && current->next->next->next)
 			{
 				current->next = current->next->next->next->next;
 				current->next->prev = current;
@@ -65,9 +65,8 @@ void	parse_near_quote(t_data *data)
 			{
 				tmp_tmp = tmp;
 				tmp = tmp->next;
-				free(tmp_tmp->value);
-				if (tmp_tmp->token_type == WORD)
-					free(tmp_tmp->raw_value);
+				if (tmp_tmp->token_type != WORD)
+					free(tmp_tmp->value);
 				free(tmp_tmp);
 			}
 		}
@@ -102,7 +101,8 @@ t_cmd	*create_cmd(t_data *data)
 	ret->next = NULL;
 	ret->prev = NULL;
 	ret->pipe_status = 0;
-	ret->background = 0;
+	ret->is_bg = 0;
+	ret->is_term = 0;
 	return (ret);
 }
 
@@ -132,7 +132,7 @@ int	is_assign(char	*str)
 	{
 		if (*str == '=' && *str + 1)
 			return (1); 
-		if (!ft_isalnum(*str))
+		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
 		str++;
 	}
@@ -327,6 +327,8 @@ void	build_cmd_list(t_data *data, t_token *token)
 				current_t = current_t->next;
 			if (current_t && current_t->token_type == PIPE)
 				set_pipe(last_cmd(data->cmd_list));
+			if (current_t && current_t->token_type >= TERM_END && current_t->token_type <= TERM_OR)
+				last_cmd(data->cmd_list)->is_term = 1;
 			current_t = current_t->next;
 		}
 		else

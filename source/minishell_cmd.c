@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 16:19:25 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 16:40:13 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,27 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	close_pipes(data->cmd_list, cmd);
 }
 
+int	is_directory(char *str)
+{
+	int	i;
+	int	dot_count;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '.')
+			dot_count++;
+		else
+			dot_count = 0;
+		if (str[i] != '/' && str[i] != '.')
+			return (0);
+		if (dot_count > 2)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
@@ -87,6 +108,13 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 	char	sep;
 	char	**env_p;
 
+	if (is_directory(cmd_node->cmd))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_node->cmd, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		exit(126);
+	}
 	if (cmd_node->fd[0] == -1)
 		return ;
 	env_p = get_path(data->envv);

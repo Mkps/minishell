@@ -11,6 +11,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <signal.h>
 
 # define USAGE_MSG	"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
@@ -18,7 +19,7 @@
 # define ERR_FORK	"minishell: error creating child process\n"
 # define NONE		0
 
-enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
+enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_2SC,TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_pipex {
@@ -51,7 +52,8 @@ typedef struct s_cmd {
 	int		*pipe_fd;
 	char	*cmd;
 	char	**args;
-	int		background;
+	int		is_term;
+	int		is_bg;
 	
 }	t_cmd;
 
@@ -124,8 +126,8 @@ char	*ft_strappend(char *s1, char *s2, int mode);
 
 /**		token_utils.c	**/
 int 	token_is_quote(t_token *token);
-int token_is_io(t_token *token);
-int token_is_term(t_token *token);
+int 	token_is_io(t_token *token);
+int 	token_is_term(t_token *token);
 
 /**		env_utils.c		**/
 int		import_envv(t_data *data, char **envv);
@@ -152,6 +154,7 @@ t_token	*ft_new_token(t_token **root, char *value, int type);
 /**		lexer_utils.c	**/
 int		ft_get_sep_type(char *str);
 char	*ft_str_extract(char *str, int n);
+char	*ft_str_extract_free(char *str, int n);
 int		ft_escape_seq(char *str);
 char	evaluate_bslash(char	*str, t_data *data);
 
@@ -160,6 +163,7 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 
 /**		error.c			**/
 int		check_error(t_data *data);
+void	output_err(char *msg, t_token *token, int squotes);
 
 /**		variable d environnement->liste chainee **/
 void copy_env_to_list(t_data *data);

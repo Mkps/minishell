@@ -40,7 +40,7 @@ int	ft_get_word(char *input, t_data *data)
 	}
 	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
 	last_token(data->token_root)->quote_status = current_status;
-	if (ft_get_sep_type(input + i) == DQUOTE || ft_get_sep_type(input + i) == SQUOTE)
+	if (current_status == 0 && (ft_get_sep_type(input + i) == DQUOTE || ft_get_sep_type(input + i) == SQUOTE))
 		last_token(data->token_root)->near_quote = 1;
 	return (i);
 }
@@ -104,6 +104,7 @@ int	scan_input(t_data *data)
 	i = 0;
 	if (input == NULL)
 		return (EXIT_FAILURE);
+	add_history(input);
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 

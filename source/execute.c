@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 16:02:29 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:12:03 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,15 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 {	
 	if (cmd->type == EMPTY)
 	{
-		set_fd(cmd);
+		cmd->pid = fork();
+		if (cmd->pid == 0)
+		{		
+			set_fd(cmd);
+			cmd->pid = -2;
+			cmd->pipe_status = 0;
+			set_pipes(data, cmd);
+			exit (1);
+		}
 		return ;
 	}
 	if (is_builtin(cmd, data) == 1)
@@ -86,9 +94,9 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		printf("execute_cmd\n");
 		cmd->pid = fork();
 		if (cmd->pid == 0)
-		{
-			set_pipes(data, cmd);
+		{		
 			set_fd(cmd);
+			set_pipes(data, cmd);
 			close_pipes(data->cmd_list, NULL);
 			if (!execute_builtin(cmd,data))
 				exec_cmd(cmd, data);
@@ -105,12 +113,16 @@ void	execute(t_data *data)
 {
 	int		status;
 	t_cmd	*cmd;
+	t_cmd	*start;
+	t_cmd	*last;
+	int		i;
 
 	status = 0;
-	cmd = *data->cmd_list;
-	if (!cmd)
+	start = *data->cmd_list;
+	if (!start)
 		return ;
-	while(cmd) 
+	i = 1;
+	while(start) 
 	{
 		execute_cmd(cmd, data);
 		cmd = cmd->next;
@@ -125,15 +137,4 @@ void	execute(t_data *data)
 			data->exit_status = status;
 		cmd = cmd->next;
 	}
-}
-
-void 	ft_env(t_data *data)
-{
-    t_env *current = data->env_cpy;
-
-    while (current != NULL)
-    {
-        printf("%s=%s\n", current->key, current->value);
-        current = current->next;
-    }
 }

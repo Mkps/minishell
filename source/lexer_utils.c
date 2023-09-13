@@ -37,6 +37,23 @@ char	*ft_str_extract(char *str, int n)
 	return (ret);
 }
 
+char	*ft_str_extract_free(char *str, int n)
+{
+	char	*ret;
+	int		i;
+
+	ret = malloc(sizeof(char) * (n + 1));
+	i = 0;
+	while (i < n)
+	{
+		ret[i] = str[i];
+		i++;
+	}
+	ret[i] = 0;
+	free(str);
+	return (ret);
+}
+
 //	Returns 0 if not a separator. token_type otherwise.
 int	ft_get_sep_type(char *str)
 {
@@ -50,10 +67,10 @@ int	ft_get_sep_type(char *str)
 		return (O_PAR);
 	else if (*str == ')')
 		return (C_PAR);
-	else if (*str == '\\')
-		return (BSLASH);
 	else if (*str == '|' && *(str + 1) == '&')
 		return (PIPE_STDERR);
+	else if (*str == '&' && *(str + 1) == '&')
+			return (TERM_2AND);
 	else if (*str == '|' && *(str + 1) == '|')
 		return (TERM_OR);
 	else if (*str == '<' && *(str + 1) == '<')
@@ -62,12 +79,16 @@ int	ft_get_sep_type(char *str)
 		return (IO_APPEND);
 	else if (*str == '|')
 		return (PIPE);
+	else if (*str == '&')
+		return (TERM_AND);
 	else if (*str == '<')
 		return (IO_INPUT);
 	else if (*str == '>')
 		return (IO_TRUNC);
 	else if (*str == 0)
 		return (TERM_END);
+	else if (*str == ';' && *(str + 1) == ';')
+		return (TERM_2SC);
 	else if (*str == ';')
 		return (TERM_SC);
 	else if (*str <= 126 || *str >= 33)
