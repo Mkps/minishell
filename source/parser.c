@@ -49,7 +49,7 @@ void	parse_near_quote(t_data *data)
 			if (current->next && current->next->next && current->next->next->token_type == WORD)
 				current->value = ft_strappend(current->value, current->next->next->value, 3);
 			else
-				current->value = ft_strappend(current->value,"", 0); 
+				current->value = ft_strappend(current->value,"", 3); 
 			tmp = current->next;
 			if (current->next && current->next->next && token_is_quote(current->next->next))
 			{
