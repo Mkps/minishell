@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 13:50:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:29:40 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	execute(t_data *data)
 			close_pipes(data->cmd_list, NULL);
 			wpid = waitpid(cmd->pid, &status, 0);
 			if (wpid == last->pid)
-				data->exit_status = status;
+				data->exit_status = WEXITSTATUS(status);
 			cmd = cmd->next;
 		}
 		start = cmd;

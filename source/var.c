@@ -96,39 +96,42 @@ char	*var_expander(t_data *data, char *str)
 	char	*exit_code;
 	
 	i = 0;
-	n = 0;
+	n = 1;
 	ret = ft_strdup(str);
 	exit_code = ft_itoa(data->exit_status);
-	while (str[i])
+	while (ret[i])
 	{
-		if (str[i] == '$')
+		if (ret[i] == '$')
 		{
-			if (str[i + 1] == '?')
+			if (ret[i + 1] == '?')
 			{
 				tmp = ret;
 				ret = str_replace(ret, i, 2, exit_code);
 				free(tmp);
 			}
-			else if (ft_isalnum(str[i + 1]) || str[i + 1] == '_')
+			else if (ft_isalnum(ret[i + 1]) || ret[i + 1] == '_')
 			{
-				while (*(str + i + n) && ft_get_sep_type(str + i + n) == WORD)
+				n = 1;
+				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i + n] == '_'))
 					n++;
-				if (n != 0)
+				if (n != 1)
 				{
 					tmp = ret;
-					tmp_str = ft_str_extract(str + i + 1, n - 1);
+					tmp_str = ft_str_extract(ret + i + 1, n - 1);
 					ret = str_replace(ret, i, n, get_var(data, tmp_str));
 					free(tmp_str);
 					free(tmp);
 				}
 			}
+			i = 0;
 		}
-		else if (str[i] == 92)
-		{
-			if (str[i + 1] && str[i + 1] == 34)
-			 return (var_expander(data, str_replace(str, i, 2, "\"")));
-		}
-		i++;
+		// else if (str[i] == 92)
+		// {
+		// 	if (str[i + 1] && str[i + 1] == 34)
+		// 	 return (var_expander(data, str_replace(str, i, 2, "\"")));
+		// }
+		else
+			i++;
 	}
 	free(exit_code);
 	free(str);
