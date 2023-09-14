@@ -154,6 +154,7 @@ int	check_par_error(t_token **root)
 			if (tmp->prev->token_type == O_PAR)
 			{
 				output_err("syntax error near unexpected token `)'", NULL, 0);
+				return (EXIT_FAILURE);
 			}
 			par_status--;
 		}
@@ -169,13 +170,17 @@ int	check_par_error(t_token **root)
 
 int	check_error(t_data *data)
 {
-	if (check_io_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (check_quote_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (check_par_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (check_term_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	int	err;
+
+	err = EXIT_SUCCESS;
+	if (!err && check_io_error(data->token_root) == EXIT_FAILURE)
+		err = EXIT_FAILURE;
+	if (!err && check_quote_error(data->token_root) == EXIT_FAILURE)
+		err = EXIT_FAILURE;
+	if (!err && check_par_error(data->token_root) == EXIT_FAILURE)
+		err = SYNTAX_ERROR;
+	if (!err && check_term_error(data->token_root) == EXIT_FAILURE)
+		err = EXIT_FAILURE;
+	data->exit_status = err;
+	return (err);
 }

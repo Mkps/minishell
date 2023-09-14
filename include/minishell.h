@@ -18,6 +18,7 @@
 # define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
 # define PROG_NAME		"minishell: "
 # define ERR_FORK		"minishell: error creating child process\n"
+# define SYNTAX_ERROR	2
 # define CMD_ERR_FKO	127
 # define CMD_ERR_XKO	126
 # define NONE			0
