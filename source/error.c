@@ -50,7 +50,7 @@ void	output_err_cmd(char *msg, char *cmd_str)
 	char	*name_str;
 	char	*tmp_str;
 
-	name_str = "minishell: ";
+	name_str = PROG_NAME;
 	if (!cmd_str)
 	{
 		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
@@ -141,7 +141,8 @@ int	check_par_error(t_token **root)
 			output_err("syntax error near unexpected token `)'", NULL, 0);
 			return (EXIT_FAILURE);
 		}
-		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR && !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
+		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR 
+				&& !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
 		{
 			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
 				output_err("syntax error near unexpected token ", tmp->next , 1);
@@ -174,13 +175,13 @@ int	check_error(t_data *data)
 
 	err = EXIT_SUCCESS;
 	if (!err && check_io_error(data->token_root) == EXIT_FAILURE)
-		err = EXIT_FAILURE;
+		err = SYNTAX_ERROR;
 	if (!err && check_quote_error(data->token_root) == EXIT_FAILURE)
-		err = EXIT_FAILURE;
+		err = SYNTAX_ERROR;
 	if (!err && check_par_error(data->token_root) == EXIT_FAILURE)
 		err = SYNTAX_ERROR;
 	if (!err && check_term_error(data->token_root) == EXIT_FAILURE)
-		err = EXIT_FAILURE;
+		err = SYNTAX_ERROR;
 	data->exit_status = err;
 	return (err);
 }

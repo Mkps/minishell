@@ -102,7 +102,7 @@ int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 	int	error;
 	if (is_cmd_fko(cmd, data) == 1)
 	{
-		output_err_cmd(strerror(errno), cmd->cmd);
+		output_err_cmd("command not found", cmd->cmd);
 		return (CMD_ERR_FKO);
 	}
 	if (is_cmd_fko(cmd, data) == 2)
