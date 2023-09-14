@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <stdlib.h>
 
 int	ft_get_sep(char *input, t_data *data)
 {
@@ -93,6 +94,12 @@ int	ft_get_token(char *input, t_data *data)
 	}
 	return (i);
 }
+int	ft_is_ws(char c)
+{
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (1);
+	return (0);
+}
 
 //Scan input for tokens then load them into the pre-command table.
 int	scan_input(t_data *data)
@@ -102,11 +109,16 @@ int	scan_input(t_data *data)
 	char *input;
 	int	input_length;
 
-
 	input = data->user_input;
 	data->parse_status = NONE;
 	i = 0;
-	if (input == NULL)
+	if (*input == '#')
+	{
+		add_history(input);
+		return (EXIT_FAILURE);
+	}
+	while (*input && ft_is_ws(*input)) input++;
+	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
 	add_history(input);
 	input_length = ft_strlen(input);
