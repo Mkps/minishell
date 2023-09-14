@@ -53,10 +53,7 @@ t_token	*create_token(int type, char *value)
 	ret = malloc(sizeof(t_token));
 	ret->next = NULL;
 	ret->prev = NULL;
-	if (value == NULL)
-		ret->value = "";
-	else
-		ret->value = value;
+	ret->value = value;
 	ret->raw_value = value;
 	ret->token_type = type;
 	ret->near_quote = 0;

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 15:03:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:39:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	cmd_is_dir(t_cmd *cmd, t_data *data)
 {
 	struct stat	stat_var;
 
-	ft_memset(&stat_var, 0, sizeof(stat));
+	ft_memset(&stat_var, 0, sizeof(stat_var));
 	stat(cmd->cmd, &stat_var);
 	return (S_ISDIR(stat_var.st_mode));
 }
@@ -84,6 +84,7 @@ int	is_cmd_fko(t_cmd *cmd, t_data *data)
 
 	env_p = get_path(data->envv);
 	tmp = get_cmd(cmd->cmd, env_p);
+	ret = 0;
 	if (tmp == NULL)
 		ret = 1;
 	else
@@ -98,8 +99,7 @@ int	is_cmd_fko(t_cmd *cmd, t_data *data)
 }
 int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 {
-	int	error;
-	if (is_cmd_fko(cmd, data) == 1)
+	if (is_cmd_fko(cmd, data) == 1 || (cmd->type == WORD && cmd->cmd[0] == 0))
 	{
 		output_err_cmd("command not found", cmd->cmd);
 		return (CMD_ERR_FKO);

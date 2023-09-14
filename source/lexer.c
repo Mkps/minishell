@@ -54,6 +54,8 @@ int	ft_get_quote(char *input, t_data *data)
 
 	i = 1;
 	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
+	if (ft_get_sep_type(input + 1) == WORD || ft_get_sep_type(input + i) == WORD)
+		last_token(data->token_root)->near_quote = 1;
 	return (i);
 }
 
