@@ -31,17 +31,6 @@ static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
 	return (sq);
 }
 
-//TODO: make it return 126 in case of !X_OK 127 !F_OK
-void	cmd_error(char *cmd, int error)
-{
-	ft_putstr_fd(PROG_NAME, 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	if (error == 2)
-		ft_putendl_fd("Command not found", 2);
-	else
-		ft_putendl_fd(strerror(error), 2);
-}
 void	set_fd(t_cmd *cmd)
 {
 	if (cmd->fd[0] != 0 || (cmd->prev && !cmd->prev->pipe_status))
@@ -80,54 +69,17 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	close_pipes(data->cmd_list, cmd);
 }
 
-int	is_directory(char *str)
-{
-	int	i;
-	int	dot_count;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '.')
-			dot_count++;
-		else
-			dot_count = 0;
-		if (str[i] != '/' && str[i] != '.')
-			return (0);
-		if (dot_count > 2)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
-	char	**sq;
-	char	sep;
 	char	**env_p;
 
-	if (is_directory(cmd_node->cmd))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_node->cmd, 2);
-		ft_putstr_fd(": is a directory\n", 2);
-		exit(126);
-	}
-	if (cmd_node->fd[0] == -1)
-		return ;
 	env_p = get_path(data->envv);
-	sep = 0;
-	sq = escape_quote(cmd_node->cmd, &cmd_node->args, &sep);
 	cmd_p = get_cmd(cmd_node->cmd, env_p);
-	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
+	if (execve(cmd_p, cmd_node->args, data->envv) == -1)
 	{
-		cmd_error(cmd_node->cmd, errno);
 		ft_free_tab(env_p);
-		if (sep)
-			ft_free_tab(sq);
-		if (cmd_p != NULL)
+		if (cmd_p)
 			free(cmd_p);
 	}
 }
@@ -139,11 +91,6 @@ char	*get_cmd(char *cmd, char **env_p)
 	char	*cmd_tmp;
 
 	i = -1;
-	if (access(cmd, F_OK) == 0)
-	{
-		if (!ft_strncmp(cmd, "./", 2) || !ft_strncmp(cmd, "/", 1))
-			return (ft_strdup(cmd));
-	}
 	while (env_p[++i])
 	{
 		cmd_dir = ft_strjoin(env_p[i], "/");
@@ -154,6 +101,11 @@ char	*get_cmd(char *cmd, char **env_p)
 			return (cmd_tmp);
 		}
 		free(cmd_tmp);
+	}
+	if (access(cmd, F_OK) == 0)
+	{
+		if (!ft_strncmp(cmd, "./", 2) || !ft_strncmp(cmd, "/", 1))
+			return (ft_strdup(cmd));
 	}
 	return (NULL);
 }

@@ -9,15 +9,18 @@
 # include <fcntl.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
 
-# define USAGE_MSG	"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
-# define PROG_NAME	"minishell: "
-# define ERR_FORK	"minishell: error creating child process\n"
-# define NONE		0
+# define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
+# define PROG_NAME		"minishell: "
+# define ERR_FORK		"minishell: error creating child process\n"
+# define CMD_ERR_FKO	127
+# define CMD_ERR_XKO	126
+# define NONE			0
 
 enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_2SC,TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
@@ -147,6 +150,7 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 /**		error.c			**/
 int		check_error(t_data *data);
 void	output_err(char *msg, t_token *token, int squotes);
+void	output_err_cmd(char *msg, char *cmd_str);
 
 /**		execution builtin	**/
 void    ft_echo(t_cmd *cmd);

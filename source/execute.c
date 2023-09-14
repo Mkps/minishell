@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <unistd.h>
 
 int		execute_builtin(t_cmd *cmd, t_data *data)
 {
@@ -67,16 +68,64 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 		return (0);
 	return (0);
 }
+int	cmd_is_dir(t_cmd *cmd, t_data *data)
+{
+	struct stat	stat_var;
 
+	ft_memset(&stat_var, 0, sizeof(stat));
+	stat(cmd->cmd, &stat_var);
+	return (S_ISDIR(stat_var.st_mode));
+}
+
+int	is_cmd_fko(t_cmd *cmd, t_data *data)
+{
+	char	**env_p;
+	char	*tmp;
+	int		ret;
+
+	env_p = get_path(data->envv);
+	tmp = get_cmd(cmd->cmd, env_p);
+	if (tmp == NULL)
+		ret = 1;
+	else
+	{
+		if (access(tmp, F_OK | X_OK))
+		 	ret = 2;
+	}
+	ft_free_tab(env_p);
+	if (tmp)
+		free(tmp);
+	return (ret);
+}
+int	get_cmd_ecode(t_cmd *cmd, t_data *data)
+{
+	int	error;
+	if (is_cmd_fko(cmd, data) == 1)
+	{
+		output_err_cmd(strerror(errno), cmd->cmd);
+		return (CMD_ERR_FKO);
+	}
+	if (is_cmd_fko(cmd, data) == 2)
+	{
+		output_err_cmd(strerror(errno), cmd->cmd);
+		return (CMD_ERR_XKO);
+	}
+	if (cmd_is_dir(cmd, data))
+	{
+		output_err_cmd("Is a directory", cmd->cmd);
+		return (CMD_ERR_XKO);
+	}
+	return (EXIT_FAILURE);
+}
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
+	int	exit_code;
 	if (cmd->type == EMPTY)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
 			set_fd(cmd);
-			cmd->pid = -2;
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
 			exit (1);
@@ -98,11 +147,12 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 			close_pipes(data->cmd_list, NULL);
 			if (!execute_builtin(cmd,data))
 				exec_cmd(cmd, data);
+			exit_code = get_cmd_ecode(cmd, data);
 			free_data(data);
 			free(data->token_root);
 			free(data->cmd_list);
 			ft_free_tab(data->envv);
-			exit (1);
+			exit (exit_code);
 		}
 	}
 }
