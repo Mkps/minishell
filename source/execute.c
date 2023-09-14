@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 17:46:27 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/14 14:48:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,6 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {	
-	if (cmd == NULL)
-		printf("NULL\n");
-	else
-		printf("%s\n", cmd->cmd);
 	if (cmd->type == EMPTY)
 	{
 		cmd->pid = fork();

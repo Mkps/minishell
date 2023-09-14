@@ -76,7 +76,11 @@ int	ft_get_token(char *input, t_data *data)
 			if (data->parse_status == NONE)
 				data->parse_status = ft_get_sep_type(input);
 			else if (data->parse_status == ft_get_sep_type(input))
+			{
+				if ((input - 1) && ft_get_sep_type(input - 1) == SQUOTE || ft_get_sep_type(input - 1) == DQUOTE)
+					add_token_back(data->token_root, WORD, ft_strdup(""));
 				data->parse_status = NONE;
+			}
 			i += ft_get_quote(input, data);
 			return (i);
 		}
