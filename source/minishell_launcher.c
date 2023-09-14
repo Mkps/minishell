@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 15:25:06 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:36:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void	minishell_prompt(t_data *data)
 		parse_token(data);
 		parse_near_quote(data);
 		t_token *tmp = *data->token_root;
-		while (tmp)
-		{
-			printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
-			tmp = tmp->next;
-		}
+	//	while (tmp)       
+	//	{
+	//		printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
+	//		tmp = tmp->next;
+	//	}
 		if (check_error(data) == EXIT_SUCCESS)
 		{
 			build_cmd_list(data, *data->token_root);
