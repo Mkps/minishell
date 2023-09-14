@@ -56,8 +56,9 @@ void	output_err_cmd(char *msg, char *cmd_str)
 		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
 		return ;
 	}
-	tmp_str = ft_strappend(name_str, msg, 0);
-	tmp_str = ft_strappend(tmp_str, cmd_str, 0);
+	tmp_str = ft_strappend(name_str, cmd_str, 0);
+	tmp_str = ft_strappend(tmp_str, ": ", 0);
+	tmp_str = ft_strappend(tmp_str, msg, 0);
 	tmp_str = ft_strappend(tmp_str, "\n", 0);
 	ft_putstr_fd(tmp_str, 2);
 
