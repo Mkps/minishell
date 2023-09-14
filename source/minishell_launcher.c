@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 16:36:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:16:04 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,13 @@ void	minishell_prompt(t_data *data)
 		parse_token(data);
 		parse_near_quote(data);
 		t_token *tmp = *data->token_root;
+		while (tmp)
+		{
+			if (tmp->token_type == WORD)
+				tmp->value = get_wildcard(tmp->value);
+			tmp = tmp->next;
+		}
+		tmp = *data->token_root;
 	//	while (tmp)       
 	//	{
 	//		printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);

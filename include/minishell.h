@@ -14,6 +14,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <dirent.h> 
 
 # define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
 # define PROG_NAME		"minishell: "
@@ -118,6 +119,7 @@ int		scan_input(t_data *data);
 char	*ft_str_extract(char *str, int n);
 int		ft_get_word(char *input, t_data *data);
 int		ft_get_sep_type(char *str);
+int		ft_is_ws(char c);
 
 /**		parser.c	**/
 void	parse_token(t_data *data);
@@ -210,5 +212,8 @@ void set_in_export(t_data *data, char *variable);
 /**		dummies.c			**/
 int		ft_true(void);
 int		ft_false(void);
+
+/**		wildcards.c			**/
+char	*get_wildcard(char *str);
 
 #endif
