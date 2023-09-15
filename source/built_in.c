@@ -6,11 +6,17 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/13 10:43:04 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:43:26 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void    ft_env(t_data *data)
+{
+    print_env_list(data->env_cpy);
+    return ;
+}
 
 void    ft_echo(t_cmd *cmd)
 {

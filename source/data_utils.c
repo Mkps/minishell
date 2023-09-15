@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:59:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/12 11:59:56 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/15 11:47:10 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	init_data(t_data *data)
 	data->old_fd[1] = dup(STDOUT_FILENO);
 	data->env_cpy = NULL;
 	data->export = NULL;
+	data->flag = 0;
 	return (EXIT_SUCCESS);
 }
 

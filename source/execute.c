@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 17:46:27 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:47:11 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,21 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 		ft_pwd(data);
 		return (1);
 	}
+	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+	    ft_env(data);
+		return (1);
+	}
 	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
 		ft_true();
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
 		ft_false();
-	/*else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-        ft_env(data);
-    else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
-        exit(0);
-    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd + 1)) == 0)
-        ft_export(cmd, data);
-	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd + 1)) == 0)
-		ft_unset(cmd, data);*/
+    /*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
+        exit(0);*/
+    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
+        ft_export(data);
+	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
+		ft_unset(data);
 	return (0);
 }
 
@@ -69,10 +72,10 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {	
-	if (cmd == NULL)
+	/*if (cmd == NULL)
 		printf("NULL\n");
 	else
-		printf("%s\n", cmd->cmd);
+		printf("%s\n", cmd->cmd);*/
 	if (cmd->type == EMPTY)
 	{
 		cmd->pid = fork();

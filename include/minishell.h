@@ -90,7 +90,8 @@ typedef struct s_data {
 	int		old_fd[2];
 	t_token	**token_root;
 	t_cmd	**cmd_list;
-	char	*user_input;	
+	char	*user_input;
+	int		flag;
 }	t_data;
 
 void	argc_error(int error_code);
@@ -201,7 +202,19 @@ char    **ft_split2(char *s, char c);
 int    ft_wordsize(char *s, char c, int pos);
 void    free_tabs(char **tab);
 void set_in_export(t_data *data, char *variable);
+char *check_variable(const char *input);
+char *add_quotes(char *str) ;
+void set_in_env(t_data *data, char *variable);
 
+void ft_lstadd_back_env(t_env **lst, t_env *new);
+t_env *ft_lstnew_env(char *key, char *value);
+void free_env_list(t_env *env);
+
+/***	unset	***/
+void    ft_unset(t_data *data);
+t_cmd *find_unset_command(t_data *data);
+void execute_unset(t_data *data, t_cmd *cmd);
+void execute_env(t_data *data, t_cmd *cmd);
 /**		dummies.c			**/
 int		ft_true(void);
 int		ft_false(void);
