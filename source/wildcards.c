@@ -12,13 +12,6 @@
 
 #include "../include/minishell.h"
 
-typedef struct s_wcnode{
-	struct s_wcnode	*next;
-	struct s_wcnode	*prev;
-	int				level;
-	char			**refs;
-}	t_wcnode;
-
 int	get_start_index(char *str, int i)
 {
 	while (i > 0 && !ft_is_ws(str[i]))
@@ -33,27 +26,6 @@ int	get_end_index(char *str, int i)
 	while (str[i] && !ft_is_ws(str[i]))
 		i++;
 	return (i);
-}
-t_wcnode	*get_last_node(t_wcnode **root)
-{
-	t_wcnode	*tmp;
-
-	tmp = *root;
-	while (tmp)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-void	add_node(t_wcnode **root)
-{
-	t_wcnode	*last;
-
-	last = get_last_node(root);
-	if (*root == NULL)
-		root = malloc(sizeof (t_wcnode));
-	else
-		get_last_node(root)->next = malloc(sizeof (t_wcnode));
-	get_last_node(root)->next = NULL;
 }
 
 char	*str_tolower(char *str)
@@ -73,11 +45,21 @@ int		ft_strcmp_no_case(char *s1, char *s2)
 {
 	char	*tmp_s1;
 	char	*tmp_s2;
+	int		i1;
+	int		i2;
 	int		ret;
 
+	i1 = 0;
+	i2 = 0;
 	tmp_s1 = ft_strdup(s1);
+	while(s1[i1] && !ft_isalnum(s1[i1]))
+		i1++;
 	tmp_s2 = ft_strdup(s2);
-	ret = strcmp(str_tolower(tmp_s1), str_tolower(tmp_s2));
+	while(s2[i2] && !ft_isalnum(s2[i2]))
+		i2++;
+	if (!s1[i1]) i1--;
+	if (!s2[i2]) i2--;
+	ret = strcmp(str_tolower(tmp_s1 + i1), str_tolower(tmp_s2 + i2));
 	free(tmp_s1);
 	free(tmp_s2);
 	return (ret);
@@ -119,6 +101,11 @@ char	*sort_str(char *str)
 	char	**split;
 
 	split = ft_split(str, ' ');
+	if (split[1] == NULL)
+	{
+		ft_free_tab(split);
+		return (str);
+	}
 	free(str);
 	i = 0;
 	while (split[i] && split[i + 1])
@@ -131,8 +118,8 @@ char	*sort_str(char *str)
 		else
 			i++;
 	}
-	i = 0;
-	ret = ft_strjoin_tab(split, -1);
+	free(split[i]);
+	ret = ft_strjoin_tab(split, i);
 	return (ret);
 }
 
@@ -176,27 +163,6 @@ char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,i
 	return (ret);
 }
 
-char	*wc_expand(t_wcnode **root)
-{
-	char		*str;
-	char		*ret;
-	DIR			*d;
-	struct dirent	*dir;
-
-	(void)root;
-	str = ft_strdup("");
-	d = opendir(".");
-	if (d) {
-		while ((dir = readdir(d)) != NULL)
-		{
-			str = ft_strappend(str, dir->d_name,2);
-			str = ft_strappend(str, " ", 2);
-		}
-		closedir(d);
-	}
-	ret = sort_str(str);
-	return (ret);
-}
 char	*ft_strend(char *big, char *little, char n)
 {
 	int	i;
@@ -288,14 +254,10 @@ int	wc_present(char *str)
 
 char	*get_wildcard(char *str)
 {
-	int	i;
-	int	start_index;
-	int	end_index;
+	int		i;
 	char	*f_wc;
 	char	*b_wc;
 	char	*ret;
-	char	*tmp;
-	t_wcnode	**root;
 
 	f_wc = get_front_wc(str);
 	b_wc = get_back_wc(str);
@@ -323,6 +285,7 @@ char	*get_wildcard(char *str)
 		return (str);
 	}
 	free(str);
+	ret = sort_str(ret);
 	return (ret);
 }
 
@@ -377,7 +340,6 @@ char	*ft_wildcard(char *str)
 	int			len;
 	char		*ret;
 	char		*tmp;
-	t_wcnode	**root;
 
 	i = 0;
 	start_index = 0;
