@@ -167,6 +167,7 @@ void	execute(t_data *data)
 
 	status = 0;
 	start = *data->cmd_list;
+	g_exit_code = 0;
 	if (!start)
 		return ;
 	i = 1;
@@ -193,8 +194,8 @@ void	execute(t_data *data)
 			close_pipes(data->cmd_list, NULL);
 			if (cmd->pid > 0)
 				wpid = waitpid(cmd->pid, &status, 0);
-			if (wpid == last->pid)
-				data->exit_status = WEXITSTATUS(status);
+			if (wpid == last->pid && g_exit_code == 0)
+				g_exit_code = WEXITSTATUS(status);
 			cmd = cmd->next;
 		}
 		start = cmd;
