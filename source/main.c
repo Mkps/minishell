@@ -105,7 +105,11 @@ int	free_data(t_data *data)
 	free_token(data);
 	free_cmd_list(data);
 	free(data->user_input);
-	free(data->raw_input);
+	if (data->raw_input)
+	{
+		free(data->raw_input);
+		data->raw_input = NULL;
+	}
 	return (EXIT_SUCCESS);
 }
 
