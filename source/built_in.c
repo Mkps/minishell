@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/13 10:43:04 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/15 13:14:30 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void    ft_echo(t_cmd *cmd)
 		printf("\n");
 		return;
 	}
-	if (cmd->args[0] != NULL && ft_strncmp(cmd->args[1], "-n", 2) == 0)
+    if (cmd->args[0] != NULL && ft_strncmp(cmd->args[1], "-n", 2) == 0)
 	{
 		flag = 1;
 	    i++;
@@ -31,11 +31,11 @@ void    ft_echo(t_cmd *cmd)
     while (cmd->args[i] != NULL)
     {
         len = ft_strlen(cmd->args[i]);
-        if (len >= 2 && cmd->args[i][0] == '"' && cmd->args[i][len - 1] == '"')
-        {
-            ft_memmove(cmd->args[i], cmd->args[i] + 1, len - 2);
-            cmd->args[i][len - 2] = '\0';
-        }
+        /*if (len >= 2 && cmd->args[i][0] == '"' && cmd->args[i][len - 1] == '"')*/
+        /*{*/
+        /*    ft_memmove(cmd->args[i], cmd->args[i] + 1, len - 2);*/
+        /*    cmd->args[i][len - 2] = '\0';*/
+        /*}*/
         printf("%s", cmd->args[i]);
         i++;
         if (cmd->args[i] != NULL)
