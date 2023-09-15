@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 10:44:22 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/14 14:35:43 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,14 @@ int	free_data(t_data *data)
 	free_token(data);
 	free_cmd_list(data);
 	free(data->user_input);
+	if (data->raw_input)
+	{
+		free(data->raw_input);
+		data->raw_input = NULL;
+	}
 	return (EXIT_SUCCESS);
 }
-
+int	g_exit_code;
 int	main(int ac, char **av, char **envv)
 {
 	t_data	data;
@@ -118,10 +123,12 @@ int	main(int ac, char **av, char **envv)
 	int		status;
 	int		exit_status;
 
+	g_exit_code = 0;
 	init_data(&data);
 	import_envv(&data, envv);
 	copy_env_to_list(&data);
 	sort_export_list(&data);
+
 	//print_env_list(data.export);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
@@ -131,5 +138,5 @@ int	main(int ac, char **av, char **envv)
 	else if (ac == 1)
 		minishell_prompt(&data);
 	data_cleanup(&data);
-	return (WEXITSTATUS(data.exit_status));
+	return (WEXITSTATUS(g_exit_code));
 }

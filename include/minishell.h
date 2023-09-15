@@ -9,16 +9,22 @@
 # include <fcntl.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <dirent.h> 
 
-# define USAGE_MSG	"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
-# define PROG_NAME	"minishell: "
-# define ERR_FORK	"minishell: error creating child process\n"
-# define NONE		0
+# define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
+# define PROG_NAME		"minishell: "
+# define ERR_FORK		"minishell: error creating child process\n"
+# define SYNTAX_ERROR	2
+# define CMD_ERR_FKO	127
+# define CMD_ERR_XKO	126
+# define NONE			0
 
+extern int g_exit_code;
 enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_2SC,TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
@@ -80,18 +86,19 @@ typedef struct s_export
 }	t_export;
 
 typedef struct s_data {
-	int		pid;
-	int		is_interactive;
-	char	**envv;
-	t_env	*env_cpy;
+	int			pid;
+	int			is_interactive;
+	char		**envv;
+	t_env		*env_cpy;
 	t_export	*export;
-	int		parse_status;
-	int		exit_status;
-	int		old_fd[2];
-	t_token	**token_root;
-	t_cmd	**cmd_list;
-	char	*user_input;
+	int			parse_status;
+	int			exit_status;
+	int			old_fd[2];
+	t_token		**token_root;
+	t_cmd		**cmd_list;
+	char		*user_input;
 	int		flag;
+	char		*raw_input;
 }	t_data;
 
 void	argc_error(int error_code);
@@ -115,6 +122,7 @@ int		scan_input(t_data *data);
 char	*ft_str_extract(char *str, int n);
 int		ft_get_word(char *input, t_data *data);
 int		ft_get_sep_type(char *str);
+int		ft_is_ws(char c);
 
 /**		parser.c	**/
 void	parse_token(t_data *data);
@@ -165,6 +173,7 @@ void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 /**		error.c			**/
 int		check_error(t_data *data);
 void	output_err(char *msg, t_token *token, int squotes);
+void	output_err_cmd(char *msg, char *cmd_str);
 
 /**		variable d environnement->liste chainee **/
 void copy_env_to_list(t_data *data);
@@ -218,5 +227,8 @@ void execute_env(t_data *data, t_cmd *cmd);
 /**		dummies.c			**/
 int		ft_true(void);
 int		ft_false(void);
+
+/**		wildcards.c			**/
+char	*ft_wildcard(char *str);
 
 #endif

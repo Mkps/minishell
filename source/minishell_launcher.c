@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 17:41:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:16:04 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	minishell_prompt(t_data *data)
 	while(1)
 	{
 		signals_interact();
-		get_next_line(-1);
 		data->user_input = readline("$ ");
 		signals_no_interact();
 		if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
@@ -39,11 +38,14 @@ void	minishell_prompt(t_data *data)
 				write(1, "\n", 1);
 			break ;
 		}
+		data->raw_input = ft_strdup(data->user_input);
+		data->user_input = ft_wildcard(data->user_input);
 		scan_input(data);
 		parse_token(data);
 		parse_near_quote(data);
-		// t_token *tmp = *data->token_root;
-		// while (tmp)
+		t_token *tmp = *data->token_root;
+		tmp = *data->token_root;
+		// while (tmp)       
 		// {
 		// 	printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
 		// 	tmp = tmp->next;

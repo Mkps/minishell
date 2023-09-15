@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <stdlib.h>
 
 int	ft_get_sep(char *input, t_data *data)
 {
@@ -38,7 +39,7 @@ int	ft_get_word(char *input, t_data *data)
 		while (ft_get_sep_type(input + i) == WORD)
 			i++;
 	}
-	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
+	add_token_back(data->token_root, WORD, ft_str_extract(input, i));
 	last_token(data->token_root)->quote_status = current_status;
 	if (current_status == 0 && (ft_get_sep_type(input + i) == DQUOTE || ft_get_sep_type(input + i) == SQUOTE))
 		last_token(data->token_root)->near_quote = 1;
@@ -53,6 +54,9 @@ int	ft_get_quote(char *input, t_data *data)
 
 	i = 1;
 	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
+	if (ft_get_sep_type(input + 1) == WORD || ft_get_sep_type(input + i) == WORD)
+		last_token(data->token_root)->near_quote = 1;
+	i += (ft_get_word(input + 1, data));
 	return (i);
 }
 
@@ -89,6 +93,12 @@ int	ft_get_token(char *input, t_data *data)
 	}
 	return (i);
 }
+int	ft_is_ws(char c)
+{
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (1);
+	return (0);
+}
 
 //Scan input for tokens then load them into the pre-command table.
 int	scan_input(t_data *data)
@@ -98,13 +108,18 @@ int	scan_input(t_data *data)
 	char *input;
 	int	input_length;
 
-
 	input = data->user_input;
 	data->parse_status = NONE;
 	i = 0;
-	if (input == NULL)
+	if (*input == '#')
+	{
+		add_history(data->raw_input);
 		return (EXIT_FAILURE);
-	add_history(input);
+	}
+	while (*input && ft_is_ws(*input)) input++;
+	if (input == NULL || *input == 0 || *input == '#')
+		return (EXIT_FAILURE);
+	add_history(data->raw_input);
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 

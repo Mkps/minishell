@@ -6,11 +6,12 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/15 13:47:11 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/15 16:05:21 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <unistd.h>
 
 int		execute_builtin(t_cmd *cmd, t_data *data)
 {
@@ -69,20 +70,64 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 		return (0);
 	return (0);
 }
+int	cmd_is_dir(t_cmd *cmd, t_data *data)
+{
+	struct stat	stat_var;
 
-void	execute_cmd(t_cmd *cmd, t_data *data)
-{	
-	/*if (cmd == NULL)
-		printf("NULL\n");
+	ft_memset(&stat_var, 0, sizeof(stat_var));
+	stat(cmd->cmd, &stat_var);
+	return (S_ISDIR(stat_var.st_mode));
+}
+
+int	is_cmd_fko(t_cmd *cmd, t_data *data)
+{
+	char	**env_p;
+	char	*tmp;
+	int		ret;
+
+	env_p = get_path(data->envv);
+	tmp = get_cmd(cmd->cmd, env_p);
+	ret = 0;
+	if (tmp == NULL)
+		ret = 1;
 	else
-		printf("%s\n", cmd->cmd);*/
+	{
+		if (access(tmp, F_OK | X_OK))
+		 	ret = 2;
+	}
+	ft_free_tab(env_p);
+	if (tmp)
+		free(tmp);
+	return (ret);
+}
+int	get_cmd_ecode(t_cmd *cmd, t_data *data)
+{
+	if (is_cmd_fko(cmd, data) == 1 || (cmd->type == WORD && cmd->cmd[0] == 0))
+	{
+		output_err_cmd("command not found", cmd->cmd);
+		return (CMD_ERR_FKO);
+	}
+	if (is_cmd_fko(cmd, data) == 2)
+	{
+		output_err_cmd(strerror(errno), cmd->cmd);
+		return (CMD_ERR_XKO);
+	}
+	if (cmd_is_dir(cmd, data))
+	{
+		output_err_cmd("Is a directory", cmd->cmd);
+		return (CMD_ERR_XKO);
+	}
+	return (EXIT_FAILURE);
+}
+void	execute_cmd(t_cmd *cmd, t_data *data)
+{
+	int	exit_code;
 	if (cmd->type == EMPTY)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
 			set_fd(cmd);
-			cmd->pid = -2;
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
 			exit (1);
@@ -92,6 +137,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	if (is_builtin(cmd, data) == 1)
 	{
 		set_fd(cmd);
+		cmd->pid = -2;
 		execute_builtin(cmd, data);
 	}
 	else
@@ -104,11 +150,12 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 			close_pipes(data->cmd_list, NULL);
 			if (!execute_builtin(cmd,data))
 				exec_cmd(cmd, data);
+			exit_code = get_cmd_ecode(cmd, data);
 			free_data(data);
 			free(data->token_root);
 			free(data->cmd_list);
 			ft_free_tab(data->envv);
-			exit (1);
+			exit (exit_code);
 		}
 	}
 }
@@ -123,6 +170,7 @@ void	execute(t_data *data)
 
 	status = 0;
 	start = *data->cmd_list;
+	g_exit_code = 0;
 	if (!start)
 		return ;
 	i = 1;
@@ -147,9 +195,10 @@ void	execute(t_data *data)
 		{
 			i -= cmd->is_term;
 			close_pipes(data->cmd_list, NULL);
-			wpid = waitpid(cmd->pid, &status, 0);
-			if (wpid == last->pid)
-				data->exit_status = WEXITSTATUS(status);
+			if (cmd->pid > 0)
+				wpid = waitpid(cmd->pid, &status, 0);
+			if (wpid == last->pid && g_exit_code == 0)
+				g_exit_code = WEXITSTATUS(status);
 			cmd = cmd->next;
 		}
 		start = cmd;

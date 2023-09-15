@@ -28,7 +28,7 @@ void	output_err(char *msg, t_token *token, int squotes)
 	name_str = "minishell: ";
 	if (!token)
 	{
-		ft_putstr_fd(ft_strappend(name_str, msg, 0), 2);
+		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
 		return ;
 	}
 	token_str = token->value;
@@ -40,7 +40,26 @@ void	output_err(char *msg, t_token *token, int squotes)
 	tmp_str = ft_strappend(tmp_str, token_str, 0);
 	if (squotes == 1)
 		tmp_str = ft_strappend(tmp_str, "'", 0);
-	tmp_str = ft_strappend(tmp_str, " \n", 0);
+	tmp_str = ft_strappend(tmp_str, "\n", 0);
+	ft_putstr_fd(tmp_str, 2);
+
+
+}
+void	output_err_cmd(char *msg, char *cmd_str)
+{
+	char	*name_str;
+	char	*tmp_str;
+
+	name_str = PROG_NAME;
+	if (!cmd_str)
+	{
+		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
+		return ;
+	}
+	tmp_str = ft_strappend(name_str, cmd_str, 0);
+	tmp_str = ft_strappend(tmp_str, ": ", 0);
+	tmp_str = ft_strappend(tmp_str, msg, 0);
+	tmp_str = ft_strappend(tmp_str, "\n", 0);
 	ft_putstr_fd(tmp_str, 2);
 
 
@@ -83,9 +102,9 @@ int	check_quote_error(t_token **root)
 	if (quote_status == 0)
 		return (EXIT_SUCCESS);
 	if (quote_status == DQUOTE)
-		output_err("unexpected EOF while looking for matching `\"\'\n", NULL, 0);
+		output_err("unexpected EOF while looking for matching `\"\'", NULL, 0);
 	else if (quote_status == SQUOTE)
-		output_err("unexpected EOF while looking for matching `\'\'\n", NULL, 0);
+		output_err("unexpected EOF while looking for matching `\'\'", NULL, 0);
 	return (EXIT_FAILURE);
 }
 
@@ -119,22 +138,24 @@ int	check_par_error(t_token **root)
 			par_status++;
 		if (par_status == 0 && tmp->token_type == C_PAR)
 		{
-			output_err("syntax error near unexpected token `)'\n", NULL, 0);
+			output_err("syntax error near unexpected token `)'", NULL, 0);
 			return (EXIT_FAILURE);
 		}
-		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR && !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
+		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR 
+				&& !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
 		{
 			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
 				output_err("syntax error near unexpected token ", tmp->next , 1);
 			else
-				output_err("syntax error near unexpected token `('\n", NULL, 0);
+				output_err("syntax error near unexpected token `('", NULL, 0);
 			return (EXIT_FAILURE);
 		}
 		if (tmp->token_type == C_PAR)
 		{
 			if (tmp->prev->token_type == O_PAR)
 			{
-				output_err("syntax error near unexpected token `)'\n", NULL, 0);
+				output_err("syntax error near unexpected token `)'", NULL, 0);
+				return (EXIT_FAILURE);
 			}
 			par_status--;
 		}
@@ -142,7 +163,7 @@ int	check_par_error(t_token **root)
 	}
 	if (par_status != 0)
 	{
-		output_err("unexpected EOF while looking for matching ')'\n", NULL, 0);
+		output_err("unexpected EOF while looking for matching ')'", NULL, 0);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -150,13 +171,17 @@ int	check_par_error(t_token **root)
 
 int	check_error(t_data *data)
 {
-	if (check_io_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (check_quote_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (check_par_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (check_term_error(data->token_root) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	int	err;
+
+	err = EXIT_SUCCESS;
+	if (!err && check_io_error(data->token_root) == EXIT_FAILURE)
+		err = SYNTAX_ERROR;
+	if (!err && check_quote_error(data->token_root) == EXIT_FAILURE)
+		err = SYNTAX_ERROR;
+	if (!err && check_par_error(data->token_root) == EXIT_FAILURE)
+		err = SYNTAX_ERROR;
+	if (!err && check_term_error(data->token_root) == EXIT_FAILURE)
+		err = SYNTAX_ERROR;
+	data->exit_status = err;
+	return (err);
 }

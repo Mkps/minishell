@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
 
+extern int g_exit_code;
 void	redisplay_prompt(int signum)
 {
 	(void)signum;
@@ -41,6 +42,12 @@ void	signals_interact(void)
 	handle_sigint();
 }
 
+void	signal_quit(int signum)
+{
+	write(1, "Quit\n", 5);
+	g_exit_code  = signum + 128;
+}
+
 void	signal_nl(int signum)
 {
 	(void)signum;
@@ -53,6 +60,8 @@ void	signals_no_interact(void)
 
 	ft_memset(&act, 0, sizeof(act));	
 	act.sa_handler = &signal_nl;
+	act.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act, NULL);
+	act.sa_handler = &signal_quit;
 	sigaction(SIGQUIT, &act, NULL);
 }

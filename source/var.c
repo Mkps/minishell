@@ -98,7 +98,7 @@ char	*var_expander(t_data *data, char *str)
 	i = 0;
 	n = 1;
 	ret = ft_strdup(str);
-	exit_code = ft_itoa(data->exit_status);
+	exit_code = ft_itoa(g_exit_code);
 	while (ret[i])
 	{
 		if (ret[i] == '$')
@@ -108,6 +108,7 @@ char	*var_expander(t_data *data, char *str)
 				tmp = ret;
 				ret = str_replace(ret, i, 2, exit_code);
 				free(tmp);
+				i = 0;
 			}
 			else if (ft_isalnum(ret[i + 1]) || ret[i + 1] == '_')
 			{
@@ -122,8 +123,10 @@ char	*var_expander(t_data *data, char *str)
 					free(tmp_str);
 					free(tmp);
 				}
+				i = 0;
 			}
-			i = 0;
+			else
+				i++;
 		}
 		else if (ret[i] == 92)
 		{
