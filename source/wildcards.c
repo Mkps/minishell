@@ -100,6 +100,7 @@ char	*sort_str(char *str)
 	char	*ret;
 	char	**split;
 
+	printf("str %s\n", str);
 	split = ft_split(str, ' ');
 	if (split[1] == NULL)
 	{
@@ -118,8 +119,8 @@ char	*sort_str(char *str)
 		else
 			i++;
 	}
-	free(split[i]);
-	ret = ft_strjoin_tab(split, i);
+	// free(split[i]);
+	ret = ft_strjoin_tab(split, i + 1);
 	return (ret);
 }
 
