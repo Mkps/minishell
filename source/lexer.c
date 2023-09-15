@@ -116,13 +116,13 @@ int	scan_input(t_data *data)
 	i = 0;
 	if (*input == '#')
 	{
-		add_history(input);
+		add_history(data->raw_input);
 		return (EXIT_FAILURE);
 	}
 	while (*input && ft_is_ws(*input)) input++;
 	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
-	add_history(input);
+	add_history(data->raw_input);
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 

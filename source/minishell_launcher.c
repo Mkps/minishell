@@ -39,22 +39,18 @@ void	minishell_prompt(t_data *data)
 				write(1, "\n", 1);
 			break ;
 		}
+		data->raw_input = ft_strdup(data->user_input);
+		data->user_input = ft_wildcard(data->user_input);
 		scan_input(data);
 		parse_token(data);
 		parse_near_quote(data);
 		t_token *tmp = *data->token_root;
-		while (tmp)
-		{
-			if (tmp->token_type == WORD)
-				tmp->value = get_wildcard(tmp->value);
-			tmp = tmp->next;
-		}
 		tmp = *data->token_root;
-	//	while (tmp)       
-	//	{
-	//		printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
-	//		tmp = tmp->next;
-	//	}
+		// while (tmp)       
+		// {
+		// 	printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
+		// 	tmp = tmp->next;
+		// }
 		if (check_error(data) == EXIT_SUCCESS)
 		{
 			build_cmd_list(data, *data->token_root);
