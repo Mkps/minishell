@@ -98,7 +98,7 @@ char	*var_expander(t_data *data, char *str)
 	i = 0;
 	n = 1;
 	ret = ft_strdup(str);
-	exit_code = ft_itoa(data->exit_status);
+	exit_code = ft_itoa(g_exit_code);
 	while (ret[i])
 	{
 		if (ret[i] == '$')

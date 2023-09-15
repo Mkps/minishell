@@ -112,7 +112,7 @@ int	free_data(t_data *data)
 	}
 	return (EXIT_SUCCESS);
 }
-
+int	g_exit_code;
 int	main(int ac, char **av, char **envv)
 {
 	t_data	data;
@@ -123,10 +123,12 @@ int	main(int ac, char **av, char **envv)
 	int		status;
 	int		exit_status;
 
+	g_exit_code = 0;
 	init_data(&data);
 	import_envv(&data, envv);
 	copy_env_to_list(&data);
 	sort_export_list(&data);
+
 	//print_env_list(data.export);
 	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
@@ -136,5 +138,5 @@ int	main(int ac, char **av, char **envv)
 	else if (ac == 1)
 		minishell_prompt(&data);
 	data_cleanup(&data);
-	return (WEXITSTATUS(data.exit_status));
+	return (WEXITSTATUS(g_exit_code));
 }

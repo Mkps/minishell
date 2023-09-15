@@ -20,7 +20,7 @@ int	init_data(t_data *data)
 	*data->token_root = NULL;
 	*data->cmd_list = NULL;
 	data->parse_status = NONE;
-	data->exit_status = 0;
+	data->exit_status = g_exit_code;
 	data->old_fd[0] = dup(STDIN_FILENO);
 	data->old_fd[1] = dup(STDOUT_FILENO);
 	data->env_cpy = NULL;
