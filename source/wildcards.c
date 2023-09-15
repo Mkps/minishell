@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/15 16:16:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:52:50 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ char	*ft_strjoin_tab(char **tab, int i)
 
 
 	index = 0;
-	/*if (tab[0] && !tab[0 + i])*/
-	/*    return (tab[i]);*/
 	ret = ft_strdup("");
 	while (index < i || (i == -1 && tab[index]))
 	{
@@ -100,8 +98,6 @@ char	*ft_strjoin_tab(char **tab, int i)
 			ret = ft_strappend(ret, tab[index], 3);
 			ret = ft_strappend(ret, " ", 2);
 		}
-		else
-			free(tab[index]);
 		index++;
 	}
 	free(tab);
@@ -139,7 +135,18 @@ char	*sort_str(char *str)
 	ret = ft_strjoin_tab(split, -1);
 	return (ret);
 }
-char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,int))
+
+int	show_hidden(char *search, char *str)
+{
+	if (!search || !str)
+		return (0);
+	if (ft_strncmp(str, ".", 2) == 0 || ft_strncmp(str, "..", 3) == 0)
+		return (0);
+	if (search[0] != '.' && str[0] == '.')
+		return (0);
+	return (1);
+}
+char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,int), int mode)
 {
 	int		i;
 	char	*ret;
@@ -150,11 +157,19 @@ char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,i
 	i = 0;
 	while (split[i])
 	{
-		if (function_ptr(split[i], search, ft_strlen(search)) != NULL)
+		if (search && (function_ptr(split[i], search, ft_strlen(search)) != NULL))
 		{
+			if (mode == 0 && !show_hidden(search, split[i]))
+			{
+				free(split[i]);
+				split[i] = 0;
+			}
 		}	
 		else
+		{
+			free(split[i]);
 			split[i] = 0;
+		}
 		i++;
 	}
 	ret = ft_strjoin_tab(split, i);
@@ -163,7 +178,6 @@ char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,i
 
 char	*wc_expand(t_wcnode **root)
 {
-   // t_wcnode	*current;
 	char		*str;
 	char		*ret;
 	DIR			*d;
@@ -204,7 +218,6 @@ char	*ft_strend(char *big, char *little, char n)
 }
 char	*get_wc(char *search, char *src, int mode)
 {
-   // t_wcnode	*current;
 	char		*str;
 	char		*ret;
 	DIR			*d;
@@ -215,6 +228,8 @@ char	*get_wc(char *search, char *src, int mode)
 		select = &ft_strnstr;
 	else if (mode == 1)
 		select = &ft_strend;
+	else if (mode == 2)
+		select = &strstr;
 	if (!src)
 	{
 		str = ft_strdup("");
@@ -227,13 +242,12 @@ char	*get_wc(char *search, char *src, int mode)
 			}
 			closedir(d);
 		}
-		ret = find_matching(search, str, select);
+		ret = find_matching(search, str, select, mode);
 	}
 	else 
 	{
-		ret = find_matching(search, src, select);
+		ret = find_matching(search, src, select, mode);
 	}
-	/*ret = sort_str(ret);*/
 	return (ret);
 }
 
@@ -242,6 +256,8 @@ char	*get_front_wc(char *str)
 	int	i;
 
 	i = 0;
+	if (*str == 0)
+		return (NULL);
 	while (str[i] && str[i] != '*')
 		i++;
 	if (str[i])
@@ -270,12 +286,6 @@ int	wc_present(char *str)
 	return (0);
 }
 
-/*char	*get_bwc(b_wc, ret)*/
-/*{*/
-/*    char	*str;*/
-/**/
-/*    while (ret[i]*/
-/*}*/
 char	*get_wildcard(char *str)
 {
 	int	i;
@@ -284,29 +294,34 @@ char	*get_wildcard(char *str)
 	char	*f_wc;
 	char	*b_wc;
 	char	*ret;
+	char	*tmp;
 	t_wcnode	**root;
 
-	// root = ft_calloc(1, sizeof(t_wcnode*));
 	f_wc = get_front_wc(str);
 	b_wc = get_back_wc(str);
-	printf("str = %s\n", str);
-	printf("fstr = %s\n", f_wc);
-	printf("bstr = %s\n", b_wc);
+	if (f_wc)
+		i = ft_strlen(f_wc) + 1;
 	ret = get_wc(f_wc, NULL, 0);
 	while (f_wc != NULL)
 	{
 		free(f_wc);
-		f_wc = get_front_wc(ret);
+		f_wc = get_front_wc(str + i);
 		if (f_wc)
-			ret = get_wc(f_wc, ret, 0);
+		{
+			i += ft_strlen(f_wc) + 1;
+			ret = get_wc(f_wc, ret, 2);
+		}	
 	}
 	if (b_wc)
 	{
 		ret = get_wc(b_wc, ret, 1);
+		free(b_wc);
 	}
-	/*ret = get_bwc(b_wc, ret);*/
 	if (ret[0] == 0)
+	{
+		free(ret);
 		return (str);
+	}
 	free(str);
 	return (ret);
 }
@@ -331,7 +346,7 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 	ret_len = ft_strlen(src) + (last_index - r_index) + str_len; 
 	ret = (char *)ft_calloc(ret_len + 1, sizeof(char));
 	if (!ret)
-		printf("error allocating mem for return string\n");
+		output_err("error allocating mem for return string\n", NULL, 0);
 	i = 0;
 	while (i < r_index)
 	{
