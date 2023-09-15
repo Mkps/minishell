@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 18:13:41 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/15 16:16:55 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,25 +82,28 @@ int		ft_strcmp_no_case(char *s1, char *s2)
 	free(tmp_s2);
 	return (ret);
 }
-char	*ft_strjoin_tab(char **tab)
+char	*ft_strjoin_tab(char **tab, int i)
 {
-	int	i;
+	int	index;
+	int	k;
 	char *ret;
 
-	i = 1;
-	if (!tab[0])
-		return (NULL);
-	if (tab[0] && !tab[0 + i])
-		return (tab[i]);
-	tab[0] = ft_strappend(tab[0], " ", 2);
-	while (tab[0] && tab[0 + i])
+
+	index = 0;
+	/*if (tab[0] && !tab[0 + i])*/
+	/*    return (tab[i]);*/
+	ret = ft_strdup("");
+	while (index < i || (i == -1 && tab[index]))
 	{
-		tab[0] = ft_strappend(tab[0], tab[0 + i], 3);
-		tab[0] = ft_strappend(tab[0], " ", 2);
-		i++;
+		if (tab[index])
+		{
+			ret = ft_strappend(ret, tab[index], 3);
+			ret = ft_strappend(ret, " ", 2);
+		}
+		else
+			free(tab[index]);
+		index++;
 	}
-	ret = ft_strdup(tab[0]);
-	free(tab[0]);
 	free(tab);
 	return (ret);
 
@@ -133,9 +136,31 @@ char	*sort_str(char *str)
 			i++;
 	}
 	i = 0;
-	ret = ft_strjoin_tab(split);
+	ret = ft_strjoin_tab(split, -1);
 	return (ret);
 }
+char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,int))
+{
+	int		i;
+	char	*ret;
+	char	**split;
+
+	split = ft_split(src, ' ');
+	free(src);
+	i = 0;
+	while (split[i])
+	{
+		if (function_ptr(split[i], search, ft_strlen(search)) != NULL)
+		{
+		}	
+		else
+			split[i] = 0;
+		i++;
+	}
+	ret = ft_strjoin_tab(split, i);
+	return (ret);
+}
+
 char	*wc_expand(t_wcnode **root)
 {
    // t_wcnode	*current;
@@ -158,18 +183,132 @@ char	*wc_expand(t_wcnode **root)
 	ret = sort_str(str);
 	return (ret);
 }
+char	*ft_strend(char *big, char *little, char n)
+{
+	int	i;
+	int	j;
+	int	len;
 
+	len = ft_strlen(big);
+	if (n > len)
+		return (NULL);
+	i = len - n;
+	j = 0;
+	while (big[i + j] && little[j])
+	{
+		if (big[i + j] != little[j])
+			return (NULL);
+		j++;
+	}
+	return (&big[i]);
+}
+char	*get_wc(char *search, char *src, int mode)
+{
+   // t_wcnode	*current;
+	char		*str;
+	char		*ret;
+	DIR			*d;
+	void		*select;
+	struct dirent	*dir;
+
+	if (mode == 0)
+		select = &ft_strnstr;
+	else if (mode == 1)
+		select = &ft_strend;
+	if (!src)
+	{
+		str = ft_strdup("");
+		d = opendir(".");
+		if (d) {
+			while ((dir = readdir(d)) != NULL)
+			{
+				str = ft_strappend(str, dir->d_name,2);
+				str = ft_strappend(str, " ", 2);
+			}
+			closedir(d);
+		}
+		ret = find_matching(search, str, select);
+	}
+	else 
+	{
+		ret = find_matching(search, src, select);
+	}
+	/*ret = sort_str(ret);*/
+	return (ret);
+}
+
+char	*get_front_wc(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '*')
+		i++;
+	if (str[i])
+		return (ft_str_extract(str, i));
+	return (NULL);
+}
+
+char	*get_back_wc(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	while (str[i] != '*' && i > 0)
+		i--;
+	if (str[i] == '*' && str[i + 1] == 0)
+		return (NULL);
+	return (ft_str_extract(str + i + 1, ft_strlen(str)));
+}
+int	wc_present(char *str)
+{
+	while (*str)
+		if (*str++ == '*')
+			return (1);
+	return (0);
+}
+
+/*char	*get_bwc(b_wc, ret)*/
+/*{*/
+/*    char	*str;*/
+/**/
+/*    while (ret[i]*/
+/*}*/
 char	*get_wildcard(char *str)
 {
 	int	i;
 	int	start_index;
 	int	end_index;
+	char	*f_wc;
+	char	*b_wc;
+	char	*ret;
 	t_wcnode	**root;
 
 	// root = ft_calloc(1, sizeof(t_wcnode*));
+	f_wc = get_front_wc(str);
+	b_wc = get_back_wc(str);
+	printf("str = %s\n", str);
+	printf("fstr = %s\n", f_wc);
+	printf("bstr = %s\n", b_wc);
+	ret = get_wc(f_wc, NULL, 0);
+	while (f_wc != NULL)
+	{
+		free(f_wc);
+		f_wc = get_front_wc(ret);
+		if (f_wc)
+			ret = get_wc(f_wc, ret, 0);
+	}
+	if (b_wc)
+	{
+		ret = get_wc(b_wc, ret, 1);
+	}
+	/*ret = get_bwc(b_wc, ret);*/
+	if (ret[0] == 0)
+		return (str);
 	free(str);
-	root = NULL;
-	return (wc_expand(root));
+	return (ret);
 }
 
 // Replaces the string at r_index of length n by str
