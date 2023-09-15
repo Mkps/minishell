@@ -134,6 +134,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	if (is_builtin(cmd, data) == 1)
 	{
 		set_fd(cmd);
+		cmd->pid = -2;
 		execute_builtin(cmd, data);
 	}
 	else
@@ -190,7 +191,8 @@ void	execute(t_data *data)
 		{
 			i -= cmd->is_term;
 			close_pipes(data->cmd_list, NULL);
-			wpid = waitpid(cmd->pid, &status, 0);
+			if (cmd->pid > 0)
+				wpid = waitpid(cmd->pid, &status, 0);
 			if (wpid == last->pid)
 				data->exit_status = WEXITSTATUS(status);
 			cmd = cmd->next;

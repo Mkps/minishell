@@ -85,17 +85,18 @@ typedef struct s_export
 }	t_export;
 
 typedef struct s_data {
-	int		pid;
-	int		is_interactive;
-	char	**envv;
-	t_env	*env_cpy;
+	int			pid;
+	int			is_interactive;
+	char		**envv;
+	t_env		*env_cpy;
 	t_export	*export;
-	int		parse_status;
-	int		exit_status;
-	int		old_fd[2];
-	t_token	**token_root;
-	t_cmd	**cmd_list;
-	char	*user_input;	
+	int			parse_status;
+	int			exit_status;
+	int			old_fd[2];
+	t_token		**token_root;
+	t_cmd		**cmd_list;
+	char		*user_input;	
+	char		*raw_input;
 }	t_data;
 
 void	argc_error(int error_code);
@@ -214,6 +215,6 @@ int		ft_true(void);
 int		ft_false(void);
 
 /**		wildcards.c			**/
-char	*get_wildcard(char *str);
+char	*ft_wildcard(char *str);
 
 #endif
