@@ -45,11 +45,11 @@ void	minishell_prompt(t_data *data)
 		parse_near_quote(data);
 		t_token *tmp = *data->token_root;
 		tmp = *data->token_root;
-		while (tmp)       
-		{
-			printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
-			tmp = tmp->next;
-		}
+		// while (tmp)       
+		// {
+		// 	printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
+		// 	tmp = tmp->next;
+		// }
 		if (check_error(data) == EXIT_SUCCESS)
 		{
 			build_cmd_list(data, *data->token_root);
