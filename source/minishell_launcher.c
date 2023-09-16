@@ -16,9 +16,10 @@ void	minishell_inline(t_data *data, char *user_input)
 {
 	data->user_input = ft_strdup(user_input);
 	scan_input(data);
-	parse_token(data);
 	if (check_error(data) == EXIT_SUCCESS)
 	{
+		parse_token(data);
+		parse_near_quote(data);
 		build_cmd_list(data, *data->token_root);
 		execute(data);
 	}
@@ -100,8 +101,6 @@ void	minishell_prompt(t_data *data)
 				write(1, "\n", 1);
 			break ;
 		}
-		data->raw_input = ft_strdup(data->user_input);
-		// data->user_input = ft_wildcard(data->user_input);
 		scan_input(data);
 		if (check_error(data) == EXIT_SUCCESS)
 		{
