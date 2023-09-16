@@ -64,6 +64,12 @@ void	output_err_cmd(char *msg, char *cmd_str)
 
 
 }
+int	is_wc(char *str)
+{
+	while (*str)
+		if (*str++ == '*') return (1);
+	return (0);
+}
 int	check_io_error(t_token **root)
 {
 	t_token	*tmp;
@@ -76,6 +82,11 @@ int	check_io_error(t_token **root)
 			if (tmp->next && (tmp->next->token_type != WORD && !token_is_quote(tmp->next)))
 			{
 				output_err("syntax error near unexpected token ", tmp->next, 1);
+				return (SYNTAX_ERROR);
+			}
+			if (tmp->next && (tmp->next->token_type == WORD && is_wc(tmp->next->value)))
+			{
+				output_err_cmd("ambiguous redirect", tmp->next->value);
 				return (EXIT_FAILURE);
 			}
 		}
@@ -174,14 +185,15 @@ int	check_error(t_data *data)
 	int	err;
 
 	err = EXIT_SUCCESS;
-	if (!err && check_io_error(data->token_root) == EXIT_FAILURE)
-		err = SYNTAX_ERROR;
+	if (!err)
+		err = check_io_error(data->token_root);
 	if (!err && check_quote_error(data->token_root) == EXIT_FAILURE)
 		err = SYNTAX_ERROR;
 	if (!err && check_par_error(data->token_root) == EXIT_FAILURE)
 		err = SYNTAX_ERROR;
 	if (!err && check_term_error(data->token_root) == EXIT_FAILURE)
 		err = SYNTAX_ERROR;
-	data->exit_status = err;
+	if (err)
+		g_exit_code = err;
 	return (err);
 }

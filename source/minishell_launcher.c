@@ -25,13 +25,14 @@ void	minishell_inline(t_data *data, char *user_input)
 	dup2(data->old_fd[0], 0);
 }
 
+void	set_wc(t_data *data);
 void	minishell_prompt(t_data *data)
 {
 	while(1)
 	{
 		signals_interact();
 		data->user_input = readline("$ ");
-		signals_no_interact();
+		// signals_no_interact();
 		if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
 		{
 			if (!data->user_input)
@@ -39,20 +40,20 @@ void	minishell_prompt(t_data *data)
 			break ;
 		}
 		data->raw_input = ft_strdup(data->user_input);
-		data->user_input = ft_wildcard(data->user_input);
+		// data->user_input = ft_wildcard(data->user_input);
 		scan_input(data);
-		parse_token(data);
-		parse_near_quote(data);
-		t_token *tmp = *data->token_root;
-		tmp = *data->token_root;
-		// while (tmp)       
-		// {
-		// 	printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
-		// 	tmp = tmp->next;
-		// }
 		if (check_error(data) == EXIT_SUCCESS)
 		{
+			parse_token(data);
+			parse_near_quote(data);
+			// t_token *tmp = *data->token_root;
+			// while (tmp)       
+			// {
+			// 	printf("tmp token value %s | type %i\n", tmp->value, tmp->token_type);
+			// 	tmp = tmp->next;
+			// }
 			build_cmd_list(data, *data->token_root);
+			// set_wc(data);
 			execute(data);
 		}
 		free_data(data);

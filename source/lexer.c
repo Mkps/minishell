@@ -100,6 +100,44 @@ int	ft_is_ws(char c)
 	return (0);
 }
 
+
+// int	get_index_wc(char* str, int	start)
+// {
+// 	int	i;
+//
+// 	i = 0;
+// 	if (!str)
+// 		return (-1);
+// 	if (ft_strlen(str) < start)
+// 		return (-1);
+// 	while (str[start])
+// 	{
+// 		if (str[start] == '*')
+// 		{
+// 			while (!ft_is_ws(str[start]))
+// 			{
+// 				start--;
+// 				if (ft_is_ws(str[start]))
+// 					return (start + 1);
+// 			}
+// 		}
+// 	}
+// 	return (-1);
+//
+// }
+// void	set_index_wc(t_data *data)
+// {
+// 	int	i;
+// 	int	pos;
+//
+// 	i = 0;
+// 	while ((pos = get_index_wc(data->raw_input, i)) != -1)
+// 	{
+// 		while (data->raw_input[i] && !ft_is_ws(data->raw_input[i]))
+// 			i++;
+// 	}
+// }
+//
 //Scan input for tokens then load them into the pre-command table.
 int	scan_input(t_data *data)
 {
@@ -123,5 +161,6 @@ int	scan_input(t_data *data)
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 
+	// set_index_wc(data);
 	return (EXIT_SUCCESS);
 } 

@@ -1,5 +1,7 @@
 #include "../include/minishell.h"
 
+int	is_assign(char	*str);
+
 char	*ft_strappend(char *s1, char *s2, int mode)
 {
 	char	*tmp;
@@ -77,17 +79,83 @@ void	parse_near_quote(t_data *data)
 			current = current->next;
 	}
 }
+
+int	token_wc(char *input, t_token *current, t_data *data)
+{
+	int	i;
+	int	current_status;
+
+	i = 0;
+	if (!input)
+	{
+		return (1);
+	}
+	while (*(input + i) && ft_get_sep_type(input + i) != WSPACE)
+			i++;
+	if (i > 0)
+		insert_token_next(current, WORD, ft_str_extract(input, i));
+	while (*(input + i) != 0 && ft_get_sep_type(input + i) == WSPACE)
+		i++;
+	if (i == 0)
+		i++;
+	return (i);
+}
+t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
+{
+	char	*tmp;
+	int		i;
+	t_token	*node;
+	t_token	*ret;
+	t_token	*swap;
+	t_token	*next;
+
+
+	i = 0;
+	tmp = ft_wildcard(start->value); 
+	printf("tmp %s\n", tmp);
+	node = start;
+	while (tmp[i])
+	{
+		i += token_wc(tmp + i, node, data);
+		node = node->next;
+	}
+	ret = node;
+	if (!ret)
+		return (start);
+	swap = start->prev;
+	next = start->next;
+	if (next)
+	{
+		swap->next = next;
+		next->prev = swap;
+		free(start);
+		start = NULL;
+	}
+	free(tmp);
+	return (ret);
+
+}
 //	Parses tokens looking for VAR to expand.
 void	parse_token(t_data *data)
 {
 	t_token	*current;
+	t_token	*node;
+	char	*tmp;
 
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD & current->quote_status != SQUOTE)
+		if (current->token_type == WORD && current->quote_status != SQUOTE)
 		{
-			current->value = var_expander(data, current->value);	
+			current->value = var_expander(data, current->value);
+		}
+		if (current->token_type == WORD && current->quote_status == NONE)
+		{
+			if (current->prev && current->prev->token_type == WORD && !is_assign(current->prev->value) && wc_present(current->value))
+			{
+				current = wc_tokenize(current, current->value, data);
+			}
+
 		}
 		current = current->next;
 	}
