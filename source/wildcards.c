@@ -59,7 +59,7 @@ int		ft_strcmp_no_case(const char *s1, const char *s2)
 		return (-1);
 	if (i1 > 0 && !s1[i1]) i1--;
 	if (i2 > 0 && !s2[i2]) i2--;
-	while (ft_tolower((unsigned char)s1[i1]) == ft_tolower((unsigned char)s2[i2] && (s1[i1] || s2[i2])))
+	while ((ft_tolower((unsigned char)s1[i1]) == ft_tolower((unsigned char)s2[i2]) && (s1[i1])))
 	{
 		i1++;
 		i2++;
