@@ -172,6 +172,12 @@ void ft_cd(t_cmd *cmd, t_data *data)
             perror("cd");
             return;
         }
+        pwd = getcwd(NULL, 0);
+        if (pwd == NULL)
+        {
+            perror("getcwd");
+            return;
+        }
     }
     else
     {
@@ -207,7 +213,10 @@ void ft_cd(t_cmd *cmd, t_data *data)
             current = current->next;
         }
     }
-    //printf("%s\n", current->value);
+	char *tmp;
+	tmp = ft_strjoin("PWD=", pwd);
+	ft_setenv(data, tmp);
+    // printf("%s\n", current->value);
     free(pwd);
 }
 

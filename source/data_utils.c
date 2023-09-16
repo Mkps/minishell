@@ -25,12 +25,14 @@ int	init_data(t_data *data)
 	data->old_fd[1] = dup(STDOUT_FILENO);
 	data->env_cpy = NULL;
 	data->export = NULL;
+	data->user_input = NULL;
 	return (EXIT_SUCCESS);
 }
 
 void	data_cleanup(t_data *data)
 {
 	free_data(data);
+	free_env_lst(data->env_cpy);
 	free(data->token_root);
 	free(data->cmd_list);
 	ft_free_tab(data->envv);

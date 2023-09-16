@@ -112,7 +112,6 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 
 	i = 0;
 	tmp = ft_wildcard(start->value); 
-	printf("tmp %s\n", tmp);
 	node = start;
 	while (tmp[i])
 	{

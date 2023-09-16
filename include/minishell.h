@@ -15,6 +15,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <dirent.h> 
+# include "color.h"
 
 # define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
 # define PROG_NAME		"minishell: "
@@ -196,6 +197,7 @@ void	set_pipes(t_data *data, t_cmd *cmd);
 int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
+char	*get_var(t_data *data,char *str);
 
 /**			export			**/
 void free_export_list(t_export *export_lst);
