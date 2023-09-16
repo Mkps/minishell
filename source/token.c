@@ -45,6 +45,25 @@ void	add_token_back(t_token **root, int type, char *value)
 	last_token(root)->prev = current;
 }
 
+void	insert_token_next(t_token *i_p, int type, char *value)
+{
+	t_token *tmp;
+
+	if (i_p == NULL)
+	{
+		i_p = create_token(type, value);
+		return ;
+	}
+	tmp = i_p->next;
+	i_p->next = create_token(type, value);
+	if (tmp)
+	{
+		i_p->next->prev = i_p;
+		i_p->next->next = tmp;
+		tmp->prev = i_p->next;
+	}
+}
+
 // Token constructor with type and value
 t_token	*create_token(int type, char *value)
 {

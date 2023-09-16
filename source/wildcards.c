@@ -100,7 +100,6 @@ char	*sort_str(char *str)
 	char	*ret;
 	char	**split;
 
-	printf("str %s\n", str);
 	split = ft_split(str, ' ');
 	if (split[1] == NULL)
 	{
@@ -119,7 +118,6 @@ char	*sort_str(char *str)
 		else
 			i++;
 	}
-	// free(split[i]);
 	ret = ft_strjoin_tab(split, i + 1);
 	return (ret);
 }
@@ -243,7 +241,7 @@ char	*get_back_wc(char *str)
 		i--;
 	if (str[i] == '*' && str[i + 1] == 0)
 		return (NULL);
-	return (ft_str_extract(str + i + 1, ft_strlen(str)));
+	return (ft_str_extract(str + i + 1, ft_strlen(str) - (i + 1)));
 }
 int	wc_present(char *str)
 {
@@ -287,6 +285,8 @@ char	*get_wildcard(char *str)
 	}
 	free(str);
 	ret = sort_str(ret);
+	if (ret)
+		ret[ft_strlen(ret) - 1] = 0;
 	return (ret);
 }
 
@@ -363,4 +363,23 @@ char	*ft_wildcard(char *str)
 	}
 	free(str);
 	return (ret);
+}
+
+void	set_wc(t_data *data)
+{
+	t_cmd	*cmd;
+	int		i;
+
+	i = 0;
+	cmd = *data->cmd_list;
+	while (cmd)
+	{
+		if (cmd->type == CMD)
+		{
+			i = -1;
+			while (cmd->args[++i])
+				cmd->args[i] = ft_wildcard(cmd->args[i]);
+		}
+		cmd = cmd->next;
+	}
 }

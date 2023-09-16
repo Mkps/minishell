@@ -159,6 +159,7 @@ t_token	*create_token(int type, char *value);
 void	add_token_back(t_token **root, int type, char *value);
 t_token *last_token(t_token **root);
 t_token	*ft_new_token(t_token **root, char *value, int type);
+void	insert_token_next(t_token *i_p, int type, char *value);
 
 /**		lexer_utils.c	**/
 int		ft_get_sep_type(char *str);
@@ -230,5 +231,6 @@ int		ft_false(void);
 
 /**		wildcards.c			**/
 char	*ft_wildcard(char *str);
+int		wc_present(char *str);
 
 #endif
