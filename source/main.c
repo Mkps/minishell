@@ -133,5 +133,5 @@ int	main(int ac, char **av, char **envv)
 	else if (ac == 1)
 		minishell_prompt(&data);
 	data_cleanup(&data);
-	return (WEXITSTATUS(g_exit_code));
+	return (g_exit_code);
 }
