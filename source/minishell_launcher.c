@@ -72,12 +72,12 @@ char	*set_prompt(t_data *data)
 {
 	char	*prompt;
 
-	prompt = ft_strappend(GREEN, get_var(data, "USER"), 0);
+	prompt = ft_strappend(RED, get_var(data, "USER"), 0);
 	prompt = ft_strappend(prompt, "@", 2);
 	prompt = ft_strappend(prompt, get_session(data), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, ":", 2);
-	prompt = ft_strappend(prompt, BLUE, 2);
+	prompt = ft_strappend(prompt, RED, 2);
 	prompt = ft_strappend(prompt, glob_home(data, get_var(data, "PWD")), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, "$ ", 2);

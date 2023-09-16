@@ -41,29 +41,32 @@ char	*str_tolower(char *str)
 	return (str);
 }
 
-int		ft_strcmp_no_case(char *s1, char *s2)
+int		ft_strcmp_no_case(const char *s1, const char *s2)
 {
-	char	*tmp_s1;
-	char	*tmp_s2;
 	int		i1;
 	int		i2;
 	int		ret;
 
 	i1 = 0;
 	i2 = 0;
-	tmp_s1 = ft_strdup(s1);
 	while(s1[i1] && !ft_isalnum(s1[i1]))
 		i1++;
-	tmp_s2 = ft_strdup(s2);
 	while(s2[i2] && !ft_isalnum(s2[i2]))
 		i2++;
-	if (!s1[i1]) i1--;
-	if (!s2[i2]) i2--;
-	ret = strcmp(str_tolower(tmp_s1 + i1), str_tolower(tmp_s2 + i2));
-	free(tmp_s1);
-	free(tmp_s2);
-	return (ret);
+	if (!s2[i2] && ft_isalnum(s1[i1]))
+		return (1);
+	if (!s1[i1] && ft_isalnum(s2[i2]))
+		return (-1);
+	if (i1 > 0 && !s1[i1]) i1--;
+	if (i2 > 0 && !s2[i2]) i2--;
+	while (ft_tolower((unsigned char)s1[i1]) == ft_tolower((unsigned char)s2[i2] && (s1[i1] || s2[i2])))
+	{
+		i1++;
+		i2++;
+	}
+	return (ft_tolower((unsigned char)s1[i1]) - ft_tolower((unsigned char)s2[i2]));
 }
+
 char	*ft_strjoin_tab(char **tab, int i)
 {
 	int	index;
@@ -110,7 +113,7 @@ char	*sort_str(char *str)
 	i = 0;
 	while (split[i] && split[i + 1])
 	{
-		if (ft_strcmp_no_case(split[i], split[i + 1]) >= 0)
+		if (ft_strcmp_no_case(split[i], split[i + 1]) > 0)
 		{
 			ft_str_swap(&split[i], &split[i + 1]);
 			i = 0;
