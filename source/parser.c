@@ -37,6 +37,34 @@ char	*ft_strappend(char *s1, char *s2, int mode)
 	}
 	return (tmp);
 }
+void	lst_del_prev(t_token **node)
+{
+	t_token	*prev;
+	t_token	*current;
+	
+	current = *node;
+	prev = current->prev;
+	current->prev= prev->prev;
+	if (current->prev)
+		current->prev->next = current;
+	if (prev->token_type != WORD)
+		free(prev->value);
+	free(prev);
+}
+void	lst_del_next(t_token **node)
+{
+	t_token	*next;
+	t_token	*current;
+	
+	current = *node;
+	next = current->next;
+	current->next = next->next;
+	if (current->next)
+		current->next->prev= current;
+	if (next->token_type != WORD)
+		free(next->value);
+	free(next);
+}
 void	parse_near_quote(t_data *data)
 {
 	t_token	*current;
@@ -46,37 +74,75 @@ void	parse_near_quote(t_data *data)
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD && current->near_quote == 1)
+		// usleep(250000);
+		// printf("start\n");
+		if (current->token_type == WORD)
 		{
-			if (current->next && current->next->next && current->next->next->token_type == WORD)
-				current->value = ft_strappend(current->value, current->next->next->value, 3);
-			else if (current->next && current->next->next && current->next->next->token_type == WORD && current->next->next->value[0] == 0)
+			// printf("is word\n");
+			if (current->next && current->near_quote == 1)
 			{
-				current->value = ft_strappend(current->value,"", 3);
+				// printf("is nq\n");
+				lst_del_next(&current);
+				if (current->next && current->next->token_type == WORD)
+				{
+					// printf("next is word\n");
+					current->value = ft_strappend(current->value, current->next->value, 3);
+					lst_del_next(&current);
+					if (!token_is_quote(current->next) || (token_is_quote(current->next) && current->next->near_quote == 0))
+					{
+						// printf("del next quote after word\n");
+						if (token_is_quote(current->next))
+							lst_del_next(&current);
+						current->near_quote = 0;
+					}
+				}
+				else if (current->next && token_is_quote(current->next) && current->next->near_quote == 1)
+				{
+					// printf("next is quote\n");
+					lst_del_next(&current);
+					current->near_quote = 1;
+				}
 			}
-			tmp = current->next;
-			if (current->next && current->next->next && current->next->next->next->near_quote == 1)
+			else if (current->prev && token_is_quote(current->prev))
 			{
-				current->value = ft_strappend(current->value, current->next->next->next->next->value, 3);
-				current->next = current->next->next->next->next->next;
-				current->next->prev = current;
+				// printf("del prev quote\n");
+				lst_del_prev(&current);
+				if (current->prev == NULL)
+					*data->token_root = current;
+				if (current->next && token_is_quote(current->next) && current->next->near_quote == 0)
+				{
+					// printf("del next quote nq 0\n");
+					lst_del_next(&current);
+				}
+				else if (current->next && token_is_quote(current->next) && current->next->near_quote == 1)
+				{
+					lst_del_next(&current);
+					if (current->next->token_type == WORD)
+					{
+						// printf("del next quote nq 1 append word\n");
+						current->value = ft_strappend(current->value, current->next->value, 3);
+						current->near_quote = current->next->near_quote;
+						lst_del_next(&current);
+					}
+					else if (token_is_quote(current->next))
+					{
+						// printf("del next quote nq 1 makenq\n");
+						current->near_quote = 1;
+					}
+				}
 			}
-			else if (current->next && current->next->next && current->next->next->next)
+			else
 			{
-				current->next = current->next->next->next->next;
-				current->next->prev = current;
-			}
-			while (tmp != current->next)
-			{
-				tmp_tmp = tmp;
-				tmp = tmp->next;
-				if (tmp_tmp->token_type != WORD)
-					free(tmp_tmp->value);
-				free(tmp_tmp);
-			}
+				// printf("Wincrement\n");
+				current = current->next;
+			
+			} 
 		}
-		if (current)
+		else if (current)
+		{
+			// printf("increment\n");
 			current = current->next;
+		}
 	}
 }
 

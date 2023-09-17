@@ -39,10 +39,19 @@ int	ft_get_word(char *input, t_data *data)
 		while (ft_get_sep_type(input + i) == WORD)
 			i++;
 	}
-	add_token_back(data->token_root, WORD, ft_str_extract(input, i));
-	last_token(data->token_root)->quote_status = current_status;
-	if (current_status == 0 && (ft_get_sep_type(input + i) == DQUOTE || ft_get_sep_type(input + i) == SQUOTE))
-		last_token(data->token_root)->near_quote = 1;
+	if (i == 0 && data->parse_status != NONE)
+	{
+		add_token_back(data->token_root, WORD, ft_strdup(""));
+		last_token(data->token_root)->near_quote = 0;
+		last_token(data->token_root)->quote_status= 1;
+	}
+	else if (i > 0)
+	{
+		add_token_back(data->token_root, WORD, ft_str_extract(input, i));
+		last_token(data->token_root)->quote_status = current_status;
+		if (!current_status && (ft_get_sep_type(input + i) == DQUOTE || ft_get_sep_type(input + i) == SQUOTE))
+			last_token(data->token_root)->near_quote = 1;
+	}
 	return (i);
 }
 
@@ -51,11 +60,15 @@ int	ft_get_quote(char *input, t_data *data)
 {
 	int	i;
 	int quote_type;
+	t_token	*last;
 
 	i = 1;
 	add_token_back(data->token_root, ft_get_sep_type(input), ft_str_extract(input, i));
-	if (ft_get_sep_type(input + 1) == WORD || ft_get_sep_type(input + i) == WORD)
-		last_token(data->token_root)->near_quote = 1;
+	last = last_token(data->token_root);
+	if (data->parse_status == NONE && (ft_get_sep_type(input + 1) == WORD 
+		|| ((ft_get_sep_type(input + 1) == DQUOTE || ft_get_sep_type(input+i) == SQUOTE) 
+		&& data->parse_status == NONE)))  
+		last->near_quote = 1;
 	i += (ft_get_word(input + 1, data));
 	return (i);
 }
