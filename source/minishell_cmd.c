@@ -38,11 +38,13 @@ void	set_fd(t_cmd *cmd)
 	if (cmd->fd[1] != 1 || !cmd->pipe_status)
 		dup2(cmd->fd[1], 1);
 }
-void	close_pipes(t_cmd **root, t_cmd *cmd)
+void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)
 {
 	t_cmd	*current;
 	current = *root;
-	while (current)
+	if (last)
+		last = last->next;
+	while (current && current->next != last)
 	{
 		if (current != cmd && current->pipe_status)
 		{
@@ -66,7 +68,7 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	{
 		dup2(cmd->pipe_fd[1], STDOUT_FILENO);
 	}
-	close_pipes(data->cmd_list, cmd);
+	close_pipes(data->cmd_list, cmd, NULL);
 }
 
 void	exec_cmd(t_cmd *cmd_node, t_data *data)

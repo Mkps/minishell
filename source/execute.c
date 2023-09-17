@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/15 16:05:21 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:55:12 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		{		
 			set_fd(cmd);
 			set_pipes(data, cmd);
-			close_pipes(data->cmd_list, NULL);
+			close_pipes(data->cmd_list, NULL, NULL);
 			if (!execute_builtin(cmd,data))
 				exec_cmd(cmd, data);
 			exit_code = get_cmd_ecode(cmd, data);
@@ -163,14 +163,17 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 void	execute(t_data *data)	
 {
 	int		status;
+	int		eval;
 	t_cmd	*cmd;
 	t_cmd	*start;
 	t_cmd	*last;
 	int		i;
+	int		wpid;
 
 	status = 0;
-	start = *data->cmd_list;
 	g_exit_code = 0;
+	eval = 0;
+	start = *data->cmd_list;
 	if (!start)
 		return ;
 	i = 1;
@@ -178,7 +181,7 @@ void	execute(t_data *data)
 	{
 		cmd = start;
 		i = 1;
-		while(i) 
+		while(i > 0) 
 		{
 			i -= cmd->is_term;
 			execute_cmd(cmd, data);
@@ -188,19 +191,42 @@ void	execute(t_data *data)
 			last = last_cmd(data->cmd_list);
 		else
 			last = cmd;
-		int	wpid = 0;
+		wpid = 0;
 		cmd = start;
 		i = 1;
-		while(i)
+		while(i > 0 && cmd)
 		{
+			printf("loop1\n");
 			i -= cmd->is_term;
-			close_pipes(data->cmd_list, NULL);
+			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
 				wpid = waitpid(cmd->pid, &status, 0);
-			if (wpid == last->pid && g_exit_code == 0)
+			if (cmd->is_term != 0)
+			{
+				printf("stuck\n");
 				g_exit_code = WEXITSTATUS(status);
+				eval = g_exit_code;
+			}
 			cmd = cmd->next;
 		}
+		if (g_exit_code > 127)
+			break ;
+		// if (cmd)
+		// 	printf("eval %i cmd %s \n", eval, cmd->cmd);
+		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_AND))
+		{
+			printf("loop2\n");
+			if (cmd->is_term)
+				cmd = cmd->next;
+			else
+			{
+				while (!cmd->is_term)
+					cmd = cmd->next;
+				cmd = cmd->next;
+			}
+		}
+		// while (!cmd->is_term)
+		// 	cmd = cmd->next;
 		start = cmd;
 	}
 }
