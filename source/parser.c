@@ -212,7 +212,7 @@ void	parse_token(t_data *data)
 	{
 		if (current->token_type == WORD && current->quote_status != SQUOTE)
 		{
-			current->value = var_expander(data, current->value);
+			current->value = var_expander(data, current->value, current);
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{

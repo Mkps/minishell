@@ -26,7 +26,7 @@ char	*get_var(t_data *data,char *str)
 	char	**env_p;
 	char	*tmp;
 
-	env = ft_getenv(data->envv, str);
+	env = getenv(str);
 	if (env == NULL)
 	{
 		free(env);
@@ -86,7 +86,7 @@ int		is_valid_var(char *str)
 }
 
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
-char	*var_expander(t_data *data, char *str)
+char	*var_expander(t_data *data, char *str, t_token *token)
 {
 	int		i;
 	int		n;
@@ -103,6 +103,10 @@ char	*var_expander(t_data *data, char *str)
 	{
 		if (ret[i] == '$')
 		{
+			if (ret[i + 1] == 0 && token->near_quote == 1)
+			{
+				ret[i] = 0;
+			}
 			if (ret[i + 1] == '?')
 			{
 				tmp = ret;
