@@ -464,7 +464,7 @@ void	build_cmd_list(t_data *data, t_token *token)
 			if (current_t && current_t->token_type == PIPE)
 				set_pipe(last_cmd(data->cmd_list));
 			if (current_t && current_t->token_type >= TERM_END && current_t->token_type <= TERM_OR)
-				last_cmd(data->cmd_list)->is_term = 1;
+				last_cmd(data->cmd_list)->is_term = current_t->token_type;
 			current_t = current_t->next;
 		}
 		else
