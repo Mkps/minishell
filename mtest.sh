@@ -25,6 +25,8 @@ else
 	color=$RED
 fi
 printf "Standard output matches bash:	${color}[%s]\n${NC}" $result
+cat "err_b" | awk -F ':' '{print $NF}' > err_b
+cat "err_m" | awk -F ':' '{print $NF}' > err_m
 diff ./err_b ./err_m
 exit_code=$?
 if [ $exit_code -eq 0 ]
