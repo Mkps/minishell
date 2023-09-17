@@ -15,13 +15,18 @@ run_test() {
     
     # Count lines in input as the number of test lines
     test_lines=$(echo -n "$input" | wc -l)
-    total_test_count=$((total_test_count + 3))
+    total_test_count=$((total_test_count + 1))
     
     echo "$test_output"
-    total_ok_count=$((total_ok_count + ok_count))
+	if [ $ok_count -eq 3 ]
+	then
+    	total_ok_count=$((total_ok_count + 1))
+	fi
 }
 
 # Run each test
+# Syntax and assign tests
+test_syntax() {
 run_test "test 1: enter"""
 run_test "test 2: spaces" "               "
 run_test "test 3: tabs" "					"
@@ -80,6 +85,9 @@ run_test "test 55: 4ABC=hola" "4ABC=hola"
 run_test "test 56: a" "a"
 run_test "test 57: hola que tal" "hola que tal"
 run_test "test 58: Makefile" "Makefile"
+}
+# Echo tests
+test_echo() {
 run_test "test 59: echo" "echo"
 run_test "test 60: echo -n" "echo -n"
 run_test "test 61: echo Hola" "echo Hola"
@@ -148,6 +156,9 @@ run_test "test 123: echo $*" "echo $*"
 run_test "test 124: echo hola*hola *" "echo hola*hola *"
 run_test "test 125: echo $hola*" "echo $hola*"
 run_test "test 126: echo $HOME*" "echo $HOME*"
+}
+# Var tests
+test_var() {
 run_test "test 127: \$" "'\$'"
 run_test "test 128: \"\$\"" "\"'\$'\""
 run_test "test 129: '\$''HOME'" "'\$\$HOME'"
@@ -175,7 +186,124 @@ run_test "test 150: echo \"'h'o'la'\"" "echo \"'h'o'la'\""
 run_test "test 151: echo\"'hola'\"" "echo\"'hola'\""
 run_test "test 152: echo \"'hola'\"" "echo \"'hola'\""
 run_test "test 153: echo '\"hola\"'" "echo '\"hola\"'"
+run_test "test 154: echo '''ho\"''''l\"a'''" "echo '''ho\"''''l\"a'''"
+run_test "test 155: echo hola\"\"\"\"\"\"\"\"\"\"\"" "echo hola\"\"\"\"\"\"\"\"\"\"\""
+run_test "test 156: echo hola\"''''''''''\"" "echo hola\"''''''''''\""
+run_test "test 157: echo hola'''''''''''''" "echo hola'''''''''''''"
+run_test "test 158: echo hola'\"\"\"\"\"\"\"\"\"\"'" "echo hola'\"\"\"\"\"\"\"\"\"\"'"
+run_test "test 159: e\"cho hola\"" "e\"cho hola\""
+run_test "test 160: e'cho hola'" "e'cho hola'"
+run_test "test 161: echo \"hola     \" | cat -e" "echo \"hola     \" | cat -e"
+run_test "test 162: echo \"\"hola" "echo \"\"hola"
+run_test "test 163: echo \"\" hola" "echo \"\" hola"
+run_test "test 164: echo \"\"             hola" "echo \"\"             hola"
+run_test "test 165: echo \"\"hola" "echo \"\"hola"
+run_test "test 166: echo \"\" hola" "echo \"\" hola"
+run_test "test 167: echo hola\"\"bonjour" "echo hola\"\"bonjour"
+run_test "test 168: \"e\"'c'ho 'b'\"o\"nj\"o\"'u'r" "\"e\"'c'ho 'b'\"o\"nj\"o\"'u'r"
+run_test "test 169: \"\"e\"'c'ho 'b'\"o\"nj\"o\"'u'r\"" "\"\"e\"'c'ho 'b'\"o\"nj\"o\"'u'r\""
+run_test "test 170: echo \"\$DONTEXIST\"Makefile" "echo \"\$DONTEXIST\"Makefile"
+run_test "test 171: echo \"\$DONTEXIST\"\"Makefile\"" "echo \"\$DONTEXIST\"\"Makefile\""
+run_test "test 172: \"\$DONTEXIST\" \"Makefile\"" "\"\$DONTEXIST\" \"Makefile\""
+run_test "test 173: \$?" "\$?"
+run_test "test 174: \$?\$?" "\$?\$?"
+run_test "test 175: ?\$HOME" "?\$HOME"
+run_test "test 176: \$" "\$"
+run_test "test 177: \$HOME" "\$HOME"
+run_test "test 178: \$HOMEdskjhfkdshfsd" "\$HOMEdskjhfkdshfsd"
+run_test "test 179: \"\$HOMEdskjhfkdshfsd\"" "\"\$HOMEdskjhfkdshfsd\""
+run_test "test 180: '\$HOMEdskjhfkdshfsd'" "'\$HOMEdskjhfkdshfsd'"
+run_test "test 181: \$DONTEXIST" "\$DONTEXIST"
+run_test "test 182: \$LESS\$VAR" "\$LESS\$VAR"
+}
+# env / export / tests
+test_env() {
+run_test "test 183: env" "env"
+run_test "test 184: env hola" "env hola"
+run_test "test 185: env hola que tal" "env hola que tal"
+run_test "test 186: env env" "env env"
+run_test "test 187: env env env env env" "env env env env env"
+run_test "test 188: env ls" "env ls"
+run_test "test 189: env ./Makefile" "env ./Makefile"
+run_test "test 190: export HOLA=bonjour ; env" "export HOLA=bonjour ; env"
+run_test "test 191: export       HOLA=bonjour ;  env" "export       HOLA=bonjour ;  env"
+run_test "test 192: export" "export"
+run_test "test 193: export Hola ; export" "export Hola ; export"
+run_test "test 194: export Hola9hey ; export" "export Hola9hey ; export"
+run_test "test 195: export \$DONTEXIST" "export \$DONTEXIST"
+run_test "test 196: export | grep \"HOME\"" "export | grep \"HOME\""
+run_test "test 197: export \"\"" "export \"\""
+run_test "test 198: export =" "export ="
+run_test "test 199: export %" "export %"
+run_test "test 200: export \$?" "export \$?"
+run_test "test 201: export ?=2" "export ?=2"
+run_test "test 202: export 9HOLA=" "export 9HOLA="
+run_test "test 203: export HOLA9=bonjour ; env" "export HOLA9=bonjour ; env"
+run_test "test 204: export _HOLA=bonjour ; env" "export _HOLA=bonjour ; env"
+run_test "test 205: export ___HOLA=bonjour ; env" "export ___HOLA=bonjour ; env"
+run_test "test 206: export _HO_LA_=bonjour ; env" "export _HO_LA_=bonjour ; env"
+run_test "test 207: export HOL@=bonjour" "export HOL@=bonjour"
+run_test "test 208: export HOL\\~A=bonjour" "export HOL\\~A=bonjour"
+run_test "test 209: export -HOLA=bonjour" "export -HOLA=bonjour"
+run_test "test 210: export --HOLA=bonjour" "export --HOLA=bonjour"
+run_test "test 211: export HOLA-=bonjour" "export HOLA-=bonjour"
+run_test "test 212: export HO-LA=bonjour" "export HO-LA=bonjour"
+run_test "test 213: export HOL.A=bonjour" "export HOL.A=bonjour"
+run_test "test 214: export HOL\\\$A=bonjour" "export HOL\\\$A=bonjour"
+run_test "test 215: export HO\\\\LA=bonjour" "export HO\\\\LA=bonjour"
+run_test "test 216: export HOL}A=bonjour" "export HOL}A=bonjour"
+run_test "test 217: export HOL{A=bonjour" "export HOL{A=bonjour"
+run_test "test 218: export HO*LA=bonjour" "export HO*LA=bonjour"
+run_test "test 219: export HO#LA=bonjour" "export HO#LA=bonjour"
+run_test "test 220: export HO@LA=bonjour" "export HO@LA=bonjour"
+run_test "test 221: export HO!LA=bonjour" "export HO!LA=bonjour"
+run_test "test 222: export HO$?LA=bonjour ; env" "export HO$?LA=bonjour ; env"
+run_test "test 223: export +HOLA=bonjour" "export +HOLA=bonjour"
+run_test "test 224: export HOL+A=bonjour" "export HOL+A=bonjour"
+run_test "test 225: export HOLA+=bonjour ; env" "export HOLA+=bonjour ; env"
+run_test "test 226: export HOLA=bonjour ; export HOLA+=bonjour ; env" "export HOLA=bonjour ; export HOLA+=bonjour ; env"
+run_test "test 227: exportHOLA=bonjour ; env" "exportHOLA=bonjour ; env"
+run_test "test 228: export HOLA =bonjour" "export HOLA =bonjour"
+run_test "test 229: export HOLA = bonjour" "export HOLA = bonjour"
+run_test "test 230: export HOLA=bon jour ; env" "export HOLA=bon jour ; env"
+run_test "test 231: export HOLA= bonjour ; env" "export HOLA= bonjour ; env"
+run_test "test 232: export HOLA=bonsoir ; export HOLA=bonretour ; export HOLA=bonjour ; env" "export HOLA=bonsoir ; export HOLA=bonretour ; export HOLA=bonjour ; env"
+run_test "test 233: export HOLA=\$HOME ; env" "export HOLA=\$HOME ; env"
+run_test "test 234: export HOLA=bonjour\$HOME ; env" "export HOLA=bonjour\$HOME ; env"
+run_test "test 235: export HOLA=\$HOMEbonjour ; env" "export HOLA=\$HOMEbonjour ; env"
+run_test "test 236: export HOLA=bon\$jour ; env" "export HOLA=bon\$jour ; env"
+run_test "test 237: export HOLA=bon\\jour ; env" "export HOLA=bon\\jour ; env"
+run_test "test 238: export HOLA=bon\\\\jour ; env" "export HOLA=bon\\\\jour ; env"
+run_test "test 239: export HOLA=bon(jour" "export HOLA=bon(jour"
+run_test "test 240: export HOLA=bon()jour" "export HOLA=bon()jour"
+run_test "test 241: export HOLA=bon&jour" "export HOLA=bon&jour"
+run_test "test 242: export HOLA=bon@jour ; env" "export HOLA=bon@jour ; env"
+run_test "test 243: export HOLA=bon;jour ; env" "export HOLA=bon;jour ; env"
+run_test "test 244: export HOLA=bon!jour" "export HOLA=bon!jour"
+run_test "test 245: export HOLA=bon\"\"jour\"\" ; env" "export HOLA=bon\"\"jour\"\" ; env"
+run_test "test 246: export HOLA\$USER=bonjour ; env" "export HOLA\$USER=bonjour ; env"
+run_test "test 247: export HOLA=bonjour=casse-toi ; echo \$HOLA" "export HOLA=bonjour=casse-toi ; echo \$HOLA"
+run_test "test 248: export \"\"HOLA=bonjour\"\"=casse-toi ; echo \$HOLA" "export \"\"HOLA=bonjour\"\"=casse-toi ; echo \$HOLA"
+run_test "test 249: export HOLA=bonjour ; export BYE=casse-toi ; echo \$HOLA et \$BYE" "export HOLA=bonjour ; export BYE=casse-toi ; echo \$HOLA et \$BYE"
+run_test "test 250: export HOLA=bonjour BYE=casse-toi ; echo \$HOLA et \$BYE" "export HOLA=bonjour BYE=casse-toi ; echo \$HOLA et \$BYE"
+run_test "test 251: export \$HOLA=bonjour ; env" "export \$HOLA=bonjour ; env"
+# run_test "test 252: export HOLA=\"\"bonjour      \"\"  ; echo \$HOLA | cat -e" "export HOLA=\"\"bonjour      \"\"  ; echo \$HOLA | cat -e"
+# run_test "test 253: export HOLA=\"\"   -n bonjour   \"\" ; echo \$HOLA" "export HOLA=\"\"   -n bonjour   \"\" ; echo \$HOLA"
+# run_test "test 254: export HOLA=\"\"bonjour   \"\"/ ; echo \$HOLA" "export HOLA=\"\"bonjour   \"\"/ ; echo \$HOLA"
+# run_test "test 255: export HOLA='\"\"' ; echo \"\" \$HOLA \"\" | cat -e" "export HOLA='\"\"' ; echo \"\" \$HOLA \"\" | cat -e"
+# run_test "test 256: export HOLA=at ; c\$HOLA Makefile" "export HOLA=at ; c\$HOLA Makefile"
+# run_test "test 257: export \"\"\"\" HOLA=bonjour ; env" "export \"\"\"\" HOLA=bonjour ; env"
+# run_test "test 258: export HOLA=\"\"cat Makefile | grep NAME\"\"   ; echo \$HOLA" "export HOLA=\"\"cat Makefile | grep NAME\"\"   ; echo \$HOLA"
+# run_test "test 259: export HOLA=hey ; echo \$HOLA\$HOLA\$HOLA=hey\$HOLA" "export HOLA=hey ; echo \$HOLA\$HOLA\$HOLA=hey\$HOLA"
+# run_test "test 260: export HOLA=\"\"  bonjour  hey  \"\"  ; echo \$HOLA | cat -e" "export HOLA=\"\"  bonjour  hey  \"\"  ; echo \$HOLA | cat -e"
+# run_test "test 261: export HOLA=\"\"  bonjour  hey  \"\" ; echo \$HOLA | cat -e" "export HOLA=\"\"  bonjour  hey  \"\" ; echo \$HOLA | cat -e"
+}
 
-
+# Start here: comment out the tests you dont want.
+# test_syntax
+# test_echo
+# test_var
+test_env
 # Print total counts
-echo "Total OK count: $total_ok_count / $total_test_count"
+# echo "Total OK count: $total_ok_count / $total_test_count"
+echo "Total OK count: $total_ok_count / $total_test_count "
