@@ -63,6 +63,10 @@ int		ft_strcmp_no_case(const char *s1, const char *s2)
 	{
 		i1++;
 		i2++;
+		while(s1[i1] && !ft_isalnum(s1[i1]))
+			i1++;
+		while(s2[i2] && !ft_isalnum(s2[i2]))
+			i2++;
 	}
 	return (ft_tolower((unsigned char)s1[i1]) - ft_tolower((unsigned char)s2[i2]));
 }
