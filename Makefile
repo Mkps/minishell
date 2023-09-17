@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
+#    By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/14 17:57:10 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/15 16:04:00 by uaupetit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SRC_NAME = here_doc.c env_utils.c\
 	  minishell_launcher.c token.c \
 	  env.c cmd_io.c var.c lexer_utils.c \
 	  error.c built_in.c  copy_env.c export.c \
-	  dummies.c wildcards.c \
+	  dummies.c export_utils.c \
+	  unset.c wildcards.c \
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)

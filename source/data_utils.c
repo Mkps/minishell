@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:59:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/12 11:59:56 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:54:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	init_data(t_data *data)
 	data->env_cpy = NULL;
 	data->export = NULL;
 	data->user_input = NULL;
+	data->flag = 0;
 	return (EXIT_SUCCESS);
 }
 

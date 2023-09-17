@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 15:39:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:55:12 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,36 @@
 
 int		execute_builtin(t_cmd *cmd, t_data *data)
 {
-	// if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
-	// {
-	//     ft_echo(cmd);
-	// 	return (1);
-	// }
-	// else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
- //    {
-	// 	ft_cd(cmd, data);
-	// 	return (1);
-	// }
-	// else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
-	// {
-	// 	ft_pwd(data);
-	// 	return (1);
-	// }
-	// else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
-	// 	ft_true();
-	// else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
-	// 	ft_false();
-	/*else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-        ft_env(data);
-    else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
-        exit(0);
-    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd + 1)) == 0)
-        ft_export(cmd, data);
-	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd + 1)) == 0)
-		ft_unset(cmd, data);*/
+	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+	    ft_echo(cmd);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
+    {
+		ft_cd(cmd, data);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+		ft_pwd(data);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+	    ft_env(data);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
+		ft_true();
+	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
+		ft_false();
+    /*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
+        exit(0);*/
+    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
+        ft_export(data);
+	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
+		ft_unset(data);
 	return (0);
 }
 
@@ -193,6 +196,7 @@ void	execute(t_data *data)
 		i = 1;
 		while(i > 0 && cmd)
 		{
+			printf("loop1\n");
 			i -= cmd->is_term;
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)

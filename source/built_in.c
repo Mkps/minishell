@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/15 13:14:30 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:54:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void    ft_env(t_data *data)
+{
+    print_env_list(data->env_cpy);
+    return ;
+}
 
 void    ft_echo(t_cmd *cmd)
 {

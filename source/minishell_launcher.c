@@ -72,7 +72,7 @@ char	*get_session(t_data *data)
 char	*set_prompt(t_data *data)
 {
 	char	*prompt;
-
+  
 	prompt = ft_strappend(GREEN, get_var(data, "USER"), 0);
 	prompt = ft_strappend(prompt, "@", 2);
 	prompt = ft_strappend(prompt, get_session(data), 3);
