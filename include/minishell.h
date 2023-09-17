@@ -127,7 +127,7 @@ int		ft_is_ws(char c);
 /**		parser.c	**/
 void	parse_token(t_data *data);
 void	parse_near_quote(t_data *data);
-char	*var_expander(t_data *data, char *str);
+char	*var_expander(t_data *data, char *str, t_token *token);
 void	build_cmd_list(t_data *data, t_token *token);
 t_cmd	*last_cmd(t_cmd **root);
 t_token	*get_cmd_first(t_token *current_t);
