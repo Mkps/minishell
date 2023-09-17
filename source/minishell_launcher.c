@@ -72,13 +72,13 @@ char	*get_session(t_data *data)
 char	*set_prompt(t_data *data)
 {
 	char	*prompt;
-
-	prompt = ft_strappend(RED, get_var(data, "USER"), 0);
+  
+	prompt = ft_strappend(GREEN, get_var(data, "USER"), 0);
 	prompt = ft_strappend(prompt, "@", 2);
 	prompt = ft_strappend(prompt, get_session(data), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, ":", 2);
-	prompt = ft_strappend(prompt, RED, 2);
+	prompt = ft_strappend(prompt, CYAN, 2);
 	prompt = ft_strappend(prompt, glob_home(data, get_var(data, "PWD")), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, "$ ", 2);
@@ -107,12 +107,12 @@ void	minishell_prompt(t_data *data)
 		{
 			parse_token(data);
 			parse_near_quote(data);
-			t_token *tmp = *data->token_root;
-			while (tmp)       
-			{
-				printf("tmp token value %s | type %i nq %i\n", tmp->value, tmp->token_type, tmp->near_quote);
-				tmp = tmp->next;
-			}
+			// t_token *tmp = *data->token_root;
+			// while (tmp)       
+			// {
+			// 	printf("tmp token value %s | type %i nq %i\n", tmp->value, tmp->token_type, tmp->near_quote);
+			// 	tmp = tmp->next;
+			// }
 			build_cmd_list(data, *data->token_root);
 			// set_wc(data);
 			execute(data);

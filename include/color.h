@@ -1,7 +1,7 @@
 #ifndef COLOR_H
 # define COLOR_H
 
-# define RESET	   "\033[00m"
+# define RESET		  "\033[00m"
 # define BOLD       "\033[1m"
 # define DARK       "\033[2m"
 # define UNDERLINE  "\033[4m"
