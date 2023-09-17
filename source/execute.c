@@ -193,14 +193,12 @@ void	execute(t_data *data)
 		i = 1;
 		while(i > 0 && cmd)
 		{
-			printf("loop1\n");
 			i -= cmd->is_term;
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
 				wpid = waitpid(cmd->pid, &status, 0);
 			if (cmd->is_term != 0)
 			{
-				printf("stuck\n");
 				g_exit_code = WEXITSTATUS(status);
 				eval = g_exit_code;
 			}
@@ -212,7 +210,6 @@ void	execute(t_data *data)
 		// 	printf("eval %i cmd %s \n", eval, cmd->cmd);
 		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_AND))
 		{
-			printf("loop2\n");
 			if (cmd->is_term)
 				cmd = cmd->next;
 			else

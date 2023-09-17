@@ -102,6 +102,8 @@ void	free_cmd_list(t_data *data)
 
 int	free_data(t_data *data)
 {
+	close(data->old_fd[0]);
+	close(data->old_fd[1]);
 	free_token(data);
 	free_cmd_list(data);
 	free(data->user_input);
