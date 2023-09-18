@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/17 21:55:12 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:25:15 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,22 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 	    ft_env(data);
 		return (1);
 	}
+    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
+    {
+	    ft_export(data);
+		return (1);
+	}
+	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+		return (1);
+		ft_unset(data);
+	}
+	/*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
+        exit(0);*/
 	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
 		ft_true();
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_false();
-    /*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
-        exit(0);*/
-    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
-        ft_export(data);
-	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_unset(data);
+		ft_false();	
 	return (0);
 }
 
@@ -70,6 +76,7 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 		return (0);
 	return (0);
 }
+
 int	cmd_is_dir(t_cmd *cmd, t_data *data)
 {
 	struct stat	stat_var;
@@ -196,7 +203,7 @@ void	execute(t_data *data)
 		i = 1;
 		while(i > 0 && cmd)
 		{
-			printf("loop1\n");
+			//printf("loop1\n");
 			i -= cmd->is_term;
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)

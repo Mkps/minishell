@@ -188,6 +188,7 @@ int		execute_builtin(t_cmd *cmd, t_data *data);
 void    ft_echo(t_cmd *cmd);
 void	ft_cd(t_cmd *cmd, t_data *data);
 void    ft_pwd(t_data *data);
+void	ft_env(t_data *data);
 
 /**		minishell_cmd.c	**/
 void	set_fd(t_cmd *cmd);
@@ -201,32 +202,43 @@ void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
 
 /**			export			**/
-void free_export_list(t_export *export_lst);
+void    env_update(t_data *data);
+void set_in_env(t_data *data, char *variable);
+void set_in_export(t_data *data, char *variable);
+void    execute_export(t_data *data, t_cmd *cmd);
+void print_export(t_data *data);
+void sort_export_list(t_data *data);
+t_cmd *find_export_command(t_data *data);
+void env_to_export(t_data *data);
+void    ft_export(t_data *data);
+
+//char *check_variable(const char *input);
+
+/**		export_utils	**/
 t_export *ft_lstnew_export(char *key, char *value);
 void ft_lstadd_back_export(t_export **lst, t_export *new);
-void env_to_export(t_data *data);
-void print_export(t_data *data);
-void    ft_export(t_data *data);
-void sort_export_list(t_data *data);
+void free_export_list(t_export *export_lst);
 void insert_sorted(t_export **sorted, t_export *new_export);
-void    execute_export(t_data *data, t_cmd *cmd);
 char    **ft_split2(char *s, char c);
 int    ft_wordsize(char *s, char c, int pos);
 void    free_tabs(char **tab);
-void set_in_export(t_data *data, char *variable);
-char *check_variable(const char *input);
 char *add_quotes(char *str) ;
-void set_in_env(t_data *data, char *variable);
-
+int export_key_exists(t_export *export, char *key_to_check);
+void remove_export(t_data *data, const char *key_to_remove);
+int env_key_exists(t_env *env, char *key_to_check) ;
+void remove_env(t_data *data, const char *key_to_remove);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env *ft_lstnew_env(char *key, char *value);
 void free_env_list(t_env *env);
 
 /***	unset	***/
-void    ft_unset(t_data *data);
-t_cmd *find_unset_command(t_data *data);
+int	ft_lstsize_env(t_env *lst);
+void    env_update(t_data *data);
 void execute_unset(t_data *data, t_cmd *cmd);
 void execute_env(t_data *data, t_cmd *cmd);
+t_cmd *find_unset_command(t_data *data);
+void    ft_unset(t_data *data);
+
 /**		dummies.c			**/
 int		ft_true(void);
 int		ft_false(void);
@@ -234,5 +246,7 @@ int		ft_false(void);
 /**		wildcards.c			**/
 char	*ft_wildcard(char *str);
 int		wc_present(char *str);
+
+void print_envp(t_data *data);
 
 #endif

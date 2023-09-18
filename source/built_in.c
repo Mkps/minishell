@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/17 21:54:25 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:17:45 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void    ft_env(t_data *data)
 {
-    print_env_list(data->env_cpy);
+    print_envp(data);
     return ;
 }
 
@@ -115,27 +115,6 @@ void    ft_cd_bis(t_cmd *cmd, t_data *data)
     }
 }
 
-void ft_pwd_bis(t_data *data)
-{
-    char *pwd_value = NULL;
-    int i = 0;
-    
-    while (data->envv[i] != NULL)
-    {
-        if (ft_strncmp(data->envv[i], "PWD=", 4) == 0)
-        {
-            pwd_value = data->envv[i] + 4;
-            break;
-        }
-        i++;
-    }
-    if (pwd_value == NULL) {
-        fprintf(stderr, "PWD variable not found in envv\n");
-        return;
-    }
-    printf("%s\n", pwd_value);
-}
-
 void ft_pwd(t_data *data)
 {
     char *pwd_value = NULL;
@@ -165,6 +144,7 @@ void ft_cd(t_cmd *cmd, t_data *data)
     char *dir = NULL;
     char *pwd = NULL;
     t_env *current = data->env_cpy;
+    char *tmp = NULL;
     
     if (cmd->args[1] == NULL)
     {
@@ -219,10 +199,8 @@ void ft_cd(t_cmd *cmd, t_data *data)
             current = current->next;
         }
     }
-	char *tmp;
 	tmp = ft_strjoin("PWD=", pwd);
 	ft_setenv(data, tmp);
-    // printf("%s\n", current->value);
     free(pwd);
 }
 
