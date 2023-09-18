@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 14:35:43 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:27:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,22 @@ void	free_cmd_list(t_data *data)
 		current = current->next;
 		if (tmp->type != EMPTY && tmp->args)
 			ft_free_tab(tmp->args);
+		if (tmp->type != EMPTY && tmp->cmd)
+			free(tmp->cmd);
 		if (tmp->pipe_status)
 			free(tmp->pipe_fd);
+		if (tmp->assign)
+		{
+			t_env *env = *tmp->assign;
+			while (env)
+			{
+				t_env *next = env->next;
+				free(env->key);
+				free(env);
+				env = next;
+			}
+			free(tmp->assign);
+		}
 		free(tmp);
 	}
 	*data->cmd_list = NULL;

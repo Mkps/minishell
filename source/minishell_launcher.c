@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 10:36:56 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:13:55 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,55 @@
 
 void	minishell_inline(t_data *data, char *user_input)
 {
-	data->user_input = ft_strdup(user_input);
+	t_data new_data;
+
+	data->user_input = user_input;
 	scan_input(data);
 	if (check_error(data) == EXIT_SUCCESS)
 	{
 		parse_token(data);
 		parse_near_quote(data);
 		build_cmd_list(data, *data->token_root);
+		// var_expand(data);
+		/*t_cmd *cmd;*/
+		/*cmd = *new_data.cmd_list;*/
+		/*while (cmd)*/
+		/*{*/
+		/*    printf("cmd %s type %i\n", cmd->cmd, cmd->type);*/
+		/*    cmd = cmd->next;*/
+		/*}*/
 		execute(data);
 	}
 	dup2(data->old_fd[0], 0);
+}
+void	minishell_subshell(t_data *data, char *user_input)
+{
+	t_data new_data;
+
+	printf("%s\n", user_input);
+	init_data(&new_data);
+	import_envv(&new_data, data->envv);
+	new_data.user_input = ft_strdup(user_input);
+	new_data.raw_input = ft_strdup(new_data.user_input);
+	free_data(data);
+	scan_input(&new_data);
+	if (check_error(&new_data) == EXIT_SUCCESS)
+	{
+		parse_token(&new_data);
+		parse_near_quote(&new_data);
+		build_cmd_list(&new_data, *new_data.token_root);
+		// var_expand(&new_data);
+		/*t_cmd *cmd;*/
+		/*cmd = *new_data.cmd_list;*/
+		/*while (cmd)*/
+		/*{*/
+		/*    printf("cmd %s type %i\n", cmd->cmd, cmd->type);*/
+		/*    cmd = cmd->next;*/
+		/*}*/
+		execute(&new_data);
+	}
+	/*dup2(data->old_fd[0], 0);*/
+	exit (g_exit_code);
 }
 
 void	set_wc(t_data *data);
@@ -107,14 +146,14 @@ void	minishell_prompt(t_data *data)
 		{
 			parse_token(data);
 			parse_near_quote(data);
-			// t_token *tmp = *data->token_root;
-			// while (tmp)       
-			// {
-			// 	printf("tmp token value %s | type %i nq %i\n", tmp->value, tmp->token_type, tmp->near_quote);
-			// 	tmp = tmp->next;
-			// }
+			 /*t_token *tmp = *data->token_root;*/
+			 /*while (tmp)       */
+			 /*{*/
+			 /*    printf("tmp token value %s | type %i nq %i\n", tmp->value, tmp->token_type, tmp->near_quote);*/
+			 /*    tmp = tmp->next;*/
+			 /*}*/
 			build_cmd_list(data, *data->token_root);
-			// set_wc(data);
+			// var_expand(data);
 			execute(data);
 		}
 		free(prompt);

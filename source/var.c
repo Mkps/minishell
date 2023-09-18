@@ -86,7 +86,7 @@ int		is_valid_var(char *str)
 }
 
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
-char	*var_expander(t_data *data, char *str, t_token *token)
+char	*var_expander_sys(t_data *data, char *str, t_token *token)
 {
 	int		i;
 	int		n;
@@ -114,7 +114,47 @@ char	*var_expander(t_data *data, char *str, t_token *token)
 				free(tmp);
 				i = 0;
 			}
-			else if (ft_isalnum(ret[i + 1]) || ret[i + 1] == '_')
+			else
+				i++;
+		}
+		else if (ret[i] == 92)
+		{
+			if (ret[i + 1] && ret[i + 1] == 92)
+			{
+				tmp = ret;
+				ret = str_replace(ret, i, 2, "\\");
+				free(tmp);
+			}
+			i++;
+		}
+		else
+			i++;
+	}
+	free(exit_code);
+	free(str);
+	return (ret);
+}
+
+char	*var_expander_var(t_data *data, char *str)
+{
+	int		i;
+	int		n;
+	char	*ret;
+	char	*tmp;
+	char	*tmp_str;
+	char	*exit_code;
+	
+	i = 0;
+	n = 1;
+	if (!str)
+		return (str);
+	ret = ft_strdup(str);
+	exit_code = ft_itoa(g_exit_code);
+	while (ret[i])
+	{
+		if (ret[i] == '$')
+		{
+			if (ft_isalnum(ret[i + 1]) || ret[i + 1] == '_')
 			{
 				n = 1;
 				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i + n] == '_'))
@@ -131,16 +171,6 @@ char	*var_expander(t_data *data, char *str, t_token *token)
 			}
 			else
 				i++;
-		}
-		else if (ret[i] == 92)
-		{
-			if (ret[i + 1] && ret[i + 1] == 92)
-			{
-				tmp = ret;
-				ret = str_replace(ret, i, 2, "\\");
-				free(tmp);
-			}
-			i++;
 		}
 		else
 			i++;

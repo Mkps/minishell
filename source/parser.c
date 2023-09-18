@@ -210,9 +210,10 @@ void	parse_token(t_data *data)
 	current = *data->token_root;
 	while (current != NULL)
 	{
-		if (current->token_type == WORD && current->quote_status != SQUOTE)
+		if (current->token_type == WORD && current->quote_status != SQUOTE
+				&& current->quote_status != O_PAR)
 		{
-			current->value = var_expander(data, current->value, current);
+			current->value = var_expander_sys(data, current->value, current);
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{
@@ -225,6 +226,22 @@ void	parse_token(t_data *data)
 		current = current->next;
 	}
 }
+void	var_expand(t_data *data, t_cmd *cmd)
+{
+	int		i;
+
+	if (cmd->cmd)
+	{
+		cmd->cmd = var_expander_var(data, cmd->cmd);
+	}
+	i = 0;
+	while (cmd->args[i])
+	{
+		cmd->args[i] = var_expander_var(data, cmd->args[i]);
+		i++;
+	}
+
+}
 
 // Creating a cmd.
 t_cmd	*create_cmd(t_data *data)
@@ -236,6 +253,8 @@ t_cmd	*create_cmd(t_data *data)
 		return (NULL); 
 	ret->next = NULL;
 	ret->prev = NULL;
+	ret->assign = (t_env **)malloc(sizeof(t_env*)* 1);
+	*ret->assign = NULL;
 	ret->pipe_status = 0;
 	ret->is_bg = 0;
 	ret->is_term = 0;
@@ -289,12 +308,14 @@ t_cmd	*last_cmd(t_cmd **root)
 }
 
 //	Checks if the cmd is a comment. NOTE: will be reworked
-int		get_cmd_type(char *value)
+int		get_cmd_type(t_token *token)
 {
-	if (!value)
+	if (!token->value)
 		return (EMPTY);
-	if (*value == '#')
+	if (token->value[0] == '#')
 		return (COMMENT);
+	if (token->quote_status == O_PAR)
+		return (O_PAR);
 	return (CMD);
 }
 
@@ -309,8 +330,8 @@ t_token	*add_cmd(t_data *data, t_token *token)
 
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
-	new_cmd->cmd = token->value; 
-	new_cmd->type = get_cmd_type(token->value);
+	new_cmd->cmd = ft_strdup(token->value); 
+	new_cmd->type = get_cmd_type(token);
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
 	tmp = "";
@@ -329,6 +350,8 @@ t_token	*add_cmd(t_data *data, t_token *token)
 			current = current->next;
 	}
 	new_cmd->args = ft_split(tmp, ';');
+	if (new_cmd->type == O_PAR)
+		new_cmd->is_term = O_PAR;
 	free(tmp);
 	return (current);
 }
@@ -349,7 +372,9 @@ void	add_assign_cmd(t_data *data)
 {
 	t_cmd	*new_cmd;
 
-	new_cmd = create_cmd(data);
+	add_cmd_back(data);
+	new_cmd = last_cmd(data->cmd_list);
+	new_cmd->cmd = NULL; 
 	new_cmd->type = CMD_ASSIGN;
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
@@ -360,7 +385,9 @@ t_token	*get_cmd_first(t_token *current_t)
 	t_token	*current;
 
 	current = current_t;
-	while(current != NULL && current->prev != NULL && current->prev->token_type != PIPE)
+	if (current->prev == NULL)
+		return (current);
+	while(current != NULL && current->prev != NULL && !token_is_term(current->prev))
 		current = current->prev;
 	return (current);
 }
@@ -373,12 +400,10 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && !token_is_term(current))
 	{
-		if (current != NULL && current->token_type == WORD)
+		if (current != NULL && current->token_type == WORD && !is_assign(current->value))
 		{
-			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev) )
-			{
+			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev))
 				return (current);
-			}
 			if (current->prev != NULL && current->quote_status != NONE && !token_is_io(current->prev->prev))
 				return (current);
 		}
@@ -414,6 +439,7 @@ void	set_pipe(t_cmd *cmd)
 	pipe(cmd->pipe_fd);
 	return ;	
 }
+
 char	*set_assign(t_token *token)
 {
 	char	*ret;
@@ -433,10 +459,37 @@ char	*set_assign(t_token *token)
 	}
 	return (ret);
 }
+
+void	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
+{
+	t_token	*current;
+	t_env	*env;
+	char	*tmp;
+
+
+	current = get_cmd_first(token);
+	if (current && (!current->prev || (current->prev && token_is_term(current->prev))) && is_assign(current->value))
+	{
+		tmp = set_assign(current);
+		*cmd->assign = ft_lstnew_env("assign", tmp);
+		env = *cmd->assign;
+		free(tmp);
+		current = current->next;
+		while (current && is_assign(current->value))
+		{
+			tmp = set_assign(current);
+			env->next = ft_lstnew_env("assign", tmp);
+			env = env->next;
+			free(tmp);
+			current = current->next;
+		}
+	}
+}
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
 	t_token *tmp;
+	char	*tmp_assign;
 
 	if (token == NULL)
 		current_t  = *data->token_root;
@@ -445,10 +498,9 @@ void	build_cmd_list(t_data *data, t_token *token)
 	while (current_t != NULL)
 	{
 		tmp = current_t;
-		if (current_t && !current_t->prev && is_assign(current_t->value))
+		if (current_t && (!current_t->prev || token_is_term(current_t->prev)) && is_assign(current_t->value))
 		{
-			ft_setenv(data, set_assign(current_t));
-			current_t = current_t->next;
+		    current_t = current_t->next;
 		}
 		else if (current_t)
 		{
@@ -459,6 +511,7 @@ void	build_cmd_list(t_data *data, t_token *token)
 			else
 				current_t = add_cmd(data, current_t);
 			handle_cmd_io(data, current_t, last_cmd(data->cmd_list));
+			handle_assign(data, current_t, last_cmd(data->cmd_list));
 			while (current_t && !token_is_term(current_t))
 				current_t = current_t->next;
 			if (current_t && current_t->token_type == PIPE)
@@ -470,7 +523,7 @@ void	build_cmd_list(t_data *data, t_token *token)
 		else
 		{
 			if (current_t)
-		 		current_t = current_t->next;
+		         current_t = current_t->next;
 		}
 	}
 

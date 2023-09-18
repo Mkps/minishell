@@ -59,6 +59,7 @@ typedef struct s_cmd {
 	int		*pipe_fd;
 	char	*cmd;
 	char	**args;
+	struct s_env	**assign;
 	int		is_term;
 	int		is_bg;
 	
@@ -112,6 +113,8 @@ char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
 char	*ft_readline(char *str);
 int		free_data(t_data *data);
+void ft_lstadd_back_env(t_env **lst, t_env *new);
+void free_env_list(t_env *env);
 
 /** 	signal.c	**/
 void	signals_interact(void);
@@ -127,11 +130,11 @@ int		ft_is_ws(char c);
 /**		parser.c	**/
 void	parse_token(t_data *data);
 void	parse_near_quote(t_data *data);
-char	*var_expander(t_data *data, char *str, t_token *token);
 void	build_cmd_list(t_data *data, t_token *token);
 t_cmd	*last_cmd(t_cmd **root);
 t_token	*get_cmd_first(t_token *current_t);
 char	*ft_strappend(char *s1, char *s2, int mode);
+void	var_expand(t_data *data, t_cmd *cmd);
 
 /**		token_utils.c	**/
 int 	token_is_quote(t_token *token);
@@ -153,6 +156,7 @@ void	data_cleanup(t_data *data);
 /**		minishell_launcher.c	**/
 void	minishell_prompt(t_data *data);
 void	minishell_inline(t_data *data, char *user_input);
+void	minishell_subshell(t_data *data, char *user_input);
 
 /**		token.c			**/
 t_token	*create_token(int type, char *value);
@@ -199,6 +203,8 @@ int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
+char	*var_expander_sys(t_data *data, char *str, t_token *token);
+char	*var_expander_var(t_data *data, char *str);
 
 /**			export			**/
 void free_export_list(t_export *export_lst);

@@ -143,10 +143,31 @@ int	check_par_error(t_token **root)
 
 	par_status= 0;
 	tmp = *root;
+	/*while (tmp)*/
+	/*{*/
+	/*    printf("token %s type %i\n",tmp->value, tmp->token_type);*/
+	/*    tmp = tmp->next;*/
+	/*}*/
 	while (tmp)
 	{
 		if (tmp->token_type == O_PAR)
+		{
 			par_status++;
+			tmp = tmp->next;
+			while (tmp && par_status > 0)
+			{
+				if (tmp->token_type == O_PAR)
+					par_status++;
+				if (tmp->token_type == C_PAR)
+					par_status--;
+				tmp = tmp->next;
+				if (!tmp && par_status != 0)
+				{
+					output_err("unexpected EOF while looking for matching ')'", NULL, 0);
+					return (EXIT_FAILURE);
+				}
+		}
+		}
 		if (par_status == 0 && tmp->token_type == C_PAR)
 		{
 			output_err("syntax error near unexpected token `)'", NULL, 0);
