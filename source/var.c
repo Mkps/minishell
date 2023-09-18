@@ -26,7 +26,7 @@ char	*get_var(t_data *data,char *str)
 	char	**env_p;
 	char	*tmp;
 
-	env = getenv(str);
+	env = ft_getenv(data->envv, str);
 	if (env == NULL)
 	{
 		free(env);
