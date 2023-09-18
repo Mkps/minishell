@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 18:16:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 10:36:56 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_session(t_data *data)
 			s_idx++;
 		s_idx++;
 		e_idx = s_idx;
-		while (tmp[e_idx] && tmp[e_idx] != ':')
+		while (tmp[e_idx] && tmp[e_idx] != ':' && tmp[e_idx] != '.')
 			e_idx++;
 		ret = ft_strdup(&tmp[s_idx]);
 		ret = ft_str_extract_free(ret, (e_idx - s_idx));
@@ -81,7 +81,7 @@ char	*set_prompt(t_data *data)
 	prompt = ft_strappend(prompt, CYAN, 2);
 	prompt = ft_strappend(prompt, glob_home(data, get_var(data, "PWD")), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
-	prompt = ft_strappend(prompt, "$ ", 2);
+	prompt = ft_strappend(prompt, "\n$ ", 2);
 	return (prompt);
 }
 

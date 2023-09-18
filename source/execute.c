@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/17 21:55:12 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 10:31:50 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,6 @@ void	execute(t_data *data)
 		i = 1;
 		while(i > 0 && cmd)
 		{
-			printf("loop1\n");
 			i -= cmd->is_term;
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
