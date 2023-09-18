@@ -115,6 +115,7 @@ char	*ft_readline(char *str);
 int		free_data(t_data *data);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 void free_env_list(t_env *env);
+void	free_var(t_data *data, t_cmd *cmd);
 
 /** 	signal.c	**/
 void	signals_interact(void);

@@ -400,7 +400,7 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && !token_is_term(current))
 	{
-		if (current != NULL && current->token_type == WORD && !is_assign(current->value))
+		if (current != NULL && current->token_type == WORD && (!is_assign(current->value) || current->quote_status == O_PAR))
 		{
 			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev))
 				return (current);
@@ -498,7 +498,7 @@ void	build_cmd_list(t_data *data, t_token *token)
 	while (current_t != NULL)
 	{
 		tmp = current_t;
-		if (current_t && (!current_t->prev || token_is_term(current_t->prev)) && is_assign(current_t->value))
+		if (current_t && (!current_t->prev || token_is_term(current_t->prev)) && (is_assign(current_t->value) && current_t->quote_status != O_PAR))
 		{
 		    current_t = current_t->next;
 		}

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 16:12:57 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:49:37 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,9 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
 
-	set_var_cmd(data, cmd);
-	var_expand(data, cmd);
 	if (cmd->type == EMPTY)
 	{
+		set_var_cmd(data, cmd);
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
@@ -150,6 +149,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		}
 		return ;
 	}
+	free_var(data, cmd);
 	if (cmd->type == O_PAR)
 	{
 		cmd->pid = fork();
@@ -163,6 +163,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
+		var_expand(data, cmd);
 		if (is_builtin(cmd, data) == 1)
 		{
 			set_fd(cmd);

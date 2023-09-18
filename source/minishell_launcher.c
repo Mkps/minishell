@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 15:13:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:10:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	minishell_subshell(t_data *data, char *user_input)
 {
 	t_data new_data;
 
-	printf("%s\n", user_input);
 	init_data(&new_data);
 	import_envv(&new_data, data->envv);
 	new_data.user_input = ft_strdup(user_input);
@@ -146,12 +145,12 @@ void	minishell_prompt(t_data *data)
 		{
 			parse_token(data);
 			parse_near_quote(data);
-			 /*t_token *tmp = *data->token_root;*/
-			 /*while (tmp)       */
-			 /*{*/
-			 /*    printf("tmp token value %s | type %i nq %i\n", tmp->value, tmp->token_type, tmp->near_quote);*/
-			 /*    tmp = tmp->next;*/
-			 /*}*/
+			// t_token *tmp = *data->token_root;
+			// while (tmp)       
+			// {
+			//     printf("tmp token value %s | type %i qs %i\n", tmp->value, tmp->token_type, tmp->quote_status./);
+			//     tmp = tmp->next;
+			// }
 			build_cmd_list(data, *data->token_root);
 			// var_expand(data);
 			execute(data);

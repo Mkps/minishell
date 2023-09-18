@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 16:27:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:56:41 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,21 @@ void	free_token(t_data *data)
 	}
 	*data->token_root = NULL;
 }
-
+void	free_var(t_data *data, t_cmd *cmd)
+{
+	t_env	*current;
+	t_env	*next;
+	
+	if (cmd->assign)
+	{
+		current = *cmd->assign;
+		while (current)
+		{
+			free(current->value);
+			current = current->next;
+		}
+	}
+}
 void	free_cmd_list(t_data *data)
 {
 	t_cmd	*current;
