@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 15:25:15 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:18:44 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,26 @@ int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 	}
 	return (EXIT_FAILURE);
 }
+void	set_var_cmd(t_data *data, t_cmd *cmd)
+{
+	t_env	*start;
+
+	start = *cmd->assign;
+	if (!start)
+		return ;
+	while (start)
+	{
+		ft_setenv(data, start->value);
+		start = start->next;
+	}
+}
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
+
 	if (cmd->type == EMPTY)
 	{
+		set_var_cmd(data, cmd);
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
@@ -141,13 +156,8 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		}
 		return ;
 	}
-	if (is_builtin(cmd, data) == 1)
-	{
-		set_fd(cmd);
-		cmd->pid = -2;
-		execute_builtin(cmd, data);
-	}
-	else
+	free_var(data, cmd);
+	if (cmd->type == O_PAR)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
@@ -155,14 +165,35 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 			set_fd(cmd);
 			set_pipes(data, cmd);
 			close_pipes(data->cmd_list, NULL, NULL);
-			if (!execute_builtin(cmd,data))
-				exec_cmd(cmd, data);
-			exit_code = get_cmd_ecode(cmd, data);
-			free_data(data);
-			free(data->token_root);
-			free(data->cmd_list);
-			ft_free_tab(data->envv);
-			exit (exit_code);
+			minishell_subshell(data, cmd->cmd);
+		}
+	}
+	else
+	{
+		var_expand(data, cmd);
+		if (is_builtin(cmd, data) == 1)
+		{
+			set_fd(cmd);
+			cmd->pid = -2;
+			execute_builtin(cmd, data);
+		}
+		else
+		{
+			cmd->pid = fork();
+			if (cmd->pid == 0)
+			{		
+				set_fd(cmd);
+				set_pipes(data, cmd);
+				close_pipes(data->cmd_list, NULL, NULL);
+				if (!execute_builtin(cmd,data))
+					exec_cmd(cmd, data);
+				exit_code = get_cmd_ecode(cmd, data);
+				free_data(data);
+				free(data->token_root);
+				free(data->cmd_list);
+				ft_free_tab(data->envv);
+				exit (exit_code);
+			}
 		}
 	}
 }
@@ -188,7 +219,7 @@ void	execute(t_data *data)
 	{
 		cmd = start;
 		i = 1;
-		while(i > 0) 
+		while(i > 0 && cmd) 
 		{
 			i -= cmd->is_term;
 			execute_cmd(cmd, data);
@@ -203,7 +234,6 @@ void	execute(t_data *data)
 		i = 1;
 		while(i > 0 && cmd)
 		{
-			//printf("loop1\n");
 			i -= cmd->is_term;
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)

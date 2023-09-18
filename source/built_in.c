@@ -200,6 +200,7 @@ void ft_cd(t_cmd *cmd, t_data *data)
         }
     }
 	tmp = ft_strjoin("PWD=", pwd);
+    // printf("%s %s\n", tmp, current->value);
 	ft_setenv(data, tmp);
     free(pwd);
 }

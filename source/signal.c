@@ -52,6 +52,7 @@ void	signal_nl(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);
+	g_exit_code  = signum + 128;
 }
 
 void	signals_no_interact(void)

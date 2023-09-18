@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/14 18:16:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:10:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,54 @@
 
 void	minishell_inline(t_data *data, char *user_input)
 {
-	data->user_input = ft_strdup(user_input);
+	t_data new_data;
+
+	data->user_input = user_input;
 	scan_input(data);
 	if (check_error(data) == EXIT_SUCCESS)
 	{
 		parse_token(data);
 		parse_near_quote(data);
 		build_cmd_list(data, *data->token_root);
+		// var_expand(data);
+		/*t_cmd *cmd;*/
+		/*cmd = *new_data.cmd_list;*/
+		/*while (cmd)*/
+		/*{*/
+		/*    printf("cmd %s type %i\n", cmd->cmd, cmd->type);*/
+		/*    cmd = cmd->next;*/
+		/*}*/
 		execute(data);
 	}
 	dup2(data->old_fd[0], 0);
+}
+void	minishell_subshell(t_data *data, char *user_input)
+{
+	t_data new_data;
+
+	init_data(&new_data);
+	import_envv(&new_data, data->envv);
+	new_data.user_input = ft_strdup(user_input);
+	new_data.raw_input = ft_strdup(new_data.user_input);
+	free_data(data);
+	scan_input(&new_data);
+	if (check_error(&new_data) == EXIT_SUCCESS)
+	{
+		parse_token(&new_data);
+		parse_near_quote(&new_data);
+		build_cmd_list(&new_data, *new_data.token_root);
+		// var_expand(&new_data);
+		/*t_cmd *cmd;*/
+		/*cmd = *new_data.cmd_list;*/
+		/*while (cmd)*/
+		/*{*/
+		/*    printf("cmd %s type %i\n", cmd->cmd, cmd->type);*/
+		/*    cmd = cmd->next;*/
+		/*}*/
+		execute(&new_data);
+	}
+	/*dup2(data->old_fd[0], 0);*/
+	exit (g_exit_code);
 }
 
 void	set_wc(t_data *data);
@@ -60,7 +98,7 @@ char	*get_session(t_data *data)
 			s_idx++;
 		s_idx++;
 		e_idx = s_idx;
-		while (tmp[e_idx] && tmp[e_idx] != ':')
+		while (tmp[e_idx] && tmp[e_idx] != ':' && tmp[e_idx] != '.')
 			e_idx++;
 		ret = ft_strdup(&tmp[s_idx]);
 		ret = ft_str_extract_free(ret, (e_idx - s_idx));
@@ -81,7 +119,7 @@ char	*set_prompt(t_data *data)
 	prompt = ft_strappend(prompt, CYAN, 2);
 	prompt = ft_strappend(prompt, glob_home(data, get_var(data, "PWD")), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
-	prompt = ft_strappend(prompt, "$ ", 2);
+	prompt = ft_strappend(prompt, "\n$ ", 2);
 	return (prompt);
 }
 
@@ -110,11 +148,11 @@ void	minishell_prompt(t_data *data)
 			// t_token *tmp = *data->token_root;
 			// while (tmp)       
 			// {
-			// 	printf("tmp token value %s | type %i nq %i\n", tmp->value, tmp->token_type, tmp->near_quote);
-			// 	tmp = tmp->next;
+			//     printf("tmp token value %s | type %i qs %i\n", tmp->value, tmp->token_type, tmp->quote_status./);
+			//     tmp = tmp->next;
 			// }
 			build_cmd_list(data, *data->token_root);
-			// set_wc(data);
+			// var_expand(data);
 			execute(data);
 		}
 		free(prompt);
