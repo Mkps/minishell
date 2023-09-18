@@ -6,15 +6,15 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/18 16:31:51 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:57:32 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int    ft_wordsize(char *s, char c, int pos)
+int     ft_wordsize(char *s, char c, int pos)
 {
-    int    wsize;
+    int wsize;
 
     wsize = 0;
     while (s[pos] != c && s[pos])
@@ -27,7 +27,7 @@ int    ft_wordsize(char *s, char c, int pos)
 
 void    free_tabs(char **tab)
 {
-    size_t    i;
+    size_t i;
 
     i = 0;
     while (tab[i])
@@ -40,11 +40,11 @@ void    free_tabs(char **tab)
         free(tab);
 }
 
-char *add_quotes(char *str)
+char    *add_quotes(char *str)
 {
     size_t len = ft_strlen(str);
     char *result = (char *)malloc(len + 3);
-    
+
     if (result)
     {
         result[0] = '"';
@@ -55,7 +55,7 @@ char *add_quotes(char *str)
     return result;
 }
 
-int export_key_exists(t_export *export, char *key_to_check) 
+int     export_key_exists(t_export *export, char *key_to_check)
 {
     while (export != NULL)
     {

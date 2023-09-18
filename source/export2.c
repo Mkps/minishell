@@ -6,18 +6,18 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/18 16:22:35 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:57:11 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void env_update(t_data *data)
+void    env_update(t_data *data)
 {
     int num_env = 0;
     int i = 0;
     t_env *current_env = NULL;
-    
+
     if (data->envv)
     {
         i = 0;
@@ -57,14 +57,14 @@ void env_update(t_data *data)
     data->envv[i] = NULL;
 }
 
-void set_in_env(t_data *data, char *variable)
+void    set_in_env(t_data *data, char *variable)
 {
     char **variable_split = NULL;
     char *key = NULL;
     char *value = NULL;
-    t_env    *new_env = NULL;
+    t_env *new_env = NULL;
     int i = 0;
-    
+
     variable_split = ft_split2(variable, '=');
     key = ft_strdup(variable_split[0]);
     value = ft_strdup(variable_split[1]);
@@ -80,12 +80,12 @@ void set_in_env(t_data *data, char *variable)
         if (value[0] != '\0')
             remove_env(data, key);
         else
-            return ;
+            return;
     }
     ft_lstadd_back_env(&(data->env_cpy), new_env);
     free(key);
     free(value);
-    while(variable_split[i])
+    while (variable_split[i])
     {
         free(variable_split[i]);
         i++;
@@ -93,14 +93,14 @@ void set_in_env(t_data *data, char *variable)
     free(variable_split);
 }
 
-void set_in_export(t_data *data, char *variable)
+void    set_in_export(t_data *data, char *variable)
 {
     char **variable_split = NULL;
     char *key = NULL;
     char *value = NULL;
     t_export *new_export = NULL;
     int i = 0;
-    
+
     variable_split = ft_split2(variable, '=');
     key = ft_strdup(variable_split[0]);
     value = ft_strdup(variable_split[1]);
@@ -114,7 +114,7 @@ void set_in_export(t_data *data, char *variable)
         if (value[0] != '\0')
             remove_export(data, key);
         else
-            return ;
+            return;
     }
     new_export = ft_lstnew_export(key, value);
     if (!new_export)
@@ -126,7 +126,7 @@ void set_in_export(t_data *data, char *variable)
     free(key);
     if (value)
         free(value);
-    while(variable_split[i])
+    while (variable_split[i])
     {
         free(variable_split[i]);
         i++;
@@ -134,7 +134,7 @@ void set_in_export(t_data *data, char *variable)
     free(variable_split);
 }
 
-void execute_export(t_data *data, t_cmd *cmd)
+void    execute_export(t_data *data, t_cmd *cmd)
 {
     int i = 1;
 
