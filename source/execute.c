@@ -196,7 +196,6 @@ void	execute(t_data *data)
 		i = 1;
 		while(i > 0 && cmd)
 		{
-			printf("loop1\n");
 			i -= cmd->is_term;
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
