@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 10:48:55 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 15:16:21 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 21:04:04 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,13 @@ char	*ft_getline(char *buffer)
 	int		i;
 
 	i = 0;
-	// if (!buffer[i])
-	// 	return (NULL);
+	if (!buffer[i])
+		return (NULL);
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof (char));
 	if (!line)
 		return (NULL);
-	if (buffer[0] == 0)
-	{
-		line[0] = 4;
-		return (line);
-	}
 	line[i] = 0;
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
