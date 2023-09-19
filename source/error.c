@@ -36,12 +36,13 @@ void	output_err(char *msg, t_token *token, int squotes)
 		token_str = "newline";
 	tmp_str = ft_strappend(name_str, msg, 0);
 	if (squotes == 1)
-		tmp_str = ft_strappend(tmp_str, "'", 0);
-	tmp_str = ft_strappend(tmp_str, token_str, 0);
+		tmp_str = ft_strappend(tmp_str, "'", 2);
+	tmp_str = ft_strappend(tmp_str, token_str, 2);
 	if (squotes == 1)
-		tmp_str = ft_strappend(tmp_str, "'", 0);
-	tmp_str = ft_strappend(tmp_str, "\n", 0);
+		tmp_str = ft_strappend(tmp_str, "'", 2);
+	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
+	free(tmp_str);
 
 
 }
@@ -57,12 +58,11 @@ void	output_err_cmd(char *msg, char *cmd_str)
 		return ;
 	}
 	tmp_str = ft_strappend(name_str, cmd_str, 0);
-	tmp_str = ft_strappend(tmp_str, ": ", 0);
-	tmp_str = ft_strappend(tmp_str, msg, 0);
-	tmp_str = ft_strappend(tmp_str, "\n", 0);
+	tmp_str = ft_strappend(tmp_str, ": ", 2);
+	tmp_str = ft_strappend(tmp_str, msg, 2);
+	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
-
-
+	free(tmp_str);
 }
 int	is_wc(char *str)
 {
