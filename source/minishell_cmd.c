@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/13 16:40:13 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:27:18 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,75 @@ static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
 	}
 	return (sq);
 }
+void	open_fd_node(t_cmd *cmd, t_io_node *fd)
+{
+	if (fd->mode == IO_INPUT)
+	{
+		fd->fd = open_fd(0, fd->filename);
+		if (fd->fd > 0)
+		{
+			dup2(fd->fd, STDIN_FILENO);
+			close(fd->fd);
+		}		
+	}
+	if (fd->mode == IO_HEREDOC)
+		here_doc_handler(fd->filename);
+	if (fd->mode == IO_TRUNC)
+	{
+		fd->fd = open_fd(1, fd->filename);
+		if (fd->fd > 0)
+		{
+			dup2(fd->fd, STDOUT_FILENO);
+			close(fd->fd);
+		}
+	}
+	if (fd->mode == IO_APPEND)
+	{
+		fd->fd = open_fd(2, fd->filename);
+		if (fd->fd > 0)
+		{
+			dup2(fd->fd, STDOUT_FILENO);
+			close(fd->fd);
+		}
+	}
 
+}
 void	set_fd(t_cmd *cmd)
 {
-	if (cmd->fd[0] != 0 || (cmd->prev && !cmd->prev->pipe_status))
-		dup2(cmd->fd[0], 0);
-	if (cmd->fd[1] != 1 || !cmd->pipe_status)
-		dup2(cmd->fd[1], 1);
+	t_io_node	*current;
+
+	current = *cmd->io_list;
+	while (current)
+	{
+		open_fd_node(cmd, current);
+		current = current->next;
+	}
+	if (cmd->fd[0] > 0)
+		dup2(cmd->fd[0], STDIN_FILENO);
+	if (cmd->fd[1] > 0)
+		dup2(cmd->fd[1], STDIN_FILENO);
+
+}
+void	close_fd_node(t_cmd *cmd, t_io_node *current)
+{
+	if (current->fd != cmd->fd[0] && current->fd != cmd->fd[1])
+		close(current->fd);
+}
+
+void	close_fd(t_data *data, t_cmd *cmd)
+{
+	t_io_node	*current;
+
+	current = *cmd->io_list;
+	while (current)
+	{
+		close_fd_node(cmd, current);
+		current = current->next;
+	}
+	if (cmd->fd[0] > 0)
+		close(cmd->fd[0]);
+	if (cmd->fd[1] > 0)
+		close(cmd->fd[1]);
 }
 void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)
 {
@@ -78,7 +140,7 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 
 	env_p = get_path(data->envv);
 	cmd_p = get_cmd(cmd_node->cmd, env_p);
-	if (execve(cmd_p, cmd_node->args, data->envv) == -1)
+	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
 	{
 		ft_free_tab(env_p);
 		if (cmd_p)

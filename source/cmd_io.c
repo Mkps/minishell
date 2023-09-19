@@ -1,42 +1,42 @@
 #include "../include/minishell.h"
 
-t_token *get_input_token(t_token *current_t)
-{
-	t_token	*tmp;
-	t_token *input_token;
+// t_token *get_input_token(t_token *current_t)
+// {
+// 	t_token	*tmp;
+// 	t_token *input_token;
 
-	input_token = NULL;
-	tmp = current_t;
-	while(tmp != NULL && tmp->token_type != PIPE)
-	{
-		if (tmp->token_type == IO_INPUT || tmp->token_type == IO_HEREDOC)
-		{	
-			input_token = tmp;
-			return (input_token);
-		}
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
+// 	input_token = NULL;
+// 	tmp = current_t;
+// 	while(tmp != NULL && tmp->token_type != PIPE)
+// 	{
+// 		if (tmp->token_type == IO_INPUT || tmp->token_type == IO_HEREDOC)
+// 		{	
+// 			input_token = tmp;
+// 			return (input_token);
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (NULL);
+// }
 
-t_token	*get_output_token(t_token *current)
-{
-	t_token *tmp;
-	t_token *output_token;
+// t_token	*get_output_token(t_token *current)
+// {
+// 	t_token *tmp;
+// 	t_token *output_token;
 
-	output_token = NULL;
-	tmp = current;
-	while (tmp != NULL && tmp->token_type != PIPE)
-	{
-		if (tmp != NULL && tmp->token_type != PIPE)
-		{
-			if (tmp->token_type == IO_TRUNC || tmp->token_type == IO_APPEND)
-				output_token = tmp;
-			tmp = tmp->next;
-		}
-	}
-	return (output_token);
-}
+// 	output_token = NULL;
+// 	tmp = current;
+// 	while (tmp != NULL && tmp->token_type != PIPE)
+// 	{
+// 		if (tmp != NULL && tmp->token_type != PIPE)
+// 		{
+// 			if (tmp->token_type == IO_TRUNC || tmp->token_type == IO_APPEND)
+// 				output_token = tmp;
+// 			tmp = tmp->next;
+// 		}
+// 	}
+// 	return (output_token);
+// }
 
 int		set_input_fd(t_token *current)
 {
@@ -72,44 +72,115 @@ int		set_output_fd(t_token *current)
 	return (-1);
 }
 
-void	handle_cmd_input(t_data *data, t_token *current_t, t_cmd *cmd)
-{
-	t_token	*input_token;
-	int		p_type;
+// void	handle_cmd_input(t_data *data, t_token *current_t, t_cmd *cmd)
+// {
+// 	t_token	*input_token;
+// 	int		p_type;
 
-	cmd->fd[0] = 0;
-	p_type = NONE;
-	input_token = get_input_token(get_cmd_first(current_t));
-	while (input_token != NULL)
-	{
-		cmd->fd[0] = set_input_fd(input_token);
-		p_type = input_token->token_type;
-		input_token = get_input_token(input_token->next);
-		if (p_type == IO_HEREDOC && input_token && input_token->token_type == IO_HEREDOC)
-			dup2(data->old_fd[0], 0);
-		if (cmd->fd[0] < 0)
-			return ;
-	}
+// 	cmd->fd[0] = 0;
+// 	p_type = NONE;
+// 	input_token = get_input_token(get_cmd_first(current_t));
+// 	while (input_token != NULL)
+// 	{
+// 		cmd->fd[0] = add_io_node(input_token);
+// 		p_type = input_token->token_type;
+// 		input_token = get_input_token(input_token->next);
+// 		if (p_type == IO_HEREDOC && input_token && input_token->token_type == IO_HEREDOC)
+// 			dup2(data->old_fd[0], 0);
+// 		if (cmd->fd[0] < 0)
+// 			return ;
+// 	}
+// }
+// void	handle_cmd_output(t_data *data, t_token *current_t, t_cmd *cmd)
+// {
+// 	t_token	*output_token;
+
+// 	cmd->fd[1] = 1;
+// 	output_token = get_output_token(get_cmd_first(current_t));
+// 	while (output_token != NULL)
+// 	{
+// 		cmd->fd[1] = set_output_fd(output_token);
+// 		output_token = get_output_token(output_token->next);	
+// 		if (cmd->fd[1] < 0)
+// 			return ;
+// 	}
+// }
+t_io_node	*create_io_node(char *filename, int mode)
+{
+	t_io_node	*ret;
+
+	ret = malloc(sizeof(t_io_node));
+	ret->fd = -2;
+	ret->filename = filename;
+	ret->mode = mode;
+	ret->next = NULL;
+	return (ret);
 }
-void	handle_cmd_output(t_data *data, t_token *current_t, t_cmd *cmd)
-{
-	t_token	*output_token;
 
-	cmd->fd[1] = 1;
-	output_token = get_output_token(get_cmd_first(current_t));
-	while (output_token != NULL)
+int	add_io_node(t_data *data, t_cmd *cmd, char *filename, int mode)
+{
+	t_io_node	*current;
+
+	if (*cmd->io_list == NULL)
 	{
-		cmd->fd[1] = set_output_fd(output_token);
-		output_token = get_output_token(output_token->next);	
-		if (cmd->fd[1] < 0)
-			return ;
+		current = create_io_node(filename, mode);
+		*cmd->io_list = current;
+		if (!current)
+			return (0);
+		return (1);
 	}
+	current = *cmd->io_list;
+	while (current->next)
+		current = current->next;
+	current->next = create_io_node(filename, mode);
+	if (!current)
+		return (0);
+	return (1);
+}
+
+t_token *get_io_token(t_token *current_t)
+{
+	t_token	*tmp;
+	t_token *io_token;
+
+	io_token = NULL;
+	tmp = current_t;
+	while(tmp != NULL && !token_is_term(tmp))
+	{
+		if (token_is_io(tmp))
+		{	
+			io_token = tmp;
+			return (io_token);
+		}
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+char	*get_filename(t_token *io_token)
+{
+	t_token	*current;
+
+	current = io_token;
+	if (current->next && current->next->token_type == WORD)
+		return (current->next->value);
+	else if (current->next && token_is_quote(current->next) 
+		&& current->next->next && current->next->next->token_type == WORD)
+		return (current->next->next->value);
+	return (NULL);
 }
 
 //	Looks for and then handles the io
-void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
+int	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 {
-	handle_cmd_input(data, current_t, cmd);
+	t_token	*io_token;
+	int		p_type;
 
-	handle_cmd_output(data, current_t, cmd);
+	io_token = get_io_token(get_cmd_first(current_t));
+	while (io_token != NULL)
+	{
+		if (!add_io_node(data, cmd, get_filename(io_token), io_token->token_type))
+			return (EXIT_FAILURE);
+		io_token = get_io_token(io_token->next);
+	}
+	return (EXIT_SUCCESS);
 }

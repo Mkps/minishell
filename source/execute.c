@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 16:49:37 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 14:01:19 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,12 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
-			set_fd(cmd);
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
-			exit (1);
+			set_fd(cmd);
+			close(data->old_fd[0]);
+			close(data->old_fd[1]);
+			exit (0);
 		}
 		return ;
 	}
@@ -155,8 +157,8 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
-			set_fd(cmd);
 			set_pipes(data, cmd);
+			set_fd(cmd);
 			close_pipes(data->cmd_list, NULL, NULL);
 			minishell_subshell(data, cmd->cmd);
 		}
@@ -173,9 +175,9 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		{
 			cmd->pid = fork();
 			if (cmd->pid == 0)
-			{		
+			{
+				set_pipes(data, cmd);		
 				set_fd(cmd);
-				set_pipes(data, cmd);
 				close_pipes(data->cmd_list, NULL, NULL);
 				if (!execute_builtin(cmd,data))
 					exec_cmd(cmd, data);
@@ -183,6 +185,8 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 				free_data(data);
 				free(data->token_root);
 				free(data->cmd_list);
+				close(data->old_fd[0]);
+				close(data->old_fd[1]);
 				ft_free_tab(data->envv);
 				exit (exit_code);
 			}

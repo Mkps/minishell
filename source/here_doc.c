@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/08 15:42:35 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:53:36 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	here_doc_handler(char *limiter)
 {
 	int		p_fd[2];
 	pid_t	pid;
+	int		wpid;
 	int		status;
 
 	if (pipe(p_fd) == -1)
@@ -58,7 +59,7 @@ void	here_doc_handler(char *limiter)
 	else
 	{
 		close(p_fd[1]);
-		waitpid(pid, &status, 0);
+		wpid = waitpid(pid, &status, 0);
 		if (status != 256)
 			ft_printf("%s%s')\n", HEREDOC_WARNING_EOF, limiter);
 		dup2(p_fd[0], 0);

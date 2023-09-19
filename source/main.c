@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 16:56:41 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:05:19 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,17 @@ void	free_cmd_list(t_data *data)
 				env = next;
 			}
 			free(tmp->assign);
+		}
+		if (tmp->io_list)
+		{
+			t_io_node *io = *tmp->io_list;
+			while (io)
+			{
+				t_io_node *next_io = io->next;
+				free(io);
+				io = next_io;
+			}
+			free(tmp->io_list);
 		}
 		free(tmp);
 	}
