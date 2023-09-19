@@ -103,7 +103,7 @@ char	*var_expander(t_data *data, char *str, t_token *token)
 	{
 		if (ret[i] == '$')
 		{
-			if (ft_isalnum(ret[i + 1]) || ret[i + 1] == '_')
+			if (ft_isalpha(ret[i + 1]) || ret[i + 1] == '_')
 			{
 				n = 1;
 				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i + n] == '_'))
@@ -118,7 +118,14 @@ char	*var_expander(t_data *data, char *str, t_token *token)
 				}
 				i = 0;
 			}
-			else if (ret[i + 1] == 0 && token->near_quote == 1)
+			else if (ft_isdigit(ret[i + 1]))
+			{
+				tmp = ret;
+				ret = str_replace(ret, i, 2, "");
+				free(tmp);
+				i = 0;
+			}
+			else if ((ret[i + 1] == 0) && token->near_quote == 1)
 			{
 				ret[i] = 0;
 			}
