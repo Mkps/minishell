@@ -126,37 +126,46 @@ char	*set_prompt(t_data *data)
 void	minishell_prompt(t_data *data)
 {
 	char	*prompt;
+	char	**cmd_list;
+	int		i;
 
 	while(1)
 	{
 		prompt = set_prompt(data);
 		signals_interact();
+		data->user_input = NULL;
+		data->raw_input = NULL;
 		data->user_input = readline(prompt);
 		signals_no_interact();
+		free(prompt);
 		if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
 		{
 			if (!data->user_input)
 				write(1, "\n", 1);
 			break ;
 		}
+		cmd_list = ft_split(data->user_input, ';');
 		data->raw_input = data->user_input;
-		scan_input(data);
-		if (check_error(data) == EXIT_SUCCESS)
+		i = -1; 
+		while (cmd_list[++i])
 		{
-			parse_token(data);
-			parse_near_quote(data);
-			// t_token *tmp = *data->token_root;
-			// while (tmp)       
-			// {
-			//     printf("tmp token value %s | type %i qs %i\n", tmp->value, tmp->token_type, tmp->quote_status./);
-			//     tmp = tmp->next;
-			// }
-			build_cmd_list(data, *data->token_root);
-			execute(data);
+			data->user_input = cmd_list[i];
+			if (i > 0)
+				data->raw_input = NULL;
+			scan_input(data);
+			if (check_error(data) == EXIT_SUCCESS)
+			{
+				parse_token(data);
+				parse_near_quote(data);
+				// print_token(data);
+				build_cmd_list(data, *data->token_root);
+				execute(data);
+			}
+			// free_token(data);
+			// free_cmd_list(data);
+			free_data(data);
+			// dup2(data->old_fd[0], 0);
 		}
-		free(prompt);
-		free_data(data);
-		dup2(data->old_fd[0], 0);
+		free(cmd_list);
 	}
-	free(prompt);
 }

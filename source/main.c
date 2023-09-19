@@ -134,7 +134,10 @@ int	free_data(t_data *data)
 	close(data->old_fd[1]);
 	free_token(data);
 	free_cmd_list(data);
-	free(data->user_input);
+	if (data->user_input)
+		free(data->user_input);
+	if (data->raw_input)
+		free(data->raw_input);
 	return (EXIT_SUCCESS);
 }
 int	g_exit_code;

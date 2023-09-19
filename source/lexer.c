@@ -170,10 +170,10 @@ int	scan_input(t_data *data)
 	while (*input && ft_is_ws(*input)) input++;
 	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
-	add_history(data->raw_input);
+	if (data->raw_input)
+		add_history(data->raw_input);
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 
-	// set_index_wc(data);
 	return (EXIT_SUCCESS);
 } 
