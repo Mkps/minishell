@@ -204,8 +204,7 @@ int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
-char	*var_expander_sys(t_data *data, char *str, t_token *token);
-char	*var_expander_var(t_data *data, char *str);
+char	*var_expander(t_data *data, char *str, t_token *token);
 
 /**			export			**/
 void free_export_list(t_export *export_lst);

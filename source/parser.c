@@ -213,7 +213,7 @@ void	parse_token(t_data *data)
 		if (current->token_type == WORD && current->quote_status != SQUOTE
 				&& current->quote_status != O_PAR)
 		{
-			current->value = var_expander_sys(data, current->value, current);
+			current->value = var_expander(data, current->value, current);
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{
@@ -225,22 +225,6 @@ void	parse_token(t_data *data)
 		}
 		current = current->next;
 	}
-}
-void	var_expand(t_data *data, t_cmd *cmd)
-{
-	int		i;
-
-	if (cmd->cmd)
-	{
-		cmd->cmd = var_expander_var(data, cmd->cmd);
-	}
-	i = 0;
-	while (cmd->args[i])
-	{
-		cmd->args[i] = var_expander_var(data, cmd->args[i]);
-		i++;
-	}
-
 }
 
 // Creating a cmd.

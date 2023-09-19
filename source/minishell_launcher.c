@@ -152,7 +152,6 @@ void	minishell_prompt(t_data *data)
 			//     tmp = tmp->next;
 			// }
 			build_cmd_list(data, *data->token_root);
-			// var_expand(data);
 			execute(data);
 		}
 		free(prompt);

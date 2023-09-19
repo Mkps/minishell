@@ -163,7 +163,6 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		var_expand(data, cmd);
 		if (is_builtin(cmd, data) == 1)
 		{
 			set_fd(cmd);

@@ -143,11 +143,6 @@ int	check_par_error(t_token **root)
 
 	par_status= 0;
 	tmp = *root;
-	/*while (tmp)*/
-	/*{*/
-	/*    printf("token %s type %i\n",tmp->value, tmp->token_type);*/
-	/*    tmp = tmp->next;*/
-	/*}*/
 	while (tmp)
 	{
 		if (tmp->token_type == O_PAR)
