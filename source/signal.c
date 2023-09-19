@@ -51,7 +51,6 @@ void	signal_quit(int signum)
 void	signal_nl(int signum)
 {
 	(void)signum;
-	write(1, "\n", 1);
 	g_exit_code  = signum + 128;
 }
 
@@ -65,4 +64,40 @@ void	signals_no_interact(void)
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;
 	sigaction(SIGQUIT, &act, NULL);
+}
+void	here_doc_SIGINT(int signum)
+{
+	g_exit_code  = signum + 128;
+	exit(g_exit_code);
+}
+void	here_doc_child_SIGINT(int signum)
+{
+	write(1, "\n", 1);
+	exit(1);
+}
+
+void	signals_here_doc(void)
+{
+	struct sigaction act;
+
+	ft_memset(&act, 0, sizeof(act));	
+	act.sa_handler = &here_doc_SIGINT;
+	act.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &act, NULL);
+	act.sa_handler = &signal_quit;
+	sigaction(SIGQUIT, &act, NULL);
+
+}
+
+void	signals_here_doc_child(void)
+{
+	struct sigaction act;
+
+	ft_memset(&act, 0, sizeof(act));	
+	act.sa_handler = &here_doc_child_SIGINT;
+	act.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &act, NULL);
+	act.sa_handler = &signal_quit;
+	sigaction(SIGQUIT, &act, NULL);
+
 }

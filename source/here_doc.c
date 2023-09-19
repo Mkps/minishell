@@ -48,6 +48,7 @@ void	here_doc_handler(char *limiter)
 	int		wpid;
 	int		status;
 
+	signals_here_doc();
 	if (pipe(p_fd) == -1)
 		error_exit(5);
 	pid = fork();
@@ -55,7 +56,10 @@ void	here_doc_handler(char *limiter)
 		error_exit(6);
 	status = 0;
 	if (!pid)
+	{
+		signals_here_doc_child();
 		here_doc_input(limiter, p_fd);
+	}
 	else
 	{
 		close(p_fd[1]);

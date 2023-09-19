@@ -139,11 +139,13 @@ void	free_cmd_list(t_data *data)
 	*data->cmd_list = NULL;
 }
 
+
 int	free_data(t_data *data)
 {
 	close(data->old_fd[0]);
 	close(data->old_fd[1]);
 	free_token(data);
+	// free_env_list(data->env_cpy);
 	free_cmd_list(data);
 	if (data->user_input)
 		free(data->user_input);

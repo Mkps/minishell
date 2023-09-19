@@ -87,6 +87,7 @@ typedef struct s_export
 typedef struct s_data {
 	int			pid;
 	int			is_interactive;
+	char		**cmd_split;
 	char		**envv;
 	t_env		*env_cpy;
 	t_export	*export;
@@ -116,6 +117,8 @@ void	free_var(t_data *data, t_cmd *cmd);
 /** 	signal.c	**/
 void	signals_interact(void);
 void	signals_no_interact(void);
+void	signals_here_doc(void);
+void	signals_here_doc_child(void);
 
 /**		lexer.c		**/
 int		scan_input(t_data *data);

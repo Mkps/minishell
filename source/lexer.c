@@ -151,6 +151,7 @@ int	ft_is_ws(char c)
 // 	}
 // }
 //
+
 //Scan input for tokens then load them into the pre-command table.
 int	scan_input(t_data *data)
 {

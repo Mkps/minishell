@@ -157,30 +157,30 @@ void	minishell_prompt(t_data *data)
 				write(1, "\n", 1);
 			break ;
 		}
-		cmd_list = ft_split(data->user_input, ';');
+		data->cmd_split = ft_split(data->user_input, ';');
 		data->raw_input = data->user_input;
 		i = -1; 
-		while (cmd_list[++i])
+		while (data->cmd_split[++i])
 		{
-			data->user_input = cmd_list[i];
+			data->user_input = ft_strdup(data->cmd_split[i]);
 			if (i > 0)
+			{
+				free(data->raw_input);
 				data->raw_input = NULL;
+			}
 			scan_input(data);
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);
 				parse_near_quote(data);
-				// print_token(data);
+			// // 	// print_token(data);
 				build_cmd_list(data, *data->token_root);
 				execute(data);
 			}
-			// free_token(data);
-			// free_cmd_list(data);
 			free_data(data);
 			dup2(data->old_fd[0], 0);
 			dup2(data->old_fd[1], 1);
-
 		}
-		free(cmd_list);
+		ft_free_tab(data->cmd_split);
 	}
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <readline/readline.h>
 #include <unistd.h>
 
 int		execute_builtin(t_cmd *cmd, t_data *data)
@@ -185,9 +186,11 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 				free_data(data);
 				free(data->token_root);
 				free(data->cmd_list);
+				ft_free_tab(data->cmd_split);
 				close(data->old_fd[0]);
 				close(data->old_fd[1]);
 				ft_free_tab(data->envv);
+				// rl_clear_history();
 				exit (exit_code);
 			}
 		}
