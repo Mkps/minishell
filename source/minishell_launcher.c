@@ -14,57 +14,70 @@
 
 void	minishell_inline(t_data *data, char *user_input)
 {
-	t_data new_data;
+	char	**cmd_list;
+	int		i;
 
-	data->user_input = user_input;
-	scan_input(data);
-	if (check_error(data) == EXIT_SUCCESS)
+	if (user_input)
 	{
-		parse_token(data);
-		parse_near_quote(data);
-		build_cmd_list(data, *data->token_root);
-		// var_expand(data);
-		/*t_cmd *cmd;*/
-		/*cmd = *new_data.cmd_list;*/
-		/*while (cmd)*/
-		/*{*/
-		/*    printf("cmd %s type %i\n", cmd->cmd, cmd->type);*/
-		/*    cmd = cmd->next;*/
-		/*}*/
-		execute(data);
+		cmd_list = ft_split(user_input, ';');
+		data->raw_input = ft_strdup(user_input);
 	}
-	dup2(data->old_fd[0], 0);
+	else
+	{
+		cmd_list = NULL;	
+		data->raw_input = NULL;
+	}
+	i = -1; 
+	while (cmd_list[++i])
+	{
+		data->user_input = cmd_list[i];
+		if (i > 0)
+			data->raw_input = NULL;
+		scan_input(data);
+		if (check_error(data) == EXIT_SUCCESS)
+		{
+			parse_token(data);
+			parse_near_quote(data);
+			build_cmd_list(data, *data->token_root);
+			execute(data);
+		}
+		free_data(data);
+	}
+	free(cmd_list);
+	exit(g_exit_code);
 }
 void	minishell_subshell(t_data *data, char *user_input)
 {
-	t_data new_data;
+	t_data	new_data;
+	char	**cmd_list;
+	int		i;
 
 	init_data(&new_data);
 	import_envv(&new_data, data->envv);
 	new_data.user_input = ft_strdup(user_input);
 	new_data.raw_input = ft_strdup(new_data.user_input);
 	free_data(data);
-	scan_input(&new_data);
-	if (check_error(&new_data) == EXIT_SUCCESS)
+	cmd_list = ft_split(new_data.user_input, ';');
+	new_data.raw_input = new_data.user_input;
+	i = -1; 
+	while (cmd_list[++i])
 	{
-		parse_token(&new_data);
-		parse_near_quote(&new_data);
-		build_cmd_list(&new_data, *new_data.token_root);
-		// var_expand(&new_data);
-		/*t_cmd *cmd;*/
-		/*cmd = *new_data.cmd_list;*/
-		/*while (cmd)*/
-		/*{*/
-		/*    printf("cmd %s type %i\n", cmd->cmd, cmd->type);*/
-		/*    cmd = cmd->next;*/
-		/*}*/
-		execute(&new_data);
+		new_data.user_input = cmd_list[i];
+		if (i > 0)
+			new_data.raw_input = NULL;
+		scan_input(&new_data);
+		if (check_error(&new_data) == EXIT_SUCCESS)
+		{
+			parse_token(&new_data);
+			parse_near_quote(&new_data);
+			build_cmd_list(&new_data, *new_data.token_root);
+			execute(&new_data);
+		}
+		free_data(&new_data);
 	}
-	/*dup2(data->old_fd[0], 0);*/
+	free(cmd_list);
 	exit (g_exit_code);
 }
-
-void	set_wc(t_data *data);
 
 char	*glob_home(t_data *data, char *str)
 {
