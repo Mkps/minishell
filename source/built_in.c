@@ -5,17 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/18 16:39:48 by uaupetit         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2023/09/18 17:20:03 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/minishell.h"
 
 void    ft_env(t_data *data)
 {
-    printf("******\n");
-    print_env_list(data->env_cpy);
+    print_envp(data);
     return ;
 }
 
@@ -116,27 +116,6 @@ void    ft_cd_bis(t_cmd *cmd, t_data *data)
     }
 }
 
-void ft_pwd_bis(t_data *data)
-{
-    char *pwd_value = NULL;
-    int i = 0;
-    
-    while (data->envv[i] != NULL)
-    {
-        if (ft_strncmp(data->envv[i], "PWD=", 4) == 0)
-        {
-            pwd_value = data->envv[i] + 4;
-            break;
-        }
-        i++;
-    }
-    if (pwd_value == NULL) {
-        fprintf(stderr, "PWD variable not found in envv\n");
-        return;
-    }
-    printf("%s\n", pwd_value);
-}
-
 void ft_pwd(t_data *data)
 {
     char *pwd_value = NULL;
@@ -166,6 +145,7 @@ void ft_cd(t_cmd *cmd, t_data *data)
     char *dir = NULL;
     char *pwd = NULL;
     t_env *current = data->env_cpy;
+    char *tmp = NULL;
     
     if (cmd->args[1] == NULL)
     {
@@ -220,7 +200,6 @@ void ft_cd(t_cmd *cmd, t_data *data)
             current = current->next;
         }
     }
-	char *tmp;
 	tmp = ft_strjoin("PWD=", pwd);
     // printf("%s %s\n", tmp, current->value);
 	ft_setenv(data, tmp);
