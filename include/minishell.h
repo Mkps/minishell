@@ -238,8 +238,11 @@ void remove_env(t_data *data, const char *key_to_remove);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env *ft_lstnew_env(char *key, char *value);
 void free_env_list(t_env *env);
-int is_valid_export(char *str);
-
+int key_is_valid(char *chaine);
+int is_valid_arg(char *arg);
+int first_char(char *str);
+int ft_equal(char *chaine);
+//int ft_isspace(char c);
 /***	unset	***/
 int	ft_lstsize_env(t_env *lst);
 void    env_update(t_data *data);

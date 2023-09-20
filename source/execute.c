@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 17:18:44 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/20 10:13:39 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 	}
 	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
 	{
-		return (1);
 		ft_unset(data);
+		return (1);
 	}
 	/*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
         exit(0);*/

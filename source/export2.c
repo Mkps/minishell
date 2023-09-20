@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/19 16:52:42 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:41:30 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,10 @@ void    set_in_env(t_data *data, char *variable)
     variable_split = ft_split2(variable, '=');
     key = ft_strdup(variable_split[0]);
     value = ft_strdup(variable_split[1]);
+    if (key_is_valid(key) == 1)
+            return;
     if (value[0] == '\0')
-        return ;
-   
+        return ;  
    // if (ft_strrchr(variable, '=') == NULL)
      //   return ;
     new_env = ft_lstnew_env(key, value);
@@ -101,6 +102,16 @@ void    set_in_env(t_data *data, char *variable)
     free(variable_split);
 }
 
+int first_char(char *str)
+{
+    if (str[0] == '\0')
+        return 0;
+    if (ft_isalpha(str[0]) || str[0] == '_' || str[0] == '=')
+        return 0;
+     else
+        return 1;
+}
+
 void    set_in_export(t_data *data, char *variable)
 {
     char **variable_split = NULL;
@@ -109,11 +120,25 @@ void    set_in_export(t_data *data, char *variable)
     t_export *new_export = NULL;
     int i = 0;
     int flag = 0;
-
+    
     variable_split = ft_split2(variable, '=');
     key = ft_strdup(variable_split[0]);
     value = ft_strdup(variable_split[1]);
-  //  if (variable_split[1] == NULL || variable_split[0][0] != '\0')
+    if (key_is_valid(key) == 1)
+    {
+        printf("invalid key\n");
+        return;
+    }
+    /*if (first_char(key) == 1 || is_valid_arg(key) == 1 || ft_equal(key) == 1)
+    {
+            printf("1 export: '%s': not a valid identifier\n", key);
+            return;
+    }
+    if (is_valid_arg(value) == 1 || ft_equal(value) == 1)
+    {
+            printf("2 export: '%s': not a valid identifier\n", value);
+            return;
+    }*/
     if (ft_strrchr(variable, '=') == NULL)
         flag++;
    // printf("FLAG= %i\n", flag);
@@ -124,7 +149,7 @@ void    set_in_export(t_data *data, char *variable)
         if (value[0] != '\0')
             remove_export(data, key);
         else
-            return;
+            return ;
     }
     new_export = ft_lstnew_export(key, value, flag);
     if (!new_export)
@@ -148,41 +173,72 @@ void    execute_export(t_data *data, t_cmd *cmd)
 {
     int i = 1;
     int flag = 0;
-   /* if (is_valid_export(cmd->args[i]) == 1)
-    {
-        printf("L'export n'est pas valide");
-        return;
-    }*/
     while (cmd->args[i])
     {
-        /*if (fonction a coder(cmd->args[i][0]) == 1 && flag == 0)
+        if (ft_strlen(cmd->args[i]) == 1 && cmd->args[i][0] == '=')
         {
-            printf("export: `=': not a valid identifier");
-            flag++;
-        }*/
-        set_in_export(data, cmd->args[i]);
-        set_in_env(data, cmd->args[i]);
-        i++;
+            printf("export: `=': not a valid identifier\n");
+            i++;
+        }
+      //  if (is_valid_arg(cmd->args[i]) == 1)
+        //    printf("export: ` ': not a valid identifier\n");
+   //     else
+       //     printf("good\n");
+       else
+        {
+            set_in_export(data, cmd->args[i]);
+            set_in_env(data, cmd->args[i]);
+            i++;
+        }
     }
 }
-
-int is_valid_export(char *str)
+/*
+int is_valid_arg(char *arg)
 {
     int i = 0;
-    int equal_found = 0;  // Variable pour suivre si le signe égal a été trouvé
-
-    // Chercher le premier signe égal '=' dans la chaîne
-    while (str[i] != '\0') {
-        if (str[i] == '=') {
-            equal_found = 1;
-            break;  // Sortir de la boucle dès que le signe égal est trouvé
-        }
+    while (arg[i])
+    {
+        if (!ft_isalnum(arg[i]) && arg[i] != '=' && arg[i] != '_' && arg[i] != '"'
+            && arg[i] != ' ' && arg[i] != '\0')
+            return 1;
         i++;
     }
+    return 0;
+}*/
 
-    // Si le signe égal n'a pas été trouvé ou s'il est précédé ou suivi d'un espace, alors c'est invalide.
-    if (!equal_found || (i > 0 && str[i - 1] == ' ') || str[i + 1] == ' ') {
+int key_is_valid(char *chaine) {
+    if (chaine[0] == '\0') {
+        return 0; // Chaîne vide
+    }
+
+    // Vérifie si le premier caractère est une lettre ou un '_'
+    if (!ft_isalpha(chaine[0]) && chaine[0] != '_') {
+        return 1; // Commence par autre chose qu'une lettre ou un '_'
+    }
+
+    // Vérifie s'il y a autre chose que des caractères alphanumériques ou '_'
+    for (int i = 0; chaine[i] != '\0'; i++) {
+        if (!ft_isalnum(chaine[i]) && chaine[i] != '_') {
+            return 1; // Contient autre chose que des caractères alphanumériques ou '_'
+        }
+    }
+
+    return 0; // La chaîne est valide
+}
+
+int ft_equal(char *chaine) {
+    int i = 0;
+    if (ft_strlen(chaine) == 1 && chaine[0] == '=')
         return 1;
+    // Recherche du signe égal '=' dans la chaîne
+    while (chaine[i] != '\0') {
+        if (chaine[i] == '=') {
+            // Vérifie s'il y a des espaces avant et après le signe égal
+            if ((i > 0 && chaine[i - 1] == ' ') && (chaine[i + 1] == ' ' || chaine[i + 1] == '\0')) {
+                return 1;
+            }
+        }
+        i++;
     }
 
     return 0;
