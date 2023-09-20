@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/20 12:41:30 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:49:06 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void    set_in_export(t_data *data, char *variable)
     value = ft_strdup(variable_split[1]);
     if (key_is_valid(key) == 1)
     {
-        printf("invalid key\n");
+        printf("export: `%s': not a valid identifier\n", key);
         return;
     }
     /*if (first_char(key) == 1 || is_valid_arg(key) == 1 || ft_equal(key) == 1)
