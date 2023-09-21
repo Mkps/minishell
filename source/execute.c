@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 22:57:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 23:09:23 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		{		
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
-			set_fd(cmd);
-			close(data->old_fd[0]);
-			close(data->old_fd[1]);
+			set_fd(data, cmd);
 			exit (0);
 		}
 		return ;
@@ -159,7 +157,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		if (cmd->pid == 0)
 		{		
 			set_pipes(data, cmd);
-			set_fd(cmd);
+			set_fd(data, cmd);
 			close_pipes(data->cmd_list, NULL, NULL);
 			minishell_subshell(data, cmd->cmd);
 		}
@@ -168,7 +166,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	{
 		if (is_builtin(cmd, data) == 1)
 		{
-			set_fd(cmd);
+			set_fd(data, cmd);
 			cmd->pid = -2;
 			execute_builtin(cmd, data);
 		}
@@ -178,7 +176,16 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 			if (cmd->pid == 0)
 			{
 				set_pipes(data, cmd);		
-				set_fd(cmd);
+				if (cmd->fd[0] > -1)
+				{
+					dup2(cmd->fd[0], STDIN_FILENO);
+					close(cmd->fd[0]);
+				}
+				if (cmd->fd[1] > -1)
+				{
+					dup2(cmd->fd[1], STDOUT_FILENO);
+					close(cmd->fd[1]);
+				}
 				close_pipes(data->cmd_list, NULL, NULL);
 				if (!execute_builtin(cmd,data))
 					exec_cmd(cmd, data);
@@ -187,10 +194,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 				free(data->token_root);
 				free(data->cmd_list);
 				ft_free_tab(data->cmd_split);
-				close(data->old_fd[0]);
-				close(data->old_fd[1]);
 				ft_free_tab(data->envv);
-				// rl_clear_history();
 				exit (exit_code);
 			}
 		}
@@ -234,12 +238,17 @@ void	execute(t_data *data)
 		while(i > 0 && cmd)
 		{
 			i -= cmd->is_term;
+			if (cmd->fd[0] > -1)
+				close(cmd->fd[0]);
+			if (cmd->fd[1] > -1)
+				close(cmd->fd[1]);
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
 				wpid = waitpid(cmd->pid, &status, 0);
 			if (cmd->is_term != 0)
 			{
-				g_exit_code = WEXITSTATUS(status);
+				if (!g_exit_code)
+					g_exit_code = WEXITSTATUS(status);
 				eval = g_exit_code;
 			}
 			cmd = cmd->next;

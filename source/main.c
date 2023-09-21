@@ -54,10 +54,9 @@ void	print_token(t_token **root)
 	current = *root;
 	while (current != NULL)
 	{
-		printf("token type %i | value %s\n", current->token_type, current->value);
+		printf("token type %i | value %s | qs %i\n", current->token_type, current->value, current->quote_status);
 		current = current->next;
 	}
-	*root = NULL;
 }
 
 void	free_token(t_data *data)
@@ -142,8 +141,6 @@ void	free_cmd_list(t_data *data)
 
 int	free_data(t_data *data)
 {
-	close(data->old_fd[0]);
-	close(data->old_fd[1]);
 	free_token(data);
 	// free_env_list(data->env_cpy);
 	free_cmd_list(data);

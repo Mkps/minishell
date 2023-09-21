@@ -211,7 +211,7 @@ void	parse_token(t_data *data)
 	while (current != NULL)
 	{
 		if (current->token_type == WORD && current->quote_status != SQUOTE
-				&& current->quote_status != O_PAR)
+				&& current->quote_status != O_PAR && current->quote_status != IO_HEREDOC)
 		{
 			current->value = var_expander(data, current->value, current);
 		}
@@ -226,7 +226,7 @@ void	parse_token(t_data *data)
 		if (current->token_type == IO_HEREDOC && current->next && ((current->next->token_type == WORD) || token_is_quote(current->next) && current->next->next->token_type == WORD))
 		{
 			if (current->next && (current->next->token_type == WORD))
-				current->next->quote_status = SQUOTE;
+				current->next->quote_status = DQUOTE;
 			else if (current->next && ((current->next->token_type == WORD) 
 				|| token_is_quote(current->next) && current->next->next->token_type == WORD))
 				current->next->next->quote_status = SQUOTE;
@@ -514,7 +514,6 @@ void	build_cmd_list(t_data *data, t_token *token)
 		else if (current_t)
 		{
 			tmp = get_next_cmd(tmp);
-			printf("tmp %s\n", tmp->value);
 			current_t = tmp;
 			if (tmp && tmp->token_type != WORD)
 				add_empty_cmd(data);

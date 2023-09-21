@@ -136,27 +136,35 @@ char	*set_prompt(t_data *data)
 	return (prompt);
 }
 
-void	minishell_prompt(t_data *data)
+void	prompt_user(t_data *data)
 {
 	char	*prompt;
+
+	prompt = set_prompt(data);
+	signal(SIGINT, (void (*) (int))redisplay_prompt);
+	redisplay_prompt(42, prompt);
+	data->user_input = NULL;
+	data->raw_input = NULL;
+	data->user_input = readline(prompt);
+	free(prompt);
+	if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
+	{
+		if (!data->user_input)
+			write(1, "exit\n", 5);
+		exit(0);
+	}
+}
+
+void	minishell_prompt(t_data *data)
+{
 	char	**cmd_list;
 	int		i;
 
 	while(1)
 	{
-		prompt = set_prompt(data);
 		signals_interact();
-		data->user_input = NULL;
-		data->raw_input = NULL;
-		data->user_input = readline(prompt);
+		prompt_user(data);
 		signals_no_interact();
-		free(prompt);
-		if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
-		{
-			if (!data->user_input)
-				write(1, "\n", 1);
-			break ;
-		}
 		data->cmd_split = ft_split(data->user_input, ';');
 		data->raw_input = data->user_input;
 		i = -1; 
@@ -172,14 +180,15 @@ void	minishell_prompt(t_data *data)
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);
+				// print_token(data->token_root);
 				parse_near_quote(data);
-			// // 	// print_token(data);
 				build_cmd_list(data, *data->token_root);
-				execute(data);
+				if (init_io_redir(data) == EXIT_SUCCESS)
+					execute(data);
 			}
 			free_data(data);
 			dup2(data->old_fd[0], 0);
-			dup2(data->old_fd[1], 1);
+			// dup2(data->old_fd[1], 1);
 		}
 		ft_free_tab(data->cmd_split);
 	}

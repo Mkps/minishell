@@ -104,7 +104,7 @@ typedef struct s_data {
 void	argc_error(int error_code);
 void	error_exit(int exit_code);
 int		open_fd(int mode, char *filename);
-void	here_doc_handler(char *limiter);
+int		here_doc_handler(t_data *data, char *limiter);
 void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
@@ -113,12 +113,15 @@ int		free_data(t_data *data);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 void free_env_list(t_env *env);
 void	free_var(t_data *data, t_cmd *cmd);
+void	print_token(t_token **root);
 
 /** 	signal.c	**/
 void	signals_interact(void);
 void	signals_no_interact(void);
 void	signals_here_doc(void);
 void	signals_here_doc_child(void);
+void	here_doc_child_SIGINT(const int signum, void *ptr);
+void	redisplay_prompt(int signum, void *ptr);
 
 /**		lexer.c		**/
 int		scan_input(t_data *data);
@@ -194,10 +197,11 @@ void	ft_cd(t_cmd *cmd, t_data *data);
 void    ft_pwd(t_data *data);
 
 /**		minishell_cmd.c	**/
-void	set_fd(t_cmd *cmd);
+int		set_fd(t_data *data, t_cmd *cmd);
 void	set_pipes(t_data *data, t_cmd *cmd);
 void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last);
 void	close_fd(t_data *data, t_cmd *cmd);
+int		init_io_redir(t_data *data);
 
 /**		var.c			**/
 int		is_valid_var(char *str);

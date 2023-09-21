@@ -40,6 +40,7 @@ int	open_fd(int mode, char *filename)
 {
 	int	fd;
 	
+	fd = -3;
 	if (mode == 0)
 		fd = open(filename, O_RDONLY, 0664);
 	if (mode == 1)
@@ -54,5 +55,7 @@ int	open_fd(int mode, char *filename)
 		perror("");
 		return (fd);
 	}
+	if (fd == -3)
+		output_err("supported mode", NULL, 0);
 	return (fd);
 }
