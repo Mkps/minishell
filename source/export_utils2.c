@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:23:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/19 14:10:53 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:57:17 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,11 @@ t_export *ft_lstnew_export(char *key, char *value, int flag)
     return new_export;
 }
 
-void free_export_list(t_export *export_lst)
+void free_export_list(t_export **export_lst)
 {
-    t_export *current = export_lst;
+    t_export *current;
+
+	current = *export_lst;
     while (current != NULL)
     {
         t_export *next = current->next;

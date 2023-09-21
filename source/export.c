@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/19 15:11:46 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:48:38 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void env_to_export(t_data *data)
 {
-    t_env *current = data->env_cpy;
-    t_export *new_export = NULL;
+    t_env		*current = *data->env_cpy;
+    t_export	*new_export = NULL;
     
     while (current != NULL)
     {
@@ -25,26 +25,23 @@ void env_to_export(t_data *data)
             perror("Malloc failed");
             exit(EXIT_FAILURE);
         }
-        new_export->export = ft_strdup("declare -x");
-        ft_lstadd_back_export(&(data->export), new_export);
+        ft_lstadd_back_export(data->env_export, new_export);
         current = current->next;
     }
 }
 
-t_cmd *find_export_command(t_data *data)
+t_cmd	*find_export_command(t_data *data)
 {
-    t_cmd **cmd_list = data->cmd_list;
-    int i = 0;
-    
-    while (cmd_list && cmd_list[i])
+	t_cmd	*cmd;
+
+	cmd = *data->cmd_list;
+    while (cmd)
     {
-        t_cmd *cmd = cmd_list[i];
-        if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0], "export", ft_strlen("export")) == 0) {
+        if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0], "export", ft_strlen("export")) == 0)
             return cmd;
-        }
-        i++;
+        cmd = cmd->next;
     }
-    return NULL;
+    return (NULL);
 }
 
 void    ft_export(t_data *data)
@@ -52,7 +49,7 @@ void    ft_export(t_data *data)
     t_cmd *cmd_lst;
     
     cmd_lst = NULL;
-    if (data->export == NULL)
+    if (data->env_export == NULL)
         env_to_export(data);
     cmd_lst = find_export_command(data);
     if (cmd_lst->args[1] == NULL)
@@ -70,7 +67,7 @@ void    ft_export(t_data *data)
 /*
 void dprint_export(t_data *data)
 {
-    t_export *current = data->export;
+    t_export *current = data->env_export;
 
     while (current != NULL)
     {   
@@ -86,8 +83,9 @@ void dprint_export(t_data *data)
 
 void print_export(t_data *data)
 {
-    t_export *current = data->export;
-
+    t_export *current;
+	
+	current = *data->env_export;
     while (current != NULL)
     {   
         if (current->value[0] == '\0' && current->flag == 1)
@@ -112,15 +110,17 @@ void print_export(t_data *data)
 
 void sort_export_list(t_data *data)
 {
-    t_export *sorted = NULL;
-    t_export *current = data->export;
+    t_export *sorted;
+    t_export *current;
     t_export *next;
 
+	sorted = NULL;
+	current = *data->env_export;
     while (current != NULL)
     {
         next = current->next;
         insert_sorted(&sorted, current);
         current = next;
     }
-    data->export = sorted;
+    *data->env_export = sorted;
 }

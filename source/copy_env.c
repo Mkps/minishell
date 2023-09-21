@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:59:12 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/12 14:56:16 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:02:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ void copy_env_to_list(t_data *data)
             {
                 new_env = ft_lstnew_two(key, value);
                 if (new_env)
-                    ft_lstadd_back_two(&(data->env_cpy), new_env); // Utilisez data->env_cpy
-                else
+				{
+                    ft_lstadd_back_two(data->env_cpy, new_env); // Utilisez data->env_cpy
+				}
+				else
                 {
-                    free(key);
-                    free(value);
+					free(key);
+					free(value);
+					printf("ERROR failed to initiallize new_env \n");
                 }
             }
         }
@@ -43,12 +46,13 @@ void copy_env_to_list(t_data *data)
     }
 }
 
-void free_env_lst(t_env *env_lst)
+void free_env_lst(t_env **env_lst)
 {
-	t_env *current = env_lst;
+	t_env *current = *env_lst;
+	t_env	*next;
 	while (current != NULL)
 	{
-		t_env *next = current->next;
+		next = current->next;
 		free(current->key);
 		free(current->value);
 		free(current);
@@ -83,11 +87,14 @@ t_env	*ft_lstnew_two(char *key, char *value)
 	return list;
 }
 
-void print_env_list(t_env *env_lst)
+void print_env_list(t_env **env_lst)
 {
-    while (env_lst != NULL)
+    t_env *current;
+
+    current = *env_lst;
+    while (current != NULL)
     {
-        printf("%s=%s\n", env_lst->key, env_lst->value);
-        env_lst = env_lst->next;
+        printf("%s=%s\n", current->key, current->value);
+        current = current->next;
     }
 }

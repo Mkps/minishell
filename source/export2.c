@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/20 13:03:55 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:58:59 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void    env_update(t_data *data)
         perror("Malloc failed");
         exit(EXIT_FAILURE);
     }
-    current_env = data->env_cpy;
+    current_env = *data->env_cpy;
     i = 0;
     while (current_env)
     {
@@ -70,33 +70,39 @@ void    set_in_env(t_data *data, char *variable)
     variable_split = ft_split2(variable, '=');
     key = ft_strdup(variable_split[0]);
     value = ft_strdup(variable_split[1]);
-    if (key_is_valid(key) == 1)
-            return;
-    if (value[0] == '\0')
-        return ;  
+    if (key_is_valid(key) == 1 || value[0] == '\0')
+	{
+		free(value);
+		free(key);
+	    ft_free_tab(variable_split);
+        return;
+	}
     new_env = ft_lstnew_env(key, value);
     if (!new_env)
     {
         perror("Malloc failed");
+		free(value);
+		free(key);
+	    ft_free_tab(variable_split);
         exit(EXIT_FAILURE);
     }
-    if (env_key_exists(data->env_cpy, key) == 1)
+    if (env_key_exists(*data->env_cpy, key) == 1)
     {
         printf("\n key existe deja \n");
         if (value[0] != '\0')
             remove_env(data, key);
         else
-            return;
+		{	
+			free(value);
+			free(key);
+			ft_free_tab(variable_split);
+			return;
+		}
     }
-    ft_lstadd_back_env(&(data->env_cpy), new_env);
+    ft_lstadd_back_env(data->env_cpy, new_env);
     free(key);
     free(value);
-    while (variable_split[i])
-    {
-        free(variable_split[i]);
-        i++;
-    }
-    free(variable_split);
+	ft_free_tab(variable_split);
 }
 
 void    set_in_export(t_data *data, char *variable)
@@ -114,18 +120,26 @@ void    set_in_export(t_data *data, char *variable)
     if (key_is_valid(key) == 1)
     {
         printf("export: `%s': not a valid identifier\n", key);
-        return;
+		free(key);
+		free(value);
+		ft_free_tab(variable_split);
+        return ;
     }
     if (ft_strrchr(variable, '=') == NULL)
         flag++;
     if (value[0] != '\0')
         value = add_quotes(value);
-    if (export_key_exists(data->export, key) == 1)
+    if (export_key_exists(*data->env_export, key) == 1)
     {
         if (value[0] != '\0')
             remove_export(data, key);
         else
+		{
+			free(value);
+			free(key);
+			ft_free_tab(variable_split);
             return ;
+		}
     }
     new_export = ft_lstnew_export(key, value, flag);
     if (!new_export)
@@ -133,16 +147,11 @@ void    set_in_export(t_data *data, char *variable)
         perror("Malloc failed");
         exit(EXIT_FAILURE);
     }
-    ft_lstadd_back_export(&(data->export), new_export);
+    ft_lstadd_back_export(data->env_export, new_export);
     free(key);
     if (value)
         free(value);
-    while (variable_split[i])
-    {
-        free(variable_split[i]);
-        i++;
-    }
-    free(variable_split);
+	ft_free_tab(variable_split);
 }
 
 void    execute_export(t_data *data, t_cmd *cmd)
@@ -163,4 +172,18 @@ void    execute_export(t_data *data, t_cmd *cmd)
             i++;
         }
     }
+}
+
+void	free_export(t_export *node)
+{
+	t_export	*next;
+
+	while (node)
+	{
+		next = node->next;
+		free(node->value);
+		free(node->key);
+		free(node);
+		node = next;		
+	}
 }

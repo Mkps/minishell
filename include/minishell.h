@@ -90,15 +90,15 @@ typedef struct s_data {
 	int			is_interactive;
 	char		**cmd_split;
 	char		**envv;
-	t_env		*env_cpy;
-	t_export	*export;
+	t_env		**env_cpy;
+	t_export	**env_export;
 	int			parse_status;
 	int			exit_status;
 	int			old_fd[2];
 	t_token		**token_root;
 	t_cmd		**cmd_list;
 	char		*user_input;
-	int 		flag;
+	int			flag;
 	char		*raw_input;
 }	t_data;
 
@@ -110,9 +110,8 @@ void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
 char	*ft_readline(char *str);
-int		free_data(t_data *data);
-void ft_lstadd_back_env(t_env **lst, t_env *new);
-void free_env_list(t_env *env);
+void 	ft_lstadd_back_env(t_env **lst, t_env *new);
+void 	free_env_list(t_env **env);
 void	free_var(t_data *data, t_cmd *cmd);
 void	print_token(t_token **root);
 void	free_token(t_data *data);
@@ -189,8 +188,7 @@ void	output_err_cmd(char *msg, char *cmd_str);
 void copy_env_to_list(t_data *data);
 t_env	*ft_lstnew_two(char *key, char *value);
 void ft_lstadd_back_two(t_env **lst, t_env *new);
-void free_env_lst(t_env *env_lst);
-void print_env_list(t_env *env_lst);
+void print_env_list(t_env **env_lst);
 
 /**		execution builtin	**/
 int		execute_builtin(t_cmd *cmd, t_data *data);
@@ -229,7 +227,7 @@ void    ft_export(t_data *data);
 /**		export_utils	**/
 t_export *ft_lstnew_export(char *key, char *value, int flag);
 void ft_lstadd_back_export(t_export **lst, t_export *new);
-void free_export_list(t_export *export_lst);
+void free_export_list(t_export **export_lst);
 void insert_sorted(t_export **sorted, t_export *new_export);
 char    **ft_split2(char *s, char c);
 int    ft_wordsize(char *s, char c, int pos);
@@ -242,10 +240,10 @@ int env_key_exists(t_env *env, char *key_to_check) ;
 void remove_env(t_data *data, const char *key_to_remove);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env *ft_lstnew_env(char *key, char *value);
-void free_env_list(t_env *env);
+void	free_env_lst(t_env **cpy);
 
 /***	unset	***/
-int	ft_lstsize_env(t_env *lst);
+int	ft_lstsize_env(t_env **lst);
 void    env_update(t_data *data);
 void execute_unset(t_data *data, t_cmd *cmd);
 void execute_env(t_data *data, t_cmd *cmd);
@@ -261,5 +259,12 @@ char	*ft_wildcard(char *str);
 int		wc_present(char *str);
 
 void print_envp(t_data *data);
+
+/**		free.c				**/
+void	free_child(t_data *data);
+void	free_subshell(t_data *data);
+void	data_cleanup(t_data *data);
+void	free_shell(t_data *data);
+int		free_data(t_data *data);
 
 #endif
