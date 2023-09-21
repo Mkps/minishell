@@ -114,6 +114,7 @@ void ft_lstadd_back_env(t_env **lst, t_env *new);
 void free_env_list(t_env *env);
 void	free_var(t_data *data, t_cmd *cmd);
 void	print_token(t_token **root);
+void	free_token(t_data *data);
 
 /** 	signal.c	**/
 void	signals_interact(void);
