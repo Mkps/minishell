@@ -35,7 +35,6 @@ char	*get_var(t_data *data,char *str)
 	return (env);
 }
 
-// Replaces the string at r_index of length n by str
 char	*str_replace(char *src, int r_index, int n, char *str)
 {
 	int	i;
@@ -85,7 +84,6 @@ int		is_valid_var(char *str)
 	return (1);
 }
 
-// Replaces the $VAR with its' corresponding value stored in env if it exists.
 char	*var_expander_sys(t_data *data, char *str, t_token *token)
 {
 	int		i;

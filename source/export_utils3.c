@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/18 16:57:32 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/20 13:04:05 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,23 @@ int     export_key_exists(t_export *export, char *key_to_check)
         if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
             return 1;
         export = export->next;
+    }
+    return 0;
+}
+
+int key_is_valid(char *chaine)
+{
+    int i = 0;
+    
+    if (chaine[i] == '\0')
+        return 0;
+    if (!ft_isalpha(chaine[i]) && chaine[i] != '_')
+        return 1;
+    while (chaine[i] != '\0')
+    {
+        if (!ft_isalnum(chaine[i]) && chaine[i] != '_')
+            return 1;
+        i++;
     }
     return 0;
 }

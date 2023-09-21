@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/09/18 17:20:03 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 11:04:40 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ void    ft_echo(t_cmd *cmd)
 		printf("\n");
 		return;
 	}
-    if (cmd->args[0] != NULL && ft_strncmp(cmd->args[1], "-n", 2) == 0)
+    if (cmd->args[0] != NULL && ft_strncmp(cmd->args[1], "-n", 3) == 0)
 	{
 		flag = 1;
 	    i++;
 	}
     while (cmd->args[i] != NULL)
     {
+        if (cmd->args[i] != NULL && ft_strncmp(cmd->args[i], "-n", 3) == 0 && i > 1)
+            i++;
         len = ft_strlen(cmd->args[i]);
         /*if (len >= 2 && cmd->args[i][0] == '"' && cmd->args[i][len - 1] == '"')*/
         /*{*/
