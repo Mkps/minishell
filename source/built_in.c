@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/09/21 11:04:40 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:03:21 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void    ft_env(t_data *data)
     print_envp(data);
     return ;
 }
-
-void    ft_echo(t_cmd *cmd)
+/*
+void    ft_echo_original(t_cmd *cmd)
 {
 	int i = 1;
 	int len = 0;
@@ -40,11 +40,47 @@ void    ft_echo(t_cmd *cmd)
         if (cmd->args[i] != NULL && ft_strncmp(cmd->args[i], "-n", 3) == 0 && i > 1)
             i++;
         len = ft_strlen(cmd->args[i]);
-        /*if (len >= 2 && cmd->args[i][0] == '"' && cmd->args[i][len - 1] == '"')*/
-        /*{*/
-        /*    ft_memmove(cmd->args[i], cmd->args[i] + 1, len - 2);*/
-        /*    cmd->args[i][len - 2] = '\0';*/
-        /*}*/
+        printf("%s", cmd->args[i]);
+        i++;
+        if (cmd->args[i] != NULL)
+            printf(" ");
+	}
+    if (!flag)
+        printf("\n");
+}*/
+
+void    ft_echo(t_cmd *cmd)
+{
+	int i = 1;
+	int len = 0;
+	int flag = 0;
+    int j = 1;
+
+	if (cmd->args[1] == NULL)
+	{
+		printf("\n");
+		return;
+	}
+	if (cmd->args[i][0] == '-')
+    {
+	    while (cmd->args[i][j] == 'n')
+            j++;
+        if (cmd->args[i][j] == '\0')
+        {
+            flag++;
+            i++;
+        }
+    }
+    while (cmd->args[i][0] == '-')
+    {
+        j = 1;
+	    while (cmd->args[i][j] == 'n')
+            j++;
+        if (cmd->args[i][j] == '\0')
+            i++;
+    }
+    while (cmd->args[i] != NULL)
+    {
         printf("%s", cmd->args[i]);
         i++;
         if (cmd->args[i] != NULL)
