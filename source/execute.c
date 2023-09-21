@@ -255,9 +255,7 @@ void	execute(t_data *data)
 		}
 		if (g_exit_code > 127)
 			break ;
-		// if (cmd)
-		// 	printf("eval %i cmd %s \n", eval, cmd->cmd);
-		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_AND))
+		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_2AND))
 		{
 			if (cmd->is_term)
 				cmd = cmd->next;
@@ -268,8 +266,6 @@ void	execute(t_data *data)
 				cmd = cmd->next;
 			}
 		}
-		// while (!cmd->is_term)
-		// 	cmd = cmd->next;
 		start = cmd;
 	}
 }

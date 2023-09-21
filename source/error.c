@@ -1,24 +1,6 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
-//returns the token as a str
-// char	*get_str_token(int token_type)
-// {
-// 	if (token_type == PIPE)
-// 		return ("|");
-// 	if (token_type == TERM_END)
-// 		return ("newline");
-// 	if (token_type == IO_APPEND)
-// 		return (">");
-// 	if (token_type == IO_INPUT)
-// 		return ("<");
-// 	if (token_type == IO_APPEND)
-// 		return (">>");
-// 	if (token_type == IO_HEREDOC)
-// 		return ("<<");
-// 	if (token_type == TERM_SC)
-// 		return (";");
-// }
 void	output_err(char *msg, t_token *token, int squotes)
 {
 	char	*name_str;
@@ -28,7 +10,9 @@ void	output_err(char *msg, t_token *token, int squotes)
 	name_str = "minishell: ";
 	if (!token)
 	{
-		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
+		tmp_str = ft_strappend(name_str, msg, 0);
+		ft_putendl_fd(tmp_str, 2);
+		free(tmp_str);
 		return ;
 	}
 	token_str = token->value;

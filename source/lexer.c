@@ -106,6 +106,38 @@ int	ft_get_token(char *input, t_data *data)
 	}
 	return (i);
 }
+int	ft_get_token_err(char *input, t_data *data)
+{
+	int	i;
+	int	type;
+
+	i = 0;
+	type = ft_get_sep_type(input);
+	if (type)
+	{
+		if (ft_get_sep_type(input + i) == WORD)
+		{
+			i = ft_get_word(input, data);
+			return (i); 
+		}
+		else if (ft_get_sep_type(input) == SQUOTE || ft_get_sep_type(input) == DQUOTE)
+		{
+			if (data->parse_status == NONE)
+				data->parse_status = ft_get_sep_type(input);
+			else if (data->parse_status == ft_get_sep_type(input))
+				data->parse_status = NONE;
+			i += ft_get_quote(input, data);
+			return (i);
+		}
+		else if (ft_get_sep_type(input + i) > 2)
+		{
+			i += ft_get_sep(input, data);
+			return (i);
+		}
+		i++;
+	}
+	return (i);
+}
 int	ft_is_ws(char c)
 {
 	if ((c >= 9 && c <= 13) || c == 32)
@@ -173,6 +205,7 @@ int	scan_input(t_data *data)
 		return (EXIT_FAILURE);
 	if (data->raw_input)
 		add_history(data->raw_input);
+	data->raw_input = NULL;
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 

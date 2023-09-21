@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdlib.h>
 
 void	minishell_inline(t_data *data, char *user_input)
 {
@@ -49,33 +50,31 @@ void	minishell_inline(t_data *data, char *user_input)
 void	minishell_subshell(t_data *data, char *user_input)
 {
 	t_data	new_data;
-	char	**cmd_list;
 	int		i;
 
 	init_data(&new_data);
 	import_envv(&new_data, data->envv);
-	new_data.user_input = ft_strdup(user_input);
-	new_data.raw_input = ft_strdup(new_data.user_input);
+	new_data.user_input = user_input;
+	new_data.raw_input = NULL;
+	new_data.cmd_split = ft_split(new_data.user_input, ';');
 	free_data(data);
-	cmd_list = ft_split(new_data.user_input, ';');
-	new_data.raw_input = new_data.user_input;
 	i = -1; 
-	while (cmd_list[++i])
+	while (new_data.cmd_split[++i])
 	{
-		new_data.user_input = cmd_list[i];
-		if (i > 0)
-			new_data.raw_input = NULL;
+		new_data.user_input = ft_strdup(new_data.cmd_split[i]);
 		scan_input(&new_data);
 		if (check_error(&new_data) == EXIT_SUCCESS)
 		{
 			parse_token(&new_data);
 			parse_near_quote(&new_data);
 			build_cmd_list(&new_data, *new_data.token_root);
-			execute(&new_data);
+			if (init_io_redir(&new_data) == EXIT_SUCCESS)
+				execute(&new_data);
 		}
 		free_data(&new_data);
+		dup2(new_data.old_fd[0], 0);
 	}
-	free(cmd_list);
+	ft_free_tab(new_data.cmd_split);
 	exit (g_exit_code);
 }
 
@@ -155,6 +154,29 @@ void	prompt_user(t_data *data)
 	}
 }
 
+int		ft_get_token_err(char *input, t_data *data);
+int		check_error_raw(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	free(data->raw_input);
+	while (data->cmd_split[++i])
+	{
+		data->user_input = ft_strdup(data->cmd_split[i]);
+		data->raw_input = NULL;
+		scan_input(data);
+		if (check_error(data) != EXIT_SUCCESS)
+		{
+			free_data(data);
+			ft_free_tab(data->cmd_split);
+			return (1);
+		}
+		free(data->user_input);
+	}
+	return (0);
+
+}
 void	minishell_prompt(t_data *data)
 {
 	char	**cmd_list;
@@ -165,22 +187,23 @@ void	minishell_prompt(t_data *data)
 		signals_interact();
 		prompt_user(data);
 		signals_no_interact();
-		data->cmd_split = ft_split(data->user_input, ';');
 		data->raw_input = data->user_input;
+		data->cmd_split = ft_split(data->user_input, ';');
+		if (check_error_raw(data))
+			continue;
 		i = -1; 
 		while (data->cmd_split[++i])
 		{
 			data->user_input = ft_strdup(data->cmd_split[i]);
 			if (i > 0)
 			{
-				free(data->raw_input);
 				data->raw_input = NULL;
 			}
 			scan_input(data);
+			// print_token(data->token_root);
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);
-				// print_token(data->token_root);
 				parse_near_quote(data);
 				build_cmd_list(data, *data->token_root);
 				if (init_io_redir(data) == EXIT_SUCCESS)

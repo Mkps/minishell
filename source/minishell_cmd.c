@@ -39,6 +39,7 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	int		tmp_fd;
 	int		status;
 	pid_t	pid;
+	printf("test\n");
 	if (fd->mode == IO_INPUT)
 	{
 		fd->fd = open_fd(0, fd->filename);
@@ -58,6 +59,14 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 			fd->fd=-42;
 			return (0);
 		}
+
+		// if (fd->fd > 0)
+		// {
+		// 	if (cmd->fd[0] >= 0)
+		// 		close(cmd->fd[0]);
+		// 	cmd->fd[0] = fd->fd;
+		// 	return (0);
+		// }
 		return (1);
 	}
 	if (fd->mode == IO_TRUNC)
@@ -149,7 +158,10 @@ void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)
 	t_cmd	*current;
 	current = *root;
 
-	while (current != NULL)
+	last = NULL;
+	if (last)
+		last = last->next;
+	while (current && current->next != last)
 	{
 		if (current != cmd && current->pipe_status)
 		{
@@ -157,14 +169,6 @@ void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)
 			close(current->pipe_fd[0]);
 		}
 		current = current->next;
-	}
-	if (current && last && current == last)
-	{
-		if (current != cmd && current->pipe_status)
-		{
-			close(current->pipe_fd[1]);
-			close(current->pipe_fd[0]);
-		}
 	}
 }
 
