@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 23:09:23 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 13:40:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,8 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 			cmd->pid = fork();
 			if (cmd->pid == 0)
 			{
+				close(data->old_fd[0]);
+				close(data->old_fd[1]);
 				set_pipes(data, cmd);		
 				if (cmd->fd[0] > -1)
 				{

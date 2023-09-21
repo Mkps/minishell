@@ -89,7 +89,7 @@ typedef struct s_data {
 	int			is_interactive;
 	char		**cmd_split;
 	char		**envv;
-	t_env		*env_cpy;
+	t_env		**env_cpy;
 	t_export	*export;
 	int			parse_status;
 	int			exit_status;
@@ -97,7 +97,7 @@ typedef struct s_data {
 	t_token		**token_root;
 	t_cmd		**cmd_list;
 	char		*user_input;
-	int		flag;
+	int			flag;
 	char		*raw_input;
 }	t_data;
 
@@ -109,9 +109,8 @@ void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
 char	*ft_readline(char *str);
-int		free_data(t_data *data);
-void ft_lstadd_back_env(t_env **lst, t_env *new);
-void free_env_list(t_env *env);
+void 	ft_lstadd_back_env(t_env **lst, t_env *new);
+void 	free_env_list(t_env **env);
 void	free_var(t_data *data, t_cmd *cmd);
 void	print_token(t_token **root);
 void	free_token(t_data *data);
@@ -227,11 +226,10 @@ void    free_tabs(char **tab);
 void set_in_export(t_data *data, char *variable);
 char *check_variable(const char *input);
 char *add_quotes(char *str) ;
-void set_in_env(t_data *data, char *variable);
 
-void ft_lstadd_back_env(t_env **lst, t_env *new);
-t_env *ft_lstnew_env(char *key, char *value);
-void free_env_list(t_env *env);
+void	set_in_env(t_data *data, char *variable);
+void 	ft_lstadd_back_env(t_env **lst, t_env *new);
+t_env *	ft_lstnew_env(char *key, char *value);
 
 /***	unset	***/
 void    ft_unset(t_data *data);
@@ -245,5 +243,12 @@ int		ft_false(void);
 /**		wildcards.c			**/
 char	*ft_wildcard(char *str);
 int		wc_present(char *str);
+
+/**		free.c				**/
+void	free_child(t_data *data);
+void	free_subshell(t_data *data);
+void	data_cleanup(t_data *data);
+void	free_shell(t_data *data);
+int		free_data(t_data *data);
 
 #endif
