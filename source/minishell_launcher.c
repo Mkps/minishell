@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 22:58:06 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 12:34:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void	minishell_prompt(t_data *data)
 				data->raw_input = NULL;
 			}
 			scan_input(data);
-			// print_token(data->token_root);
+			 print_token(data->token_root);
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 13:27:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 13:05:42 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,19 +185,66 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	}
 	close_pipes(data->cmd_list, cmd, NULL);
 }
+char	*ft_strs_join(char **tab)
+{
+	int	i;
+	char	*ret;
 
+	i = -1;
+	ret = ft_strdup(" ");
+	while (tab[++i])
+	{
+		ret = ft_strappend(ret, tab[i], 2);
+		ret = ft_strappend(ret, " ", 2);
+	}
+	return (ret);
+}
+
+int		wsstr(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		if (ft_is_ws(str[i]))
+			return (1);
+	return (0);
+}
+void	extract_cmd(t_cmd *cmd_node, t_data *data)
+{
+	char	*cmd_p;
+	char	**env_p;
+	char	**cmd_split;
+	char	*arg_str;
+
+	env_p = get_path(data->envv);
+	arg_str = ft_strs_join(cmd_node->args);
+	cmd_split = ft_split(arg_str, ' ');
+	cmd_p = get_cmd(cmd_split[0], env_p);
+	if (!cmd_p || execve(cmd_p, cmd_split, data->envv) == -1)
+	{
+		ft_free_tab(env_p);
+		if (cmd_p)
+			free(cmd_p);
+	}
+}
 void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
 	char	**env_p;
 
-	env_p = get_path(data->envv);
-	cmd_p = get_cmd(cmd_node->cmd, env_p);
-	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
+	if (wsstr(cmd_node->cmd))
+		extract_cmd(cmd_node, data);
+	else
 	{
-		ft_free_tab(env_p);
-		if (cmd_p)
-			free(cmd_p);
+		env_p = get_path(data->envv);
+		cmd_p = get_cmd(cmd_node->cmd, env_p);
+		if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
+		{
+			ft_free_tab(env_p);
+			if (cmd_p)
+				free(cmd_p);
+		}
 	}
 }
 
