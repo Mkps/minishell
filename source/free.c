@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 12:08:10 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 14:03:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 18:04:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,18 @@
 void	free_shell(t_data *data)
 {
 	free_data(data);
-	free_env_lst(data->env_cpy);
 	free(data->token_root);
 	free(data->cmd_list);
+	if (data->env_cpy)
+		free_env_list(data->env_cpy);
+	free(data->env_cpy);
+	if (data->env_export)
+		free_export_list(data->env_export);
+	free(data->env_export);
 	if (data->cmd_split)
 		ft_free_tab(data->cmd_split);
-	ft_free_tab(data->envv);
+	if (data->envv)
+		ft_free_tab(data->envv);
 }
 
 void	free_cmd_list(t_data *data)
@@ -82,6 +88,12 @@ void	free_child(t_data *data)
 	free_data(data);
 	free(data->token_root);
 	free(data->cmd_list);
+	if (data->env_cpy)
+		free_env_list(data->env_cpy);
+	if (data->env_export)
+		free_export_list(data->env_export);
+	free(data->env_cpy);
+	free(data->env_export);
 	ft_free_tab(data->cmd_split);
 	ft_free_tab(data->envv);
 }

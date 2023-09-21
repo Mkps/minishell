@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:50:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/18 16:56:43 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:37:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ t_env   *ft_lstnew_env(char *key, char *value)
     return new_env;
 }
 
-void    free_env_list(t_env *env)
+void    free_env_list(t_env **env)
 {
     t_env *current;
     t_env *next = NULL;
 
-    current = env;
+    current = *env;
     while (current != NULL)
     {
         next = current->next;
@@ -71,14 +71,16 @@ int     env_key_exists(t_env *env, char *key_to_check)
     return 0;
 }
 
-int     ft_lstsize_env(t_env *lst)
+int     ft_lstsize_env(t_env **lst)
 {
-    size_t size;
+    size_t	size;
+	t_env	*current;
 
     size = 0;
-    while (lst)
+	current = *lst;
+    while (current)
     {
-        lst = lst->next;
+        current = current->next;
         size++;
     }
     return (size);

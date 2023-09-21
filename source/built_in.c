@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/21 15:10:59 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 15:15:06 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void    ft_cd_bis(t_cmd *cmd, t_data *data)
 {
     char *dir = NULL;
     char *pwd = NULL;
-    t_env *current = data->env_cpy;
+    t_env *current = *data->env_cpy;
     int i;
 
     i = 0;
@@ -121,7 +121,7 @@ void    ft_cd_bis(t_cmd *cmd, t_data *data)
 void ft_pwd(t_data *data)
 {
     char *pwd_value = NULL;
-    t_env *current = data->env_cpy;
+    t_env *current = *data->env_cpy;
     
     while (current != NULL)
     {
@@ -146,7 +146,7 @@ void ft_cd(t_cmd *cmd, t_data *data)
 {
     char *dir = NULL;
     char *pwd = NULL;
-    t_env *current = data->env_cpy;
+    t_env *current = *data->env_cpy;
     char *tmp = NULL;
     
     if (cmd->args[1] == NULL)

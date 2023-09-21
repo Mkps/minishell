@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 15:11:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:19:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,11 +199,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 				if (!execute_builtin(cmd,data))
 					exec_cmd(cmd, data);
 				exit_code = get_cmd_ecode(cmd, data);
-				free_data(data);
-				free(data->token_root);
-				free(data->cmd_list);
-				ft_free_tab(data->cmd_split);
-				ft_free_tab(data->envv);
+				free_child(data);
 				exit (exit_code);
 			}
 		}

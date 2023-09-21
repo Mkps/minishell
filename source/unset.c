@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 13:42:53 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/18 15:31:35 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:49:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void execute_unset(t_data *data, t_cmd *cmd)
     while (cmd->args[i])
     {
         prev = NULL;
-        current_export = data->export;
+        current_export = *data->env_export;
         
         while (current_export)
         {
@@ -46,7 +46,7 @@ void execute_unset(t_data *data, t_cmd *cmd)
             {
                 if (prev == NULL)
                 {
-                    data->export = current_export->next;
+                    *data->env_export = current_export->next;
                     free(current_export->key);
                     free(current_export->value);
                     free(current_export);
@@ -75,14 +75,14 @@ void    execute_env(t_data *data, t_cmd *cmd)
         while (cmd->args[i])
         {
         t_env *prev = NULL;
-        t_env *current_export = data->env_cpy;
+        t_env *current_export = *data->env_cpy;
         while (current_export)
         {
             if (ft_strncmp(current_export->key, cmd->args[i], ft_strlen(cmd->args[i])) == 0)
             {
                 if (prev == NULL)
                 {
-                    data->env_cpy = current_export->next;
+                    *data->env_cpy = current_export->next;
                     free(current_export->key);
                     free(current_export->value);
                     free(current_export);
@@ -125,14 +125,14 @@ void remove_export(t_data *data, const char *key_to_remove)
     t_export *prev = NULL;
     t_export *current_export = NULL; 
     
-    current_export = data->export;
+    current_export = *data->env_export;
     while (current_export)
     {
         if (ft_strncmp(current_export->key, key_to_remove, ft_strlen(current_export->key)) == 0)
         {
             if (prev == NULL)
             {
-                data->export = current_export->next;
+                *data->env_export = current_export->next;
             }
             else
             {
@@ -153,14 +153,14 @@ void remove_env(t_data *data, const char *key_to_remove)
     t_env *prev = NULL;
     t_env *current_env = NULL; 
     
-    current_env = data->env_cpy;
+    current_env = *data->env_cpy;
     while (current_env)
     {
         if (ft_strncmp(current_env->key, key_to_remove, ft_strlen(current_env->key)) == 0)
         {
             if (prev == NULL)
             {
-                data->env_cpy = current_env->next;
+                *data->env_cpy = current_env->next;
             }
             else
             {

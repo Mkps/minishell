@@ -91,7 +91,7 @@ typedef struct s_data {
 	char		**cmd_split;
 	char		**envv;
 	t_env		**env_cpy;
-	t_export	*export;
+	t_export	**env_export;
 	int			parse_status;
 	int			exit_status;
 	int			old_fd[2];
@@ -188,8 +188,7 @@ void	output_err_cmd(char *msg, char *cmd_str);
 void copy_env_to_list(t_data *data);
 t_env	*ft_lstnew_two(char *key, char *value);
 void ft_lstadd_back_two(t_env **lst, t_env *new);
-void free_env_lst(t_env *env_lst);
-void print_env_list(t_env *env_lst);
+void print_env_list(t_env **env_lst);
 
 /**		execution builtin	**/
 int		execute_builtin(t_cmd *cmd, t_data *data);
@@ -228,7 +227,7 @@ void    ft_export(t_data *data);
 /**		export_utils	**/
 t_export *ft_lstnew_export(char *key, char *value, int flag);
 void ft_lstadd_back_export(t_export **lst, t_export *new);
-void free_export_list(t_export *export_lst);
+void free_export_list(t_export **export_lst);
 void insert_sorted(t_export **sorted, t_export *new_export);
 char    **ft_split2(char *s, char c);
 int    ft_wordsize(char *s, char c, int pos);
@@ -241,10 +240,10 @@ int env_key_exists(t_env *env, char *key_to_check) ;
 void remove_env(t_data *data, const char *key_to_remove);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env *ft_lstnew_env(char *key, char *value);
-void free_env_list(t_env *env);
+void	free_env_lst(t_env **cpy);
 
 /***	unset	***/
-int	ft_lstsize_env(t_env *lst);
+int	ft_lstsize_env(t_env **lst);
 void    env_update(t_data *data);
 void execute_unset(t_data *data, t_cmd *cmd);
 void execute_env(t_data *data, t_cmd *cmd);

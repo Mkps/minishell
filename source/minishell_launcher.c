@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_launcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 14:58:16 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 18:06:57 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ void	prompt_user(t_data *data)
 	{
 		if (!data->user_input)
 			write(1, "exit\n", 5);
+		free_shell(data);
 		exit(0);
 	}
 }
@@ -261,5 +262,6 @@ void	minishell_prompt(t_data *data)
 			dup2(data->old_fd[1], STDOUT_FILENO);
 		}
 		ft_free_tab(data->cmd_split);
+		data->cmd_split = NULL;
 	}
 }

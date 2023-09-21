@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/20 13:04:05 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 18:01:35 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ char    *add_quotes(char *str)
         result[len + 1] = '"';
         result[len + 2] = '\0';
     }
-    return result;
+	free(str);
+    return (result);
 }
 
 int     export_key_exists(t_export *export, char *key_to_check)
