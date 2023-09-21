@@ -211,9 +211,9 @@ void	parse_token(t_data *data)
 	while (current != NULL)
 	{
 		if (current->token_type == WORD && current->quote_status != SQUOTE
-				&& current->quote_status != O_PAR)
+				&& current->quote_status != O_PAR && current->quote_status != IO_HEREDOC)
 		{
-			current->value = var_expander_sys(data, current->value, current);
+			current->value = var_expander(data, current->value, current);
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{
@@ -223,24 +223,17 @@ void	parse_token(t_data *data)
 			}
 
 		}
+		if (current->token_type == IO_HEREDOC && current->next && ((current->next->token_type == WORD) || token_is_quote(current->next) && current->next->next->token_type == WORD))
+		{
+			if (current->next && (current->next->token_type == WORD))
+				current->next->quote_status = DQUOTE;
+			else if (current->next && ((current->next->token_type == WORD) 
+				|| token_is_quote(current->next) && current->next->next->token_type == WORD))
+				current->next->next->quote_status = SQUOTE;
+
+		}
 		current = current->next;
 	}
-}
-void	var_expand(t_data *data, t_cmd *cmd)
-{
-	int		i;
-
-	if (cmd->cmd)
-	{
-		cmd->cmd = var_expander_var(data, cmd->cmd);
-	}
-	i = 0;
-	while (cmd->args[i])
-	{
-		cmd->args[i] = var_expander_var(data, cmd->args[i]);
-		i++;
-	}
-
 }
 
 // Creating a cmd.
@@ -251,9 +244,20 @@ t_cmd	*create_cmd(t_data *data)
 	ret = (t_cmd *)malloc(sizeof(t_cmd) * 1);
 	if (!ret)
 		return (NULL); 
+	ret->assign = (t_env **)malloc(sizeof(t_env*)* 1);
+	ret->io_list = (t_io_node **)malloc(sizeof(t_io_node*));
+	if (!ret->assign || !ret->io_list)
+	{
+		free(ret);
+		if (ret->assign)
+			free(ret->assign);
+		else if (ret->io_list)
+			free(ret->io_list);
+		return (NULL);
+	}
 	ret->next = NULL;
 	ret->prev = NULL;
-	ret->assign = (t_env **)malloc(sizeof(t_env*)* 1);
+	*ret->io_list = NULL;
 	*ret->assign = NULL;
 	ret->pipe_status = 0;
 	ret->is_bg = 0;
@@ -332,8 +336,8 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	new_cmd = last_cmd(data->cmd_list);
 	new_cmd->cmd = ft_strdup(token->value); 
 	new_cmd->type = get_cmd_type(token);
-	new_cmd->fd[0] = -1;
-	new_cmd->fd[1] = -1;
+	new_cmd->fd[0] = -2;
+	new_cmd->fd[1] = -2;
 	tmp = "";
 	tmp = ft_strappend(tmp, ";", 0);
 	current = token;
@@ -402,9 +406,14 @@ t_token	*get_next_cmd(t_token *src)
 	{
 		if (current != NULL && current->token_type == WORD && (!is_assign(current->value) || current->quote_status == O_PAR))
 		{
-			if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev))
+			if (current->prev && token_is_io(current->prev))
+			{
+				current = current->next;
+				continue ;
+			}
+			else if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev))
 				return (current);
-			if (current->prev != NULL && current->quote_status != NONE && !token_is_io(current->prev->prev))
+			else if (current->prev != NULL && current->quote_status != NONE && !token_is_io(current->prev->prev))
 				return (current);
 		}
 		current = current->next;

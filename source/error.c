@@ -1,24 +1,6 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
-//returns the token as a str
-// char	*get_str_token(int token_type)
-// {
-// 	if (token_type == PIPE)
-// 		return ("|");
-// 	if (token_type == TERM_END)
-// 		return ("newline");
-// 	if (token_type == IO_APPEND)
-// 		return (">");
-// 	if (token_type == IO_INPUT)
-// 		return ("<");
-// 	if (token_type == IO_APPEND)
-// 		return (">>");
-// 	if (token_type == IO_HEREDOC)
-// 		return ("<<");
-// 	if (token_type == TERM_SC)
-// 		return (";");
-// }
 void	output_err(char *msg, t_token *token, int squotes)
 {
 	char	*name_str;
@@ -28,7 +10,9 @@ void	output_err(char *msg, t_token *token, int squotes)
 	name_str = "minishell: ";
 	if (!token)
 	{
-		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
+		tmp_str = ft_strappend(name_str, msg, 0);
+		ft_putendl_fd(tmp_str, 2);
+		free(tmp_str);
 		return ;
 	}
 	token_str = token->value;
@@ -36,12 +20,13 @@ void	output_err(char *msg, t_token *token, int squotes)
 		token_str = "newline";
 	tmp_str = ft_strappend(name_str, msg, 0);
 	if (squotes == 1)
-		tmp_str = ft_strappend(tmp_str, "'", 0);
-	tmp_str = ft_strappend(tmp_str, token_str, 0);
+		tmp_str = ft_strappend(tmp_str, "'", 2);
+	tmp_str = ft_strappend(tmp_str, token_str, 2);
 	if (squotes == 1)
-		tmp_str = ft_strappend(tmp_str, "'", 0);
-	tmp_str = ft_strappend(tmp_str, "\n", 0);
+		tmp_str = ft_strappend(tmp_str, "'", 2);
+	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
+	free(tmp_str);
 
 
 }
@@ -57,12 +42,11 @@ void	output_err_cmd(char *msg, char *cmd_str)
 		return ;
 	}
 	tmp_str = ft_strappend(name_str, cmd_str, 0);
-	tmp_str = ft_strappend(tmp_str, ": ", 0);
-	tmp_str = ft_strappend(tmp_str, msg, 0);
-	tmp_str = ft_strappend(tmp_str, "\n", 0);
+	tmp_str = ft_strappend(tmp_str, ": ", 2);
+	tmp_str = ft_strappend(tmp_str, msg, 2);
+	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
-
-
+	free(tmp_str);
 }
 int	is_wc(char *str)
 {
@@ -143,11 +127,6 @@ int	check_par_error(t_token **root)
 
 	par_status= 0;
 	tmp = *root;
-	/*while (tmp)*/
-	/*{*/
-	/*    printf("token %s type %i\n",tmp->value, tmp->token_type);*/
-	/*    tmp = tmp->next;*/
-	/*}*/
 	while (tmp)
 	{
 		if (tmp->token_type == O_PAR)
