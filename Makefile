@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+         #
+#    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/18 16:32:48 by uaupetit         ###   ########.fr        #
+#    Updated: 2023/09/21 15:09:59 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC_NAME = here_doc.c env_utils.c\
 	  dummies.c export_utils.c \
 	  unset.c wildcards.c export2.c export_utils2.c \
 	  export_utils3.c \
+	  unset.c wildcards.c free.c\
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)

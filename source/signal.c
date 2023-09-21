@@ -41,14 +41,14 @@ void	handle_sigint(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));	
-	// act.sa_handler = &redisplay_prompt;
+	act.sa_handler = (void (*) (int))redisplay_prompt;
 	sigaction(SIGINT, &act, NULL);
 }
 
 void	signals_interact(void)
 {
 	ignore_sigquit();
-	// handle_sigint();
+	 handle_sigint();
 }
 
 void	signal_quit(int signum)

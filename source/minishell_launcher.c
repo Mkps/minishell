@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 22:58:06 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 14:58:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void	minishell_prompt(t_data *data)
 				data->raw_input = NULL;
 			}
 			scan_input(data);
-			// print_token(data->token_root);
+			 //print_token(data->token_root);
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);
@@ -253,10 +253,12 @@ void	minishell_prompt(t_data *data)
 				build_cmd_list(data, *data->token_root);
 				if (init_io_redir(data) == EXIT_SUCCESS)
 					execute(data);
+				else
+					close_pipes(data->cmd_list, NULL, NULL);
 			}
 			free_data(data);
-			dup2(data->old_fd[0], 0);
-			// dup2(data->old_fd[1], 1);
+			dup2(data->old_fd[0], STDIN_FILENO);
+			dup2(data->old_fd[1], STDOUT_FILENO);
 		}
 		ft_free_tab(data->cmd_split);
 	}
