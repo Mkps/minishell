@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 16:56:41 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:05:19 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,9 @@ void	print_token(t_token **root)
 	current = *root;
 	while (current != NULL)
 	{
-		printf("token type %i | value %s\n", current->token_type, current->value);
+		printf("token type %i | value %s | qs %i\n", current->token_type, current->value, current->quote_status);
 		current = current->next;
 	}
-	*root = NULL;
 }
 
 void	free_token(t_data *data)
@@ -123,18 +122,32 @@ void	free_cmd_list(t_data *data)
 			}
 			free(tmp->assign);
 		}
+		if (tmp->io_list)
+		{
+			t_io_node *io = *tmp->io_list;
+			while (io)
+			{
+				t_io_node *next_io = io->next;
+				free(io);
+				io = next_io;
+			}
+			free(tmp->io_list);
+		}
 		free(tmp);
 	}
 	*data->cmd_list = NULL;
 }
 
+
 int	free_data(t_data *data)
 {
-	close(data->old_fd[0]);
-	close(data->old_fd[1]);
 	free_token(data);
+	// free_env_list(data->env_cpy);
 	free_cmd_list(data);
-	free(data->user_input);
+	if (data->user_input)
+		free(data->user_input);
+	if (data->raw_input)
+		free(data->raw_input);
 	return (EXIT_SUCCESS);
 }
 int	g_exit_code;

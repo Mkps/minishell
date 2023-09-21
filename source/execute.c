@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/20 10:13:39 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/21 11:33:20 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <readline/readline.h>
 #include <unistd.h>
 
 int		execute_builtin(t_cmd *cmd, t_data *data)
@@ -149,10 +150,10 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
-			set_fd(cmd);
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
-			exit (1);
+			set_fd(data, cmd);
+			exit (0);
 		}
 		return ;
 	}
@@ -162,18 +163,17 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{		
-			set_fd(cmd);
 			set_pipes(data, cmd);
+			set_fd(data, cmd);
 			close_pipes(data->cmd_list, NULL, NULL);
 			minishell_subshell(data, cmd->cmd);
 		}
 	}
 	else
 	{
-		var_expand(data, cmd);
 		if (is_builtin(cmd, data) == 1)
 		{
-			set_fd(cmd);
+			set_fd(data, cmd);
 			cmd->pid = -2;
 			execute_builtin(cmd, data);
 		}
@@ -181,9 +181,18 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		{
 			cmd->pid = fork();
 			if (cmd->pid == 0)
-			{		
-				set_fd(cmd);
-				set_pipes(data, cmd);
+			{
+				set_pipes(data, cmd);		
+				if (cmd->fd[0] > -1)
+				{
+					dup2(cmd->fd[0], STDIN_FILENO);
+					close(cmd->fd[0]);
+				}
+				if (cmd->fd[1] > -1)
+				{
+					dup2(cmd->fd[1], STDOUT_FILENO);
+					close(cmd->fd[1]);
+				}
 				close_pipes(data->cmd_list, NULL, NULL);
 				if (!execute_builtin(cmd,data))
 					exec_cmd(cmd, data);
@@ -191,6 +200,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 				free_data(data);
 				free(data->token_root);
 				free(data->cmd_list);
+				ft_free_tab(data->cmd_split);
 				ft_free_tab(data->envv);
 				exit (exit_code);
 			}
@@ -235,21 +245,24 @@ void	execute(t_data *data)
 		while(i > 0 && cmd)
 		{
 			i -= cmd->is_term;
+			if (cmd->fd[0] > -1)
+				close(cmd->fd[0]);
+			if (cmd->fd[1] > -1)
+				close(cmd->fd[1]);
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
 				wpid = waitpid(cmd->pid, &status, 0);
 			if (cmd->is_term != 0)
 			{
-				g_exit_code = WEXITSTATUS(status);
+				if (!g_exit_code)
+					g_exit_code = WEXITSTATUS(status);
 				eval = g_exit_code;
 			}
 			cmd = cmd->next;
 		}
 		if (g_exit_code > 127)
 			break ;
-		// if (cmd)
-		// 	printf("eval %i cmd %s \n", eval, cmd->cmd);
-		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_AND))
+		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_2AND))
 		{
 			if (cmd->is_term)
 				cmd = cmd->next;
@@ -260,8 +273,6 @@ void	execute(t_data *data)
 				cmd = cmd->next;
 			}
 		}
-		// while (!cmd->is_term)
-		// 	cmd = cmd->next;
 		start = cmd;
 	}
 }

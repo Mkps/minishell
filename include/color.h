@@ -1,7 +1,7 @@
 #ifndef COLOR_H
 # define COLOR_H
 
-# define RESET		  "\033[00m"
+# define RESET		  "\001\033[00m\002"
 # define BOLD       "\033[1m"
 # define DARK       "\033[2m"
 # define UNDERLINE  "\033[4m"
@@ -11,11 +11,11 @@
 # define GRAY       "\033[30m"
 # define GREY       "\033[30m"
 # define RED        "\033[31m"
-# define GREEN      "\033[32m"
-# define YELLOW     "\033[33m"
-# define BLUE       "\033[34m"
+# define GREEN      "\001\033[32m\002"
+# define YELLOW     "\001\033[33m\002"
+# define BLUE       "\001\033[34m\002"
 # define MAGENTA    "\033[35m"
-# define CYAN       "\033[36m"
+# define CYAN       "\001\033[36m\002"
 # define WHITE      "\033[37m"
 # define BG_GRAY    "\033[40m"
 # define BG_GREY    "\033[40m"

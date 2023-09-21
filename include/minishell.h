@@ -29,16 +29,6 @@ extern int g_exit_code;
 enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, IO_RW, IO_TRUNC , IO_APPEND, TERM_END, TERM_SC, TERM_2SC,TERM_AND, TERM_2AND, TERM_OR, SQUOTE, DQUOTE, O_PAR, C_PAR, BSLASH};
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
-typedef struct s_pipex {
-	int		here_doc;
-	int		count;
-	int		fd[2];
-	int		*status;
-	int		nb_cmd;
-	pid_t	*pid;
-	int		**p_arr;	
-}	t_pipex;
-
 typedef struct s_token {
 	struct s_token	*next;
 	struct s_token	*prev;
@@ -50,18 +40,19 @@ typedef struct s_token {
 } t_token;
 
 typedef struct s_cmd {
-	struct s_cmd	*next;
-	struct s_cmd	*prev;
-	int		pid;
-	int		type;
-	int		fd[2];
-	int		pipe_status;
-	int		*pipe_fd;
-	char	*cmd;
-	char	**args;
-	struct s_env	**assign;
-	int		is_term;
-	int		is_bg;
+	struct s_cmd		*next;
+	struct s_cmd		*prev;
+	int					pid;
+	int					type;
+	int					fd[2];
+	int					pipe_status;
+	int					*pipe_fd;
+	char				*cmd;
+	struct s_io_node	**io_list;
+	char				**args;
+	struct s_env		**assign;
+	int					is_term;
+	int					is_bg;
 	
 }	t_cmd;
 
@@ -71,6 +62,12 @@ typedef struct s_AST {
 	struct s_AST	*right;
 	void			*data;
 }	t_AST;
+typedef struct s_io_node{
+	struct s_io_node	*next;
+	char				*filename;
+	int					fd;
+	int					mode;
+}	t_io_node;
 
 typedef struct s_env
 {
@@ -91,6 +88,7 @@ typedef struct s_export
 typedef struct s_data {
 	int			pid;
 	int			is_interactive;
+	char		**cmd_split;
 	char		**envv;
 	t_env		*env_cpy;
 	t_export	*export;
@@ -107,8 +105,7 @@ typedef struct s_data {
 void	argc_error(int error_code);
 void	error_exit(int exit_code);
 int		open_fd(int mode, char *filename);
-void	here_doc_handler(char *limiter);
-void	exec_pipe(t_pipex *handler, t_cmd *cmd, char **envv);
+int		here_doc_handler(t_data *data, char *limiter);
 void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
@@ -117,10 +114,16 @@ int		free_data(t_data *data);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 void free_env_list(t_env *env);
 void	free_var(t_data *data, t_cmd *cmd);
+void	print_token(t_token **root);
+void	free_token(t_data *data);
 
 /** 	signal.c	**/
 void	signals_interact(void);
 void	signals_no_interact(void);
+void	signals_here_doc(void);
+void	signals_here_doc_child(void);
+void	here_doc_child_SIGINT(const int signum, void *ptr);
+void	redisplay_prompt(int signum, void *ptr);
 
 /**		lexer.c		**/
 int		scan_input(t_data *data);
@@ -175,7 +178,7 @@ int		ft_escape_seq(char *str);
 char	evaluate_bslash(char	*str, t_data *data);
 
 /**		cmd_io.c		**/
-void	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
+int		handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 
 /**		error.c			**/
 int		check_error(t_data *data);
@@ -197,17 +200,18 @@ void    ft_pwd(t_data *data);
 void	ft_env(t_data *data);
 
 /**		minishell_cmd.c	**/
-void	set_fd(t_cmd *cmd);
+int		set_fd(t_data *data, t_cmd *cmd);
 void	set_pipes(t_data *data, t_cmd *cmd);
 void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last);
+void	close_fd(t_data *data, t_cmd *cmd);
+int		init_io_redir(t_data *data);
 
 /**		var.c			**/
 int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
-char	*var_expander_sys(t_data *data, char *str, t_token *token);
-char	*var_expander_var(t_data *data, char *str);
+char	*var_expander(t_data *data, char *str, t_token *token);
 
 /**			export			**/
 void    env_update(t_data *data);
