@@ -39,7 +39,6 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	int		tmp_fd;
 	int		status;
 	pid_t	pid;
-	printf("test\n");
 	if (fd->mode == IO_INPUT)
 	{
 		fd->fd = open_fd(0, fd->filename);

@@ -155,25 +155,69 @@ void	prompt_user(t_data *data)
 }
 
 int		ft_get_token_err(char *input, t_data *data);
+int		check_err(char *input, t_data *data)
+{
+	int	i;
+	int	input_length;
+
+	input = data->user_input;
+	data->parse_status = NONE;
+	i = 0;
+	if (*input == '#')
+	{
+		add_history(data->raw_input);
+		return (EXIT_FAILURE);
+	}
+	while (*input && ft_is_ws(*input)) input++;
+	if (input == NULL || *input == 0 || *input == '#')
+		return (EXIT_FAILURE);
+	if (data->raw_input)
+	{
+		add_history(data->raw_input);
+		free(data->raw_input);
+		data->raw_input = NULL;
+	}
+	input_length = ft_strlen(input);
+	while(i <= input_length)
+		i += ft_get_token_err(input + i, data); 
+	return (check_error(data));
+}
 int		check_error_raw(t_data *data)
 {
 	int	i;
+	char	*tmp;
 
 	i = -1;
-	free(data->raw_input);
+	tmp = ft_strdup(data->raw_input);
+	data->raw_input = ft_strdup(data->user_input);
+	if (check_err(data->raw_input, data))
+	{
+		free(tmp);
+		free_data(data);
+		ft_free_tab(data->cmd_split);
+		return (1);
+	}
+	else
+	{
+		data->raw_input = ft_strdup(data->user_input);
+		free_token(data);
+		free(data->user_input);
+	}
 	while (data->cmd_split[++i])
 	{
 		data->user_input = ft_strdup(data->cmd_split[i]);
-		data->raw_input = NULL;
 		scan_input(data);
 		if (check_error(data) != EXIT_SUCCESS)
 		{
+			free(tmp);
 			free_data(data);
 			ft_free_tab(data->cmd_split);
 			return (1);
 		}
 		free(data->user_input);
 	}
+	data->raw_input = tmp;
+	free_token(data);
 	return (0);
 
 }
@@ -195,8 +239,9 @@ void	minishell_prompt(t_data *data)
 		while (data->cmd_split[++i])
 		{
 			data->user_input = ft_strdup(data->cmd_split[i]);
-			if (i > 0)
+			if (i == 1)
 			{
+				free(data->raw_input);
 				data->raw_input = NULL;
 			}
 			scan_input(data);

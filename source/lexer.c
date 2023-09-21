@@ -204,8 +204,11 @@ int	scan_input(t_data *data)
 	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
 	if (data->raw_input)
+	{
 		add_history(data->raw_input);
-	data->raw_input = NULL;
+		free(data->raw_input);
+		data->raw_input = NULL;
+	}
 	input_length = ft_strlen(input);
 	while(i <= input_length)
 		i += ft_get_token(input + i, data); 
