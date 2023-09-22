@@ -62,6 +62,11 @@ void	insert_token_next(t_token *i_p, int type, char *value)
 		i_p->next->next = tmp;
 		tmp->prev = i_p->next;
 	}
+	else
+	{
+		i_p->next->prev = i_p;
+		i_p->next->next = NULL;
+	}
 }
 
 // Token constructor with type and value

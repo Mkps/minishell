@@ -58,6 +58,7 @@ int	token_wc(char *input, t_token *current, t_data *data)
 		i++;
 	return (i);
 }
+
 t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 {
 	char	*tmp;
@@ -92,6 +93,7 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 	return (ret);
 
 }
+
 //	Parses tokens looking for VAR to expand.
 void	parse_token(t_data *data)
 {
@@ -105,7 +107,7 @@ void	parse_token(t_data *data)
 		if (current->token_type == WORD && current->quote_status != SQUOTE
 				&& current->quote_status != O_PAR && current->quote_status != IO_HEREDOC)
 		{
-			current->value = var_expander(data, current->value, current);
+			var_expander(data, current->value, current);
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{
@@ -232,11 +234,14 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	new_cmd->fd[0] = -2;
 	new_cmd->fd[1] = -2;
 	tmp = "";
-	tmp = ft_strappend(tmp, ";", 0);
 	current = token;
+	char	sep[2];
+	sep[0] = 2;
+	sep[1] = 0;
+	tmp = ft_strappend(tmp, sep, 0);
 	while (current->token_type == WORD )
 	{
-		tmp = ft_strappend(tmp, ";", 2);	
+		tmp = ft_strappend(tmp, sep, 2);	
 		char	test[2] ;
 		test[0] = 1;
 		test[1] = 0;
@@ -253,14 +258,7 @@ t_token	*add_cmd(t_data *data, t_token *token)
 		else
 			current = current->next;
 	}
-	new_cmd->args = ft_split(tmp, ';');
-	i = -1;
-	while (new_cmd->args[++i] != NULL)
-	{
-		if (new_cmd->args[i][0] == 1)
-			new_cmd->args[i][0] = 0;
-	}
-
+	new_cmd->args = ft_split(tmp, 2);
 	if (new_cmd->type == O_PAR)
 		new_cmd->is_term = O_PAR;
 	free(tmp);
@@ -389,6 +387,7 @@ void	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 		}
 	}
 }
+
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;

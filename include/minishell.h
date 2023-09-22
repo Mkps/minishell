@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 12:39:37 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 16:56:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void 	free_env_list(t_env **env);
 void	free_var(t_data *data, t_cmd *cmd);
 void	print_token(t_token **root);
 void	free_token(t_data *data);
+char	**ft_split_noquote(char *str, char c);
 
 /** 	signal.c	**/
 void	signals_interact(void);
@@ -222,7 +223,7 @@ int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
-char	*var_expander(t_data *data, char *str, t_token *token);
+int		var_expander(t_data *data, char *str, t_token *token);
 
 /**			export			**/
 void    env_update(t_data *data);

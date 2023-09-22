@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 13:05:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:00:49 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,10 +233,10 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 	char	*cmd_p;
 	char	**env_p;
 
-	if (wsstr(cmd_node->cmd))
-		extract_cmd(cmd_node, data);
-	else
-	{
+	//if (wsstr(cmd_node->cmd))
+	//    extract_cmd(cmd_node, data);
+	//else
+	//{
 		env_p = get_path(data->envv);
 		cmd_p = get_cmd(cmd_node->cmd, env_p);
 		if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
@@ -245,7 +245,7 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 			if (cmd_p)
 				free(cmd_p);
 		}
-	}
+	//}
 }
 
 char	*get_cmd(char *cmd, char **env_p)

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 12:53:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:02:56 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void	minishell_prompt(t_data *data)
 		prompt_user(data);
 		signals_no_interact();
 		data->raw_input = data->user_input;
-		data->cmd_split = ft_split(data->user_input, ';');
+		data->cmd_split = ft_split_noquote(data->user_input, ';');
 		if (check_error_raw(data))
 			continue;
 		i = -1; 

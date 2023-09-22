@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:22:15 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/22 07:54:51 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:27:33 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ void	ft_echo(t_cmd *cmd)
 	while (cmd->args[i][0] == '-')
 	{
 		j = 1;
-		while (cmd->args[i][j] == 'n')
+		while (cmd->args[i][j] && cmd->args[i][j] == 'n')
 			j++;
 		if (cmd->args[i][j] == '\0')
 			i++;
+		else
+			break; 
 	}
 	while (cmd->args[i] != NULL)
 	{

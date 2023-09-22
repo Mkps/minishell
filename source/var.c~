@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   var.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/21 22:50:23 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 16:57:41 by aloubier         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    var.c~                                             :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/21 22:50:23 by aloubier          #+#    #+#              #
+#    Updated: 2023/09/22 16:08:08 by aloubier         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 
 #include "../include/minishell.h"
@@ -109,30 +109,8 @@ int	var_is_multiple(char *var)
 	return (0);
 }
 
-int	retokenize(t_data *data, char *str, t_token *token)
-{
-	char	**split;
-	t_token	*new_token;
-	t_token	*current;
-	int		i;
-	
-	current = token;
-	split = ft_split(str, ' ');
-	if (!split)
-		return (EXIT_FAILURE);
-	token->value = split[0];
-	i = 1;
-	while (split[i])
-	{
-		insert_token_next(current, WORD, ft_strdup(split[i]));
-		current = current->next;
-		i++;
-	}
-	return (EXIT_SUCCESS);
-}
-
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
-int	var_expander(t_data *data, char *str, t_token *token)
+char	*var_expander(t_data *data, char *str, t_token *token)
 {
 	int		i;
 	int		n;
@@ -141,9 +119,7 @@ int	var_expander(t_data *data, char *str, t_token *token)
 	char	*var_id;
 	char	*tmp_str;
 	char	*exit_code;
-	int		flag_retokenize;
-
-	flag_retokenize = 1;
+	
 	i = 0;
 	n = 1;
 	ret = ft_strdup(str);
@@ -162,9 +138,8 @@ int	var_expander(t_data *data, char *str, t_token *token)
 					tmp = ret;
 					tmp_str = ft_str_extract(ret + i + 1, n - 1);
 					var_id = get_var(data,tmp_str);
-					if (var_is_multiple(var_id))
-						flag_retokenize++;
-					ret = str_replace(ret, i, n, get_var(data, tmp_str));
+					if (!var_is_multiple(var_id))
+						ret = str_replace(ret, i, n, get_var(data, tmp_str));
 					free(tmp_str);
 					free(tmp);
 				}
@@ -206,12 +181,6 @@ int	var_expander(t_data *data, char *str, t_token *token)
 	}
 	free(exit_code);
 	free(str);
-	if (flag_retokenize > 0 && token->quote_status == NONE)
-	{
-		if (retokenize(data, ret, token) == EXIT_SUCCESS)
-			return (EXIT_SUCCESS);
-	}
-	token->value = ret;
-	return (flag_retokenize != 0);
+	return (ret);
 }
 
