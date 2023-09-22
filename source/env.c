@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:39:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 07:53:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:09:39 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*ft_getenv(char **env, const char *str)
 
 	tmp = 0;
 	i = 0;
+	if (!str || !str[i])
+		return (NULL);
 	while (env && env[i])
 	{
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
@@ -29,7 +31,7 @@ char	*ft_getenv(char **env, const char *str)
 		}
 		i++;
 	}
-	if (*tmp)
+	if (tmp && *tmp)
 		return (tmp);
 	return (NULL);
 }

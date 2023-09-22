@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_launcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 22:48:34 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:04:07 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,3 +188,4 @@ void	minishell_prompt(t_data *data)
 		data->cmd_split = NULL;
 	}
 }
+ 

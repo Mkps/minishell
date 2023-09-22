@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/15 18:52:50 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:00:21 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*str_tolower(char *str)
 	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		str[i] = ft_tolower(str[i]);
 		i++;
@@ -41,7 +41,7 @@ char	*str_tolower(char *str)
 	return (str);
 }
 
-int		ft_strcmp_no_case(const char *s1, const char *s2)
+int	ft_strcmp_no_case(const char *s1, const char *s2)
 {
 	int		i1;
 	int		i2;
@@ -49,34 +49,38 @@ int		ft_strcmp_no_case(const char *s1, const char *s2)
 
 	i1 = 0;
 	i2 = 0;
-	while(s1[i1] && !ft_isalnum(s1[i1]))
+	while (s1[i1] && !ft_isalnum(s1[i1]))
 		i1++;
-	while(s2[i2] && !ft_isalnum(s2[i2]))
+	while (s2[i2] && !ft_isalnum(s2[i2]))
 		i2++;
 	if (!s2[i2] && ft_isalnum(s1[i1]))
 		return (1);
 	if (!s1[i1] && ft_isalnum(s2[i2]))
 		return (-1);
-	if (i1 > 0 && !s1[i1]) i1--;
-	if (i2 > 0 && !s2[i2]) i2--;
-	while ((ft_tolower((unsigned char)s1[i1]) == ft_tolower((unsigned char)s2[i2]) && (s1[i1])))
+	if (i1 > 0 && !s1[i1])
+		i1--;
+	if (i2 > 0 && !s2[i2])
+		i2--;
+	while ((ft_tolower((unsigned char)s1[i1])
+			== ft_tolower((unsigned char)s2[i2])
+			&& (s1[i1])))
 	{
 		i1++;
 		i2++;
-		while(s1[i1] && !ft_isalnum(s1[i1]))
+		while (s1[i1] && !ft_isalnum(s1[i1]))
 			i1++;
-		while(s2[i2] && !ft_isalnum(s2[i2]))
+		while (s2[i2] && !ft_isalnum(s2[i2]))
 			i2++;
 	}
-	return (ft_tolower((unsigned char)s1[i1]) - ft_tolower((unsigned char)s2[i2]));
+	return (ft_tolower((unsigned char)s1[i1])
+		- ft_tolower((unsigned char)s2[i2]));
 }
 
 char	*ft_strjoin_tab(char **tab, int i)
 {
-	int	index;
-	int	k;
-	char *ret;
-
+	int		index;
+	int		k;
+	char	*ret;
 
 	index = 0;
 	ret = ft_strdup("");
@@ -91,16 +95,17 @@ char	*ft_strjoin_tab(char **tab, int i)
 	}
 	free(tab);
 	return (ret);
-
 }
+
 void	ft_str_swap(char **s1, char **s2)
 {
-	char *tmp;
+	char	*tmp;
 
-	tmp = *s1; 
+	tmp = *s1;
 	*s1 = *s2;
 	*s2 = tmp;
 }
+
 char	*sort_str(char *str)
 {
 	int		i;
@@ -139,7 +144,9 @@ int	show_hidden(char *search, char *str)
 		return (0);
 	return (1);
 }
-char	*find_matching(char *search, char *src, char* (*function_ptr)(char*,char*,int), int mode)
+
+char	*find_matching(char *search, char *src,
+			char *(*function_ptr)(char*, char*, int), int mode)
 {
 	int		i;
 	char	*ret;
@@ -188,6 +195,7 @@ char	*ft_strend(char *big, char *little, char n)
 	}
 	return (&big[i]);
 }
+
 char	*get_wc(char *search, char *src, int mode)
 {
 	char		*str;
@@ -206,7 +214,8 @@ char	*get_wc(char *search, char *src, int mode)
 	{
 		str = ft_strdup("");
 		d = opendir(".");
-		if (d) {
+		if (d)
+		{
 			while ((dir = readdir(d)) != NULL)
 			{
 				str = ft_strappend(str, dir->d_name,2);
