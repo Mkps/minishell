@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 11:00:21 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:20:43 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,10 +198,10 @@ char	*ft_strend(char *big, char *little, char n)
 
 char	*get_wc(char *search, char *src, int mode)
 {
-	char		*str;
-	char		*ret;
-	DIR			*d;
-	void		*select;
+	char			*str;
+	char			*ret;
+	DIR				*d;
+	void			*select;
 	struct dirent	*dir;
 
 	if (mode == 0)
@@ -216,16 +216,18 @@ char	*get_wc(char *search, char *src, int mode)
 		d = opendir(".");
 		if (d)
 		{
-			while ((dir = readdir(d)) != NULL)
+			dir = readdir(d);
+			while (dir != NULL)
 			{
-				str = ft_strappend(str, dir->d_name,2);
+				str = ft_strappend(str, dir->d_name, 2);
 				str = ft_strappend(str, " ", 2);
+				dir = readdir(d);
 			}
 			closedir(d);
 		}
 		ret = find_matching(search, str, select, mode);
 	}
-	else 
+	else
 	{
 		ret = find_matching(search, src, select, mode);
 	}
@@ -259,6 +261,7 @@ char	*get_back_wc(char *str)
 		return (NULL);
 	return (ft_str_extract(str + i + 1, ft_strlen(str) - (i + 1)));
 }
+
 int	wc_present(char *str)
 {
 	while (*str)
@@ -309,13 +312,13 @@ char	*get_wildcard(char *str)
 // Replaces the string at r_index of length n by str
 char	*str_replace_free(char *src, int r_index, int n, char *str)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	int		ret_len;
 	int		str_len;
 	int		last_index;
 	char	*ret;
-	
+
 	if (str == NULL)
 		str_len = 0;
 	else
@@ -323,7 +326,7 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 	last_index = r_index + n;
 	if (last_index > ft_strlen(src))
 		last_index = ft_strlen(src);
-	ret_len = ft_strlen(src) + (last_index - r_index) + str_len; 
+	ret_len = ft_strlen(src) + (last_index - r_index) + str_len;
 	ret = (char *)ft_calloc(ret_len + 1, sizeof(char));
 	if (!ret)
 		output_err("error allocating mem for return string\n", NULL, 0);
@@ -348,7 +351,6 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 	return (ret);
 }
 
-
 char	*ft_wildcard(char *str)
 {
 	int			i;
@@ -370,9 +372,12 @@ char	*ft_wildcard(char *str)
 		{
 			start_index = get_start_index(ret, i);
 			end_index = get_end_index(ret, i);
-			tmp = get_wildcard(ft_str_extract(ret + start_index, end_index - start_index));
-			i = (i - (end_index - start_index) + (end_index - i)) + ft_strlen(tmp);
-			ret = str_replace_free(ret, start_index, end_index - start_index + 1, tmp);
+			tmp = get_wildcard(ft_str_extract(ret + start_index,
+						end_index - start_index));
+			i = (i - (end_index - start_index) + (end_index - i))
+				+ ft_strlen(tmp);
+			ret = str_replace_free(ret, start_index,
+					end_index - start_index + 1, tmp);
 		}
 		else
 			i++;
