@@ -6,11 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2023/09/22 16:56:53 by aloubier         ###   ########.fr       */
-=======
-/*   Updated: 2023/09/22 15:19:20 by uaupetit         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2023/09/22 17:14:31 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
