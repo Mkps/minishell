@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 13:19:21 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:12:36 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,15 @@ static char	*glob_home(t_data *data, char *str)
 	i = 0;
 	while (str[i] && home[i] && str[i] == home[i])
 		i++;
-	if (str[i] == '/'  && i > 0)
+	if (str[i] == '/' && i > 0)
 	{
 		ret = ft_strdup(str + (i - 1));
 		ret[0] = '~';
-		return(ret);
+		return (ret);
 	}
 	return (ft_strdup(str));
 }
+
 static char	*get_session(t_data *data)
 {
 	char	*tmp;
@@ -58,11 +59,12 @@ static char	*get_session(t_data *data)
 	else
 		return (ft_strdup("localhost"));
 }
+
 char	*set_prompt(t_data *data)
 {
 	char	*prompt;
 	char	*username;
-	
+
 	username = get_var(data, "USER");
 	if (!username || !*username)
 		username = "user";
@@ -83,13 +85,14 @@ void	prompt_user(t_data *data)
 	char	*prompt;
 
 	prompt = set_prompt(data);
-	signal(SIGINT, (void (*) (int))redisplay_prompt);
+	signal(SIGINT, (void (*)(int))redisplay_prompt);
 	redisplay_prompt(42, prompt);
 	data->user_input = NULL;
 	data->raw_input = NULL;
 	data->user_input = readline(prompt);
 	free(prompt);
-	if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
+	if ((data->user_input != NULL && (!strcmp(data->user_input, "exit"))
+			|| data->user_input == NULL))
 	{
 		if (!data->user_input)
 			write(1, "exit\n", 5);

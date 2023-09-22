@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 16:56:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 18:57:11 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void	free_var(t_data *data, t_cmd *cmd);
 void	print_token(t_token **root);
 void	free_token(t_data *data);
 char	**ft_split_noquote(char *str, char c);
+int		var_is_multiple(char *var);
 
 /** 	signal.c	**/
 void	signals_interact(void);
@@ -221,9 +222,11 @@ int		init_io_redir(t_data *data);
 /**		var.c			**/
 int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
+char	*str_replace_strs(char **src, int r_index, int n, char *str);
 void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
 int		var_expander(t_data *data, char *str, t_token *token);
+int		retokenize(t_data *data, char *str, t_token *token);
 
 /**			export			**/
 void    env_update(t_data *data);
