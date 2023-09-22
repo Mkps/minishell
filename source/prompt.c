@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 17:12:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:29:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*get_session(t_data *data)
 		ret = ft_strdup(&tmp[s_idx]);
 		ret = ft_str_extract_free(ret, (e_idx - s_idx));
 		return (ret);
-	}	
+	}
 	else
 		return (ft_strdup("localhost"));
 }

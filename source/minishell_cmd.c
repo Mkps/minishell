@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 17:00:49 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:30:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	int		tmp_fd;
 	int		status;
 	pid_t	pid;
+
 	if (fd->mode == IO_INPUT)
 	{
 		fd->fd = open_fd(0, fd->filename);
@@ -48,17 +49,16 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 				close(cmd->fd[0]);
 			cmd->fd[0] = fd->fd;
 			return (0);
-		}		
+		}
 		return (1);
 	}
 	if (fd->mode == IO_HEREDOC)
 	{
 		if (!here_doc_handler(data, fd->filename))
 		{
-			fd->fd=-42;
+			fd->fd = -42;
 			return (0);
 		}
-
 		// if (fd->fd > 0)
 		// {
 		// 	if (cmd->fd[0] >= 0)
@@ -77,7 +77,7 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 				close(cmd->fd[1]);
 			cmd->fd[1] = fd->fd;
 			return (0);
-		}		
+		}
 		return (1);
 	}
 	if (fd->mode == IO_APPEND)
@@ -89,11 +89,10 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 				close(cmd->fd[1]);
 			cmd->fd[1] = fd->fd;
 			return (0);
-		}		
+		}
 		return (1);
 	}
 	return (0);
-
 }
 int	set_fd(t_data *data, t_cmd *cmd)
 {
@@ -117,7 +116,7 @@ int	set_fd(t_data *data, t_cmd *cmd)
 	return (0);
 }
 
-int		init_io_redir(t_data *data)
+int	init_io_redir(t_data *data)
 {
 	t_cmd	*current;
 
@@ -155,8 +154,8 @@ void	close_fd(t_data *data, t_cmd *cmd)
 void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)
 {
 	t_cmd	*current;
-	current = *root;
 
+	current = *root;
 	last = NULL;
 	if (last)
 		last = last->next;
@@ -187,7 +186,7 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 }
 char	*ft_strs_join(char **tab)
 {
-	int	i;
+	int		i;
 	char	*ret;
 
 	i = -1;
@@ -200,7 +199,7 @@ char	*ft_strs_join(char **tab)
 	return (ret);
 }
 
-int		wsstr(char *str)
+int	wsstr(char *str)
 {
 	int	i;
 
@@ -237,14 +236,14 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 	//    extract_cmd(cmd_node, data);
 	//else
 	//{
-		env_p = get_path(data->envv);
-		cmd_p = get_cmd(cmd_node->cmd, env_p);
-		if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
-		{
-			ft_free_tab(env_p);
-			if (cmd_p)
-				free(cmd_p);
-		}
+	env_p = get_path(data->envv);
+	cmd_p = get_cmd(cmd_node->cmd, env_p);
+	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
+	{
+		ft_free_tab(env_p);
+		if (cmd_p)
+			free(cmd_p);
+	}
 	//}
 }
 

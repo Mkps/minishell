@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_near_quote.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:23:20 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 12:39:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:32:07 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
 
 void	parse_near_quote_word(t_token *current)
 {
@@ -30,7 +28,7 @@ void	parse_near_quote_word(t_token *current)
 		}
 	}
 	else if (current->next && token_is_quote(current->next)
-		&& current->next->near_quote == 1)
+			&& current->next->near_quote == 1)
 	{
 		lst_del_next(&current);
 		current->near_quote = 1;
@@ -46,13 +44,14 @@ void	parse_near_quote_quote(t_data *data, t_token *current)
 		&& current->next->near_quote == 0)
 		lst_del_next(&current);
 	else if (current->next && token_is_quote(current->next)
-		&& current->next->near_quote == 1)
+			&& current->next->near_quote == 1)
 	{
 		lst_del_next(&current);
 		if (current->next->token_type == WORD)
 		{
 			current->value = ft_strappend(current->value,
-					current->next->value, 3);
+											current->next->value,
+											3);
 			current->near_quote = current->next->near_quote;
 			lst_del_next(&current);
 		}

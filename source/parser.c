@@ -1,7 +1,7 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
-int	is_assign(char	*str);
+int		is_assign(char *str);
 
 char	*ft_strappend(char *s1, char *s2, int mode)
 {
@@ -15,7 +15,7 @@ char	*ft_strappend(char *s1, char *s2, int mode)
 	if (!tmp)
 		return (NULL);
 	i = 0;
-	while(s1[i])
+	while (s1[i])
 	{
 		tmp[i] = s1[i];
 		i++;
@@ -50,7 +50,7 @@ int	token_wc(char *input, t_token *current, t_data *data)
 		return (1);
 	}
 	while (*(input + i) && ft_get_sep_type(input + i) != WSPACE)
-			i++;
+		i++;
 	if (i > 0)
 		insert_token_next(current, WORD, ft_str_extract(input, i));
 	while (*(input + i) != 0 && ft_get_sep_type(input + i) == WSPACE)
@@ -69,9 +69,8 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 	t_token	*swap;
 	t_token	*next;
 
-
 	i = 0;
-	tmp = ft_wildcard(start->value); 
+	tmp = ft_wildcard(start->value);
 	node = start;
 	while (tmp[i])
 	{
@@ -92,7 +91,6 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 	}
 	free(tmp);
 	return (ret);
-
 }
 
 //	Parses tokens looking for VAR to expand.
@@ -106,25 +104,31 @@ void	parse_token(t_data *data)
 	while (current != NULL)
 	{
 		if (current->token_type == WORD && current->quote_status != SQUOTE
-				&& current->quote_status != O_PAR && current->quote_status != IO_HEREDOC)
+			&& current->quote_status != O_PAR
+			&& current->quote_status != IO_HEREDOC)
 		{
 			var_expander(data, current->value, current);
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{
-			if (current->prev && current->prev->token_type == WORD && !is_assign(current->prev->value) && wc_present(current->value))
+			if (current->prev && current->prev->token_type == WORD
+				&& !is_assign(current->prev->value)
+				&& wc_present(current->value))
 			{
 				current = wc_tokenize(current, current->value, data);
 			}
 		}
-		if (current->token_type == IO_HEREDOC && current->next && ((current->next->token_type == WORD) || token_is_quote(current->next) && current->next->next->token_type == WORD))
+		if (current->token_type == IO_HEREDOC && current->next
+			&& ((current->next->token_type == WORD)
+				|| token_is_quote(current->next)
+				&& current->next->next->token_type == WORD))
 		{
 			if (current->next && (current->next->token_type == WORD))
 				current->next->quote_status = DQUOTE;
-			else if (current->next && ((current->next->token_type == WORD) 
-				|| token_is_quote(current->next) && current->next->next->token_type == WORD))
+			else if (current->next && ((current->next->token_type == WORD)
+						|| token_is_quote(current->next)
+						&& current->next->next->token_type == WORD))
 				current->next->next->quote_status = SQUOTE;
-
 		}
 		current = current->next;
 	}
@@ -137,9 +141,9 @@ t_cmd	*create_cmd(t_data *data)
 
 	ret = (t_cmd *)malloc(sizeof(t_cmd) * 1);
 	if (!ret)
-		return (NULL); 
-	ret->assign = (t_env **)malloc(sizeof(t_env*)* 1);
-	ret->io_list = (t_io_node **)malloc(sizeof(t_io_node*));
+		return (NULL);
+	ret->assign = (t_env **)malloc(sizeof(t_env *) * 1);
+	ret->io_list = (t_io_node **)malloc(sizeof(t_io_node *));
 	if (!ret->assign || !ret->io_list)
 	{
 		free(ret);
@@ -177,14 +181,14 @@ void	add_cmd_back(t_data *data)
 }
 
 // Checks if the str(cmd->cmd or token->value) represents an assign command.
-int	is_assign(char	*str)
+int	is_assign(char *str)
 {
 	if (!ft_isalpha(*str) && *str != '_')
 		return (0);
-	while(*str)
+	while (*str)
 	{
 		if (*str == '=' && *str + 1)
-			return (1); 
+			return (1);
 		if (!ft_isalnum(*str) && *str != '_')
 			return (0);
 		str++;
@@ -206,7 +210,7 @@ t_cmd	*last_cmd(t_cmd **root)
 }
 
 //	Checks if the cmd is a comment. NOTE: will be reworked
-int		get_cmd_type(t_token *token)
+int	get_cmd_type(t_token *token)
 {
 	if (!token->value)
 		return (EMPTY);
@@ -226,31 +230,31 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	char	*new_tmp;
 	char	**args;
 	int		i;
+	char	sep[2];
+		char test[2];
 
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
-	new_cmd->cmd = ft_strdup(token->value); 
+	new_cmd->cmd = ft_strdup(token->value);
 	new_cmd->type = get_cmd_type(token);
 	new_cmd->fd[0] = -2;
 	new_cmd->fd[1] = -2;
 	tmp = "";
 	current = token;
-	char	sep[2];
 	sep[0] = 2;
 	sep[1] = 0;
 	tmp = ft_strappend(tmp, sep, 0);
-	while (current->token_type == WORD )
+	while (current->token_type == WORD)
 	{
-		tmp = ft_strappend(tmp, sep, 2);	
-		char	test[2] ;
+		tmp = ft_strappend(tmp, sep, 2);
 		test[0] = 1;
 		test[1] = 0;
-
 		if (current->value[0] == 0)
 			tmp = ft_strappend(tmp, test, 2);
 		else
-			tmp = ft_strappend(tmp, current->value, 2);	
-		if (current->next->token_type == SQUOTE || current->next->token_type == DQUOTE)
+			tmp = ft_strappend(tmp, current->value, 2);
+		if (current->next->token_type == SQUOTE
+			|| current->next->token_type == DQUOTE)
 		{
 			type = current->next->token_type;
 			current = current->next->next;
@@ -271,7 +275,7 @@ void	add_empty_cmd(t_data *data)
 
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
-	new_cmd->cmd = NULL; 
+	new_cmd->cmd = NULL;
 	new_cmd->type = EMPTY;
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
@@ -284,7 +288,8 @@ t_token	*get_cmd_first(t_token *current_t)
 	current = current_t;
 	if (current->prev == NULL)
 		return (current);
-	while(current != NULL && current->prev != NULL && !token_is_term(current->prev))
+	while (current != NULL && current->prev != NULL
+		&& !token_is_term(current->prev))
 		current = current->prev;
 	return (current);
 }
@@ -297,16 +302,19 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && !token_is_term(current))
 	{
-		if (current != NULL && current->token_type == WORD && (!is_assign(current->value) || current->quote_status == O_PAR))
+		if (current != NULL && current->token_type == WORD
+			&& (!is_assign(current->value) || current->quote_status == O_PAR))
 		{
 			if (current->prev && token_is_io(current->prev))
 			{
 				current = current->next;
 				continue ;
 			}
-			else if (current->prev == NULL || current->quote_status == NONE && current->prev != NULL && !token_is_io(current->prev))
+			else if (current->prev == NULL || current->quote_status == NONE
+					&& current->prev != NULL && !token_is_io(current->prev))
 				return (current);
-			else if (current->prev != NULL && current->quote_status != NONE && !token_is_io(current->prev->prev))
+			else if (current->prev != NULL && current->quote_status != NONE
+					&& !token_is_io(current->prev->prev))
 				return (current);
 		}
 		current = current->next;
@@ -316,9 +324,9 @@ t_token	*get_next_cmd(t_token *src)
 	return (NULL);
 }
 
-int		is_empty_cmd(t_token *start)
+int	is_empty_cmd(t_token *start)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	tmp = start;
 	while (tmp && !token_is_term(tmp))
@@ -340,12 +348,13 @@ int	set_pipe(t_cmd *cmd)
 	cmd->pipe_fd = (int *)malloc(sizeof(int *) * 2);
 	if (cmd->pipe_fd && pipe(cmd->pipe_fd) != -1)
 		return (EXIT_SUCCESS);
-	return (EXIT_FAILURE);	
+	return (EXIT_FAILURE);
 }
 
 char	*set_assign(t_token *token)
 {
 	char	*ret;
+	int		i;
 
 	ret = ft_strdup(token->value);
 	if (!ret)
@@ -354,7 +363,7 @@ char	*set_assign(t_token *token)
 	{
 		return (ret);
 	}
-	int	i = 0;
+	i = 0;
 	while (i <= 3)
 	{
 		ret = ft_strjoin(ret, token->next->value);
@@ -371,9 +380,9 @@ int	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 	t_env	*env;
 	char	*tmp;
 
-
 	current = get_cmd_first(token);
-	if (current && (!current->prev || (current->prev && token_is_term(current->prev))) && is_assign(current->value))
+	if (current && (!current->prev || (current->prev
+				&& token_is_term(current->prev))) && is_assign(current->value))
 	{
 		tmp = set_assign(current);
 		if (!tmp)
@@ -397,19 +406,21 @@ int	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
-	t_token *tmp;
+	t_token	*tmp;
 	char	*tmp_assign;
 
 	if (token == NULL)
-		current_t  = *data->token_root;
+		current_t = *data->token_root;
 	else
 		current_t = token;
 	while (current_t != NULL)
 	{
 		tmp = current_t;
-		if (current_t && (!current_t->prev || token_is_term(current_t->prev)) && (is_assign(current_t->value) && current_t->quote_status != O_PAR))
+		if (current_t && (!current_t->prev || token_is_term(current_t->prev))
+			&& (is_assign(current_t->value)
+				&& current_t->quote_status != O_PAR))
 		{
-		    current_t = current_t->next;
+			current_t = current_t->next;
 		}
 		else if (current_t)
 		{
@@ -425,15 +436,15 @@ void	build_cmd_list(t_data *data, t_token *token)
 				current_t = current_t->next;
 			if (current_t && current_t->token_type == PIPE)
 				set_pipe(last_cmd(data->cmd_list));
-			if (current_t && current_t->token_type >= TERM_END && current_t->token_type <= TERM_OR)
+			if (current_t && current_t->token_type >= TERM_END
+				&& current_t->token_type <= TERM_OR)
 				last_cmd(data->cmd_list)->is_term = current_t->token_type;
 			current_t = current_t->next;
 		}
 		else
 		{
 			if (current_t)
-		         current_t = current_t->next;
+				current_t = current_t->next;
 		}
 	}
-
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 11:20:43 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:29:59 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ char	*str_tolower(char *str)
 
 int	ft_strcmp_no_case(const char *s1, const char *s2)
 {
-	int		i1;
-	int		i2;
-	int		ret;
+	int	i1;
+	int	i2;
+	int	ret;
 
 	i1 = 0;
 	i2 = 0;
@@ -61,8 +61,7 @@ int	ft_strcmp_no_case(const char *s1, const char *s2)
 		i1--;
 	if (i2 > 0 && !s2[i2])
 		i2--;
-	while ((ft_tolower((unsigned char)s1[i1])
-			== ft_tolower((unsigned char)s2[i2])
+	while ((ft_tolower((unsigned char)s1[i1]) == ft_tolower((unsigned char)s2[i2])
 			&& (s1[i1])))
 	{
 		i1++;
@@ -145,8 +144,8 @@ int	show_hidden(char *search, char *str)
 	return (1);
 }
 
-char	*find_matching(char *search, char *src,
-			char *(*function_ptr)(char*, char*, int), int mode)
+char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
+			char *, int), int mode)
 {
 	int		i;
 	char	*ret;
@@ -157,14 +156,15 @@ char	*find_matching(char *search, char *src,
 	i = 0;
 	while (split[i])
 	{
-		if (search && (function_ptr(split[i], search, ft_strlen(search)) != NULL))
+		if (search && (function_ptr(split[i], search,
+					ft_strlen(search)) != NULL))
 		{
 			if (mode == 0 && !show_hidden(search, split[i]))
 			{
 				free(split[i]);
 				split[i] = 0;
 			}
-		}	
+		}
 		else
 		{
 			free(split[i]);
@@ -290,7 +290,7 @@ char	*get_wildcard(char *str)
 		{
 			i += ft_strlen(f_wc) + 1;
 			ret = get_wc(f_wc, ret, 2);
-		}	
+		}
 	}
 	if (b_wc)
 	{
@@ -329,7 +329,7 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 	ret_len = ft_strlen(src) + (last_index - r_index) + str_len;
 	ret = (char *)ft_calloc(ret_len + 1, sizeof(char));
 	if (!ret)
-		output_err("error allocating mem for return string\n", NULL, 0);
+		output_err("error allocating mem for return (string\n", NULL, 0));
 	i = 0;
 	while (i < r_index)
 	{
@@ -353,12 +353,12 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 
 char	*ft_wildcard(char *str)
 {
-	int			i;
-	int			start_index;
-	int			end_index;
-	int			len;
-	char		*ret;
-	char		*tmp;
+	int		i;
+	int		start_index;
+	int		end_index;
+	int		len;
+	char	*ret;
+	char	*tmp;
 
 	i = 0;
 	start_index = 0;
@@ -373,11 +373,11 @@ char	*ft_wildcard(char *str)
 			start_index = get_start_index(ret, i);
 			end_index = get_end_index(ret, i);
 			tmp = get_wildcard(ft_str_extract(ret + start_index,
-						end_index - start_index));
+												end_index - start_index));
 			i = (i - (end_index - start_index) + (end_index - i))
 				+ ft_strlen(tmp);
-			ret = str_replace_free(ret, start_index,
-					end_index - start_index + 1, tmp);
+			ret = str_replace_free(ret, start_index, end_index - start_index
+					+ 1, tmp);
 		}
 		else
 			i++;

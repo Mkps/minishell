@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_launcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 17:02:56 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:30:24 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ void	minishell_inline(t_data *data, char *user_input)
 	{
 		tmp = ft_strdup(user_input);
 		data->user_input = tmp;
-		data->raw_input =tmp;
+		data->raw_input = tmp;
 		data->cmd_split = ft_split(user_input, ';');
 	}
 	else
 	{
 		data->user_input = NULL;
-		data->cmd_split = NULL;	
+		data->cmd_split = NULL;
 		data->raw_input = NULL;
 	}
 	if (check_error_raw(data))
 		exit(g_exit_code);
-	i = -1; 
+	i = -1;
 	while (data->cmd_split[++i])
 	{
 		data->user_input = ft_strdup(data->cmd_split[i]);
@@ -45,7 +45,7 @@ void	minishell_inline(t_data *data, char *user_input)
 			data->raw_input = NULL;
 		}
 		scan_input(data);
-		 //print_token(data->token_root);
+		//print_token(data->token_root);
 		if (check_error(data) == EXIT_SUCCESS)
 		{
 			parse_token(data);
@@ -74,7 +74,7 @@ void	minishell_subshell(t_data *data, char *user_input)
 	new_data.raw_input = NULL;
 	new_data.cmd_split = ft_split(new_data.user_input, ';');
 	free_data(data);
-	i = -1; 
+	i = -1;
 	while (new_data.cmd_split[++i])
 	{
 		new_data.user_input = ft_strdup(new_data.cmd_split[i]);
@@ -91,11 +91,11 @@ void	minishell_subshell(t_data *data, char *user_input)
 		dup2(new_data.old_fd[0], 0);
 	}
 	ft_free_tab(new_data.cmd_split);
-	exit (g_exit_code);
+	exit(g_exit_code);
 }
 
 int		ft_get_token_err(char *input, t_data *data);
-int		check_err(char *input, t_data *data)
+int	check_err(char *input, t_data *data)
 {
 	int	i;
 	int	input_length;
@@ -108,7 +108,8 @@ int		check_err(char *input, t_data *data)
 		add_history(data->raw_input);
 		return (EXIT_FAILURE);
 	}
-	while (*input && ft_is_ws(*input)) input++;
+	while (*input && ft_is_ws(*input))
+		input++;
 	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
 	if (data->raw_input)
@@ -118,11 +119,11 @@ int		check_err(char *input, t_data *data)
 		data->raw_input = NULL;
 	}
 	input_length = ft_strlen(input);
-	while(i <= input_length)
-		i += ft_get_token_err(input + i, data); 
+	while (i <= input_length)
+		i += ft_get_token_err(input + i, data);
 	return (check_error(data));
 }
-int		check_error_raw(t_data *data)
+int	check_error_raw(t_data *data)
 {
 	int		i;
 	char	*tmp;
@@ -161,14 +162,13 @@ int		check_error_raw(t_data *data)
 	data->raw_input = tmp;
 	free_token(data);
 	return (0);
-
 }
 void	minishell_prompt(t_data *data)
 {
 	char	**cmd_list;
 	int		i;
 
-	while(1)
+	while (1)
 	{
 		signals_interact();
 		prompt_user(data);
@@ -176,8 +176,8 @@ void	minishell_prompt(t_data *data)
 		data->raw_input = data->user_input;
 		data->cmd_split = ft_split_noquote(data->user_input, ';');
 		if (check_error_raw(data))
-			continue;
-		i = -1; 
+			continue ;
+		i = -1;
 		while (data->cmd_split[++i])
 		{
 			data->user_input = ft_strdup(data->cmd_split[i]);
@@ -187,7 +187,7 @@ void	minishell_prompt(t_data *data)
 				data->raw_input = NULL;
 			}
 			scan_input(data);
-			 //print_token(data->token_root);
+			//print_token(data->token_root);
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);
@@ -206,4 +206,3 @@ void	minishell_prompt(t_data *data)
 		data->cmd_split = NULL;
 	}
 }
- 
