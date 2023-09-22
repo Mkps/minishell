@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/22 17:41:13 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/22 19:13:18 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ SRC_NAME = here_doc.c env_utils.c\
 	  dummies.c export_utils.c \
 	  unset.c wildcards.c export2.c export_utils2.c \
 	  export_utils3.c free.c prompt.c\
-	  parse_near_quote.c ft_split_noquote.c\
+	  parse_near_quote.c ft_split_noquote.c ft_cd.c\
 	  var_expander.c \
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))

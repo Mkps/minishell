@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 18:57:11 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 19:12:55 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,12 @@ void remove_env(t_data *data, const char *key_to_remove);
 void ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env *ft_lstnew_env(char *key, char *value);
 void	free_env_lst(t_env **cpy);
-
+/***temp*/
+void handle_parent_directory();
+void handle_previous_directory(t_data *data, char **old_pwd);
+void update_oldpwd(char **old_pwd, char *new_pwd);
+void update_pwd_and_oldpwd(t_data *data, char *new_pwd);
+void handle_home_directory(t_data *data, const char *dir);
 /***	unset	***/
 int	ft_lstsize_env(t_env **lst);
 void    env_update(t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/21 18:01:35 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:02:56 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,27 @@ int     export_key_exists(t_export *export, char *key_to_check)
     while (export != NULL)
     {
         if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
+        {
+            printf("key exist = 1");
             return 1;
+        }
         export = export->next;
     }
+    printf("key exist = 0");
     return 0;
 }
 
-int key_is_valid(char *chaine)
+int key_is_valid(char *str)
 {
     int i = 0;
     
-    if (chaine[i] == '\0')
-        return 0;
-    if (!ft_isalpha(chaine[i]) && chaine[i] != '_')
+    if (str[i] == '\0')
         return 1;
-    while (chaine[i] != '\0')
+    if (!ft_isalpha(str[i]) && str[i] != '_')
+        return 1;
+    while (str[i] != '\0')
     {
-        if (!ft_isalnum(chaine[i]) && chaine[i] != '_')
+        if (!ft_isalnum(str[i]) && str[i] != '_')
             return 1;
         i++;
     }

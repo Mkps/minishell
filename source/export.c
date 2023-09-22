@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/21 22:50:31 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 16:33:03 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,6 @@ void	ft_export(t_data *data)
 		env_update(data);
 	}
 }
-/*
-void dprint_export(t_data *data)
-{
-	t_export *current = data->env_export;
-
-	while (current != NULL)
-	{   
-		if (current->value[0] == '\0' && current->flag == 0)
-			printf("1 : %s %s=\"%s\"\n", current->export, current->key, current->value);
-		else if (current->value[0] == '\0' && current->flag > 0)
-			printf("2 : %s %s flag = %i\n", current->export, current->key, current->flag);
-		else
-			printf("3 : %s %s=%s\n", current->export, current->key, current->value);
-		current = current->next;
-	}
-}*/
 
 void print_export(t_data *data)
 {
@@ -89,24 +73,14 @@ void print_export(t_data *data)
 	while (current != NULL)
 	{   
 		if (current->value[0] == '\0' && current->flag == 1)
-			printf("1 : %s %s\n", current->export, current->key);
+			printf("%s %s\n", current->export, current->key);
 		else if (current->value[0] == '\0' && current->flag == 0)
-			printf("2 : %s %s=\"\"\n", current->export, current->key);
+			printf("%s %s=\"\"\n", current->export, current->key);
 		else
-			printf("3 : %s %s=%s\n", current->export, current->key, current->value);
+			printf("%s %s=%s\n", current->export, current->key, current->value);
 		current = current->next;
 	}
 }
-//printf("1 : %s %s=\"\"\n", current->export, current->key);
-
-
-	//	if (data->flag > 0)
-	  //  {
-		  //  printf("1 : %s %s %s\n", current->export, current->key, current->value);
-		//}
- ///	   else if (current->value[0] == '\0')
-	//		printf("2 : %s %s=\"\"\n", current->export, current->key);
-		//else
 
 void sort_export_list(t_data *data)
 {

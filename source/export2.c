@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/21 22:48:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:01:18 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,16 +119,21 @@ void	set_in_export(t_data *data, char *variable)
 	value = ft_strdup(variable_split[1]);
 	if (key_is_valid(key) == 1)
 	{
-		printf("export: `%s': not a valid identifier\n", key);
+		if (key[0] == '\0')
+			printf("export `': not a valid identifier\n");
+		else
+			printf("export: `%s=%s': not a valid identifier\n", key, value);
 		free(key);
 		free(value);
 		ft_free_tab(variable_split);
 		return ;
 	}
+	printf("123\n");
 	if (ft_strrchr(variable, '=') == NULL)
 		flag++;
 	if (value[0] != '\0')
 		value = add_quotes(value);
+	printf("234\n");
 	if (export_key_exists(*data->env_export, key) == 1)
 	{
 		if (value[0] != '\0')
