@@ -30,7 +30,9 @@ static int	ft_count_strings(char *str, char separator)
 			str_count++;
 		while (str[i] && str[i] != separator)
 		{
-			if (ft_get_sep_type(&str[i]) == DQUOTE || ft_get_sep_type(&str[i]) == SQUOTE || ft_get_sep_type(&str[i]) == O_PAR)
+			if (ft_get_sep_type(&str[i]) == DQUOTE
+				|| ft_get_sep_type(&str[i]) == SQUOTE
+				|| ft_get_sep_type(&str[i]) == O_PAR)
 			{
 				if (ft_get_sep_type(&str[i]) == O_PAR)
 					quote_status = C_PAR;
@@ -38,10 +40,10 @@ static int	ft_count_strings(char *str, char separator)
 					quote_status = ft_get_sep_type(&str[i]);
 				i++;
 				while (str[i] && ft_get_sep_type(&str[i]) != quote_status)
-					i++;	
+					i++;
 			}
 			else if (str[i])
-				i++;				
+				i++;
 		}
 	}
 	return (str_count);
@@ -58,22 +60,25 @@ static char	*ft_string_extract(char *src, char separator)
 	quote_status = 0;
 	while (src[str_len] && src[str_len] != separator)
 	{
-		if (ft_get_sep_type(&src[str_len]) == DQUOTE || ft_get_sep_type(&src[str_len]) == SQUOTE || ft_get_sep_type(&src[str_len]) == O_PAR)
+		if (ft_get_sep_type(&src[str_len]) == DQUOTE
+			|| ft_get_sep_type(&src[str_len]) == SQUOTE
+			|| ft_get_sep_type(&src[str_len]) == O_PAR)
 		{
 			if (ft_get_sep_type(&src[str_len]) == O_PAR)
 				quote_status = C_PAR;
 			else
 				quote_status = ft_get_sep_type(&src[str_len]);
 			str_len++;
-			while (src[str_len] && ft_get_sep_type(&src[str_len]) != quote_status)
-				str_len++;						
+			while (src[str_len]
+				&& ft_get_sep_type(&src[str_len]) != quote_status)
+				str_len++;
 		}
 		else if (src[str_len])
-			str_len++;				
+			str_len++;
 	}
 	if (str_len == 0)
 		return (0);
-	dest = malloc(sizeof (char) * (str_len + 1));
+	dest = malloc(sizeof(char) * (str_len + 1));
 	if (!dest)
 		return (0);
 	i = 0;
@@ -107,7 +112,8 @@ static char	**ft_cycle_str(char **tab, char *str, char c)
 		}
 		while (*str && *str != c)
 		{
-			if (ft_get_sep_type(str) == DQUOTE || ft_get_sep_type(str) == SQUOTE || ft_get_sep_type(str) == O_PAR)
+			if (ft_get_sep_type(str) == DQUOTE || ft_get_sep_type(str) == SQUOTE
+				|| ft_get_sep_type(str) == O_PAR)
 			{
 				if (ft_get_sep_type(str) == O_PAR)
 					quote_status = C_PAR;
@@ -115,10 +121,10 @@ static char	**ft_cycle_str(char **tab, char *str, char c)
 					quote_status = ft_get_sep_type(str);
 				str++;
 				while (*str && ft_get_sep_type(str) != quote_status)
-					str++;						
+					str++;
 			}
 			else if (*str)
-				str++;				
+				str++;
 		}
 	}
 	tab[i] = NULL;
@@ -131,7 +137,7 @@ char	**ft_split_noquote(char *str, char c)
 	char	**tab;
 
 	string_count = ft_count_strings(str, c);
-	tab = malloc(sizeof (str) * (string_count + 1));
+	tab = malloc(sizeof(str) * (string_count + 1));
 	if (!tab)
 		return (NULL);
 	return (ft_cycle_str(tab, str, c));

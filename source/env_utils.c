@@ -5,9 +5,10 @@ char	**ft_strsdup(char	**strs)
 {
 	int		i;
 	char	**ret;
-	
+
 	i = 0;
-	while (strs[i] != 0) i++;
+	while (strs[i] != 0)
+		i++;
 	if (i == 0)
 		return (NULL);
 	ret = ft_calloc(i + 1, sizeof(char *));
@@ -20,7 +21,6 @@ char	**ft_strsdup(char	**strs)
 		if (!ret[i])
 		{
 			ft_free_tab(ret);
-			free(ret);
 			return (NULL);
 		}
 		i++;
@@ -29,7 +29,8 @@ char	**ft_strsdup(char	**strs)
 	return (ret);
 }
 
-// Duplicates the values containes in envv on data->envv allowing it to be modified in the future.
+/** Duplicates the values containes in envv on data->envv 
+* 	allowing it to be modified in the future. **/
 int	import_envv(t_data *data, char **envv)
 {
 	data->envv = ft_strsdup(envv);

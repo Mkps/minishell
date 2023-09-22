@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 19:12:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 22:24:08 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void	lst_del_next(t_token **node);
 int		import_envv(t_data *data, char **envv);
 char	*ft_getenv(char **env, const char *str);
 void	ft_setenv(t_data *data, char *value);
+char	**ft_strsdup(char	**strs);
 
 /**		execute.c		**/
 void	execute(t_data *data);
@@ -198,6 +199,8 @@ int		handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 int		check_error(t_data *data);
 void	output_err(char *msg, t_token *token, int squotes);
 void	output_err_cmd(char *msg, char *cmd_str);
+int		output_err_ret(int return_value, char *msg, char *cmd_str);
+
 
 /**		variable d environnement->liste chainee **/
 void copy_env_to_list(t_data *data);
@@ -207,10 +210,10 @@ void print_env_list(t_env **env_lst);
 
 /**		execution builtin	**/
 int		execute_builtin(t_cmd *cmd, t_data *data);
-void    ft_echo(t_cmd *cmd);
+int		ft_echo(t_cmd *cmd);
 void	ft_cd(t_cmd *cmd, t_data *data);
-void    ft_pwd(t_data *data);
-void	ft_env(t_data *data);
+int		ft_pwd(t_data *data);
+int		ft_env(t_data *data);
 
 /**		minishell_cmd.c	**/
 int		set_fd(t_data *data, t_cmd *cmd);
@@ -223,54 +226,53 @@ int		init_io_redir(t_data *data);
 int		is_valid_var(char *str);
 char	*str_replace(char *src, int r_index, int n, char *str);
 char	*str_replace_strs(char **src, int r_index, int n, char *str);
-void	ft_env(t_data *data);
 char	*get_var(t_data *data,char *str);
 int		var_expander(t_data *data, char *str, t_token *token);
 int		retokenize(t_data *data, char *str, t_token *token);
 
 /**			export			**/
-void    env_update(t_data *data);
+void	env_update(t_data *data);
 void set_in_env(t_data *data, char *variable);
 void set_in_export(t_data *data, char *variable);
-void    execute_export(t_data *data, t_cmd *cmd);
+void	execute_export(t_data *data, t_cmd *cmd);
 void print_export(t_data *data);
 void sort_export_list(t_data *data);
 t_cmd *find_export_command(t_data *data);
 void env_to_export(t_data *data);
-void    ft_export(t_data *data);
+void	ft_export(t_data *data);
 
 //char *check_variable(const char *input);
 
 /**		export_utils	**/
-t_export *ft_lstnew_export(char *key, char *value, int flag);
-void ft_lstadd_back_export(t_export **lst, t_export *new);
-void free_export_list(t_export **export_lst);
-void insert_sorted(t_export **sorted, t_export *new_export);
-char    **ft_split2(char *s, char c);
-int    ft_wordsize(char *s, char c, int pos);
-void    free_tabs(char **tab);
-int key_is_valid(char *chaine);
-char *add_quotes(char *str) ;
-int export_key_exists(t_export *export, char *key_to_check);
-void remove_export(t_data *data, const char *key_to_remove);
-int env_key_exists(t_env *env, char *key_to_check) ;
-void remove_env(t_data *data, const char *key_to_remove);
-void ft_lstadd_back_env(t_env **lst, t_env *new);
-t_env *ft_lstnew_env(char *key, char *value);
-void	free_env_lst(t_env **cpy);
+t_export	*ft_lstnew_export(char *key, char *value, int flag);
+void 		ft_lstadd_back_export(t_export **lst, t_export *new);
+void 		free_export_list(t_export **export_lst);
+void 		insert_sorted(t_export **sorted, t_export *new_export);
+char		**ft_split2(char *s, char c);
+int			ft_wordsize(char *s, char c, int pos);
+void		free_tabs(char **tab);
+int 		key_is_valid(char *chaine);
+char 		*add_quotes(char *str) ;
+int 		export_key_exists(t_export *export, char *key_to_check);
+void 		remove_export(t_data *data, const char *key_to_remove);
+int 		env_key_exists(t_env *env, char *key_to_check) ;
+void 		remove_env(t_data *data, const char *key_to_remove);
+void 		ft_lstadd_back_env(t_env **lst, t_env *new);
+t_env 		*ft_lstnew_env(char *key, char *value);
+void		free_env_lst(t_env **cpy);
 /***temp*/
-void handle_parent_directory();
-void handle_previous_directory(t_data *data, char **old_pwd);
-void update_oldpwd(char **old_pwd, char *new_pwd);
-void update_pwd_and_oldpwd(t_data *data, char *new_pwd);
-void handle_home_directory(t_data *data, const char *dir);
+void 	handle_parent_directory();
+void 	handle_previous_directory(t_data *data, char **old_pwd);
+void 	update_oldpwd(char **old_pwd, char *new_pwd);
+void 	update_pwd_and_oldpwd(t_data *data, char *new_pwd);
+void 	handle_home_directory(t_data *data, const char *dir);
 /***	unset	***/
-int	ft_lstsize_env(t_env **lst);
-void    env_update(t_data *data);
-void execute_unset(t_data *data, t_cmd *cmd);
-void execute_env(t_data *data, t_cmd *cmd);
-t_cmd *find_unset_command(t_data *data);
-void    ft_unset(t_data *data);
+int		ft_lstsize_env(t_env **lst);
+void	env_update(t_data *data);
+void 	execute_unset(t_data *data, t_cmd *cmd);
+void 	execute_env(t_data *data, t_cmd *cmd);
+t_cmd 	*find_unset_command(t_data *data);
+void	ft_unset(t_data *data);
 
 /**		dummies.c			**/
 int		ft_true(void);
@@ -280,7 +282,7 @@ int		ft_false(void);
 char	*ft_wildcard(char *str);
 int		wc_present(char *str);
 
-void print_envp(t_data *data);
+int		print_envp(t_data *data);
 
 /**		free.c				**/
 void	free_child(t_data *data);
@@ -289,6 +291,8 @@ void	free_subshell(t_data *data);
 void	data_cleanup(t_data *data);
 void	free_shell(t_data *data);
 int		free_data(t_data *data);
+int		free_return(int return_value, void *ptr_1, void *ptr_2, void *ptr3);
+void	multi_free(void *ptr_1, void *ptr_2, void *ptr_3, void *ptr_4);
 
 /**		prompt.c			**/
 char	*set_prompt(t_data *data);

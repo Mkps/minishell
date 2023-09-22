@@ -124,10 +124,9 @@ int		check_err(char *input, t_data *data)
 }
 int		check_error_raw(t_data *data)
 {
-	int	i;
+	int		i;
 	char	*tmp;
 
-	i = -1;
 	tmp = ft_strdup(data->raw_input);
 	data->raw_input = ft_strdup(data->user_input);
 	if (check_err(data->raw_input, data))
@@ -144,6 +143,7 @@ int		check_error_raw(t_data *data)
 		free_token(data);
 		free(data->user_input);
 	}
+	i = -1;
 	while (data->cmd_split[++i])
 	{
 		data->user_input = ft_strdup(data->cmd_split[i]);

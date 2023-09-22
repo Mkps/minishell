@@ -75,6 +75,8 @@ t_token	*create_token(int type, char *value)
 	t_token	*ret;
 
 	ret = malloc(sizeof(t_token));
+	if (!ret)
+		return (NULL);
 	ret->next = NULL;
 	ret->prev = NULL;
 	ret->value = value;

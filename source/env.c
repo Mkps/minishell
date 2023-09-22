@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:39:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 11:09:39 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:07:26 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ char	*ft_getenv(char **env, const char *str)
 	{
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
 		{
-			if (*(env[i] + ft_strlen(str)) == '=' && *(env[i] + ft_strlen(str) + 1) != '\0')
+			if (*(env[i] + ft_strlen(str)) == '='
+				&& *(env[i] + ft_strlen(str) + 1) != '\0')
 				tmp = env[i] + ft_strlen(str) + 1;
 		}
 		i++;
@@ -36,30 +37,32 @@ char	*ft_getenv(char **env, const char *str)
 	return (NULL);
 }
 
+// Used to return NULL while freeing the ret tab
+char	**free_ret(char **ret)
+{
+	ft_free_tab(ret);
+	return (NULL);
+}
+
 // Duplicates the envv string array and appends value to it.
 char	**add_env_value(char **envv, char *value)
 {
 	int		i;
 	char	**ret;
-	
+
 	i = 0;
-	while (envv[i] != 0) i++;
-	if (i == 0)
-		return (NULL);
+	while (envv[i] != 0)
+		i++;
 	ret = ft_calloc(i + 2, sizeof(char *));
 	if (!ret)
 		return (NULL);
-	i = 0;
-	while (envv[i])
+	if (envv && !*envv)
+		envv = ret;
+	else
 	{
-		ret[i] = ft_strdup(envv[i]);
-		if (!ret[i])
-		{
-			ft_free_tab(ret);
-			free(ret);
-			return (NULL);
-		}
-		i++;
+		ret = ft_strsdup(envv);
+		if (!ret)
+			return (free_ret(ret));
 	}
 	ret[i] = ft_strdup(value);
 	ret[i + 1] = 0;
@@ -75,7 +78,8 @@ char	**replace_env_value(char **envv, char *value)
 	int	index;
 
 	index = 0;
-	while (value[index] && value[index] != '=') index++;
+	while (value[index] && value[index] != '=')
+		index++;
 	i = 0;
 	while (envv[i])
 	{
@@ -88,20 +92,21 @@ char	**replace_env_value(char **envv, char *value)
 	}
 	free(value);
 	return (envv);
-
-
 }
-// Takes a value and checks if it exists in envv. If it does it replaces it, else it adds it.
+
+// Takes a value and checks if it exists in envv. 
+// If it does it replaces it, else it adds it.
 void	ft_setenv(t_data *data, char *value)
 {
 	int		i;
 	char	*key;
 	char	*k_value;
 	char	**envv;
-	
+
 	envv = data->envv;
 	i = 0;
-	while (value[i] && value[i] != '=') i++;
+	while (value[i] && value[i] != '=')
+		i++;
 	if (i == 0 || value[i] != '=')
 		return ;
 	key = ft_substr(value, 0, i);

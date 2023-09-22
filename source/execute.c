@@ -3,26 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 17:19:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:07:23 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <readline/readline.h>
-#include <unistd.h>
 
-int		execute_builtin(t_cmd *cmd, t_data *data)
+int	execute_builtin(t_cmd *cmd, t_data *data)
 {
 	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-	    ft_echo(cmd);
-		return (1);
-	}
+		return (ft_echo(cmd));
 	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
-    {
+	{
 		ft_cd(cmd, data);
 		return (1);
 	}
@@ -33,12 +28,12 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 	}
 	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
 	{
-	    ft_env(data);
+		ft_env(data);
 		return (1);
 	}
-    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
-    {
-	    ft_export(data);
+	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
+	{
+		ft_export(data);
 		return (1);
 	}
 	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
@@ -46,16 +41,16 @@ int		execute_builtin(t_cmd *cmd, t_data *data)
 		ft_unset(data);
 		return (1);
 	}
-	/*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
-        exit(0);*/
+	else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd->cmd) + 1) == 0)
+		exit(0);
 	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
 		ft_true();
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_false();	
+		ft_false();
 	return (0);
 }
 
-int		is_builtin(t_cmd *cmd, t_data *data)
+int	is_builtin(t_cmd *cmd, t_data *data)
 {
 	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
 		return (0);
@@ -75,6 +70,25 @@ int		is_builtin(t_cmd *cmd, t_data *data)
 		return (0);
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
 		return (0);
+	return (0);
+}
+
+int	is_unpiped(t_cmd *cmd, t_data *data)
+{
+	if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
+	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
+	else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
+	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
+	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
+	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
+	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
+		return (1);
 	return (0);
 }
 
@@ -101,13 +115,14 @@ int	is_cmd_fko(t_cmd *cmd, t_data *data)
 	else
 	{
 		if (access(tmp, F_OK | X_OK))
-		 	ret = 2;
+			ret = 2;
 	}
 	ft_free_tab(env_p);
 	if (tmp)
 		free(tmp);
 	return (ret);
 }
+
 int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 {
 	if (is_cmd_fko(cmd, data) == 1 || (cmd->type == WORD && cmd->cmd[0] == 0))
@@ -127,6 +142,7 @@ int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 	}
 	return (EXIT_FAILURE);
 }
+
 void	set_var_cmd(t_data *data, t_cmd *cmd)
 {
 	t_env	*start;
@@ -140,6 +156,7 @@ void	set_var_cmd(t_data *data, t_cmd *cmd)
 		start = start->next;
 	}
 }
+
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
@@ -149,11 +166,11 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		set_var_cmd(data, cmd);
 		cmd->pid = fork();
 		if (cmd->pid == 0)
-		{		
+		{
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
 			set_fd(data, cmd);
-			exit (0);
+			exit(0);
 		}
 		return ;
 	}
@@ -162,7 +179,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
-		{		
+		{
 			set_pipes(data, cmd);
 			set_fd(data, cmd);
 			close_pipes(data->cmd_list, NULL, NULL);
@@ -184,7 +201,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 			{
 				close(data->old_fd[0]);
 				close(data->old_fd[1]);
-				set_pipes(data, cmd);		
+				set_pipes(data, cmd);
 				if (cmd->fd[0] > -1)
 				{
 					dup2(cmd->fd[0], STDIN_FILENO);
@@ -196,17 +213,17 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 					close(cmd->fd[1]);
 				}
 				close_pipes(data->cmd_list, NULL, NULL);
-				if (!execute_builtin(cmd,data))
+				if (!execute_builtin(cmd, data))
 					exec_cmd(cmd, data);
 				exit_code = get_cmd_ecode(cmd, data);
 				free_child(data);
-				exit (exit_code);
+				exit(exit_code);
 			}
 		}
 	}
 }
 
-void	execute(t_data *data)	
+void	execute(t_data *data)
 {
 	int		status;
 	int		eval;
@@ -223,11 +240,11 @@ void	execute(t_data *data)
 	if (!start)
 		return ;
 	i = 1;
-	while(start) 
+	while (start)
 	{
 		cmd = start;
 		i = 1;
-		while(i > 0 && cmd) 
+		while (i > 0 && cmd)
 		{
 			i -= cmd->is_term;
 			execute_cmd(cmd, data);
@@ -240,7 +257,7 @@ void	execute(t_data *data)
 		wpid = 0;
 		cmd = start;
 		i = 1;
-		while(i > 0 && cmd)
+		while (i > 0 && cmd)
 		{
 			i -= cmd->is_term;
 			if (cmd->fd[0] > -1)
@@ -260,7 +277,8 @@ void	execute(t_data *data)
 		}
 		if (g_exit_code > 127)
 			break ;
-		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_2AND))
+		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd
+				&& eval > 0 && cmd->prev->is_term == TERM_2AND))
 		{
 			if (cmd->is_term)
 				cmd = cmd->next;

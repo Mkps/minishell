@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <stdlib.h>
 
 int	is_assign(char	*str);
 
@@ -115,7 +116,6 @@ void	parse_token(t_data *data)
 			{
 				current = wc_tokenize(current, current->value, data);
 			}
-
 		}
 		if (current->token_type == IO_HEREDOC && current->next && ((current->next->token_type == WORD) || token_is_quote(current->next) && current->next->next->token_type == WORD))
 		{
@@ -334,12 +334,13 @@ int		is_empty_cmd(t_token *start)
 	return (0);
 }
 // Sets up the pipe and sets pipe_status to 1.
-void	set_pipe(t_cmd *cmd)
+int	set_pipe(t_cmd *cmd)
 {
 	cmd->pipe_status = 1;
 	cmd->pipe_fd = (int *)malloc(sizeof(int *) * 2);
-	pipe(cmd->pipe_fd);
-	return ;	
+	if (cmd->pipe_fd && pipe(cmd->pipe_fd) != -1)
+		return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);	
 }
 
 char	*set_assign(t_token *token)
@@ -347,6 +348,8 @@ char	*set_assign(t_token *token)
 	char	*ret;
 
 	ret = ft_strdup(token->value);
+	if (!ret)
+		return (NULL);
 	if (token->near_quote == 0)
 	{
 		return (ret);
@@ -362,7 +365,7 @@ char	*set_assign(t_token *token)
 	return (ret);
 }
 
-void	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
+int	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 {
 	t_token	*current;
 	t_env	*env;
@@ -373,6 +376,8 @@ void	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 	if (current && (!current->prev || (current->prev && token_is_term(current->prev))) && is_assign(current->value))
 	{
 		tmp = set_assign(current);
+		if (!tmp)
+			return (EXIT_FAILURE);
 		*cmd->assign = ft_lstnew_env("assign", tmp);
 		env = *cmd->assign;
 		free(tmp);
@@ -386,6 +391,7 @@ void	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 			current = current->next;
 		}
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	build_cmd_list(t_data *data, t_token *token)

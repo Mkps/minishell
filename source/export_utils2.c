@@ -6,17 +6,18 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:23:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/22 07:51:49 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:07:20 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void insert_sorted(t_export **sorted, t_export *new_export)
+void	insert_sorted(t_export **sorted, t_export *new_export)
 {
-	t_export *current;
-	
-	if (*sorted == NULL || ft_strncmp(new_export->key, (*sorted)->key, ft_strlen(new_export->key)) < 0)
+	t_export	*current;
+
+	if (*sorted == NULL || ft_strncmp(new_export->key, (*sorted)->key,
+			ft_strlen(new_export->key)) < 0)
 	{
 		new_export->next = *sorted;
 		*sorted = new_export;
@@ -24,7 +25,8 @@ void insert_sorted(t_export **sorted, t_export *new_export)
 	else
 	{
 		current = *sorted;
-		while (current->next != NULL && ft_strncmp(new_export->key, current->next->key, ft_strlen(new_export->key)) >= 0)
+		while (current->next != NULL && ft_strncmp(new_export->key,
+				current->next->key, ft_strlen(new_export->key)) >= 0)
 			current = current->next;
 		new_export->next = current->next;
 		current->next = new_export;
@@ -65,14 +67,16 @@ char	**ft_split2(char *s, char c)
 	return (res);
 }
 
-void ft_lstadd_back_export(t_export **lst, t_export *new)
+void	ft_lstadd_back_export(t_export **lst, t_export *new)
 {
+	t_export	*temp;
+
 	if (!lst || !new)
-		return;
+		return ;
 	new->next = NULL;
 	if (*lst)
 	{
-		t_export *temp = *lst;
+		temp = *lst;
 		while (temp->next != NULL)
 			temp = temp->next;
 		temp->next = new;
@@ -81,28 +85,30 @@ void ft_lstadd_back_export(t_export **lst, t_export *new)
 		*lst = new;
 }
 
-t_export *ft_lstnew_export(char *key, char *value, int flag)
+t_export	*ft_lstnew_export(char *key, char *value, int flag)
 {
-	t_export *new_export = (t_export *)malloc(sizeof(t_export));
+	t_export	*new_export;
+
+	new_export = (t_export *)malloc(sizeof(t_export));
 	if (!new_export)
-		return NULL;
+		return (NULL);
 	new_export->export = ft_strdup("declare -x");
 	new_export->key = ft_strdup(key);
 	new_export->value = ft_strdup(value);
 	new_export->flag = flag;
 	new_export->next = NULL;
-
-	return new_export;
+	return (new_export);
 }
 
-void free_export_list(t_export **export_lst)
+void	free_export_list(t_export **export_lst)
 {
-	t_export *current;
+	t_export	*current;
+	t_export	*next;
 
 	current = *export_lst;
 	while (current != NULL)
 	{
-		t_export *next = current->next;
+		next = current->next;
 		free(current->key);
 		free(current->value);
 		free(current->export);
@@ -111,4 +117,3 @@ void free_export_list(t_export **export_lst)
 		current = next;
 	}
 }
-

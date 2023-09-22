@@ -3,21 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/22 17:01:18 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:07:17 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	env_update(t_data *data)	
+void	env_update(t_data *data)
 {
-	int num_env = 0;
-	int i = 0;
-	t_env *current_env = NULL;
+	int		num_env;
+	int		i;
+	t_env	*current_env;
+	size_t	key_len;
+	size_t	value_len;
+	size_t	entry_len;
 
+	num_env = 0;
+	i = 0;
+	current_env = NULL;
 	if (data->envv)
 	{
 		i = 0;
@@ -39,9 +45,9 @@ void	env_update(t_data *data)
 	i = 0;
 	while (current_env)
 	{
-		size_t key_len = ft_strlen(current_env->key);
-		size_t value_len = ft_strlen(current_env->value);
-		size_t entry_len = key_len + value_len + 2;
+		key_len = ft_strlen(current_env->key);
+		value_len = ft_strlen(current_env->value);
+		entry_len = key_len + value_len + 2;
 		data->envv[i] = (char *)malloc(entry_len);
 		if (!data->envv[i])
 		{
@@ -59,14 +65,19 @@ void	env_update(t_data *data)
 
 void	set_in_env(t_data *data, char *variable)
 {
-	char **variable_split = NULL;
-	char *key = NULL;
-	char *value = NULL;
-	t_env *new_env = NULL;
-	int i = 0;
+	char	**variable_split;
+	char	*key;
+	char	*value;
+	t_env	*new_env;
+	int		i;
 
+	variable_split = NULL;
+	key = NULL;
+	value = NULL;
+	new_env = NULL;
+	i = 0;
 	if (data->flag > 0)
-		return ;   
+		return ;
 	variable_split = ft_split2(variable, '=');
 	key = ft_strdup(variable_split[0]);
 	value = ft_strdup(variable_split[1]);
@@ -75,7 +86,7 @@ void	set_in_env(t_data *data, char *variable)
 		free(value);
 		free(key);
 		ft_free_tab(variable_split);
-		return;
+		return ;
 	}
 	new_env = ft_lstnew_env(key, value);
 	if (!new_env)
@@ -92,11 +103,11 @@ void	set_in_env(t_data *data, char *variable)
 		if (value[0] != '\0')
 			remove_env(data, key);
 		else
-		{	
+		{
 			free(value);
 			free(key);
 			ft_free_tab(variable_split);
-			return;
+			return ;
 		}
 	}
 	ft_lstadd_back_env(data->env_cpy, new_env);
@@ -107,13 +118,19 @@ void	set_in_env(t_data *data, char *variable)
 
 void	set_in_export(t_data *data, char *variable)
 {
-	char **variable_split = NULL;
-	char *key = NULL;
-	char *value = NULL;
-	t_export *new_export = NULL;
-	int i = 0;
-	int flag = 0;
-	
+	char		**variable_split;
+	char		*key;
+	char		*value;
+	t_export	*new_export;
+	int			i;
+	int			flag;
+
+	variable_split = NULL;
+	key = NULL;
+	value = NULL;
+	new_export = NULL;
+	i = 0;
+	flag = 0;
 	variable_split = ft_split2(variable, '=');
 	key = ft_strdup(variable_split[0]);
 	value = ft_strdup(variable_split[1]);
@@ -161,8 +178,11 @@ void	set_in_export(t_data *data, char *variable)
 
 void	execute_export(t_data *data, t_cmd *cmd)
 {
-	int i = 1;
-	int flag = 0;
+	int	i;
+	int	flag;
+
+	i = 1;
+	flag = 0;
 	while (cmd->args[i])
 	{
 		if (ft_strlen(cmd->args[i]) == 1 && cmd->args[i][0] == '=')
@@ -181,7 +201,7 @@ void	execute_export(t_data *data, t_cmd *cmd)
 
 void	free_export(t_export *node)
 {
-	t_export	*next;
+	t_export *next;
 
 	while (node)
 	{
@@ -189,6 +209,6 @@ void	free_export(t_export *node)
 		free(node->value);
 		free(node->key);
 		free(node);
-		node = next;		
+		node = next;
 	}
 }

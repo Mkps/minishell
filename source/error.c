@@ -27,9 +27,8 @@ void	output_err(char *msg, t_token *token, int squotes)
 	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
 	free(tmp_str);
-
-
 }
+
 void	output_err_cmd(char *msg, char *cmd_str)
 {
 	char	*name_str;
@@ -48,12 +47,35 @@ void	output_err_cmd(char *msg, char *cmd_str)
 	ft_putstr_fd(tmp_str, 2);
 	free(tmp_str);
 }
+
+int	output_err_ret(int return_value, char *msg, char *cmd_str)
+{
+	char	*name_str;
+	char	*tmp_str;
+
+	name_str = PROG_NAME;
+	if (!cmd_str)
+	{
+		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
+		return (return_value);
+	}
+	tmp_str = ft_strappend(name_str, cmd_str, 0);
+	tmp_str = ft_strappend(tmp_str, ": ", 2);
+	tmp_str = ft_strappend(tmp_str, msg, 2);
+	tmp_str = ft_strappend(tmp_str, "\n", 2);
+	ft_putstr_fd(tmp_str, 2);
+	free(tmp_str);
+	return (return_value);
+}
+
 int	is_wc(char *str)
 {
 	while (*str)
-		if (*str++ == '*') return (1);
+		if (*str++ == '*')
+			return (1);
 	return (0);
 }
+
 int	check_io_error(t_token **root)
 {
 	t_token	*tmp;
@@ -63,12 +85,14 @@ int	check_io_error(t_token **root)
 	{
 		if (token_is_io(tmp))
 		{
-			if (tmp->next && (tmp->next->token_type != WORD && !token_is_quote(tmp->next)))
+			if (tmp->next && (tmp->next->token_type != WORD
+					&& !token_is_quote(tmp->next)))
 			{
 				output_err("syntax error near unexpected token ", tmp->next, 1);
 				return (SYNTAX_ERROR);
 			}
-			if (tmp->next && (tmp->next->token_type == WORD && is_wc(tmp->next->value)))
+			if (tmp->next && (tmp->next->token_type == WORD
+					&& is_wc(tmp->next->value)))
 			{
 				output_err_cmd("ambiguous redirect", tmp->next->value);
 				return (EXIT_FAILURE);
@@ -122,10 +146,10 @@ int	check_term_error(t_token **root)
 
 int	check_par_error(t_token **root)
 {
-	t_token *tmp;
+	t_token	*tmp;
 	int		par_status;
 
-	par_status= 0;
+	par_status = 0;
 	tmp = *root;
 	while (tmp)
 	{
@@ -142,21 +166,26 @@ int	check_par_error(t_token **root)
 				tmp = tmp->next;
 				if (!tmp && par_status != 0)
 				{
-					output_err("unexpected EOF while looking for matching ')'", NULL, 0);
+					output_err("unexpected EOF while looking for matching ')'",
+						NULL, 0);
 					return (EXIT_FAILURE);
 				}
-		}
+			}
 		}
 		if (par_status == 0 && tmp->token_type == C_PAR)
 		{
-			output_err("syntax error near unexpected token `)'", NULL, 0);
+			output_err("syntax error near unexpected token `)'",
+				NULL, 0);
 			return (EXIT_FAILURE);
 		}
-		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR 
-				&& !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
+		if ((tmp->prev && !token_is_term(tmp->prev)) 
+			&& tmp->token_type == O_PAR 
+			&& !token_is_term(tmp->prev)
+			&& tmp->prev->token_type != O_PAR)
 		{
 			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
-				output_err("syntax error near unexpected token ", tmp->next , 1);
+				output_err("syntax error near unexpected token ",
+					tmp->next, 1);
 			else
 				output_err("syntax error near unexpected token `('", NULL, 0);
 			return (EXIT_FAILURE);

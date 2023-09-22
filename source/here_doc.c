@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 22:51:07 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:07:13 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 #include <unistd.h>
 
 #define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file (wanted `"
+
 /** Gets the input */
-int		get_flag(char *limiter)
+int	get_flag(char *limiter)
 {
 	int	i;
 	int	quote_status;
 
 	quote_status = 0;
 	i = -1;
-	while (limiter[++i]) 
+	while (limiter[++i])
 	{
 		if (limiter[i] == '\'')
 			quote_status++;
@@ -39,7 +40,7 @@ char	*heredoc_var_expand(t_data *data, char *str)
 	char	*tmp;
 	char	*tmp_str;
 	char	*exit_code;
-	
+
 	i = 0;
 	n = 1;
 	ret = ft_strdup(str);
@@ -51,7 +52,8 @@ char	*heredoc_var_expand(t_data *data, char *str)
 			if (ft_isalpha(ret[i + 1]) || ret[i + 1] == '_')
 			{
 				n = 1;
-				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i + n] == '_'))
+				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i
+						+ n] == '_'))
 					n++;
 				if (n != 1)
 				{
@@ -97,7 +99,7 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 
 	close(fd[0]);
 	signals_here_doc_child();
-	signal(SIGQUIT, (void (*) (int))here_doc_child_SIGINT);
+	signal(SIGQUIT, (void (*)(int))here_doc_child_SIGINT);
 	here_doc_child_SIGINT(42, fd, data);
 	flag = get_flag(limiter);
 	str = "str";
@@ -110,8 +112,9 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 			if (!flag)
 				str = heredoc_var_expand(data, str);
 		}
-		if (str == NULL || (!ft_strncmp(str, limiter + flag, ft_strlen(limiter + flag)) 
-				&& (ft_strlen(limiter + flag) == ft_strlen(str) - 1)))
+		if (str == NULL || (!ft_strncmp(str, limiter + flag, ft_strlen(limiter
+						+ flag)) && (ft_strlen(limiter + flag) == ft_strlen(str)
+					- 1)))
 		{
 			free(limiter);
 			close(fd[1]);
@@ -123,7 +126,6 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 			}
 			write(1, "\n", 1);
 			exit(2);
-
 		}
 		ft_putstr_fd(str, fd[1]);
 		free(str);
