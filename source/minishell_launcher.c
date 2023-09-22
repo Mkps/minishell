@@ -6,45 +6,61 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 11:04:07 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 11:42:26 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <stdlib.h>
 
+int		check_error_raw(t_data *data);
 void	minishell_inline(t_data *data, char *user_input)
 {
 	char	**cmd_list;
+	char	*tmp;
 	int		i;
 
 	if (user_input)
 	{
-		cmd_list = ft_split(user_input, ';');
-		data->raw_input = ft_strdup(user_input);
+		tmp = ft_strdup(user_input);
+		data->user_input = tmp;
+		data->raw_input =tmp;
+		data->cmd_split = ft_split(user_input, ';');
 	}
 	else
 	{
-		cmd_list = NULL;	
+		data->user_input = NULL;
+		data->cmd_split = NULL;	
 		data->raw_input = NULL;
 	}
+	if (check_error_raw(data))
+		exit(g_exit_code);
 	i = -1; 
-	while (cmd_list[++i])
+	while (data->cmd_split[++i])
 	{
-		data->user_input = cmd_list[i];
-		if (i > 0)
+		data->user_input = ft_strdup(data->cmd_split[i]);
+		if (i == 1)
+		{
+			free(data->raw_input);
 			data->raw_input = NULL;
+		}
 		scan_input(data);
+		 //print_token(data->token_root);
 		if (check_error(data) == EXIT_SUCCESS)
 		{
 			parse_token(data);
 			parse_near_quote(data);
 			build_cmd_list(data, *data->token_root);
-			execute(data);
+			if (init_io_redir(data) == EXIT_SUCCESS)
+				execute(data);
+			else
+				close_pipes(data->cmd_list, NULL, NULL);
 		}
 		free_data(data);
+		dup2(data->old_fd[0], STDIN_FILENO);
+		dup2(data->old_fd[1], STDOUT_FILENO);
 	}
-	free(cmd_list);
+	ft_free_tab(data->cmd_split);
 	exit(g_exit_code);
 }
 void	minishell_subshell(t_data *data, char *user_input)
