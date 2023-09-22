@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+         #
+#    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/21 22:48:41 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/22 12:36:38 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC_NAME = here_doc.c env_utils.c\
 	  dummies.c export_utils.c \
 	  unset.c wildcards.c export2.c export_utils2.c \
 	  export_utils3.c free.c prompt.c\
+	  parse_near_quote.c \
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)

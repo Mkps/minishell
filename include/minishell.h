@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 22:49:44 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:39:37 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ void	var_expand(t_data *data, t_cmd *cmd);
 int 	token_is_quote(t_token *token);
 int 	token_is_io(t_token *token);
 int 	token_is_term(t_token *token);
+void	lst_del_prev(t_token **node);
+void	lst_del_next(t_token **node);
 
 /**		env_utils.c		**/
 int		import_envv(t_data *data, char **envv);
@@ -282,5 +284,9 @@ int		free_data(t_data *data);
 /**		prompt.c			**/
 char	*set_prompt(t_data *data);
 void	prompt_user(t_data *data);
+
+/**		parse_near_quote.c	**/
+void	parse_near_quote(t_data *data);
+
 
 #endif

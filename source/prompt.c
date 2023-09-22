@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 22:48:38 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:50:23 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*set_prompt(t_data *data)
 	char	*username;
 	
 	username = get_var(data, "USER");
-	if (!username)
+	if (!username || !*username)
 		username = "user";
 	prompt = ft_strappend(GREEN, username, 0);
 	prompt = ft_strappend(prompt, "@", 2);

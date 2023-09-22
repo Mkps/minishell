@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 11:42:26 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:53:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int		check_error_raw(t_data *data)
 		free(tmp);
 		free_data(data);
 		ft_free_tab(data->cmd_split);
+		data->cmd_split = NULL;
 		return (1);
 	}
 	else
@@ -152,6 +153,7 @@ int		check_error_raw(t_data *data)
 			free(tmp);
 			free_data(data);
 			ft_free_tab(data->cmd_split);
+			data->cmd_split = NULL;
 			return (1);
 		}
 		free(data->user_input);

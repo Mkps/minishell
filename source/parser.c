@@ -37,114 +37,6 @@ char	*ft_strappend(char *s1, char *s2, int mode)
 	}
 	return (tmp);
 }
-void	lst_del_prev(t_token **node)
-{
-	t_token	*prev;
-	t_token	*current;
-	
-	current = *node;
-	prev = current->prev;
-	current->prev= prev->prev;
-	if (current->prev)
-		current->prev->next = current;
-	if (prev->token_type != WORD)
-		free(prev->value);
-	free(prev);
-}
-void	lst_del_next(t_token **node)
-{
-	t_token	*next;
-	t_token	*current;
-	
-	current = *node;
-	next = current->next;
-	current->next = next->next;
-	if (current->next)
-		current->next->prev= current;
-	if (next->token_type != WORD)
-		free(next->value);
-	free(next);
-}
-void	parse_near_quote(t_data *data)
-{
-	t_token	*current;
-	t_token	*tmp;
-	t_token	*tmp_tmp;
-
-	current = *data->token_root;
-	while (current != NULL)
-	{
-		// usleep(250000);
-		// printf("start\n");
-		if (current->token_type == WORD)
-		{
-			// printf("is word\n");
-			if (current->next && current->near_quote == 1)
-			{
-				// printf("is nq\n");
-				lst_del_next(&current);
-				if (current->next && current->next->token_type == WORD)
-				{
-					// printf("next is word\n");
-					current->value = ft_strappend(current->value, current->next->value, 3);
-					lst_del_next(&current);
-					if (!token_is_quote(current->next) || (token_is_quote(current->next) && current->next->near_quote == 0))
-					{
-						// printf("del next quote after word\n");
-						if (token_is_quote(current->next))
-							lst_del_next(&current);
-						current->near_quote = 0;
-					}
-				}
-				else if (current->next && token_is_quote(current->next) && current->next->near_quote == 1)
-				{
-					// printf("next is quote\n");
-					lst_del_next(&current);
-					current->near_quote = 1;
-				}
-			}
-			else if (current->prev && token_is_quote(current->prev))
-			{
-				// printf("del prev quote\n");
-				lst_del_prev(&current);
-				if (current->prev == NULL)
-					*data->token_root = current;
-				if (current->next && token_is_quote(current->next) && current->next->near_quote == 0)
-				{
-					// printf("del next quote nq 0\n");
-					lst_del_next(&current);
-				}
-				else if (current->next && token_is_quote(current->next) && current->next->near_quote == 1)
-				{
-					lst_del_next(&current);
-					if (current->next->token_type == WORD)
-					{
-						// printf("del next quote nq 1 append word\n");
-						current->value = ft_strappend(current->value, current->next->value, 3);
-						current->near_quote = current->next->near_quote;
-						lst_del_next(&current);
-					}
-					else if (token_is_quote(current->next))
-					{
-						// printf("del next quote nq 1 makenq\n");
-						current->near_quote = 1;
-					}
-				}
-			}
-			else
-			{
-				// printf("Wincrement\n");
-				current = current->next;
-			
-			} 
-		}
-		else if (current)
-		{
-			// printf("increment\n");
-			current = current->next;
-		}
-	}
-}
 
 int	token_wc(char *input, t_token *current, t_data *data)
 {
@@ -383,18 +275,6 @@ void	add_empty_cmd(t_data *data)
 	new_cmd = last_cmd(data->cmd_list);
 	new_cmd->cmd = NULL; 
 	new_cmd->type = EMPTY;
-	new_cmd->fd[0] = -1;
-	new_cmd->fd[1] = -1;
-}
-
-void	add_assign_cmd(t_data *data)
-{
-	t_cmd	*new_cmd;
-
-	add_cmd_back(data);
-	new_cmd = last_cmd(data->cmd_list);
-	new_cmd->cmd = NULL; 
-	new_cmd->type = CMD_ASSIGN;
 	new_cmd->fd[0] = -1;
 	new_cmd->fd[1] = -1;
 }
