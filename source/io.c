@@ -1,21 +1,5 @@
 #include "../include/minishell.h"
 
-int		set_output_fd(t_token *current)
-{
-	int	token_type;
-
-	token_type = current->token_type;
-	if (current->next->token_type == DQUOTE)
-		current = current->next;
-	if (current->next->token_type != WORD)
-		return (-1);
-	if (token_type == IO_TRUNC)
-		return (open_fd(1, current->next->value));
-	else if (token_type == IO_APPEND)
-		return (open_fd(2, current->next->value));
-	return (-1);
-}
-
 t_io_node	*create_io_node(char *filename, int mode)
 {
 	t_io_node	*ret;

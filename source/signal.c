@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:51:01 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 22:51:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:19:23 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	handle_sigint(void)
 void	signals_interact(void)
 {
 	ignore_sigquit();
-	 handle_sigint();
+	handle_sigint();
 }
 
 void	signal_quit(int signum)
@@ -71,7 +71,7 @@ void	signal_quit(int signum)
 
 void	signal_nl(int signum)
 {
-	(void)signum;
+	write(1, "\n", 1);
 	g_exit_code  = signum + 128;
 }
 
@@ -89,7 +89,6 @@ void	signals_no_interact(void)
 void	here_doc_SIGINT(int signum)
 {
 	g_exit_code  = signum + 128;
-	// exit(g_exit_code);
 }
 void	here_doc_child_SIGINT(const int signum, void *ptr, void *data)
 {
