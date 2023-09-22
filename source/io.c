@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   io.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 13:22:28 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/22 13:24:57 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 t_io_node	*create_io_node(char *filename, int mode)
@@ -33,14 +45,14 @@ int	add_io_node(t_data *data, t_cmd *cmd, char *filename, int mode)
 	return (1);
 }
 
-t_token *get_io_token(t_token *current_t)
+t_token	*get_io_token(t_token *current_t)
 {
 	t_token	*tmp;
-	t_token *io_token;
+	t_token	*io_token;
 
 	io_token = NULL;
 	tmp = current_t;
-	while(tmp != NULL && !token_is_term(tmp))
+	while (tmp != NULL && !token_is_term(tmp))
 	{
 		if (token_is_io(tmp))
 		{	
@@ -51,6 +63,7 @@ t_token *get_io_token(t_token *current_t)
 	}
 	return (NULL);
 }
+
 char	*get_filename(t_token *io_token)
 {
 	t_token	*current;
@@ -59,9 +72,11 @@ char	*get_filename(t_token *io_token)
 	current = io_token;
 	if (current->token_type == IO_HEREDOC)
 	{
-		if (current->next && current->next->token_type == WORD && current->next->quote_status == IO_HEREDOC)
+		if (current->next && current->next->token_type == WORD
+			&& current->next->quote_status == IO_HEREDOC)
 			return (ft_strdup(current->next->value));
-		else if (current->next && current->next->token_type == WORD && current->next->quote_status == SQUOTE)
+		else if (current->next && current->next->token_type == WORD
+			&& current->next->quote_status == SQUOTE)
 		{
 			tmp = ft_strappend("'", current->next->value, 0);
 			return (tmp);
@@ -69,7 +84,7 @@ char	*get_filename(t_token *io_token)
 	}
 	if (current->next && current->next->token_type == WORD)
 		return (current->next->value);
-	else if (current->next && token_is_quote(current->next) 
+	else if (current->next && token_is_quote(current->next)
 		&& current->next->next && current->next->next->token_type == WORD)
 		return (current->next->next->value);
 	return (NULL);
@@ -84,7 +99,8 @@ int	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 	io_token = get_io_token(get_cmd_first(current_t));
 	while (io_token != NULL)
 	{
-		if (!add_io_node(data, cmd, get_filename(io_token), io_token->token_type))
+		if (!add_io_node(data, cmd, get_filename(io_token),
+				io_token->token_type))
 			return (EXIT_FAILURE);
 		io_token = get_io_token(io_token->next);
 	}
