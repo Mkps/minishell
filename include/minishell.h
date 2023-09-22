@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/21 22:49:44 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -30,8 +42,7 @@ enum token_type{WSPACE = 1, WORD, VAR, PIPE, PIPE_STDERR, IO_INPUT, IO_HEREDOC, 
 enum cmd_type {CMD_ASSIGN = 1, CMD, COMMENT, EMPTY};
 
 typedef struct s_token {
-	struct s_token	*next;
-	struct s_token	*prev;
+	struct s_token	*next;	struct s_token	*prev;
 	char			*value;
 	char			*raw_value;
 	int				quote_status;
@@ -266,5 +277,9 @@ void	free_subshell(t_data *data);
 void	data_cleanup(t_data *data);
 void	free_shell(t_data *data);
 int		free_data(t_data *data);
+
+/**		prompt.c			**/
+char	*set_prompt(t_data *data);
+void	prompt_user(t_data *data);
 
 #endif

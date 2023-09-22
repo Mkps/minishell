@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:39:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/18 13:17:35 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/22 07:53:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ char	*ft_getenv(char **env, const char *str)
 	while (env && env[i])
 	{
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
-			if (*(env[i] + ft_strlen(str)) == '=')
+			if (*(env[i] + ft_strlen(str)) == '=' && *(env[i] + ft_strlen(str) + 1) != '\0')
 				tmp = env[i] + ft_strlen(str) + 1;
+			else
+				return (NULL);
 		i++;
 	}
+	if (i == 0)
+		return (NULL);
 	return (tmp);
 }
 
@@ -69,7 +73,7 @@ char	**replace_env_value(char **envv, char *value)
 	int	index;
 
 	index = 0;
-    while (value[index] && value[index] != '=') index++;
+	while (value[index] && value[index] != '=') index++;
 	i = 0;
 	while (envv[i])
 	{
@@ -86,19 +90,19 @@ char	**replace_env_value(char **envv, char *value)
 
 }
 // Takes a value and checks if it exists in envv. If it does it replaces it, else it adds it.
-void    ft_setenv(t_data *data, char *value)
+void	ft_setenv(t_data *data, char *value)
 {
-    int		i;
-    char	*key;
-    char	*k_value;
+	int		i;
+	char	*key;
+	char	*k_value;
 	char	**envv;
 	
 	envv = data->envv;
 	i = 0;
-    while (value[i] && value[i] != '=') i++;
-    if (i == 0 || value[i] != '=')
-        return ;
-    key = ft_substr(value, 0, i);
+	while (value[i] && value[i] != '=') i++;
+	if (i == 0 || value[i] != '=')
+		return ;
+	key = ft_substr(value, 0, i);
 	if (!ft_getenv(envv, key))
 		data->envv = add_env_value(envv, value);
 	else

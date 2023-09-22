@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/21 22:50:51 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/21 22:50:53 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 #include <stdlib.h>
 
@@ -205,7 +217,6 @@ int	scan_input(t_data *data)
 		return (EXIT_FAILURE);
 	if (data->raw_input)
 	{
-		add_history(data->raw_input);
 		free(data->raw_input);
 		data->raw_input = NULL;
 	}

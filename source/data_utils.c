@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:59:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 17:53:35 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/21 22:49:52 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	init_data(t_data *data)
 	data->old_fd[0] = dup(STDIN_FILENO);
 	data->old_fd[1] = dup(STDOUT_FILENO);
 	data->user_input = NULL;
+	data->raw_input = NULL;
 	data->flag = 0;
 	return (EXIT_SUCCESS);
 }
