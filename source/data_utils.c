@@ -22,6 +22,7 @@ int	init_data(t_data *data)
 	data->env_cpy = (t_env **)ft_calloc(1, sizeof(t_env *));
 	*data->env_cpy = NULL;
 	data->env_export = (t_export **)ft_calloc(1, sizeof(t_export *));
+	data->cmd_split = NULL;
 	*data->env_export = NULL;
 	data->parse_status = NONE;
 	data->exit_status = g_exit_code;

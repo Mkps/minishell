@@ -63,12 +63,6 @@ int	g_exit_code;
 int	main(int ac, char **av, char **envv)
 {
 	t_data	data;
-	char	*input;
-	pid_t	pid;		
-	t_token **tmp;
-	t_cmd	*tmp_cmd;
-	int		status;
-	int		exit_status;
 
 	g_exit_code = 0;
 	init_data(&data);

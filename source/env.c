@@ -23,15 +23,15 @@ char	*ft_getenv(char **env, const char *str)
 	while (env && env[i])
 	{
 		if (!ft_strncmp(env[i], str, ft_strlen(str)))
+		{
 			if (*(env[i] + ft_strlen(str)) == '=' && *(env[i] + ft_strlen(str) + 1) != '\0')
 				tmp = env[i] + ft_strlen(str) + 1;
-			else
-				return (NULL);
+		}
 		i++;
 	}
-	if (i == 0)
-		return (NULL);
-	return (tmp);
+	if (*tmp)
+		return (tmp);
+	return (NULL);
 }
 
 // Duplicates the envv string array and appends value to it.
