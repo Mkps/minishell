@@ -132,7 +132,7 @@ void	signals_interact(void);
 void	signals_no_interact(void);
 void	signals_here_doc(void);
 void	signals_here_doc_child(void);
-void	here_doc_child_SIGINT(const int signum, void *ptr);
+void	here_doc_child_SIGINT(const int signum, void *ptr, void *envv);
 void	redisplay_prompt(int signum, void *ptr);
 
 /**		lexer.c		**/
@@ -273,6 +273,7 @@ void print_envp(t_data *data);
 
 /**		free.c				**/
 void	free_child(t_data *data);
+void	free_heredoc_child(t_data *data);
 void	free_subshell(t_data *data);
 void	data_cleanup(t_data *data);
 void	free_shell(t_data *data);

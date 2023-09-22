@@ -91,20 +91,25 @@ void	here_doc_SIGINT(int signum)
 	g_exit_code  = signum + 128;
 	// exit(g_exit_code);
 }
-void	here_doc_child_SIGINT(const int signum, void *ptr)
+void	here_doc_child_SIGINT(const int signum, void *ptr, void *data)
 {
-	static int *fd;
+	static int		*fd;
+	static t_data	*hd_data;
 
 
 	if (signum == SIGINT)
 	{
 		write(1, "\n", 1);
-		close(fd[1]);
+		if (fd[1] > -1)
+			close(fd[1]);
+		if (hd_data)
+			free_child(hd_data);
 		exit(3);
 	}
 	if (signum == 42)
 	{
 		fd = (int *)ptr;
+		hd_data = (t_data *)data;
 	}
 }
 

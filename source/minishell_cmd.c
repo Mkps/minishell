@@ -147,9 +147,9 @@ void	close_fd(t_data *data, t_cmd *cmd)
 		close_fd_node(cmd, current);
 		current = current->next;
 	}
-	if (cmd->fd[0] > 0)
+	if (cmd->fd[0] > -1)
 		close(cmd->fd[0]);
-	if (cmd->fd[1] > 0)
+	if (cmd->fd[1] > -1)
 		close(cmd->fd[1]);
 }
 void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)

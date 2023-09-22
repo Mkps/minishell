@@ -91,13 +91,14 @@ char	*heredoc_var_expand(t_data *data, char *str)
 void	here_doc_input(t_data *data, char *limiter, int *fd)
 {
 	char	*str;
+	char	**envv;
 	char	*tmp;
 	int		flag;
 
+	close(fd[0]);
 	signals_here_doc_child();
 	signal(SIGQUIT, (void (*) (int))here_doc_child_SIGINT);
-	here_doc_child_SIGINT(42, fd);
-	close(fd[0]);
+	here_doc_child_SIGINT(42, fd, data);
 	flag = get_flag(limiter);
 	str = "str";
 	while (str)
@@ -117,6 +118,7 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 			if (str)
 			{
 				free(str);
+				free_child(data);
 				exit(0);
 			}
 			write(1, "\n", 1);
@@ -128,6 +130,7 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 	}
 	close(fd[1]);
 	free(str);
+	free_child(data);
 }
 
 // Creates a child process to get the heredoc and then duplicates the read end of the pipe on the STDIN_FILENO
@@ -149,7 +152,7 @@ int	here_doc_handler(t_data *data, char *limiter)
 		close(data->old_fd[0]);
 		close(data->old_fd[1]);
 		close_pipes(data->cmd_list, NULL, NULL);
-		here_doc_input(data, limiter, p_fd);
+		here_doc_input(data, ft_strdup(limiter), p_fd);
 	}
 	else
 	{
