@@ -331,6 +331,7 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	char	*tmp;
 	char	*new_tmp;
 	char	**args;
+	int		i;
 
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
@@ -344,7 +345,14 @@ t_token	*add_cmd(t_data *data, t_token *token)
 	while (current->token_type == WORD )
 	{
 		tmp = ft_strappend(tmp, ";", 2);	
-		tmp = ft_strappend(tmp, current->value, 2);	
+		char	test[2] ;
+		test[0] = 1;
+		test[1] = 0;
+
+		if (current->value[0] == 0)
+			tmp = ft_strappend(tmp, test, 2);
+		else
+			tmp = ft_strappend(tmp, current->value, 2);	
 		if (current->next->token_type == SQUOTE || current->next->token_type == DQUOTE)
 		{
 			type = current->next->token_type;
@@ -354,6 +362,13 @@ t_token	*add_cmd(t_data *data, t_token *token)
 			current = current->next;
 	}
 	new_cmd->args = ft_split(tmp, ';');
+	i = -1;
+	while (new_cmd->args[++i] != NULL)
+	{
+		if (new_cmd->args[i][0] == 1)
+			new_cmd->args[i][0] = 0;
+	}
+
 	if (new_cmd->type == O_PAR)
 		new_cmd->is_term = O_PAR;
 	free(tmp);
