@@ -20,19 +20,15 @@ OBJ_DIR = build
 
 SRC = $(SRCDIR)/main.c $(SRCDIR)/signal.c
 
-SRC_NAME = here_doc.c env_utils.c\
-	  main.c minishell_cmd.c \
-	  pipex_utils.c signal.c \
-	  lexer.c parser.c token_utils.c \
-	  execute.c data_utils.c \
-	  minishell_launcher.c token.c \
-	  env.c io.c var.c lexer_utils.c \
-	  error.c built_in.c  copy_env.c export.c \
-	  dummies.c export_utils.c \
-	  unset.c wildcards.c export2.c export_utils2.c \
-	  export_utils3.c free.c prompt.c\
-	  parse_near_quote.c ft_split_noquote.c ft_cd.c \
-	  var_expander.c copy_env_utils.c \
+SRC_NAME =	here_doc.c env_utils.c main.c minishell_cmd.c \
+			pipex_utils.c signal.c lexer.c parser.c \
+			token_utils.c execute.c data_utils.c token.c \
+	 		minishell_launcher.c env.c io.c lexer_utils.c \
+			error.c built_in.c  copy_env.c var.c export.c \
+			dummies.c export_utils.c unset.c wildcards.c \
+			export2.c export_utils2.c export_utils3.c free.c \
+			prompt.c parse_near_quote.c ft_split_noquote.c ft_cd.c \
+			var_expander.c copy_env_utils.c output_error.c \
 	  
 SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
 OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
