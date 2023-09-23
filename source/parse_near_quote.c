@@ -23,7 +23,8 @@ void	parse_near_quote_word(t_token *current)
 				&& (current->next->quote_status == NONE && current->next->near_quote == 0)))
 		{
 			current->near_quote = 0;
-			if (current->next && current->next->near_quote == 1)
+			if (current->prev)
+			if (current->next && token_is_quote(current->next) && current->next->near_quote == 1)
 					current->near_quote = 1;
 		}
 	}
@@ -75,6 +76,7 @@ void	parse_near_quote(t_data *data)
 		current = current->next;
 	}
 	current = *data->token_root;
+	// print_token(data->token_root);
 	while (current != NULL)
 	{
 		if (current->token_type == WORD)
