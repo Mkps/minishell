@@ -71,3 +71,13 @@ void	lst_del_next(t_token **node)
 		free(next->value);
 	free(next);
 }
+
+void	lst_del_token(t_token **node)
+{
+	t_token *current;
+
+	current = *node;
+	if (current->token_type != WORD)
+		free(current->value);
+	free(current);
+}

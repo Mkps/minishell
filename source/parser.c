@@ -93,7 +93,7 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 	return (ret);
 }
 
-//	Parses tokens looking for VAR to expand.
+//	Parses tokens looking for things to expand.
 void	parse_token(t_data *data)
 {
 	t_token	*current;
@@ -108,6 +108,23 @@ void	parse_token(t_data *data)
 			&& current->quote_status != IO_HEREDOC)
 		{
 			var_expander(data, current->value, current);
+			if (current->quote_status == NONE  && current->next && (!current->value || current->value && current->value[0] == 0))
+			{
+				current = current->next;
+				lst_del_prev(&current);
+				if (current->prev == NULL)
+					*data->token_root = current;
+			}
+			else if (current->quote_status == NONE && current->prev && (!current->value || current->value && current->value[0] == 0))
+			{
+				current = current->prev;
+				lst_del_next(&current);
+			}
+			else if (current->quote_status == NONE && (!current->value || current->value && current->value[0] == 0))
+			{
+				lst_del_token(&current);
+				*data->token_root = NULL;
+			}
 		}
 		if (current->token_type == WORD && current->quote_status == NONE)
 		{

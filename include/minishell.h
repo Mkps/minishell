@@ -159,6 +159,7 @@ int 	token_is_io(t_token *token);
 int 	token_is_term(t_token *token);
 void	lst_del_prev(t_token **node);
 void	lst_del_next(t_token **node);
+void	lst_del_token(t_token **node);
 
 /**		env_utils.c		**/
 int		import_envv(t_data *data, char **envv);
