@@ -6,11 +6,12 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 22:34:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:19:34 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdlib.h>
 
 int	ft_env(t_data *data)
 {
@@ -41,18 +42,24 @@ int	ft_echo(t_cmd *cmd)
 	int	i;
 	int	flag;
 
-	i = 1;
 	flag = 0;
-	i = find_first_word(cmd);
-	while (cmd->args[i] != NULL)
+	if (cmd->args[1] == NULL)
 	{
-		printf("%s", cmd->args[i]);
+		printf("\n");
+		return (EXIT_SUCCESS);
+	}
+	i = find_first_word(cmd);
+	if (i > 1)
+		flag++;
+	while (cmd->args[i] != NULL)
+	{	
+		ft_printf("%s", cmd->args[i]);
 		i++;
 		if (cmd->args[i] != NULL)
-			ft_printf("%s", cmd->args[i]);
+			ft_printf(" ", cmd->args[i]);
 	}
 	if (!flag)
-		printf("\n");
+		ft_printf("\n");
 	return (EXIT_SUCCESS);
 }
 

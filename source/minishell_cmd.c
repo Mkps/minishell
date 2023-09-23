@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:30:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:18:34 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,6 +254,8 @@ char	*get_cmd(char *cmd, char **env_p)
 	char	*cmd_tmp;
 
 	i = -1;
+	if (!ft_strncmp(cmd, ".", 2) || !ft_strncmp(cmd, "..", 3))
+		return (NULL);
 	while (env_p[++i])
 	{
 		cmd_dir = ft_strjoin(env_p[i], "/");

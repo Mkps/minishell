@@ -121,7 +121,7 @@ void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
 char	*ft_readline(char *str);
-void 	ft_lstadd_back_env(t_env **lst, t_env *new);
+void 	ft_lstadd_back_env(t_env **lst, t_env *new_node);
 void 	free_env_list(t_env **env);
 void	free_var(t_data *data, t_cmd *cmd);
 void	print_token(t_token **root);
@@ -134,7 +134,7 @@ void	signals_interact(void);
 void	signals_no_interact(void);
 void	signals_here_doc(void);
 void	signals_here_doc_child(void);
-void	here_doc_child_SIGINT(const int signum, void *ptr, void *envv);
+void	here_doc_child_sigint(const int signum, void *ptr, void *envv);
 void	redisplay_prompt(int signum, void *ptr);
 
 /**		lexer.c		**/
@@ -166,6 +166,11 @@ char	*ft_getenv(char **env, const char *str);
 void	ft_setenv(t_data *data, char *value);
 char	**ft_strsdup(char	**strs);
 
+/**		cpy_env_utils.c	**/
+t_env	*ft_lstnew_two(char *key, char *value);
+void	ft_lstadd_back_two(t_env **lst, t_env *new_node);
+void	free_env_lst(t_env **env_lst);
+
 /**		execute.c		**/
 void	execute(t_data *data);
 
@@ -173,8 +178,7 @@ void	execute(t_data *data);
 int		init_data(t_data *data);
 void	data_cleanup(t_data *data);
 
-/**		minishell_launcher.c	**/
-void	minishell_prompt(t_data *data);
+/**		minishell_launcher.c	**/ void	minishell_prompt(t_data *data);
 void	minishell_inline(t_data *data, char *user_input);
 void	minishell_subshell(t_data *data, char *user_input);
 

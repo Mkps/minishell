@@ -263,6 +263,12 @@ t_token	*add_cmd(t_data *data, t_token *token)
 			current = current->next;
 	}
 	new_cmd->args = ft_split(tmp, 2);
+	i = -1;
+	while (new_cmd->args[++i])
+	{
+		if (new_cmd->args[i][0] == 1)
+			new_cmd->args[i][0] = '\0';
+	}
 	if (new_cmd->type == O_PAR)
 		new_cmd->is_term = O_PAR;
 	free(tmp);

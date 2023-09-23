@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:23:20 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:32:07 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 02:54:52 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ void	parse_near_quote_quote(t_data *data, t_token *current)
 		if (current->next->token_type == WORD)
 		{
 			current->value = ft_strappend(current->value,
-											current->next->value,
-											3);
+					current->next->value, 3);
 			current->near_quote = current->next->near_quote;
 			lst_del_next(&current);
 		}

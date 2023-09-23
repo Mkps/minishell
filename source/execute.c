@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:23 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:14:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 		ft_true();
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
 		ft_false();
-	return (0);
+	return (-1);
 }
 
 int	is_builtin(t_cmd *cmd, t_data *data)
@@ -110,6 +110,7 @@ int	is_cmd_fko(t_cmd *cmd, t_data *data)
 	env_p = get_path(data->envv);
 	tmp = get_cmd(cmd->cmd, env_p);
 	ret = 0;
+
 	if (tmp == NULL)
 		ret = 1;
 	else
@@ -137,6 +138,8 @@ int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 	}
 	if (cmd_is_dir(cmd, data))
 	{
+		// if (ft_strncmp(cmd->cmd, ".", 2) == 0 || ft_strncmp(cmd->cmd, "..", 3) == 0)
+		// 	perror
 		output_err_cmd("Is a directory", cmd->cmd);
 		return (CMD_ERR_XKO);
 	}
@@ -188,7 +191,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		if (is_builtin(cmd, data) == 1)
+		if (is_unpiped(cmd, data) == 1)
 		{
 			set_fd(data, cmd);
 			cmd->pid = -2;
@@ -213,9 +216,12 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 					close(cmd->fd[1]);
 				}
 				close_pipes(data->cmd_list, NULL, NULL);
-				if (!execute_builtin(cmd, data))
+				exit_code = execute_builtin(cmd, data);
+				if (exit_code == -1)
+				{
 					exec_cmd(cmd, data);
-				exit_code = get_cmd_ecode(cmd, data);
+					exit_code = get_cmd_ecode(cmd, data);
+				}
 				free_child(data);
 				exit(exit_code);
 			}

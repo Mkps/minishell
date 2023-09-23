@@ -99,8 +99,8 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 
 	close(fd[0]);
 	signals_here_doc_child();
-	signal(SIGQUIT, (void (*)(int))here_doc_child_SIGINT);
-	here_doc_child_SIGINT(42, fd, data);
+	signal(SIGQUIT, (void (*)(int))here_doc_child_sigint);
+	here_doc_child_sigint(42, fd, data);
 	flag = get_flag(limiter);
 	str = "str";
 	while (str)

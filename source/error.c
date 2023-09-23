@@ -21,9 +21,13 @@ void	output_err(char *msg, t_token *token, int squotes)
 	tmp_str = ft_strappend(name_str, msg, 0);
 	if (squotes == 1)
 		tmp_str = ft_strappend(tmp_str, "'", 2);
+	else if (squotes == 2)
+		tmp_str = ft_strappend(tmp_str, "\"", 2);
 	tmp_str = ft_strappend(tmp_str, token_str, 2);
 	if (squotes == 1)
 		tmp_str = ft_strappend(tmp_str, "'", 2);
+	else if (squotes == 2)
+		tmp_str = ft_strappend(tmp_str, "\"", 2);
 	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
 	free(tmp_str);
@@ -134,7 +138,7 @@ int	check_term_error(t_token **root)
 	tmp = *root;
 	while (tmp)
 	{
-		if (token_is_term(tmp) && tmp->token_type != TERM_END && !tmp->prev)
+		if (token_is_term(tmp) && tmp->token_type != TERM_END && (!tmp->prev || (tmp->prev && token_is_term(tmp->prev))))
 		{
 			output_err("syntax error near unexpected token ", tmp, 1);
 			return (EXIT_FAILURE);
@@ -148,8 +152,10 @@ int	check_par_error(t_token **root)
 {
 	t_token	*tmp;
 	int		par_status;
+	int		w_count;
 
 	par_status = 0;
+	w_count = 0;
 	tmp = *root;
 	while (tmp)
 	{
@@ -159,8 +165,22 @@ int	check_par_error(t_token **root)
 			tmp = tmp->next;
 			while (tmp && par_status > 0)
 			{
-				if (tmp->token_type == O_PAR)
+				if (tmp->token_type == WORD)
+					w_count++;
+				if (tmp->token_type == O_PAR && w_count != 0)
+				{
+					w_count = 0;
 					par_status++;
+				}
+				else
+				{
+					if (tmp->next && tmp->next->token_type != TERM_END)
+					{
+						output_err("syntax error near unexpected token ",
+							tmp->next, 2);
+						return (EXIT_FAILURE);
+					}
+				}
 				if (tmp->token_type == C_PAR)
 					par_status--;
 				tmp = tmp->next;

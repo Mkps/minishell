@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   var_expander.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:50:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 19:07:27 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 02:52:30 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	var_expand_valid(t_data *data, char **ret, int *i
-		, t_token *token)
+int	var_expand_valid(t_data *data, char **ret, int *i, t_token *token)
 {
 	int		n;
 	char	*var_id;
@@ -23,8 +22,8 @@ int	var_expand_valid(t_data *data, char **ret, int *i
 
 	n = 1;
 	flag_retokenize = 0;
-	while (*(*ret + *i + n) && (ft_isalnum(*(*ret + *i + n))
-			|| *(*ret + *i + n) == '_'))
+	while (*(*ret + *i + n) && (ft_isalnum(*(*ret + *i + n)) || *(*ret + *i
+				+ n) == '_'))
 		n++;
 	if (n != 1)
 	{
@@ -69,7 +68,7 @@ int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
 		*i = 0;
 	}
 	else if ((*(*ret + *i + 1) == 0) && token->near_quote == 1 && (!token->next
-			|| (token->next && token->next->token_type == SQUOTE)))
+				|| (token->next && token->next->token_type == SQUOTE)))
 		*(*ret + *i) = 0;
 	else if (*(*ret + *i + 1) == '?')
 		var_expand_exitcode(data, ret, i);
@@ -88,7 +87,7 @@ int	var_expander(t_data *data, char *str, t_token *token)
 
 	flag_retokenize = 0;
 	i = 0;
-	ret_ptr = malloc(sizeof (char **));
+	ret_ptr = malloc(sizeof(char **));
 	*ret_ptr = ft_strdup(str);
 	while (*(*ret_ptr + i))
 	{

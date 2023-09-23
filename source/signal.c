@@ -14,6 +14,7 @@
 #include <readline/readline.h>
 
 extern int	g_exit_code;
+
 void	redisplay_prompt(int signum, void *ptr)
 {
 	static char	*prompt;
@@ -30,6 +31,7 @@ void	redisplay_prompt(int signum, void *ptr)
 		prompt = (char *)ptr;
 	}
 }
+
 void	ignore_sigquit(void)
 {
 	struct sigaction	act;
@@ -86,11 +88,13 @@ void	signals_no_interact(void)
 	act.sa_handler = &signal_quit;
 	sigaction(SIGQUIT, &act, NULL);
 }
-void	here_doc_SIGINT(int signum)
+
+void	here_doc_sigint(int signum)
 {
 	g_exit_code = signum + 128;
 }
-void	here_doc_child_SIGINT(const int signum, void *ptr, void *data)
+
+void	here_doc_child_sigint(const int signum, void *ptr, void *data)
 {
 	static int		*fd;
 	static t_data	*hd_data;
@@ -116,7 +120,7 @@ void	signals_here_doc(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = &here_doc_SIGINT;
+	act.sa_handler = &here_doc_sigint;
 	act.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;
@@ -129,7 +133,7 @@ void	signals_here_doc_child(void)
 
 	signal(SIGINT, (void (*)(int))signals_here_doc_child);
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = (void (*)(int)) & here_doc_child_SIGINT;
+	act.sa_handler = (void (*)(int)) & here_doc_child_sigint;
 	act.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;

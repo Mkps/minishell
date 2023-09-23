@@ -65,7 +65,7 @@ char	*str_replace(char *src, int r_index, int n, char *str)
 	ret_len = ft_strlen(src) + (last_index - r_index) + str_len;
 	ret = (char *)malloc(sizeof(char) * (ret_len + 1));
 	if (!ret)
-		printf("error allocating mem for return (string\n"));
+		printf("error allocating mem for return (string\n");
 	i = 0;
 	while (i < r_index)
 	{
@@ -98,7 +98,7 @@ char	*str_replace_strs(char **src, int r_index, int n, char *str)
 	ret_len = ft_strlen(*src) + (last_index - r_index) + str_len;
 	ret = (char *)malloc(sizeof(char) * (ret_len + 1));
 	if (!ret)
-		printf("error allocating mem for return (string\n"));
+		printf("error allocating mem for return (string\n");
 	i = -1;
 	while (++i < r_index)
 		ret[i] = *(*src + i);

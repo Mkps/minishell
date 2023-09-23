@@ -37,7 +37,7 @@ int	allocate_memory(t_data *data)
 int	init_data(t_data *data)
 {
 	ft_memset(data, '0', sizeof(data));
-	if (allocate_memory == EXIT_FAILURE)
+	if (allocate_memory(data) == EXIT_FAILURE)
 	{
 		output_err_cmd("Error while allocating memory", "init_data");
 		return (2);

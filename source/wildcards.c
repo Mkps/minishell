@@ -329,7 +329,7 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 	ret_len = ft_strlen(src) + (last_index - r_index) + str_len;
 	ret = (char *)ft_calloc(ret_len + 1, sizeof(char));
 	if (!ret)
-		output_err("error allocating mem for return (string\n", NULL, 0));
+		output_err("error allocating mem for return (string\n", NULL, 0);
 	i = 0;
 	while (i < r_index)
 	{

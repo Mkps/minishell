@@ -3,11 +3,11 @@
 //Creates a new token then adds it to the end of the list.
 t_token	*ft_new_token(t_token **root, char *value, int type)
 {
-	t_token *t;
+	t_token	*t;
 
 	t = *root;
 	while (t != NULL)
-		t = t->next;	
+		t = t->next;
 	t = malloc(sizeof(t_token));
 	if (!t)
 		return (NULL);
@@ -17,9 +17,9 @@ t_token	*ft_new_token(t_token **root, char *value, int type)
 }
 
 // Returns a pointer to the last token.
-t_token *last_token(t_token **root)
+t_token	*last_token(t_token **root)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = *root;
 	if (!current)
@@ -31,7 +31,7 @@ t_token *last_token(t_token **root)
 
 void	add_token_back(t_token **root, int type, char *value)
 {
-	t_token *current;
+	t_token	*current;
 
 	if (*root == NULL)
 	{
@@ -47,7 +47,7 @@ void	add_token_back(t_token **root, int type, char *value)
 
 void	insert_token_next(t_token *i_p, int type, char *value)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	if (i_p == NULL)
 	{
