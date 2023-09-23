@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 12:23:20 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 02:54:52 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:32:07 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	parse_near_quote_word(t_token *current)
 		current->value = ft_strappend(current->value, current->next->value, 3);
 		lst_del_next(&current);
 		if (!token_is_quote(current->next) || (token_is_quote(current->next)
-				&& current->next->near_quote == 0))
+				&& (current->next->quote_status == NONE && current->next->near_quote == 0)))
 		{
-			if (token_is_quote(current->next))
-				lst_del_next(&current);
 			current->near_quote = 0;
+			if (current->next && current->next->near_quote == 1)
+					current->near_quote = 1;
 		}
 	}
 	else if (current->next && token_is_quote(current->next)
@@ -50,7 +50,8 @@ void	parse_near_quote_quote(t_data *data, t_token *current)
 		if (current->next->token_type == WORD)
 		{
 			current->value = ft_strappend(current->value,
-					current->next->value, 3);
+											current->next->value,
+											3);
 			current->near_quote = current->next->near_quote;
 			lst_del_next(&current);
 		}
@@ -65,6 +66,14 @@ void	parse_near_quote(t_data *data)
 	t_token	*tmp;
 	t_token	*tmp_tmp;
 
+	current = *data->token_root;
+	while (current != NULL)
+	{
+		if (current->token_type == WORD && current->near_quote == 1 && current->quote_status == NONE)
+			if (current->next && token_is_quote(current->next))
+				current->next->near_quote = 1;
+		current = current->next;
+	}
 	current = *data->token_root;
 	while (current != NULL)
 	{

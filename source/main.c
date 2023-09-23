@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:30:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:30:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	print_token(t_token **root)
 	current = *root;
 	while (current != NULL)
 	{
-		printf("token type %i | value %s | qs %i\n", current->token_type, current->value, current->quote_status);
+		printf("token type %i | value %s | qs %i | nq %i\n", current->token_type,
+		 current->value, current->quote_status, current->near_quote);
 		current = current->next;
 	}
 }
