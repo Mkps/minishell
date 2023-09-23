@@ -203,6 +203,9 @@ int		handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 /**		error.c			**/
 int		check_error(t_data *data);
 
+/**		error_par.c		**/
+int	check_par_error(t_token **root);
+
 /**		output_error.c	**/
 void	output_err(char *msg, t_token *token, int squotes);
 void	output_err_cmd(char *msg, char *cmd_str);

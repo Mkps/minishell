@@ -1,6 +1,7 @@
 #include "../include/minishell.h"
 #include <stdlib.h>
 
+int	check_par_error(t_token **root);
 
 int	is_wc(char *str)
 {
@@ -68,61 +69,13 @@ int	check_term_error(t_token **root)
 	tmp = *root;
 	while (tmp)
 	{
-		if (token_is_term(tmp) && tmp->token_type != TERM_END && (!tmp->prev || (tmp->prev && token_is_term(tmp->prev))))
+		if (token_is_term(tmp) && tmp->token_type != TERM_END 
+			&& (!tmp->prev || (tmp->prev && token_is_term(tmp->prev))))
 		{
 			output_err("syntax error near unexpected token ", tmp, 1);
 			return (EXIT_FAILURE);
 		}
 		tmp = tmp->next;
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	check_par_error(t_token **root)
-{
-	t_token	*tmp;
-	int		par_status;
-	int		w_count;
-
-	par_status = 0;
-	w_count = 0;
-	tmp = *root;
-	while (tmp)
-	{
-		if (tmp->token_type == O_PAR)
-			par_status++;
-		if (par_status == 0 && tmp->token_type == C_PAR)
-		{
-			output_err("syntax error near unexpected token `)'",
-				NULL, 0);
-			return (EXIT_FAILURE);
-		}
-		if (tmp->token_type == O_PAR && tmp->prev
-				&& (!token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
-				&& tmp->prev->token_type != WORD) 
-		{
-			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
-				output_err("syntax error near unexpected token ",
-					tmp->next, 1);
-			else
-				output_err("syntax error near unexpected token `('", NULL, 0);
-			return (EXIT_FAILURE);
-		}
-		if (tmp->token_type == C_PAR)
-		{
-			if (tmp->prev->token_type == O_PAR)
-			{
-				output_err("syntax error near unexpected token `)'", NULL, 0);
-				return (EXIT_FAILURE);
-			}
-			par_status--;
-		}
-		tmp = tmp->next;
-	}
-	if (par_status != 0)
-	{
-		output_err("unexpected EOF while looking for matching ')'", NULL, 0);
-		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
