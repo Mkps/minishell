@@ -159,38 +159,41 @@ int	check_par_error(t_token **root)
 	tmp = *root;
 	while (tmp)
 	{
+		if (tmp->token_type == WORD)
+			w_count++;
 		if (tmp->token_type == O_PAR)
 		{
 			par_status++;
-			tmp = tmp->next;
-			while (tmp && par_status > 0)
-			{
-				if (tmp->token_type == WORD)
-					w_count++;
-				if (tmp->token_type == O_PAR && w_count != 0)
-				{
-					w_count = 0;
-					par_status++;
-				}
-				else
-				{
-					if (tmp->next && tmp->next->token_type != TERM_END)
-					{
-						output_err("syntax error near unexpected token ",
-							tmp->next, 2);
-						return (EXIT_FAILURE);
-					}
-				}
-				if (tmp->token_type == C_PAR)
-					par_status--;
-				tmp = tmp->next;
-				if (!tmp && par_status != 0)
-				{
-					output_err("unexpected EOF while looking for matching ')'",
-						NULL, 0);
-					return (EXIT_FAILURE);
-				}
-			}
+			w_count = 0;
+			// tmp = tmp->next;
+			// while (tmp && par_status > 0)
+			// {
+			// 	if (tmp->token_type == WORD)
+			// 		w_count++;
+			// 	if (tmp->token_type == O_PAR && w_count != 0)
+			// 	{
+			// 		w_count = 0;
+			// 		par_status++;
+			// 	}
+			// 	else if (tmp->token_type == C_PAR && w_count == 0)
+			// 	{
+			// 		if (!w_count && tmp->next && tmp->next->token_type != TERM_END)
+			// 		{
+			// 			output_err("syntax error near unexpected token ",
+			// 				tmp, 2);
+			// 			return (EXIT_FAILURE);
+			// 		}
+			// 	}
+			// 	if (tmp->token_type == C_PAR)
+			// 		par_status--;
+			// 	tmp = tmp->next;
+			// 	if (!tmp && par_status != 0)
+			// 	{
+			// 		output_err("unexpected EOF while looking for matching ')'",
+			// 			NULL, 0);
+			// 		return (EXIT_FAILURE);
+			// 	}
+			// }
 		}
 		if (par_status == 0 && tmp->token_type == C_PAR)
 		{
@@ -198,16 +201,13 @@ int	check_par_error(t_token **root)
 				NULL, 0);
 			return (EXIT_FAILURE);
 		}
-		if ((tmp->prev && !token_is_term(tmp->prev)) 
-			&& tmp->token_type == O_PAR 
-			&& !token_is_term(tmp->prev)
-			&& tmp->prev->token_type != O_PAR)
+		if (tmp->prev && tmp->token_type == O_PAR && (!token_is_term(tmp->prev) && tmp->prev->quote_status != O_PAR && tmp->prev->token_type != O_PAR)) 
 		{
 			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
 				output_err("syntax error near unexpected token ",
 					tmp->next, 1);
 			else
-				output_err("syntax error near unexpected token `('", NULL, 0);
+				output_err("syntax error near unexpected token `(1'", NULL, 0);
 			return (EXIT_FAILURE);
 		}
 		if (tmp->token_type == C_PAR)

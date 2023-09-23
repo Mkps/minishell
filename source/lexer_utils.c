@@ -79,24 +79,6 @@ int	ft_get_sep_type(char *str)
 		return (TERM_OR);
 	else if (*str == '<' && *(str + 1) == '<')
 		return (IO_HEREDOC);
-	else if (*str == '>' && *(str + 1) == '>')
-		return (IO_APPEND);
-	else if (*str == '|')
-		return (PIPE);
-	else if (*str == '&')
-		return (TERM_AND);
-	else if (*str == '<')
-		return (IO_INPUT);
-	else if (*str == '>')
-		return (IO_TRUNC);
-	else if (*str == 0)
-		return (TERM_END);
-	else if (*str == ';' && *(str + 1) == ';')
-		return (TERM_2SC);
-	else if (*str == ';')
-		return (TERM_SC);
-	else if (*str <= 126 || *str >= 33)
-		return (WORD);
 	else
 		return (ft_get_sep_type_expand(str));
 }

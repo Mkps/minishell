@@ -75,20 +75,23 @@ int	ft_strcmp_no_case(const char *s1, const char *s2)
 		- ft_tolower((unsigned char)s2[i2]));
 }
 
-char	*ft_strjoin_tab(char **tab, int i)
+char	*ft_strjoin_tab(char **tab, int i, char join)
 {
 	int		index;
 	int		k;
+	char	append[2];
 	char	*ret;
 
 	index = 0;
 	ret = ft_strdup("");
+	append[0] = join;
+	append[1] = 0;
 	while (index < i || (i == -1 && tab[index]))
 	{
 		if (tab[index])
 		{
 			ret = ft_strappend(ret, tab[index], 3);
-			ret = ft_strappend(ret, " ", 2);
+			ret = ft_strappend(ret, append, 2);
 		}
 		index++;
 	}
@@ -111,7 +114,7 @@ char	*sort_str(char *str)
 	char	*ret;
 	char	**split;
 
-	split = ft_split(str, ' ');
+	split = ft_split(str, '/');
 	if (split[1] == NULL)
 	{
 		ft_free_tab(split);
@@ -129,7 +132,7 @@ char	*sort_str(char *str)
 		else
 			i++;
 	}
-	ret = ft_strjoin_tab(split, i + 1);
+	ret = ft_strjoin_tab(split, i + 1, ' ');
 	return (ret);
 }
 
@@ -151,7 +154,7 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 	char	*ret;
 	char	**split;
 
-	split = ft_split(src, ' ');
+	split = ft_split(src, '/');
 	free(src);
 	i = 0;
 	while (split[i])
@@ -172,7 +175,7 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 		}
 		i++;
 	}
-	ret = ft_strjoin_tab(split, i);
+	ret = ft_strjoin_tab(split, i, '/');
 	return (ret);
 }
 
@@ -220,7 +223,7 @@ char	*get_wc(char *search, char *src, int mode)
 			while (dir != NULL)
 			{
 				str = ft_strappend(str, dir->d_name, 2);
-				str = ft_strappend(str, " ", 2);
+				str = ft_strappend(str, "/", 2);
 				dir = readdir(d);
 			}
 			closedir(d);

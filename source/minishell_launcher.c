@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 int		check_error_raw(t_data *data);
 void	minishell_inline(t_data *data, char *user_input)
@@ -70,27 +71,45 @@ void	minishell_subshell(t_data *data, char *user_input)
 
 	init_data(&new_data);
 	import_envv(&new_data, data->envv);
-	new_data.user_input = user_input;
-	new_data.raw_input = NULL;
-	new_data.cmd_split = ft_split(new_data.user_input, ';');
-	free_data(data);
+	new_data.user_input = ft_strdup(user_input);
+	new_data.raw_input = new_data.user_input;
+	new_data.cmd_split = ft_split_noquote(new_data.user_input, ';');
+	free_child(data);
+	// printf("entered subshell\n");
+	if (check_error_raw(&new_data))
+		exit (g_exit_code);
 	i = -1;
 	while (new_data.cmd_split[++i])
 	{
 		new_data.user_input = ft_strdup(new_data.cmd_split[i]);
+		if (i == 0)
+		{
+			free(new_data.raw_input);
+			new_data.raw_input = NULL;
+		}
 		scan_input(&new_data);
 		if (check_error(&new_data) == EXIT_SUCCESS)
 		{
 			parse_token(&new_data);
 			parse_near_quote(&new_data);
+			// print_token(new_data.token_root);
 			build_cmd_list(&new_data, *new_data.token_root);
 			if (init_io_redir(&new_data) == EXIT_SUCCESS)
 				execute(&new_data);
+			else
+				close_pipes(new_data.cmd_list, NULL, NULL);
 		}
 		free_data(&new_data);
-		dup2(new_data.old_fd[0], 0);
+		dup2(new_data.old_fd[0], STDIN_FILENO);
+		dup2(new_data.old_fd[1], STDOUT_FILENO);
 	}
 	ft_free_tab(new_data.cmd_split);
+	new_data.cmd_split = NULL;
+	if (new_data.old_fd[0] > -1)
+		close(new_data.old_fd[0]);
+	if (new_data.old_fd[1] > -1)
+		close(new_data.old_fd[1]);
+	free_shell(&new_data);
 	exit(g_exit_code);
 }
 
@@ -149,6 +168,7 @@ int	check_error_raw(t_data *data)
 	{
 		data->user_input = ft_strdup(data->cmd_split[i]);
 		scan_input(data);
+		// print_token(data->token_root);
 		if (check_error(data) != EXIT_SUCCESS)
 		{
 			free(tmp);
@@ -192,8 +212,6 @@ void	minishell_prompt(t_data *data)
 				parse_token(data);
 				// print_token(data->token_root);
 				parse_near_quote(data);
-				// write(1, "\n", 1);
-				// print_token(data->token_root);
 				build_cmd_list(data, *data->token_root);
 				if (init_io_redir(data) == EXIT_SUCCESS)
 					execute(data);

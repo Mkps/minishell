@@ -43,16 +43,33 @@ int	ft_get_word(char *input, t_data *data)
 {
 	int	i;
 	int	current_status;
+	int	par_count;
 
 	i = 0;
+	par_count = 0;
 	current_status = data->parse_status;
 	if (data->parse_status != NONE)
 	{
-		while (ft_get_sep_type(input + i) != TERM_END && ((ft_get_sep_type(input
-						+ i) != data->parse_status)
-				&& !(data->parse_status == O_PAR && ft_get_sep_type(input
-						+ i) == C_PAR)))
-			i++;
+		if (data->parse_status == O_PAR)
+		{
+			par_count++;
+			while (par_count && *(input + i))
+			{
+				if (ft_get_sep_type(input + i) == O_PAR)
+					par_count++;
+				else if (ft_get_sep_type(input + i) == C_PAR)
+					par_count--;
+				if (par_count)
+					i++;
+			}
+
+		}
+		else
+		{
+			while (ft_get_sep_type(input + i) != TERM_END
+					&& ft_get_sep_type(input + i) != data->parse_status)
+				i++;
+		}
 	}
 	else
 	{
@@ -111,12 +128,20 @@ int	ft_get_token(char *input, t_data *data)
 			return (i);
 		}
 		else if (ft_get_sep_type(input) == SQUOTE
-				|| ft_get_sep_type(input) == DQUOTE
-				|| ft_get_sep_type(input) == O_PAR)
+				|| ft_get_sep_type(input) == DQUOTE)
 		{
 			if (data->parse_status == NONE)
 				data->parse_status = ft_get_sep_type(input);
 			else if (data->parse_status == ft_get_sep_type(input))
+				data->parse_status = NONE;
+			i += ft_get_quote(input, data);
+			return (i);
+		}
+		else if (ft_get_sep_type(input) == O_PAR || ft_get_sep_type(input) == C_PAR)
+		{
+			if (data->parse_status == NONE && ft_get_sep_type(input) == O_PAR)
+				data->parse_status = O_PAR;
+			else if (data->parse_status == O_PAR && ft_get_sep_type(input) == C_PAR)
 				data->parse_status = NONE;
 			i += ft_get_quote(input, data);
 			return (i);
