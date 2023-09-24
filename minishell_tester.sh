@@ -300,10 +300,10 @@ run_test "test 251: export \$HOLA=bonjour ; env" "export \$HOLA=bonjour ; env"
 }
 
 # Start here: comment out the tests you dont want.
-# test_syntax
-# test_echo
-# test_var
-test_env
+test_syntax
+test_echo
+test_var
+# test_env
 # Print total counts
 # echo "Total OK count: $total_ok_count / $total_test_count"
 echo "Total OK count: $total_ok_count / $total_test_count "
