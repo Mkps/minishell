@@ -32,6 +32,7 @@
 # define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
 # define PROG_NAME		"minishell: "
 # define ERR_FORK		"minishell: error creating child process\n"
+# define EXPORT_MSG		"declare -x"	
 # define SYNTAX_ERROR	2
 # define CMD_ERR_FKO	127
 # define CMD_ERR_XKO	126
@@ -89,7 +90,7 @@ typedef struct s_env
 
 typedef struct s_export
 {
-	char 	*export;
+	char 	*export_str;
 	char	*key;
 	char	*value;
 	int		flag;
@@ -128,8 +129,30 @@ void	print_token(t_token **root);
 void	free_token(t_data *data);
 char	**ft_split_noquote(char *str, char c);
 int		var_is_multiple(char *var);
+/**		cmd_list.c		**/
+void	build_cmd_list(t_data *data, t_token *token);
+int		handle_assign(t_data *data, t_token *token, t_cmd *cmd);
+char	*set_assign(t_token *token);
+t_cmd	*create_cmd(t_data *data);
 
-/** 	signal.c	**/
+/**		cmd_list_add.c	**/
+void	add_cmd_back(t_data *data);
+void	add_empty_cmd(t_data *data);
+t_token	*add_cmd(t_data *data, t_token *token);
+
+/**		cmd_list_find.c	**/
+t_token	*get_cmd_first(t_token *current_t);
+t_token	*get_next_cmd(t_token *src);
+t_cmd	*last_cmd(t_cmd **root);
+
+/**		cmd_list_utils.c **/
+int		is_assign(char *str);
+int		is_empty_cmd(t_token *start);
+int		set_pipe(t_cmd *cmd);
+int		get_cmd_type(t_token *token);
+
+
+/** 	signal.c		**/
 void	signals_interact(void);
 void	signals_no_interact(void);
 void	signals_here_doc(void);
@@ -137,19 +160,16 @@ void	signals_here_doc_child(void);
 void	here_doc_child_sigint(const int signum, void *ptr, void *envv);
 void	redisplay_prompt(int signum, void *ptr);
 
-/**		lexer.c		**/
+/**		lexer.c			**/
 int		scan_input(t_data *data);
 char	*ft_str_extract(char *str, int n);
 int		ft_get_word(char *input, t_data *data);
 int		ft_get_sep_type(char *str);
 int		ft_is_ws(char c);
 
-/**		parser.c	**/
+/**		parser.c		**/
 void	parse_token(t_data *data);
 void	parse_near_quote(t_data *data);
-void	build_cmd_list(t_data *data, t_token *token);
-t_cmd	*last_cmd(t_cmd **root);
-t_token	*get_cmd_first(t_token *current_t);
 char	*ft_strappend(char *s1, char *s2, int mode);
 void	var_expand(t_data *data, t_cmd *cmd);
 
@@ -204,7 +224,7 @@ int		handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd);
 int		check_error(t_data *data);
 
 /**		error_par.c		**/
-int	check_par_error(t_token **root);
+int		check_par_error(t_token **root);
 
 /**		output_error.c	**/
 void	output_err(char *msg, t_token *token, int squotes);
@@ -212,10 +232,10 @@ void	output_err_cmd(char *msg, char *cmd_str);
 int		output_err_ret(int return_value, char *msg, char *cmd_str);
 
 /**		variable d environnement->liste chainee **/
-void copy_env_to_list(t_data *data);
+void 	copy_env_to_list(t_data *data);
 t_env	*ft_lstnew_two(char *key, char *value);
-void ft_lstadd_back_two(t_env **lst, t_env *new);
-void print_env_list(t_env **env_lst);
+void 	ft_lstadd_back_two(t_env **lst, t_env *new_elem);
+void 	print_env_list(t_env **env_lst);
 
 /**		execution builtin	**/
 int		execute_builtin(t_cmd *cmd, t_data *data);
@@ -241,20 +261,20 @@ int		retokenize(t_data *data, char *str, t_token *token);
 
 /**			export			**/
 void	env_update(t_data *data);
-void set_in_env(t_data *data, char *variable);
-void set_in_export(t_data *data, char *variable);
+void	set_in_env(t_data *data, char *variable);
+void	set_in_export(t_data *data, char *variable);
 void	execute_export(t_data *data, t_cmd *cmd);
-void print_export(t_data *data);
-void sort_export_list(t_data *data);
-t_cmd *find_export_command(t_data *data);
-void env_to_export(t_data *data);
+void	print_export(t_data *data);
+void	sort_export_list(t_data *data);
+t_cmd	*find_export_command(t_data *data);
+void	env_to_export(t_data *data);
 void	ft_export(t_data *data);
 
 //char *check_variable(const char *input);
 
 /**		export_utils	**/
 t_export	*ft_lstnew_export(char *key, char *value, int flag);
-void 		ft_lstadd_back_export(t_export **lst, t_export *new);
+void 		ft_lstadd_back_export(t_export **lst, t_export *new_elem);
 void 		free_export_list(t_export **export_lst);
 void 		insert_sorted(t_export **sorted, t_export *new_export);
 char		**ft_split2(char *s, char c);
@@ -262,14 +282,14 @@ int			ft_wordsize(char *s, char c, int pos);
 void		free_tabs(char **tab);
 int 		key_is_valid(char *chaine);
 char 		*add_quotes(char *str) ;
-int 		export_key_exists(t_export *export, char *key_to_check);
+int 		export_key_exists(t_export *export_root, char *key_to_check);
 void 		remove_export(t_data *data, const char *key_to_remove);
 int 		env_key_exists(t_env *env, char *key_to_check) ;
 void 		remove_env(t_data *data, const char *key_to_remove);
-void 		ft_lstadd_back_env(t_env **lst, t_env *new);
+void 		ft_lstadd_back_env(t_env **lst, t_env *new_elem);
 t_env 		*ft_lstnew_env(char *key, char *value);
 void		free_env_lst(t_env **cpy);
-/***temp*/
+/***	temp	*/
 void 	handle_parent_directory();
 void 	handle_previous_directory(t_data *data, char **old_pwd);
 void 	update_oldpwd(char **old_pwd, char *new_pwd);
