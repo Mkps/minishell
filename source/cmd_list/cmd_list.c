@@ -5,18 +5,20 @@ t_cmd	*create_cmd(t_data *data)
 {
 	t_cmd	*ret;
 
+	(void)data;
 	ret = (t_cmd *)malloc(sizeof(t_cmd) * 1);
 	if (!ret)
 		return (NULL);
 	ret->assign = (t_env **)malloc(sizeof(t_env *) * 1);
+	if (!ret)
+	{
+		free(ret);
+		return (NULL);
+	}
 	ret->io_list = (t_io_node **)malloc(sizeof(t_io_node *));
 	if (!ret->assign || !ret->io_list)
 	{
-		free(ret);
-		if (ret->assign)
-			free(ret->assign);
-		else if (ret->io_list)
-			free(ret->io_list);
+		multi_free(ret->assign, ret, NULL, NULL);
 		return (NULL);
 	}
 	ret->next = NULL;
@@ -60,6 +62,7 @@ int	handle_assign(t_data *data, t_token *token, t_cmd *cmd)
 	t_env	*env;
 	char	*tmp;
 
+	(void)data;
 	current = get_cmd_first(token);
 	if (current && (!current->prev || (current->prev
 				&& token_is_term(current->prev))) && is_assign(current->value))
@@ -87,7 +90,6 @@ void	build_cmd_list(t_data *data, t_token *token)
 {
 	t_token	*current_t;
 	t_token	*tmp;
-	char	*tmp_assign;
 
 	if (token == NULL)
 		current_t = *data->token_root;

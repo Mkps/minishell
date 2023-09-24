@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <readline/readline.h>
 
 #define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file (wanted `"
 
@@ -88,17 +89,11 @@ char	*heredoc_var_expand(t_data *data, char *str)
 	return (ret);
 }
 
-void	here_doc_input(t_data *data, char *limiter, int *fd)
+int	here_doc_input(t_data *data, char *limiter, int fd)
 {
 	char	*str;
-	char	**envv;
-	char	*tmp;
 	int		flag;
 
-	close(fd[0]);
-	signals_here_doc_child();
-	signal(SIGQUIT, (void (*)(int))here_doc_child_sigint);
-	here_doc_child_sigint(42, fd, data);
 	flag = get_flag(limiter);
 	str = "str";
 	while (str)
@@ -114,67 +109,41 @@ void	here_doc_input(t_data *data, char *limiter, int *fd)
 						+ flag)) && (ft_strlen(limiter + flag) == ft_strlen(str)
 					- 1)))
 		{
-			free(limiter);
-			close(fd[1]);
 			if (str)
 			{
 				free(str);
-				free_child(data);
-				exit(0);
+				return (0);
 			}
-			write(1, "\n", 1);
-			exit(2);
+			return (1);
 		}
-		ft_putstr_fd(str, fd[1]);
-		free(str);
+		if (str)
+		{
+			ft_putstr_fd(str, fd);
+			free(str);
+		}
 	}
-	close(fd[1]);
-	free(str);
-	free_child(data);
+	return (-1);
 }
 
 // Creates a child process to get the heredoc and then duplicates the read end of the pipe on the STDIN_FILENO
-int	here_doc_handler(t_data *data, char *limiter)
+int	here_doc_handler(t_data *data, t_io_node *io_node)
 {
-	int		p_fd[2];
-	pid_t	pid;
-	int		ret_fd;
-	int		status;
+	char	*heredoc_tmp;
 
-	if (pipe(p_fd) == -1)
-		error_exit(5);
-	pid = fork();
-	if (pid == -1)
-		error_exit(6);
-	status = 0;
-	if (!pid)
-	{
-		close(data->old_fd[0]);
-		close(data->old_fd[1]);
-		close_pipes(data->cmd_list, NULL, NULL);
-		here_doc_input(data, ft_strdup(limiter), p_fd);
-	}
-	else
-	{
-		signals_here_doc();
-		close(p_fd[1]);
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-		{
-			if (WEXITSTATUS(status) == 3 || WEXITSTATUS(status) == 130)
-			{
-				close(p_fd[0]);
-				dup2(data->old_fd[0], STDIN_FILENO);
-				signals_no_interact();
-				return (-1);
-			}
-		}
-		if (WEXITSTATUS(status) == 2)
-			ft_printf("%s%s')\n", HEREDOC_WARNING_EOF, limiter);
-		dup2(p_fd[0], STDIN_FILENO);
-		close(p_fd[0]);
-		signals_no_interact();
-		return (0);
-	}
-	return (-1);
+	signals_here_doc();
+	rl_getc_function = getc;
+   	rl_catch_sigwinch = 0;
+	heredoc_tmp = "tmp_fd";
+	unlink(heredoc_tmp);
+	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRWXU);
+	if (io_node->fd == -1)
+		return (output_err_ret(-1, "Error while opening file for heredoc", NULL));
+	if (here_doc_input(data, io_node->filename, io_node->fd) == 1)
+	signals_no_interact();
+	close(io_node->fd);
+	io_node->fd = open_fd(0, heredoc_tmp);
+	io_node->filename = heredoc_tmp;
+	if (g_exit_code > 128)
+		return (-1);
+	return (io_node->fd);
 }

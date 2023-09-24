@@ -35,13 +35,10 @@ t_token	*add_cmd(t_data *data, t_token *token)
 {
 	t_cmd	*new_cmd;
 	t_token	*current;
-	int		type;
 	char	*tmp;
-	char	*new_tmp;
-	char	**args;
 	int		i;
 	char	sep[2];
-		char test[2];
+	char test[2];
 
 	add_cmd_back(data);
 	new_cmd = last_cmd(data->cmd_list);
@@ -66,7 +63,6 @@ t_token	*add_cmd(t_data *data, t_token *token)
 		if (current->next->token_type == SQUOTE
 			|| current->next->token_type == DQUOTE)
 		{
-			type = current->next->token_type;
 			current = current->next->next;
 		}
 		else
@@ -79,8 +75,6 @@ t_token	*add_cmd(t_data *data, t_token *token)
 		if (new_cmd->args[i][0] == 1)
 			new_cmd->args[i][0] = '\0';
 	}
-	// if (new_cmd->type == O_PAR)
-	// 	new_cmd->is_term = O_PAR;
 	free(tmp);
 	return (current);
 }

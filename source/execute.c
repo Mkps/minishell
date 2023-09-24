@@ -50,7 +50,7 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 	return (-1);
 }
 
-int	is_builtin(t_cmd *cmd, t_data *data)
+int	is_builtin(t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
 		return (0);
@@ -73,7 +73,7 @@ int	is_builtin(t_cmd *cmd, t_data *data)
 	return (0);
 }
 
-int	is_unpiped(t_cmd *cmd, t_data *data)
+int	is_unpiped(t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
 		return (1);
@@ -92,7 +92,7 @@ int	is_unpiped(t_cmd *cmd, t_data *data)
 	return (0);
 }
 
-int	cmd_is_dir(t_cmd *cmd, t_data *data)
+int	cmd_is_dir(t_cmd *cmd)
 {
 	struct stat	stat_var;
 
@@ -136,10 +136,8 @@ int	get_cmd_ecode(t_cmd *cmd, t_data *data)
 		output_err_cmd(strerror(errno), cmd->cmd);
 		return (CMD_ERR_XKO);
 	}
-	if (cmd_is_dir(cmd, data))
+	if (cmd_is_dir(cmd))
 	{
-		// if (ft_strncmp(cmd->cmd, ".", 2) == 0 || ft_strncmp(cmd->cmd, "..", 3) == 0)
-		// 	perror
 		output_err_cmd("Is a directory", cmd->cmd);
 		return (CMD_ERR_XKO);
 	}
@@ -202,7 +200,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		if (is_unpiped(cmd, data) == 1)
+		if (is_unpiped(cmd) == 1)
 		{
 			set_fd(data, cmd);
 			cmd->pid = -2;
@@ -248,7 +246,6 @@ void	execute(t_data *data)
 	t_cmd	*start;
 	t_cmd	*last;
 	int		i;
-	int		wpid;
 
 	status = 0;
 	g_exit_code = 0;
@@ -271,7 +268,6 @@ void	execute(t_data *data)
 			last = last_cmd(data->cmd_list);
 		else
 			last = cmd;
-		wpid = 0;
 		cmd = start;
 		i = 1;
 		while (i > 0 && cmd)
@@ -283,7 +279,7 @@ void	execute(t_data *data)
 				close(cmd->fd[1]);
 			close_pipes(&start, NULL, last);
 			if (cmd->pid > 0)
-				wpid = waitpid(cmd->pid, &status, 0);
+				waitpid(cmd->pid, &status, 0);
 			if (cmd->is_term != 0)
 			{
 				if (!g_exit_code)

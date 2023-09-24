@@ -11,35 +11,28 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
 
-static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
-{
-	char	**sq;
-
-	sq = NULL;
-	if (cmd_split[0][1])
-	{
-		if (cmd_split[0][1][0] == 34 || cmd_split[0][1][0] == 39)
-		{
-			*sep = cmd_split[0][1][0];
-			free(cmd_split[0][1]);
-			sq = ft_split(cmd, *sep);
-			cmd_split[0][1] = sq[1];
-			cmd_split[0][2] = NULL;
-		}
-	}
-	return (sq);
-}
+// static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
+// {
+// 	char	**sq;
+//
+// 	sq = NULL;
+// 	if (cmd_split[0][1])
+// 	{
+// 		if (cmd_split[0][1][0] == 34 || cmd_split[0][1][0] == 39)
+// 		{
+// 			*sep = cmd_split[0][1][0];
+// 			free(cmd_split[0][1]);
+// 			sq = ft_split(cmd, *sep);
+// 			cmd_split[0][1] = sq[1];
+// 			cmd_split[0][2] = NULL;
+// 		}
+// 	}
+// 	return (sq);
+// }
 int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 {
-	int		tmp_fd;
-	int		status;
-	pid_t	pid;
-
+	(void)data;
 	if (fd->mode == IO_INPUT)
 	{
 		fd->fd = open_fd(0, fd->filename);
@@ -54,9 +47,12 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	}
 	if (fd->mode == IO_HEREDOC)
 	{
-		if (!here_doc_handler(data, fd->filename))
+		fd->fd = here_doc_handler(data, fd);
+		if (fd->fd > 0)
 		{
-			fd->fd = -42;
+			if (cmd->fd[0] >= 0)
+				close(cmd->fd[0]);
+			cmd->fd[0] = fd->fd;
 			return (0);
 		}
 		// if (fd->fd > 0)
@@ -140,6 +136,7 @@ void	close_fd(t_data *data, t_cmd *cmd)
 {
 	t_io_node	*current;
 
+	(void)data;
 	current = *cmd->io_list;
 	while (current)
 	{

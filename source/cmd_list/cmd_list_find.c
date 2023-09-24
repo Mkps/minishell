@@ -29,8 +29,8 @@ t_token	*get_next_cmd(t_token *src)
 				current = current->next;
 				continue ;
 			}
-			else if (current->prev == NULL || current->quote_status == NONE
-					&& current->prev != NULL && !token_is_io(current->prev))
+			else if (current->prev == NULL || (current->quote_status == NONE
+					&& current->prev != NULL && !token_is_io(current->prev)))
 				return (current);
 			else if (current->prev != NULL && current->quote_status != NONE
 					&& !token_is_io(current->prev->prev))

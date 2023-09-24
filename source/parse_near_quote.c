@@ -64,8 +64,6 @@ void	parse_near_quote_quote(t_data *data, t_token *current)
 void	parse_near_quote(t_data *data)
 {
 	t_token	*current;
-	t_token	*tmp;
-	t_token	*tmp_tmp;
 
 	current = *data->token_root;
 	while (current != NULL)

@@ -73,7 +73,6 @@ int	main(int ac, char **av, char **envv)
 	sort_export_list(&data);
 
 	// print_env_list(data.export);
-	t_cmd *cmd = *data.cmd_list;
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
 	if (ac == 3)

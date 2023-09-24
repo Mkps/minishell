@@ -69,13 +69,11 @@ void	set_in_env(t_data *data, char *variable)
 	char	*key;
 	char	*value;
 	t_env	*new_env;
-	int		i;
 
 	variable_split = NULL;
 	key = NULL;
 	value = NULL;
 	new_env = NULL;
-	i = 0;
 	if (data->flag > 0)
 		return ;
 	variable_split = ft_split2(variable, '=');
@@ -122,14 +120,12 @@ void	set_in_export(t_data *data, char *variable)
 	char		*key;
 	char		*value;
 	t_export	*new_export;
-	int			i;
 	int			flag;
 
 	variable_split = NULL;
 	key = NULL;
 	value = NULL;
 	new_export = NULL;
-	i = 0;
 	flag = 0;
 	variable_split = ft_split2(variable, '=');
 	key = ft_strdup(variable_split[0]);
@@ -179,10 +175,8 @@ void	set_in_export(t_data *data, char *variable)
 void	execute_export(t_data *data, t_cmd *cmd)
 {
 	int	i;
-	int	flag;
 
 	i = 1;
-	flag = 0;
 	while (cmd->args[i])
 	{
 		if (ft_strlen(cmd->args[i]) == 1 && cmd->args[i][0] == '=')

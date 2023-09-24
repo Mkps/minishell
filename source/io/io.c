@@ -28,6 +28,7 @@ int	add_io_node(t_data *data, t_cmd *cmd, char *filename, int mode)
 {
 	t_io_node	*current;
 
+	(void)data;
 	if (*cmd->io_list == NULL)
 	{
 		current = create_io_node(filename, mode);
@@ -94,7 +95,6 @@ char	*get_filename(t_token *io_token)
 int	handle_cmd_io(t_data *data, t_token *current_t, t_cmd *cmd)
 {
 	t_token	*io_token;
-	int		p_type;
 
 	io_token = get_io_token(get_cmd_first(current_t));
 	while (io_token != NULL)

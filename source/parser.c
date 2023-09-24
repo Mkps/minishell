@@ -40,8 +40,8 @@ char	*ft_strappend(char *s1, char *s2, int mode)
 int	token_wc(char *input, t_token *current, t_data *data)
 {
 	int	i;
-	int	current_status;
 
+	(void)data;
 	i = 0;
 	if (!input)
 	{
@@ -67,6 +67,7 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 	t_token	*swap;
 	t_token	*next;
 
+	(void)str;
 	i = 0;
 	tmp = ft_wildcard(start->value);
 	node = start;
@@ -95,8 +96,6 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 void	parse_token(t_data *data)
 {
 	t_token	*current;
-	t_token	*node;
-	char	*tmp;
 
 	current = *data->token_root;
 	while (current != NULL)
@@ -106,19 +105,19 @@ void	parse_token(t_data *data)
 			&& current->quote_status != IO_HEREDOC)
 		{
 			var_expander(data, current->value, current);
-			if (current->quote_status == NONE  && current->next && (!current->value || current->value && current->value[0] == 0))
+			if (current->quote_status == NONE  && current->next && (!current->value || (current->value && current->value[0] == 0)))
 			{
 				current = current->next;
 				lst_del_prev(&current);
 				if (current->prev == NULL)
 					*data->token_root = current;
 			}
-			else if (current->quote_status == NONE && current->prev && (!current->value || current->value && current->value[0] == 0))
+			else if (current->quote_status == NONE && current->prev && (!current->value || (current->value && current->value[0] == 0)))
 			{
 				current = current->prev;
 				lst_del_next(&current);
 			}
-			else if (current->quote_status == NONE && (!current->value || current->value && current->value[0] == 0))
+			else if (current->quote_status == NONE && (!current->value || (current->value && current->value[0] == 0)))
 			{
 				lst_del_token(&current);
 				*data->token_root = NULL;
@@ -135,14 +134,14 @@ void	parse_token(t_data *data)
 		}
 		if (current->token_type == IO_HEREDOC && current->next
 			&& ((current->next->token_type == WORD)
-				|| token_is_quote(current->next)
-				&& current->next->next->token_type == WORD))
+				|| (token_is_quote(current->next)
+				&& current->next->next->token_type == WORD)))
 		{
 			if (current->next && (current->next->token_type == WORD))
 				current->next->quote_status = DQUOTE;
 			else if (current->next && ((current->next->token_type == WORD)
-						|| token_is_quote(current->next)
-						&& current->next->next->token_type == WORD))
+						|| (token_is_quote(current->next)
+						&& current->next->next->token_type == WORD)))
 				current->next->next->quote_status = SQUOTE;
 		}
 		current = current->next;

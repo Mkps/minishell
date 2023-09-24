@@ -18,7 +18,7 @@ static int	ft_count_strings(char *str, char separator)
 {
 	size_t	i;
 	size_t	str_count;
-	size_t	quote_status;
+	int		quote_status;
 
 	i = 0;
 	str_count = 0;

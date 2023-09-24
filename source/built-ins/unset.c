@@ -36,12 +36,10 @@ t_cmd	*find_unset_command(t_data *data)
 void	execute_unset(t_data *data, t_cmd *cmd)
 {
 	int			i;
-	t_cmd		*current;
 	t_export	*prev;
 	t_export	*current_export;
 
 	i = 1;
-	current = cmd;
 	prev = NULL;
 	current_export = NULL;
 	while (cmd->args[i])
@@ -79,12 +77,10 @@ void	execute_unset(t_data *data, t_cmd *cmd)
 void	execute_env(t_data *data, t_cmd *cmd)
 {
 	int		i;
-	t_cmd	*current;
 	t_env	*prev;
 	t_env	*current_export;
 
 	i = 1;
-	current = cmd;
 	while (cmd->args[i])
 	{
 		prev = NULL;

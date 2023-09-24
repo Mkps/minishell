@@ -85,13 +85,13 @@ void	prompt_user(t_data *data)
 	char	*prompt;
 
 	prompt = set_prompt(data);
-	signal(SIGINT, (void (*)(int))redisplay_prompt);
-	redisplay_prompt(42, prompt);
+	// signal(SIGINT, (void (*)(int))redisplay_prompt);
+	// redisplay_prompt(42, prompt);
 	data->user_input = NULL;
 	data->raw_input = NULL;
 	data->user_input = readline(prompt);
 	free(prompt);
-	if ((data->user_input != NULL && (!strcmp(data->user_input, "exit"))
+	if (((data->user_input != NULL && (!strcmp(data->user_input, "exit")))
 			|| data->user_input == NULL))
 	{
 		if (!data->user_input)

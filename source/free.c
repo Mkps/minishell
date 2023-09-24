@@ -78,6 +78,8 @@ void	free_cmd_list(t_data *data)
 				next_io = io->next;
 				if (io->fd > -1)
 					close(io->fd);
+				if (io->fd > -1 && io->mode == IO_HEREDOC)
+					unlink(io->filename);
 				free(io);
 				io = next_io;
 			}
@@ -90,6 +92,7 @@ void	free_cmd_list(t_data *data)
 }
 void	free_subshell(t_data *data)
 {
+	(void)data;
 }
 
 int	free_return(int return_value, void *ptr_1, void *ptr_2, void *ptr_3)
@@ -181,8 +184,8 @@ void	free_token(t_data *data)
 void	free_var(t_data *data, t_cmd *cmd)
 {
 	t_env	*current;
-	t_env	*next;
 
+	(void)data;
 	if (cmd->assign)
 	{
 		current = *cmd->assign;

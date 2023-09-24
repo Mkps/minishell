@@ -12,11 +12,10 @@
 
 #include "../include/minishell.h"
 
-int	var_expand_valid(t_data *data, char **ret, int *i, t_token *token)
+int	var_expand_valid(t_data *data, char **ret, int *i)
 {
 	int		n;
 	char	*var_id;
-	char	*tmp;
 	char	*tmp_str;
 	int		flag_retokenize;
 
@@ -27,7 +26,6 @@ int	var_expand_valid(t_data *data, char **ret, int *i, t_token *token)
 		n++;
 	if (n != 1)
 	{
-		tmp = *ret;
 		tmp_str = ft_str_extract((*ret + *i + 1), n - 1);
 		var_id = get_var(data, tmp_str);
 		if (var_is_multiple(var_id))
@@ -44,6 +42,7 @@ void	var_expand_exitcode(t_data *data, char **ret, int *i)
 	char	*tmp;
 	char	*exit_code;
 
+	(void)data;
 	exit_code = ft_itoa(g_exit_code);
 	tmp = *ret;
 	*ret = str_replace(*ret, *i, 2, exit_code);
@@ -59,7 +58,7 @@ int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
 
 	flag_retokenize = 0;
 	if (ft_isalpha(*(*ret + *i + 1)) || *(*ret + *i + 1) == '_')
-		flag_retokenize = var_expand_valid(data, ret, i, token);
+		flag_retokenize = var_expand_valid(data, ret, i);
 	else if (ft_isdigit(*(*ret + *i + 1)))
 	{
 		tmp = *ret;
@@ -81,7 +80,6 @@ int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
 int	var_expander(t_data *data, char *str, t_token *token)
 {
 	int		i;
-	char	*ret;
 	char	**ret_ptr;
 	int		flag_retokenize;
 

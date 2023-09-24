@@ -17,7 +17,6 @@
 int		check_error_raw(t_data *data);
 void	minishell_inline(t_data *data, char *user_input)
 {
-	char	**cmd_list;
 	char	*tmp;
 	int		i;
 
@@ -185,7 +184,6 @@ int	check_error_raw(t_data *data)
 }
 void	minishell_prompt(t_data *data)
 {
-	char	**cmd_list;
 	int		i;
 
 	while (1)

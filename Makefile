@@ -10,15 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = mshell
+NAME = minishell
 
-SRCDIR = source/
+SRCDIR = ./source
 
-INCDIR = include/
+INCDIR = ./include/
 
-OBJ_DIR = build
-
-SRC = $(SRCDIR)/main.c $(SRCDIR)/signal.c
+OBJ_DIR = ./build
 
 SRC_NAME = 	built-ins/unset.c \
 			built-ins/built_in.c \
@@ -62,26 +60,27 @@ SRC_NAME = 	built-ins/unset.c \
 			var_expander.c \
 			wildcards.c \
 	  
-SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
-OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
+SRC = $(addprefix $(SRCDIR)/, $(SRC_NAME))
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_NAME:c=o))
 
 CC = cc
 
 LIBFT = libft/libft.a
 LIB = $(LIBFT) -lreadline
 
-CFLAGS = -Wall -Wextra -Werror $(LIB) -I$(INCDIR)
+CFLAGS = -Wall -Wextra -Werror 
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "Compiling objects for mandatory part"
 	@make -s all -C libft
-	$(CC) -o $(NAME) $(OBJ) $(LIB)
-	
+	$(CC) -o $(NAME) $(OBJ) $(LIB) -I$(INCDIR)
+
 $(OBJ_DIR)/%.o:	$(SRCDIR)/%.c
-	@mkdir -p '$(@D)'
-	@$(CC) -c $(CFLAGS) $< -o $@
+	mkdir -p '$(@D)'
+	echo $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
 	@echo "Cleaning object files..."

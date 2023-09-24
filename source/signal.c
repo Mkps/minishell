@@ -15,20 +15,14 @@
 
 extern int	g_exit_code;
 
-void	redisplay_prompt(int signum, void *ptr)
+void	redisplay_prompt(int signum)
 {
-	static char	*prompt;
-
 	if (signum == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_forced_update_display();
-	}
-	else
-	{
-		prompt = (char *)ptr;
 	}
 }
 
@@ -55,7 +49,7 @@ void	handle_sigint(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = (void (*)(int))redisplay_prompt;
+	act.sa_handler = redisplay_prompt;
 	sigaction(SIGINT, &act, NULL);
 }
 
@@ -83,36 +77,18 @@ void	signals_no_interact(void)
 
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = &signal_nl;
-	act.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;
 	sigaction(SIGQUIT, &act, NULL);
 }
 
-void	here_doc_sigint(int signum)
+void	signal_sigint_heredoc(int signum)
 {
 	g_exit_code = signum + 128;
-}
-
-void	here_doc_child_sigint(const int signum, void *ptr, void *data)
-{
-	static int		*fd;
-	static t_data	*hd_data;
-
-	if (signum == SIGINT)
-	{
-		write(1, "\n", 1);
-		if (fd[1] > -1)
-			close(fd[1]);
-		if (hd_data)
-			free_child(hd_data);
-		exit(3);
-	}
-	if (signum == 42)
-	{
-		fd = (int *)ptr;
-		hd_data = (t_data *)data;
-	}
+    rl_reset_line_state();      // Resets the display state to a clean state
+    rl_cleanup_after_signal();  // Resets the terminal to the state before readline() was called
+    rl_replace_line("",0);      // Clears the current prompt
+    RL_UNSETSTATE(RL_STATE_ISEARCH|RL_STATE_NSEARCH|RL_STATE_VIMOTION|RL_STATE_NUMERICARG|RL_STATE_MULTIKEY);
 }
 
 void	signals_here_doc(void)
@@ -120,22 +96,9 @@ void	signals_here_doc(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = &here_doc_sigint;
-	act.sa_flags = SA_RESTART;
+	act.sa_handler = &signal_sigint_heredoc;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;
 	sigaction(SIGQUIT, &act, NULL);
-}
 
-void	signals_here_doc_child(void)
-{
-	struct sigaction	act;
-
-	signal(SIGINT, (void (*)(int))signals_here_doc_child);
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = (void (*)(int)) & here_doc_child_sigint;
-	act.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &act, NULL);
-	act.sa_handler = &signal_quit;
-	sigaction(SIGQUIT, &act, NULL);
 }

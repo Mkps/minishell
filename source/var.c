@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stddef.h>
 
 char	*str_env(t_data *data, char *str)
 {
@@ -32,11 +33,7 @@ char	*str_env(t_data *data, char *str)
 //Returns the value of the var. NULL if not set.
 char	*get_var(t_data *data, char *str)
 {
-	int		i;
-	char	*ret;
 	char	*env;
-	char	**env_p;
-	char	*tmp;
 
 	env = ft_getenv(data->envv, str);
 	if (env == NULL)
@@ -52,7 +49,7 @@ char	*str_replace(char *src, int r_index, int n, char *str)
 	int		i;
 	int		ret_len;
 	int		str_len;
-	int		last_index;
+	size_t	last_index;
 	char	*ret;
 
 	if (str == NULL)
@@ -85,7 +82,7 @@ char	*str_replace_strs(char **src, int r_index, int n, char *str)
 	int		i;
 	int		ret_len;
 	int		str_len;
-	int		last_index;
+	size_t	last_index;
 	char	*ret;
 
 	if (str == NULL)
@@ -130,7 +127,6 @@ int	is_valid_var(char *str)
 int	var_is_multiple(char *var)
 {
 	int	i;
-	int	ws;
 
 	i = -1;
 	if (!var)
@@ -144,10 +140,10 @@ int	var_is_multiple(char *var)
 int	retokenize(t_data *data, char *str, t_token *token)
 {
 	char	**split;
-	t_token	*new_token;
 	t_token	*current;
 	int		i;
 
+	(void)data;
 	current = token;
 	split = ft_split(str, ' ');
 	if (!split)

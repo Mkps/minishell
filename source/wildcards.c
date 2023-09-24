@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stddef.h>
 
 int	get_start_index(char *str, int i)
 {
@@ -45,7 +46,6 @@ int	ft_strcmp_no_case(const char *s1, const char *s2)
 {
 	int	i1;
 	int	i2;
-	int	ret;
 
 	i1 = 0;
 	i2 = 0;
@@ -78,7 +78,6 @@ int	ft_strcmp_no_case(const char *s1, const char *s2)
 char	*ft_strjoin_tab(char **tab, int i, char join)
 {
 	int		index;
-	int		k;
 	char	append[2];
 	char	*ret;
 
@@ -319,7 +318,7 @@ char	*str_replace_free(char *src, int r_index, int n, char *str)
 	int		j;
 	int		ret_len;
 	int		str_len;
-	int		last_index;
+	size_t	last_index;
 	char	*ret;
 
 	if (str == NULL)
@@ -359,14 +358,12 @@ char	*ft_wildcard(char *str)
 	int		i;
 	int		start_index;
 	int		end_index;
-	int		len;
 	char	*ret;
 	char	*tmp;
 
 	i = 0;
 	start_index = 0;
 	end_index = 0;
-	len = 0;
 	ret = ft_strdup(str);
 	tmp = NULL;
 	while (ret[i])

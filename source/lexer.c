@@ -15,8 +15,6 @@
 
 int	ft_get_sep(char *input, t_data *data)
 {
-	char	*tmp;
-
 	if (ft_get_sep_type(input) > 2)
 	{
 		if (ft_get_sep_type(input) == PIPE_STDERR
@@ -97,7 +95,6 @@ int	ft_get_word(char *input, t_data *data)
 int	ft_get_quote(char *input, t_data *data)
 {
 	int		i;
-	int		quote_type;
 	t_token	*last;
 
 	i = 1;
@@ -237,7 +234,6 @@ int	ft_is_ws(char c)
 int	scan_input(t_data *data)
 {
 	int		i;
-	int		escape_type;
 	char	*input;
 	int		input_length;
 

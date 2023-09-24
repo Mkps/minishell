@@ -90,7 +90,6 @@ typedef struct s_env
 
 typedef struct s_export
 {
-	char 	*export_str;
 	char	*key;
 	char	*value;
 	int		flag;
@@ -117,7 +116,7 @@ typedef struct s_data {
 void	argc_error(int error_code);
 void	error_exit(int exit_code);
 int		open_fd(int mode, char *filename);
-int		here_doc_handler(t_data *data, char *limiter);
+int		here_doc_handler(t_data *data, t_io_node *io_node);
 void	exec_cmd(t_cmd *cmd, t_data *data);
 char	*get_cmd(char *cmd, char **env_p);
 char	**get_path(char **envv);
@@ -156,9 +155,6 @@ int		get_cmd_type(t_token *token);
 void	signals_interact(void);
 void	signals_no_interact(void);
 void	signals_here_doc(void);
-void	signals_here_doc_child(void);
-void	here_doc_child_sigint(const int signum, void *ptr, void *envv);
-void	redisplay_prompt(int signum, void *ptr);
 
 /**		lexer.c			**/
 int		scan_input(t_data *data);

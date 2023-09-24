@@ -100,7 +100,6 @@ void	ft_setenv(t_data *data, char *value)
 {
 	int		i;
 	char	*key;
-	char	*k_value;
 	char	**envv;
 
 	envv = data->envv;
