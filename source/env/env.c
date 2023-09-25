@@ -38,10 +38,23 @@ char	*ft_getenv(char **env, const char *str)
 }
 
 // Used to return NULL while freeing the ret tab
-char	**free_ret(char **ret)
+char	**duplicate_ret(char **ret, char **envv)
 {
-	ft_free_tab(ret);
-	return (NULL);
+	int	i;
+
+	i = 0;
+	while (envv[i])
+	{
+		ret[i] = ft_strdup(envv[i]);
+		if (!ret[i])
+		{
+			ft_free_tab(ret);
+			output_err_cmd("Error adding value to environment.\n", NULL);
+			return (NULL);
+		}
+		i++;
+	}
+	return (ret);
 }
 
 // Duplicates the envv string array and appends value to it.
@@ -53,29 +66,18 @@ char	**add_env_value(char **envv, char *value)
 	i = 0;
 	while (envv[i] != 0)
 		i++;
-	ret = (char**)ft_calloc(i + 2, sizeof(*ret));
+	ret = (char **)ft_calloc(i + 2, sizeof(*ret));
 	if (!ret)
 	{
-		output_err_cmd("An error occured while adding a value to the environment.\n", NULL);
+		output_err_cmd("Error adding value to environment.\n", NULL);
 		return (envv);
 	}
 	if (envv && i == 0)
 		envv = ret;
 	else
-	{
-		i = 0;
-		while (envv[i])
-		{
-			ret[i] = ft_strdup(envv[i]);
-			if (!ret[i])
-			{
-				ft_free_tab(ret);
-				output_err_cmd("An error occured while adding a value to the environment.\n", NULL);
-				return (envv);
-			}
-			i++;
-		}
-	}
+		ret = duplicate_ret(ret, envv);
+	if (!ret)
+		return (envv);
 	ret[i] = ft_strdup(value);
 	ft_free_tab(envv);
 	free(value);
