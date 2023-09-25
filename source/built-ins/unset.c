@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 13:42:53 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 11:30:51 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 16:43:24 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,13 @@ t_cmd	*find_unset_command(t_data *data)
 		cmd = cmd_list[i];
 		if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0], "unset",
 				ft_strlen("unset")) == 0)
-		{
 			return (cmd);
-		}
 		i++;
 	}
 	return (NULL);
 }
 
-void	execute_unset(t_data *data, t_cmd *cmd)
+void		execute_unset(t_data *data, t_cmd *cmd)
 {
 	int			i;
 	t_export	*prev;
@@ -104,7 +102,6 @@ void	execute_env(t_data *data, t_cmd *cmd)
 					free(current_export->value);
 					free(current_export);
 				}
-				printf("Variable supprimée : %s\n", cmd->args[i]);
 				break ;
 			}
 			prev = current_export;
@@ -145,13 +142,9 @@ void	remove_export(t_data *data, const char *key_to_remove)
 				ft_strlen(current_export->key)) == 0)
 		{
 			if (prev == NULL)
-			{
 				*data->env_export = current_export->next;
-			}
 			else
-			{
 				prev->next = current_export->next;
-			}
 			free(current_export->key);
 			free(current_export->value);
 			free(current_export);
