@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 10:56:18 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_cmd	*find_export_command(t_data *data)
 	return (NULL);
 }
 
-void	ft_export(t_data *data)
+int	ft_export(t_data *data)
 {
 	t_cmd	*cmd_lst;
 
@@ -59,13 +59,14 @@ void	ft_export(t_data *data)
 	{
 		sort_export_list(data);
 		print_export(data);
-		return ;
+		return (EXIT_SUCCESS);
 	}
 	else
 	{
 		execute_export(data, cmd_lst);
 		env_update(data);
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	print_export(t_data *data)

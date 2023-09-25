@@ -6,13 +6,13 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:15 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 10:55:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_cd(t_cmd *cmd, t_data *data)
+int	ft_cd(t_cmd *cmd, t_data *data)
 {
 	char	*dir;
 	char	*pwd;
@@ -26,14 +26,9 @@ void	ft_cd(t_cmd *cmd, t_data *data)
 	tmp = NULL;
 	old_pwd = NULL; //getcwd(NULL, 0);
 	if (cmd->args[2] != NULL)
-	{
-		printf("minishell: cd: too many arguments\n");
-		return ;
-	}
+		return (output_err_ret(1, "minishell: cd: too many arguments\n");
 	if (cmd->args[1] == NULL)
-	{
-		return ;
-	}
+		return (output_err_ret(1, "minishell: cd: need absolute or relative path\n"));
 	dir = cmd->args[1];
 	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
 	{
@@ -96,6 +91,7 @@ void	ft_cd(t_cmd *cmd, t_data *data)
 	tmp = ft_strjoin("PWD=", pwd);
 	ft_setenv(data, tmp);
 	free(pwd);
+	return (EXIT_SUCCESS);
 }
 
 void	handle_parent_directory(void)

@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 04:14:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 10:51:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,22 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_echo(cmd));
 	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		ft_cd(cmd, data);
-		return (1);
-	}
+		return (ft_cd(cmd, data));
 	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		ft_pwd(data);
-		return (1);
-	}
+		return (ft_pwd(data));
 	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		ft_env(data);
-		return (1);
-	}
+		return (ft_env(data));
 	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		ft_export(data);
-		return (1);
-	}
+		return (ft_export(data));
 	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		ft_unset(data);
-		return (1);
-	}
+		return (ft_unset(data));
 	else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd->cmd) + 1) == 0)
-		exit(0);
+		ft_exit(g_exit_code);
 	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_true();
+		return (ft_true());
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_false();
-	return (-1);
+		return (ft_false());
+	return (1);
 }
 
 int	is_builtin(t_cmd *cmd)
