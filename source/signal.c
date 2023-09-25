@@ -85,10 +85,9 @@ void	signals_no_interact(void)
 void	signal_sigint_heredoc(int signum)
 {
 	g_exit_code = signum + 128;
-    rl_reset_line_state();      // Resets the display state to a clean state
-    rl_cleanup_after_signal();  // Resets the terminal to the state before readline() was called
-    rl_replace_line("",0);      // Clears the current prompt
-    RL_UNSETSTATE(RL_STATE_ISEARCH|RL_STATE_NSEARCH|RL_STATE_VIMOTION|RL_STATE_NUMERICARG|RL_STATE_MULTIKEY);
+    rl_reset_line_state();
+    rl_cleanup_after_signal();
+    rl_replace_line("",0);
 }
 
 void	signals_here_doc(void)

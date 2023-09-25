@@ -85,8 +85,6 @@ void	prompt_user(t_data *data)
 	char	*prompt;
 
 	prompt = set_prompt(data);
-	// signal(SIGINT, (void (*)(int))redisplay_prompt);
-	// redisplay_prompt(42, prompt);
 	data->user_input = NULL;
 	data->raw_input = NULL;
 	data->user_input = readline(prompt);
@@ -97,6 +95,6 @@ void	prompt_user(t_data *data)
 		if (!data->user_input)
 			write(1, "exit\n", 5);
 		free_shell(data);
-		exit(0);
+		exit(g_exit_code);
 	}
 }

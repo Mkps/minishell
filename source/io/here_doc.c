@@ -133,17 +133,22 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	signals_here_doc();
 	rl_getc_function = getc;
    	rl_catch_sigwinch = 0;
-	heredoc_tmp = "tmp_fd";
+	heredoc_tmp = "/tmp/tmp_fd";
 	unlink(heredoc_tmp);
-	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRWXU);
+	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (io_node->fd == -1)
 		return (output_err_ret(-1, "Error while opening file for heredoc", NULL));
-	if (here_doc_input(data, io_node->filename, io_node->fd) == 1)
+	if (here_doc_input(data, io_node->filename, io_node->fd) == 1 && g_exit_code < 128)
+		printf("here-document delimited by end-of-file (wanted '%s')\n", io_node->filename);
 	signals_no_interact();
 	close(io_node->fd);
 	io_node->fd = open_fd(0, heredoc_tmp);
 	io_node->filename = heredoc_tmp;
 	if (g_exit_code > 128)
+	{
+		close(io_node->fd);
+		unlink(io_node->filename);
 		return (-1);
+	}
 	return (io_node->fd);
 }

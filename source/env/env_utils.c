@@ -25,7 +25,6 @@ char	**ft_strsdup(char	**strs)
 		}
 		i++;
 	}
-	ret[i] = 0;
 	return (ret);
 }
 

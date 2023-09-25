@@ -53,19 +53,30 @@ char	**add_env_value(char **envv, char *value)
 	i = 0;
 	while (envv[i] != 0)
 		i++;
-	ret = ft_calloc(i + 2, sizeof(char *));
+	ret = (char**)ft_calloc(i + 2, sizeof(*ret));
 	if (!ret)
-		return (NULL);
-	if (envv && !*envv)
+	{
+		output_err_cmd("An error occured while adding a value to the environment.\n", NULL);
+		return (envv);
+	}
+	if (envv && i == 0)
 		envv = ret;
 	else
 	{
-		ret = ft_strsdup(envv);
-		if (!ret)
-			return (free_ret(ret));
+		i = 0;
+		while (envv[i])
+		{
+			ret[i] = ft_strdup(envv[i]);
+			if (!ret[i])
+			{
+				ft_free_tab(ret);
+				output_err_cmd("An error occured while adding a value to the environment.\n", NULL);
+				return (envv);
+			}
+			i++;
+		}
 	}
 	ret[i] = ft_strdup(value);
-	ret[i + 1] = 0;
 	ft_free_tab(envv);
 	free(value);
 	return (ret);

@@ -168,9 +168,22 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 		cmd->pid = fork();
 		if (cmd->pid == 0)
 		{
+			close(data->old_fd[0]);
+			close(data->old_fd[1]);
 			cmd->pipe_status = 0;
 			set_pipes(data, cmd);
-			set_fd(data, cmd);
+			if (cmd->fd[0] > -1)
+			{
+				dup2(cmd->fd[0], STDIN_FILENO);
+				close(cmd->fd[0]);
+			}
+			if (cmd->fd[1] > -1)
+			{
+				dup2(cmd->fd[1], STDOUT_FILENO);
+				close(cmd->fd[1]);
+			}
+			close_pipes(data->cmd_list, NULL, NULL);
+			free_child(data);
 			exit(0);
 		}
 		return ;
