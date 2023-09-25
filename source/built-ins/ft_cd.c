@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 11:13:08 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:53:28 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,11 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		return (output_err_ret(1, "minishell: cd: need absolute or relative path\n", NULL));
 	dir = cmd->args[1];
 	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
-	{
 		handle_home_directory(data, dir);
-	}
 	else if (ft_strncmp(dir, "-", ft_strlen(dir)) == 0)
-	{
 		handle_previous_directory(data, &old_pwd);
-	}
 	else if (ft_strncmp(dir, "..", ft_strlen(dir)) == 0)
-	{
 		handle_parent_directory();
-	}
 	else
 	{
 		if (dir[0] == '"' && dir[ft_strlen(dir) - 1] == '"')
@@ -50,15 +44,11 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 			dir[ft_strlen(dir) - 2] = '\0';
 		}
 		if (access(dir, F_OK) == -1)
-		{
 			printf("minishell: cd: %s: No such file or directory\n", dir);
-		}
 		else
 		{
 			if (chdir(dir) != 0)
-			{
 				perror("cd");
-			}
 		}
 	}
 	pwd = getcwd(NULL, 0);
@@ -112,12 +102,11 @@ void	handle_previous_directory(t_data *data, char **old_pwd)
 		printf("cd: OLDPWD not set\n");
 		return ;
 	}
-	// Allouez de la mémoire pour old_pwd et copiez la valeur de old_pwd_env.
 	*old_pwd = ft_strdup(old_pwd_env);
 	if (chdir(old_pwd_env) != 0)
 	{
 		perror("cd");
-		free(*old_pwd); // Assurez-vous de libérer la mémoire en cas d'erreur.
+		free(*old_pwd);
 	}
 }
 
@@ -130,7 +119,7 @@ void	handle_home_directory(t_data *data, const char *dir)
 		return ;
 	}
 	size_t full_path_len = strlen(home_dir) + strlen(dir) - 1;
-	char full_path[full_path_len + 1]; // +1 for null terminator
+	char full_path[full_path_len + 1]; 
 	ft_strlcpy(full_path, home_dir, sizeof(full_path));
 	ft_strlcat(full_path, dir + 1, sizeof(full_path));
 	if (chdir(full_path) != 0)

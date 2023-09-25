@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 13:29:08 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,38 @@ char	*add_quotes(char *str)
 	free(str);
 	return (result);
 }
-
-int	export_key_exists(t_export *export, char *key_to_check)
+/*
+int	export_key_existsbis(t_export *export, char *key_to_check)
 {
 	while (export != NULL)
 	{
 		if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
+		{
+			printf("key existe\n");	
 			return (1);
+		}
 		export = export->next;
 	}
+	printf("key exsiste pas \n");
 	return (0);
+}*/
+
+int export_key_exists(t_export *export, char *key_to_check)
+{
+    while (export != NULL)
+    {
+        if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
+        {
+            if (ft_strlen(export->key) == ft_strlen(key_to_check))
+            {
+                return (1);
+            }
+        }
+        export = export->next;
+    }
+    return (0);
 }
+
 
 int	key_is_valid(char *chaine)
 {

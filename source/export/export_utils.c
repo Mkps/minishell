@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:50:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 14:18:07 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:25:23 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,12 @@ int	env_key_exists(t_env *env, char *key_to_check)
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, key_to_check, ft_strlen(key_to_check)) == 0)
-			return (1);
+		{
+			if (ft_strlen(env->key) == ft_strlen(key_to_check))
+			{
+				return (1);
+			}
+		}
 		env = env->next;
 	}
 	return (0);

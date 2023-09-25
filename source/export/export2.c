@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 11:09:16 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 13:25:06 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,16 @@ int	set_in_env(t_data *data, char *variable)
 	{
 		printf("\n key existe deja \n");
 		if (value[0] != '\0')
+		{
 			remove_env(data, key);
+			return (EXIT_SUCCESS);
+		}
 		else
 		{
 			free(value);
 			free(key);
 			ft_free_tab(variable_split);
-			return (0); // Bon code de retour a mettre
+			return (EXIT_FAILURE);
 		}
 	}
 	ft_lstadd_back_env(data->env_cpy, new_env);
@@ -138,22 +141,25 @@ int	set_in_export(t_data *data, char *variable)
 		ft_free_tab(variable_split);
 		return (EXIT_FAILURE);
 	}
-	printf("123\n");
+	//printf("123\n");
 	if (ft_strrchr(variable, '=') == NULL)
 		flag++;
 	if (value[0] != '\0')
 		value = add_quotes(value);
-	printf("234\n");
+	//printf("234\n");
 	if (export_key_exists(*data->env_export, key) == 1)
 	{
 		if (value[0] != '\0')
+		{
 			remove_export(data, key);
+			return (EXIT_SUCCESS);
+		}
 		else
 		{
 			free(value);
 			free(key);
 			ft_free_tab(variable_split);
-			return (0); // A changer a la bonne valeur.
+			return (EXIT_FAILURE);
 		}
 	}
 	new_export = ft_lstnew_export(key, value, flag);
