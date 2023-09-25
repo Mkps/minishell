@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 11:32:07 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:07:35 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 		return (ft_true());
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_false());
-	return (1);
+	return (-1);
 }
 
 int	is_builtin(t_cmd *cmd)
