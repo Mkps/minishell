@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:29:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:28:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,6 @@ void	prompt_user(t_data *data)
 	free(prompt);
 	if (((data->user_input != NULL && (!strcmp(data->user_input, "exit")))
 			|| data->user_input == NULL))
-	{
 		if (!data->user_input)
-			write(1, "exit\n", 5);
-		free_shell(data);
-		exit(g_exit_code);
-	}
+			data->user_input = ft_strdup("exit");
 }

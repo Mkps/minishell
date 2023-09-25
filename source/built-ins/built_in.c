@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 04:19:34 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:27:51 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,11 @@ int	ft_pwd(t_data *data)
 	}
 	return (output_err_ret(EXIT_FAILURE,
 			"ERROR Could not find PWD in env", ""));
+}
+
+void	ft_exit(t_data *data)
+{
+	write(1, "exit\n", 5);
+	free_shell(data);
+	exit(g_exit_code);
 }

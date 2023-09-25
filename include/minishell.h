@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 11:12:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:31:11 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,7 @@ int		ft_echo(t_cmd *cmd);
 int		ft_cd(t_cmd *cmd, t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_env(t_data *data);
+void	ft_exit(t_data *data);
 
 /**		minishell_cmd.c	**/
 int		set_fd(t_data *data, t_cmd *cmd);
@@ -264,7 +265,7 @@ void	print_export(t_data *data);
 void	sort_export_list(t_data *data);
 t_cmd	*find_export_command(t_data *data);
 void	env_to_export(t_data *data);
-void	ft_export(t_data *data);
+int		ft_export(t_data *data);
 
 //char *check_variable(const char *input);
 
@@ -297,7 +298,7 @@ void	env_update(t_data *data);
 void 	execute_unset(t_data *data, t_cmd *cmd);
 void 	execute_env(t_data *data, t_cmd *cmd);
 t_cmd 	*find_unset_command(t_data *data);
-void	ft_unset(t_data *data);
+int		ft_unset(t_data *data);
 
 /**		dummies.c			**/
 int		ft_true(void);
