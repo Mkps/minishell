@@ -6,11 +6,18 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:36:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 14:36:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:26:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	ft_is_ws(char c)
+{
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (1);
+	return (0);
+}
 
 // Duplicates the string from the starting position
 // to n char then null-terminates it.

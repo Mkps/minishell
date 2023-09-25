@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:30:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:38:23 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,21 +133,26 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	signals_here_doc();
 	rl_getc_function = getc;
    	rl_catch_sigwinch = 0;
-	heredoc_tmp = "/tmp/tmp_fd";
+	heredoc_tmp = "./tmp_fd";
 	unlink(heredoc_tmp);
 	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (io_node->fd == -1)
 		return (output_err_ret(-1, "Error while opening file for heredoc", NULL));
-	if (here_doc_input(data, io_node->filename, io_node->fd) == 1 && g_exit_code < 128)
+	if (here_doc_input(data, io_node->filename, io_node->fd) == 1) 
 		printf("here-document delimited by end-of-file (wanted '%s')\n", io_node->filename);
+	//rl_clear_signals ();
+	rl_getc_function = rl_getc;
+	//rl_catch_signals = 1;
+	rl_catch_sigwinch = 1;
+	//rl_done = 1;
 	signals_no_interact();
 	close(io_node->fd);
 	io_node->fd = open_fd(0, heredoc_tmp);
 	io_node->filename = heredoc_tmp;
 	if (g_exit_code > 128)
 	{
-		close(io_node->fd);
-		unlink(io_node->filename);
+		//close(io_node->fd);
+		//unlink(io_node->filename);
 		return (-1);
 	}
 	return (io_node->fd);
