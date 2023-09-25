@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/25 14:33:31 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/25 16:07:51 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ INCDIR = ./include/
 
 OBJ_DIR = ./build
 
-SRC_NAME = 	built-ins/unset.c \
+SRC_NAME =	built-ins/unset.c \
 			built-ins/dummies.c \
 			built-ins/built_in.c \
 			built-ins/ft_cd.c \
@@ -42,7 +42,9 @@ SRC_NAME = 	built-ins/unset.c \
 			io/here_doc.c \
 			io/io.c \
 			lexer.c \
+			lexer_token.c \
 			lexer_utils.c \
+			lexer_word.c \
 			main.c \
 			minishell_cmd.c \
 			minishell_launcher.c \
@@ -51,14 +53,15 @@ SRC_NAME = 	built-ins/unset.c \
 			parser.c \
 			pipex_utils.c \
 			prompt.c \
-			signal.c \
+			signals/signal.c \
+			signals/signal_handlers.c \
 			token.c \
 			token_utils.c \
 			utils/ft_split_noquote.c \
 			utils/data_utils.c \
 			var.c \
-			var_utils.c \
 			var_expander.c \
+			var_utils.c \
 			wildcard/wildcard_strutils2.c \
 			wildcard/wildcard_strutils.c \
 			wildcard/wildcard_utils.c \
@@ -66,7 +69,7 @@ SRC_NAME = 	built-ins/unset.c \
 			wildcard/wildcard_find.c \
 			wildcard/wildcard_wcutils.c \
 			wildcard/wildcard_get.c \
-	  
+
 SRC = $(addprefix $(SRCDIR)/, $(SRC_NAME))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_NAME:c=o))
 

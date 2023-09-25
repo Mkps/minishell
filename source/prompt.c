@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 14:50:35 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:34:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static char	*glob_home(t_data *data, char *str)
 	int		i;
 
 	home = get_var(data, "HOME");
+	if (!str)
+		return (ft_strdup("???"));
 	if (!home || !*home)
 		return (strdup(str));
 	i = 0;
@@ -76,8 +78,6 @@ char	*set_prompt(t_data *data)
 	prompt = ft_strappend(prompt, ":", 2);
 	prompt = ft_strappend(prompt, CYAN, 2);
 	pwd = get_var(data, "PWD");
-	if (!pwd)
-		pwd = ft_strdup("???");
 	prompt = ft_strappend(prompt, glob_home(data, pwd), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, "\n$ ", 2);

@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 12:08:10 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:16 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:11:41 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	free_cmd_list(t_data *data)
 			}
 			free(tmp->io_list);
 			dup2(data->old_fd[0], STDIN_FILENO);
+			dup2(data->old_fd[1], STDOUT_FILENO);
 		}
 		free(tmp);
 	}
