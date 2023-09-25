@@ -6,15 +6,15 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 13:29:08 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:17:44 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_wordsize(char *s, char c, int pos)
+int ft_wordsize(char *s, char c, int pos)
 {
-	int	wsize;
+	int wsize;
 
 	wsize = 0;
 	while (s[pos] != c && s[pos])
@@ -25,10 +25,10 @@ int	ft_wordsize(char *s, char c, int pos)
 	return (wsize);
 }
 
-char	*add_quotes(char *str)
+char *add_quotes(char *str)
 {
-	size_t	len;
-	char	*result;
+	size_t len;
+	char *result;
 
 	len = ft_strlen(str);
 	result = (char *)malloc(len + 3);
@@ -49,7 +49,7 @@ int	export_key_existsbis(t_export *export, char *key_to_check)
 	{
 		if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
 		{
-			printf("key existe\n");	
+			printf("key existe\n");
 			return (1);
 		}
 		export = export->next;
@@ -60,24 +60,23 @@ int	export_key_existsbis(t_export *export, char *key_to_check)
 
 int export_key_exists(t_export *export, char *key_to_check)
 {
-    while (export != NULL)
-    {
-        if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
-        {
-            if (ft_strlen(export->key) == ft_strlen(key_to_check))
-            {
-                return (1);
-            }
-        }
-        export = export->next;
-    }
-    return (0);
+	while (export != NULL)
+	{
+		if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
+		{
+			if (ft_strlen(export->key) == ft_strlen(key_to_check))
+			{
+				return (1);
+			}
+		}
+		export = export->next;
+	}
+	return (0);
 }
 
-
-int	key_is_valid(char *chaine)
+int key_is_valid(char *chaine)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (chaine[i] == '\0')

@@ -57,7 +57,7 @@ test 184: env hola
 > VTE_VERSION=6800
 > GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
-> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
+> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
 > CHROME_DESKTOP=code-url-handler.desktop
 > VSCODE_GIT_ASKPASS_EXTRA_ARGS=--ms-enable-electron-run-as-node
 > XDG_SESSION_CLASS=user
@@ -68,9 +68,9 @@ test 184: env hola
 > LIBVIRT_DEFAULT_URI=qemu:///system
 > USER=uaupetit
 > VSCODE_GIT_IPC_HANDLE=/run/user/103585/vscode-git-a26adf4e7b.sock
-> GNOME_TERMINAL_SERVICE=:1.172
+> GNOME_TERMINAL_SERVICE=:1.792
 > DISPLAY=:0
-> SHLVL=3
+> SHLVL=7
 > PAGER=less
 > QT_IM_MODULE=ibus
 > DBUS_STARTER_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -79,7 +79,7 @@ test 184: env hola
 > VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
 > XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/mnt/nfs/homes/uaupetit/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 > GDK_BACKEND=x11
-> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > GDMSESSION=ubuntu
 > ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -132,7 +132,7 @@ test 185: env hola que tal
 > VTE_VERSION=6800
 > GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
-> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
+> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
 > CHROME_DESKTOP=code-url-handler.desktop
 > VSCODE_GIT_ASKPASS_EXTRA_ARGS=--ms-enable-electron-run-as-node
 > XDG_SESSION_CLASS=user
@@ -143,9 +143,9 @@ test 185: env hola que tal
 > LIBVIRT_DEFAULT_URI=qemu:///system
 > USER=uaupetit
 > VSCODE_GIT_IPC_HANDLE=/run/user/103585/vscode-git-a26adf4e7b.sock
-> GNOME_TERMINAL_SERVICE=:1.172
+> GNOME_TERMINAL_SERVICE=:1.792
 > DISPLAY=:0
-> SHLVL=3
+> SHLVL=7
 > PAGER=less
 > QT_IM_MODULE=ibus
 > DBUS_STARTER_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -154,7 +154,7 @@ test 185: env hola que tal
 > VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
 > XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/mnt/nfs/homes/uaupetit/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 > GDK_BACKEND=x11
-> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > GDMSESSION=ubuntu
 > ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -200,9 +200,10 @@ Standard output matches bash:	[31m[KO]
 [0mExit code matches bash:		[32m[OK]
 [0m
 test 188: env ls
-1,23c1,69
+1,24c1,69
 < b
 < build
+< ds
 < echo
 < err_b
 < err_m
@@ -265,7 +266,7 @@ test 188: env ls
 > VTE_VERSION=6800
 > GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
-> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
+> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
 > CHROME_DESKTOP=code-url-handler.desktop
 > VSCODE_GIT_ASKPASS_EXTRA_ARGS=--ms-enable-electron-run-as-node
 > XDG_SESSION_CLASS=user
@@ -276,9 +277,9 @@ test 188: env ls
 > LIBVIRT_DEFAULT_URI=qemu:///system
 > USER=uaupetit
 > VSCODE_GIT_IPC_HANDLE=/run/user/103585/vscode-git-a26adf4e7b.sock
-> GNOME_TERMINAL_SERVICE=:1.172
+> GNOME_TERMINAL_SERVICE=:1.792
 > DISPLAY=:0
-> SHLVL=3
+> SHLVL=7
 > PAGER=less
 > QT_IM_MODULE=ibus
 > DBUS_STARTER_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -287,7 +288,7 @@ test 188: env ls
 > VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
 > XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/mnt/nfs/homes/uaupetit/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 > GDK_BACKEND=x11
-> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > GDMSESSION=ubuntu
 > ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -340,7 +341,7 @@ test 189: env ./Makefile
 > VTE_VERSION=6800
 > GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
-> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
+> GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
 > CHROME_DESKTOP=code-url-handler.desktop
 > VSCODE_GIT_ASKPASS_EXTRA_ARGS=--ms-enable-electron-run-as-node
 > XDG_SESSION_CLASS=user
@@ -351,9 +352,9 @@ test 189: env ./Makefile
 > LIBVIRT_DEFAULT_URI=qemu:///system
 > USER=uaupetit
 > VSCODE_GIT_IPC_HANDLE=/run/user/103585/vscode-git-a26adf4e7b.sock
-> GNOME_TERMINAL_SERVICE=:1.172
+> GNOME_TERMINAL_SERVICE=:1.792
 > DISPLAY=:0
-> SHLVL=3
+> SHLVL=7
 > PAGER=less
 > QT_IM_MODULE=ibus
 > DBUS_STARTER_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -362,7 +363,7 @@ test 189: env ./Makefile
 > VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
 > XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/mnt/nfs/homes/uaupetit/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 > GDK_BACKEND=x11
-> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > GDMSESSION=ubuntu
 > ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/103585/bus,guid=398e831481b935f8cbfa292065114b6f
@@ -429,8 +430,8 @@ test 192: export
 < declare -x GDM_LANG="en"
 < declare -x GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
 < declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
-< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6"
-< declare -x GNOME_TERMINAL_SERVICE=":1.172"
+< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1"
+< declare -x GNOME_TERMINAL_SERVICE=":1.792"
 < declare -x GPG_AGENT_INFO="/run/user/103585/gnupg/S.gpg-agent:0:1"
 < declare -x GTK_IM_MODULE="ibus"
 < declare -x GTK_MODULES="gail:atk-bridge"
@@ -447,13 +448,13 @@ test 192: export
 < declare -x OLDPWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
 < declare -x PAGER="less"
-< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 < declare -x PWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x QT_ACCESSIBILITY="1"
 < declare -x QT_IM_MODULE="ibus"
 < declare -x SESSION_MANAGER="local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593"
 < declare -x SHELL="/bin/zsh"
-< declare -x SHLVL="4"
+< declare -x SHLVL="8"
 < declare -x SSH_AGENT_LAUNCHER="gnome-keyring"
 < declare -x SSH_AUTH_SOCK="/run/user/103585/keyring/ssh"
 < declare -x SYSTEMD_EXEC_PID="1718593"
@@ -499,8 +500,8 @@ test 192: export
 > declare -x GDM_LANG=en
 > declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
-> declare -x GNOME_TERMINAL_SERVICE=:1.172
+> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
+> declare -x GNOME_TERMINAL_SERVICE=:1.792
 > declare -x GPG_AGENT_INFO=/run/user/103585/gnupg/S.gpg-agent:0:1
 > declare -x GTK_IM_MODULE=ibus
 > declare -x GTK_MODULES=gail:atk-bridge
@@ -517,13 +518,13 @@ test 192: export
 > declare -x OLDPWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > declare -x PAGER=less
-> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > declare -x PWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x QT_ACCESSIBILITY=1
 > declare -x QT_IM_MODULE=ibus
 > declare -x SESSION_MANAGER=local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593
 > declare -x SHELL=/bin/zsh
-> declare -x SHLVL=3
+> declare -x SHLVL=7
 > declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 > declare -x SSH_AUTH_SOCK=/run/user/103585/keyring/ssh
 > declare -x SYSTEMD_EXEC_PID=1718593
@@ -574,8 +575,8 @@ test 193: export Hola ; export
 < declare -x GDM_LANG="en"
 < declare -x GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
 < declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
-< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6"
-< declare -x GNOME_TERMINAL_SERVICE=":1.172"
+< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1"
+< declare -x GNOME_TERMINAL_SERVICE=":1.792"
 < declare -x GPG_AGENT_INFO="/run/user/103585/gnupg/S.gpg-agent:0:1"
 < declare -x GTK_IM_MODULE="ibus"
 < declare -x GTK_MODULES="gail:atk-bridge"
@@ -595,8 +596,8 @@ test 193: export Hola ; export
 > declare -x GDM_LANG=en
 > declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
-> declare -x GNOME_TERMINAL_SERVICE=:1.172
+> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
+> declare -x GNOME_TERMINAL_SERVICE=:1.792
 > declare -x GPG_AGENT_INFO=/run/user/103585/gnupg/S.gpg-agent:0:1
 > declare -x GTK_IM_MODULE=ibus
 > declare -x GTK_MODULES=gail:atk-bridge
@@ -614,13 +615,13 @@ test 193: export Hola ; export
 < declare -x OLDPWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
 < declare -x PAGER="less"
-< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 < declare -x PWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x QT_ACCESSIBILITY="1"
 < declare -x QT_IM_MODULE="ibus"
 < declare -x SESSION_MANAGER="local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593"
 < declare -x SHELL="/bin/zsh"
-< declare -x SHLVL="4"
+< declare -x SHLVL="8"
 < declare -x SSH_AGENT_LAUNCHER="gnome-keyring"
 < declare -x SSH_AUTH_SOCK="/run/user/103585/keyring/ssh"
 < declare -x SYSTEMD_EXEC_PID="1718593"
@@ -663,13 +664,13 @@ test 193: export Hola ; export
 > declare -x OLDPWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > declare -x PAGER=less
-> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > declare -x PWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x QT_ACCESSIBILITY=1
 > declare -x QT_IM_MODULE=ibus
 > declare -x SESSION_MANAGER=local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593
 > declare -x SHELL=/bin/zsh
-> declare -x SHLVL=3
+> declare -x SHLVL=7
 > declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 > declare -x SSH_AUTH_SOCK=/run/user/103585/keyring/ssh
 > declare -x SYSTEMD_EXEC_PID=1718593
@@ -720,8 +721,8 @@ test 194: export Hola9hey ; export
 < declare -x GDM_LANG="en"
 < declare -x GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
 < declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
-< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6"
-< declare -x GNOME_TERMINAL_SERVICE=":1.172"
+< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1"
+< declare -x GNOME_TERMINAL_SERVICE=":1.792"
 < declare -x GPG_AGENT_INFO="/run/user/103585/gnupg/S.gpg-agent:0:1"
 < declare -x GTK_IM_MODULE="ibus"
 < declare -x GTK_MODULES="gail:atk-bridge"
@@ -741,8 +742,8 @@ test 194: export Hola9hey ; export
 > declare -x GDM_LANG=en
 > declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
-> declare -x GNOME_TERMINAL_SERVICE=:1.172
+> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
+> declare -x GNOME_TERMINAL_SERVICE=:1.792
 > declare -x GPG_AGENT_INFO=/run/user/103585/gnupg/S.gpg-agent:0:1
 > declare -x GTK_IM_MODULE=ibus
 > declare -x GTK_MODULES=gail:atk-bridge
@@ -760,13 +761,13 @@ test 194: export Hola9hey ; export
 < declare -x OLDPWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
 < declare -x PAGER="less"
-< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 < declare -x PWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x QT_ACCESSIBILITY="1"
 < declare -x QT_IM_MODULE="ibus"
 < declare -x SESSION_MANAGER="local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593"
 < declare -x SHELL="/bin/zsh"
-< declare -x SHLVL="4"
+< declare -x SHLVL="8"
 < declare -x SSH_AGENT_LAUNCHER="gnome-keyring"
 < declare -x SSH_AUTH_SOCK="/run/user/103585/keyring/ssh"
 < declare -x SYSTEMD_EXEC_PID="1718593"
@@ -809,13 +810,13 @@ test 194: export Hola9hey ; export
 > declare -x OLDPWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > declare -x PAGER=less
-> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > declare -x PWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x QT_ACCESSIBILITY=1
 > declare -x QT_IM_MODULE=ibus
 > declare -x SESSION_MANAGER=local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593
 > declare -x SHELL=/bin/zsh
-> declare -x SHLVL=3
+> declare -x SHLVL=7
 > declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 > declare -x SSH_AUTH_SOCK=/run/user/103585/keyring/ssh
 > declare -x SYSTEMD_EXEC_PID=1718593
@@ -833,117 +834,7 @@ test 194: export Hola9hey ; export
 > declare -x XAUTHORITY=/mnt/nfs/homes/uaupetit/.Xauthority
 > declare -x XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
 > declare -x XDG_CURRENT_DESKTOP=Unity
-> declare -x XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/mnt/nfs/homes/uaupetitest_syntax() {
-run_test "test 1: enter"""
-run_test "test 2: spaces" "               "
-run_test "test 3: tabs" "					"
-run_test "test 5: empty comment" "#"
-run_test "test 5: comment" "#echo test"
-run_test "test 6: dummy true" ":"
-run_test "test 7: dummy false" "!"
-run_test "test 8: io_trunc" ">"
-run_test "test 9: io_append" ">>"
-run_test "test 10: io_input" "<"
-run_test "test 11: io_heredoc" "<<"
-run_test "test 12: io_rw" "<>"
-run_test "test 13: syntax error: >>>>>" ">>>>>>>"
-run_test "test 14: syntax error: >>>>>>>>>>>>" ">>>>>>>>>>>>>>"
-run_test "test 15: syntax error: <<<<<" "<<<<<"
-run_test "test 16: syntax error: <<<<<<<<<<<<<<" "<<<<<<<<<<<<<<"
-run_test "test 17: > > > >" "> > > >"
-run_test "test 18: >> >> >> >>" ">> >> >> >>"
-run_test "test 19: >>>> >> >>" ">>>> >> >>"
-run_test "test 20: /" "/"
-run_test "test 21: //" "//"
-run_test "test 22: /." "/."
-run_test "test 23: /./../../../../.." "/./../../../../.."
-run_test "test 24: ///////" "///////"
-run_test "test 25: \\" "\\"
-run_test "test 26: \\\\" "\\\\"
-run_test "test 27: \\\\\\\\" "\\\\\\\\"
-run_test "test 28: -" " -"
-run_test "test 29: |" "|"
-run_test "test 30: | hola" "| hola"
-run_test "test 31: | | |" "| | |"
-run_test "test 32: ||" "||"
-run_test "test 33: |||||" "|||||"
-run_test "test 34: ||||||||||||" "||||||||||||||"
-run_test "test 35: >>|><" ">>|><"
-run_test "test 36: &&" "&&"
-run_test "test 37: &&&&&" "&&&&&"
-run_test "test 38: &&&&&&&&&&&&&&" "&&&&&&&&&&&&&&"
-run_test "test 39: ;;" ";;"
-run_test "test 40: ;;;;;" ";;;;;"
-run_test "test 41: ;;;;;;;;;;;;;;" ";;;;;;;;;;;;;;"
-run_test "test 42: ()" "()"
-run_test "test 43: ( ( ) )" "( ( ) )"
-run_test "test 44: ( ( ( ( ) ) ) ) " "( ( ( ( ) ) ) )"
-run_test 'test 45: ""' '""'
-run_test 'test 46: "hola"' '"hola"'
-run_test "test 47: 'hola'" "'hola'"
-run_test "test 48: ''" "''"
-run_test "test 49: *" "*"
-run_test "test 50: */*" "*/*"
-run_test "test 51: */*" "*/*"
-run_test "test 52: .." ".."
-run_test "test 53: ~" "~"
-run_test "test 54: ABC=hola" "ABC=hola"
-run_test "test 55: 4ABC=hola" "4ABC=hola"
-run_test "test 56: a" "a"
-run_test "test 57: hola que tal" "hola que tal"
-run_test "test 58: Makefile" "Makefile"
-}
-# Echo tests
-test_echo() {
-run_test "test 59: echo" "echo"
-run_test "test 60: echo -n" "echo -n"
-run_test "test 61: echo Hola" "echo Hola"
-run_test "test 62: echoHola" "echoHola"
-run_test "test 63: echo-nHola" "echo-nHola"
-run_test "test 64: echo -n Hola" "echo -n Hola"
-run_test 'test 65: echo "-n" Hola' 'echo "-n" Hola'
-run_test "test 66: echo -nHola" "echo -nHola"
-run_test "test 67: echo Hola -n" "echo Hola -n"
-run_test "test 68: echo Hola Que Tal" "echo Hola Que Tal"
-run_test "test 69: echo         Hola" "echo         Hola"
-run_test "test 70: echo    Hola     Que    Tal" "echo    Hola     Que    Tal"
-run_test 'test 71: echo      \n hola' 'echo      \n hola'
-run_test 'test 72: echo "         " | cat -e' 'echo "         " | cat -e'
-run_test 'test 73: echo           | cat -e' 'echo           | cat -e'
-run_test "test 74: \"\"''echo hola\"\"'''' que\"\"'' tal\"\"''" "\"\"''echo hola\"\"'''' que\"\"'' tal\"\"''"
-run_test "test 75: echo -n -n" "echo -n -n"
-run_test "test 76: echo -n -n Hola Que" "echo -n -n Hola Que"
-run_test "test 77: echo -p" "echo -p"
-run_test "test 78: echo -nnnnn" "echo -nnnnn"
-run_test "test 79: echo -n -nnn -nnnn" "echo -n -nnn -nnnn"
-run_test "test 80: echo -n-nnn -nnnn" "echo -n-nnn -nnnn"
-run_test "test 81: echo -n -nnn hola -nnnn" "echo -n -nnn hola -nnnn"
-run_test "test 82: echo -n -nnn-nnnn" "echo -n -nnn-nnnn"
-run_test "test 83: echo --------n" "echo --------n"
-run_test "test 84: echo -nnn --------n" "echo -nnn --------n"
-run_test "test 85: echo -nnn -----nn---nnnn" "echo -nnn -----nn---nnnn"
-run_test "test 86: echo -nnn --------nnnn" "echo -nnn --------nnnn"
-run_test "test 87: echo $" "echo $"
-run_test "test 88: echo $?" "echo $?"
-run_test "test 89: echo $?$" "echo $?$"
-run_test "test 90: \$? | echo \$? | echo \$?" "\$? | echo \$? | echo \$?"
-run_test "test 91: \$:\$= | cat -e" "\$:\$= | cat -e"
-run_test "test 92: \" \$ \" | cat -e" "\" \$ \" | cat -e"
-run_test "test 93: ' \$ ' | cat -e" "' \$ ' | cat -e"
-run_test "test 94: \$HOME" "\$HOME"
-run_test "test 95: \$HOME" "\$HOME"
-run_test "test 96: echo my shit terminal is [\$TERM]" "echo my shit terminal is [\$TERM]"
-run_test "test 97: echo my shit terminal is [\$TERM4" "echo my shit terminal is [\$TERM4"
-run_test "test 98: echo my shit terminal is [\$TERM4]" "echo my shit terminal is [\$TERM4]"
-run_test "test 99: echo \$UID" "echo \$UID"
-run_test "test 100: echo \$HOME9" "echo \$HOME9"
-run_test "test 101: echo \$9HOME" "echo \$9HOME"
-run_test "test 102: echo \$HOME%" "echo \$HOME%"
-run_test "test 103: echo \$UID\$HOME" "echo \$UID\$HOME"
-run_test "test 104: echo Le path de mon HOME est \$HOME" "echo Le path de mon HOME est \$HOME"
-run_test "test 105: echo \$USER\$var\$USER\$USERtest\$USER" "echo \$USER\$var\$USER\$USERtest\$USER"
-run_test "test 106: echo \$hola*" "echo \$hola*"
-run_test "test 107: echot/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+> declare -x XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/mnt/nfs/homes/uaupetit/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 > declare -x XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/uaupetit
 > declare -x XDG_MENU_PREFIX=gnome-
 > declare -x XDG_RUNTIME_DIR=/run/user/103585
@@ -976,8 +867,8 @@ test 195: export $DONTEXIST
 < declare -x GDM_LANG="en"
 < declare -x GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh"
 < declare -x GNOME_DESKTOP_SESSION_ID="this-is-deprecated"
-< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6"
-< declare -x GNOME_TERMINAL_SERVICE=":1.172"
+< declare -x GNOME_TERMINAL_SCREEN="/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1"
+< declare -x GNOME_TERMINAL_SERVICE=":1.792"
 < declare -x GPG_AGENT_INFO="/run/user/103585/gnupg/S.gpg-agent:0:1"
 < declare -x GTK_IM_MODULE="ibus"
 < declare -x GTK_MODULES="gail:atk-bridge"
@@ -994,13 +885,13 @@ test 195: export $DONTEXIST
 < declare -x OLDPWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x ORIGINAL_XDG_CURRENT_DESKTOP="ubuntu:GNOME"
 < declare -x PAGER="less"
-< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+< declare -x PATH="/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 < declare -x PWD="/mnt/nfs/homes/uaupetit/Documents/cursus/minishell"
 < declare -x QT_ACCESSIBILITY="1"
 < declare -x QT_IM_MODULE="ibus"
 < declare -x SESSION_MANAGER="local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593"
 < declare -x SHELL="/bin/zsh"
-< declare -x SHLVL="4"
+< declare -x SHLVL="8"
 < declare -x SSH_AGENT_LAUNCHER="gnome-keyring"
 < declare -x SSH_AUTH_SOCK="/run/user/103585/keyring/ssh"
 < declare -x SYSTEMD_EXEC_PID="1718593"
@@ -1046,8 +937,8 @@ test 195: export $DONTEXIST
 > declare -x GDM_LANG=en
 > declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
-> declare -x GNOME_TERMINAL_SERVICE=:1.172
+> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
+> declare -x GNOME_TERMINAL_SERVICE=:1.792
 > declare -x GPG_AGENT_INFO=/run/user/103585/gnupg/S.gpg-agent:0:1
 > declare -x GTK_IM_MODULE=ibus
 > declare -x GTK_MODULES=gail:atk-bridge
@@ -1064,13 +955,13 @@ test 195: export $DONTEXIST
 > declare -x OLDPWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > declare -x PAGER=less
-> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > declare -x PWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x QT_ACCESSIBILITY=1
 > declare -x QT_IM_MODULE=ibus
 > declare -x SESSION_MANAGER=local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593
 > declare -x SHELL=/bin/zsh
-> declare -x SHLVL=3
+> declare -x SHLVL=7
 > declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 > declare -x SSH_AUTH_SOCK=/run/user/103585/keyring/ssh
 > declare -x SYSTEMD_EXEC_PID=1718593
@@ -1123,8 +1014,8 @@ test 196: export | grep "HOME"
 > declare -x GDM_LANG=en
 > declare -x GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
 > declare -x GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/ae18640b_7a24_4fa6_87b9_d3ce830580c6
-> declare -x GNOME_TERMINAL_SERVICE=:1.172
+> declare -x GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/a64aa5fa_842d_4930_a058_fc802ca274d1
+> declare -x GNOME_TERMINAL_SERVICE=:1.792
 > declare -x GPG_AGENT_INFO=/run/user/103585/gnupg/S.gpg-agent:0:1
 > declare -x GTK_IM_MODULE=ibus
 > declare -x GTK_MODULES=gail:atk-bridge
@@ -1141,13 +1032,13 @@ test 196: export | grep "HOME"
 > declare -x OLDPWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
 > declare -x PAGER=less
-> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+> declare -x PATH=/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/mnt/nfs/homes/uaupetit/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 > declare -x PWD=/mnt/nfs/homes/uaupetit/Documents/cursus/minishell
 > declare -x QT_ACCESSIBILITY=1
 > declare -x QT_IM_MODULE=ibus
 > declare -x SESSION_MANAGER=local/made-f0Br5s10.clusters.42paris.fr:@/tmp/.ICE-unix/1718593,unix/made-f0Br5s10.clusters.42paris.fr:/tmp/.ICE-unix/1718593
 > declare -x SHELL=/bin/zsh
-> declare -x SHLVL=3
+> declare -x SHLVL=7
 > declare -x SSH_AGENT_LAUNCHER=gnome-keyring
 > declare -x SSH_AUTH_SOCK=/run/user/103585/keyring/ssh
 > declare -x SYSTEMD_EXEC_PID=1718593
