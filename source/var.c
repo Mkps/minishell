@@ -6,30 +6,12 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:50:23 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:30:01 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:23:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stddef.h>
 
-char	*str_env(t_data *data, char *str)
-{
-	int		i;
-	char	*tmp;
-	char	**env;
-
-	tmp = 0;
-	i = 0;
-	env = data->envv;
-	while (env && env[i])
-	{
-		if (!ft_strncmp(env[i], str, ft_strlen(str)))
-			tmp = env[i] + ft_strlen(str) + 1;
-		i++;
-	}
-	return (tmp);
-}
 //Returns the value of the var. NULL if not set.
 char	*get_var(t_data *data, char *str)
 {
@@ -44,70 +26,6 @@ char	*get_var(t_data *data, char *str)
 	return (env);
 }
 
-char	*str_replace(char *src, int r_index, int n, char *str)
-{
-	int		i;
-	int		ret_len;
-	int		str_len;
-	size_t	last_index;
-	char	*ret;
-
-	if (str == NULL)
-		str_len = 0;
-	else
-		str_len = ft_strlen(str);
-	last_index = r_index + n;
-	if (last_index > ft_strlen(src))
-		last_index = ft_strlen(src);
-	ret_len = ft_strlen(src) + (last_index - r_index) + str_len;
-	ret = (char *)malloc(sizeof(char) * (ret_len + 1));
-	if (!ret)
-		printf("error allocating mem for return (string\n");
-	i = 0;
-	while (i < r_index)
-	{
-		ret[i] = src[i];
-		i++;
-	}
-	while (str && *str)
-		ret[i++] = *str++;
-	while (i < ret_len && src[last_index])
-		ret[i++] = src[last_index++];
-	ret[i] = 0;
-	return (ret);
-}
-
-char	*str_replace_strs(char **src, int r_index, int n, char *str)
-{
-	int		i;
-	int		ret_len;
-	int		str_len;
-	size_t	last_index;
-	char	*ret;
-
-	if (str == NULL)
-		str_len = 0;
-	else
-		str_len = ft_strlen(str);
-	last_index = r_index + n;
-	if (last_index > ft_strlen(*src))
-		last_index = ft_strlen(*src);
-	ret_len = ft_strlen(*src) + (last_index - r_index) + str_len;
-	ret = (char *)malloc(sizeof(char) * (ret_len + 1));
-	if (!ret)
-		printf("error allocating mem for return (string\n");
-	i = -1;
-	while (++i < r_index)
-		ret[i] = *(*src + i);
-	while (str && *str)
-		ret[i++] = *str++;
-	while (i < ret_len && *(*src + last_index))
-		ret[i++] = *(*src + last_index++);
-	ret[i] = 0;
-	free(*src);
-	*src = ret;
-	return (ret);
-}
 int	is_valid_var(char *str)
 {
 	int	i;

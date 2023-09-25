@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:22:28 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 01:32:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:02:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_filename(t_token *io_token)
 			&& current->next->quote_status == IO_HEREDOC)
 			return (ft_strdup(current->next->value));
 		else if (current->next && current->next->token_type == WORD
-				&& current->next->quote_status == SQUOTE)
+			&& current->next->quote_status == SQUOTE)
 		{
 			tmp = ft_strappend("'", current->next->value, 0);
 			return (tmp);
@@ -86,7 +86,7 @@ char	*get_filename(t_token *io_token)
 	if (current->next && current->next->token_type == WORD)
 		return (current->next->value);
 	else if (current->next && token_is_quote(current->next)
-			&& current->next->next && current->next->next->token_type == WORD)
+		&& current->next->next && current->next->next->token_type == WORD)
 		return (current->next->next->value);
 	return (NULL);
 }

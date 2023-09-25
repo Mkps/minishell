@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:23:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:20 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:17:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,32 +37,26 @@ char	**ft_split2(char *s, char c)
 {
 	int		i;
 	int		j;
-	int		k;
 	char	**res;
 
 	if (!s)
 		return (NULL);
-	k = ft_strlen(s);
 	res = malloc(sizeof(char *) * 3);
 	if (!res)
 		return (NULL);
 	i = 0;
 	j = 0;
-	res[0] = malloc(sizeof(char) * (ft_wordsize(s, c, j) + 1));
+	res[0] = ft_calloc(ft_wordsize(s, c, j) + 1, sizeof(char));
 	if (!res[0])
 		return (free(res), NULL);
 	while (s[j] != c && s[j])
 		res[0][i++] = s[j++];
-	res[0][i] = '\0';
 	i = 0;
 	if (s[j] == '=')
 		j++;
-	res[1] = malloc(sizeof(char) * (k - j + 1));
+	res[1] = ft_strdup(s + j);
 	if (!res[1])
 		return (ft_free_tab(res), NULL);
-	while (s[j])
-		res[1][i++] = s[j++];
-	res[1][i] = '\0';
 	res[2] = 0;
 	return (res);
 }

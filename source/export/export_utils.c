@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:50:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:18:07 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ int	ft_lstsize_env(t_env **lst)
 
 int	print_envp(t_data *data)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (data->envv[i])
 	{
 		printf("%s\n", data->envv[i]);

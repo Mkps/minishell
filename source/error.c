@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 14:19:22 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/25 14:19:47 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
-#include <stdlib.h>
 
 int	check_par_error(t_token **root);
 
@@ -69,7 +80,7 @@ int	check_term_error(t_token **root)
 	tmp = *root;
 	while (tmp)
 	{
-		if (token_is_term(tmp) && tmp->token_type != TERM_END 
+		if (token_is_term(tmp) && tmp->token_type != TERM_END
 			&& (!tmp->prev || (tmp->prev && token_is_term(tmp->prev))))
 		{
 			output_err("syntax error near unexpected token ", tmp, 1);

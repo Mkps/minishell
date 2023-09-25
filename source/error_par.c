@@ -1,11 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_par.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 14:20:11 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/25 14:20:35 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
-#include <stdlib.h>
 
 int	par_error_start(t_token *tmp)
 {
 	if (tmp->token_type == O_PAR && tmp->prev
 		&& (!token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
-		&& tmp->prev->token_type != WORD) 
+		&& tmp->prev->token_type != WORD)
 	{
 		if (!tmp->prev->prev && tmp->prev->token_type == WORD)
 			output_err("syntax error near unexpected token ",
@@ -51,7 +62,7 @@ int	check_par_error(t_token **root)
 	if (par_status == -1)
 		return (EXIT_FAILURE);
 	if (par_status != 0)
-		return (output_err_ret(EXIT_FAILURE, 
+		return (output_err_ret(EXIT_FAILURE,
 				"unexpected EOF while looking for matching ')'", NULL));
 	return (EXIT_SUCCESS);
 }

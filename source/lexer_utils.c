@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 14:36:35 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/25 14:36:54 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-// Duplicates the string from the starting position to n char then null-terminates it.
+// Duplicates the string from the starting position
+// to n char then null-terminates it.
 char	*ft_str_extract(char *str, int n)
 {
 	char	*ret;

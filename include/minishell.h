@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 11:31:11 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:33:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 # include <dirent.h> 
 # include "color.h"
 
-# define USAGE_MSG		"Correct use is ./mshell or ./mshell -c \"commands to be executed\""
+# define USAGE_MSG		"Correct use is ./minishell or ./minishell \
+-c \"commands to be executed\""
 # define PROG_NAME		"minishell: "
 # define ERR_FORK		"minishell: error creating child process\n"
 # define EXPORT_MSG		"declare -x"	
@@ -128,6 +129,7 @@ void	print_token(t_token **root);
 void	free_token(t_data *data);
 char	**ft_split_noquote(char *str, char c);
 int		var_is_multiple(char *var);
+
 /**		cmd_list.c		**/
 void	build_cmd_list(t_data *data, t_token *token);
 int		handle_assign(t_data *data, t_token *token, t_cmd *cmd);
@@ -250,11 +252,13 @@ int		init_io_redir(t_data *data);
 
 /**		var.c			**/
 int		is_valid_var(char *str);
-char	*str_replace(char *src, int r_index, int n, char *str);
-char	*str_replace_strs(char **src, int r_index, int n, char *str);
 char	*get_var(t_data *data,char *str);
 int		var_expander(t_data *data, char *str, t_token *token);
 int		retokenize(t_data *data, char *str, t_token *token);
+
+/**		var_utils.c		**/
+char	*str_replace(char *src, int r_index, int n, char *str);
+char	*str_replace_strs(char **src, int r_index, int n, char *str);
 
 /**			export			**/
 void	env_update(t_data *data);
@@ -266,8 +270,6 @@ void	sort_export_list(t_data *data);
 t_cmd	*find_export_command(t_data *data);
 void	env_to_export(t_data *data);
 int		ft_export(t_data *data);
-
-//char *check_variable(const char *input);
 
 /**		export_utils	**/
 t_export	*ft_lstnew_export(char *key, char *value, int flag);
@@ -304,9 +306,37 @@ int		ft_unset(t_data *data);
 int		ft_true(void);
 int		ft_false(void);
 
+/**		wildcard_find.c	**/
+int		show_hidden(char *search, char *str);
+char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
+			char *, int), int mode);
+
+/**		wildcard_strutils.c */
+char	*ft_strjoin_tab(char **tab, int i, char join);
+void	ft_str_swap(char **s1, char **s2);
+char	*sort_str(char *str);
+
+/**		wildcard_strutils2.c **/
+char	*ft_strend(char *big, char *little, char n);
+char	*str_replace_free(char *src, int r_index, int n, char *str);
+int		find_length(char *str, char *src, int r_index, int n);
+
+/**		wildcard_utils.c */
+int		get_start_index(char *str, int i);
+int		get_end_index(char *str, int i);
+char	*str_tolower(char *str);
+int		ft_strcmp_no_case(const char *s1, const char *s2);
+
+/**		wildcard_wcutils.c	**/
+char	*get_front_wc(char *str);
+char	*get_back_wc(char *str);
+int		wc_present(char *str);
+
 /**		wildcards.c			**/
 char	*ft_wildcard(char *str);
 int		wc_present(char *str);
+char	*get_wildcard(char *str);
+char	*get_wc_data(char *search, char *src, int mode);
 
 int		print_envp(t_data *data);
 
@@ -326,6 +356,5 @@ void	prompt_user(t_data *data);
 
 /**		parse_near_quote.c	**/
 void	parse_near_quote(t_data *data);
-
 
 #endif
