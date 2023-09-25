@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 10:55:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:13:08 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	tmp = NULL;
 	old_pwd = NULL; //getcwd(NULL, 0);
 	if (cmd->args[2] != NULL)
-		return (output_err_ret(1, "minishell: cd: too many arguments\n");
+		return (output_err_ret(1, "minishell: cd: too many arguments\n", NULL));
 	if (cmd->args[1] == NULL)
-		return (output_err_ret(1, "minishell: cd: need absolute or relative path\n"));
+		return (output_err_ret(1, "minishell: cd: need absolute or relative path\n", NULL));
 	dir = cmd->args[1];
 	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
 	{
@@ -65,7 +65,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	if (pwd == NULL)
 	{
 		perror("getcwd");
-		return ;
+		return (EXIT_FAILURE);
 	}
 	while (current != NULL)
 	{

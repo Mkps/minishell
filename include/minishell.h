@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/22 22:24:08 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:12:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ void 	print_env_list(t_env **env_lst);
 /**		execution builtin	**/
 int		execute_builtin(t_cmd *cmd, t_data *data);
 int		ft_echo(t_cmd *cmd);
-void	ft_cd(t_cmd *cmd, t_data *data);
+int		ft_cd(t_cmd *cmd, t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_env(t_data *data);
 
@@ -257,9 +257,9 @@ int		retokenize(t_data *data, char *str, t_token *token);
 
 /**			export			**/
 void	env_update(t_data *data);
-void	set_in_env(t_data *data, char *variable);
-void	set_in_export(t_data *data, char *variable);
-void	execute_export(t_data *data, t_cmd *cmd);
+int		set_in_env(t_data *data, char *variable);
+int		set_in_export(t_data *data, char *variable);
+int		execute_export(t_data *data, t_cmd *cmd);
 void	print_export(t_data *data);
 void	sort_export_list(t_data *data);
 t_cmd	*find_export_command(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/23 01:07:17 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:09:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	env_update(t_data *data)
 		data->envv[i] = (char *)malloc(entry_len);
 		if (!data->envv[i])
 		{
-			perror("Malloc failed");
+			perror("Minishell: Malloc failed");
 			exit(EXIT_FAILURE);
 		}
 		ft_strlcpy(data->envv[i], current_env->key, entry_len);
@@ -63,7 +63,7 @@ void	env_update(t_data *data)
 	data->envv[i] = NULL;
 }
 
-void	set_in_env(t_data *data, char *variable)
+int	set_in_env(t_data *data, char *variable)
 {
 	char	**variable_split;
 	char	*key;
@@ -75,7 +75,7 @@ void	set_in_env(t_data *data, char *variable)
 	value = NULL;
 	new_env = NULL;
 	if (data->flag > 0)
-		return ;
+		return (EXIT_FAILURE);
 	variable_split = ft_split2(variable, '=');
 	key = ft_strdup(variable_split[0]);
 	value = ft_strdup(variable_split[1]);
@@ -84,7 +84,7 @@ void	set_in_env(t_data *data, char *variable)
 		free(value);
 		free(key);
 		ft_free_tab(variable_split);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	new_env = ft_lstnew_env(key, value);
 	if (!new_env)
@@ -93,7 +93,7 @@ void	set_in_env(t_data *data, char *variable)
 		free(value);
 		free(key);
 		ft_free_tab(variable_split);
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
@@ -105,16 +105,17 @@ void	set_in_env(t_data *data, char *variable)
 			free(value);
 			free(key);
 			ft_free_tab(variable_split);
-			return ;
+			return (0); // Bon code de retour a mettre
 		}
 	}
 	ft_lstadd_back_env(data->env_cpy, new_env);
 	free(key);
 	free(value);
 	ft_free_tab(variable_split);
+	return (EXIT_SUCCESS);
 }
 
-void	set_in_export(t_data *data, char *variable)
+int	set_in_export(t_data *data, char *variable)
 {
 	char		**variable_split;
 	char		*key;
@@ -122,10 +123,6 @@ void	set_in_export(t_data *data, char *variable)
 	t_export	*new_export;
 	int			flag;
 
-	variable_split = NULL;
-	key = NULL;
-	value = NULL;
-	new_export = NULL;
 	flag = 0;
 	variable_split = ft_split2(variable, '=');
 	key = ft_strdup(variable_split[0]);
@@ -139,7 +136,7 @@ void	set_in_export(t_data *data, char *variable)
 		free(key);
 		free(value);
 		ft_free_tab(variable_split);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	printf("123\n");
 	if (ft_strrchr(variable, '=') == NULL)
@@ -156,7 +153,7 @@ void	set_in_export(t_data *data, char *variable)
 			free(value);
 			free(key);
 			ft_free_tab(variable_split);
-			return ;
+			return (0); // A changer a la bonne valeur.
 		}
 	}
 	new_export = ft_lstnew_export(key, value, flag);
@@ -170,27 +167,32 @@ void	set_in_export(t_data *data, char *variable)
 	if (value)
 		free(value);
 	ft_free_tab(variable_split);
+	return (EXIT_SUCCESS);
 }
 
-void	execute_export(t_data *data, t_cmd *cmd)
+int	execute_export(t_data *data, t_cmd *cmd)
 {
 	int	i;
+	int	err;
 
 	i = 1;
+	err = 0;
 	while (cmd->args[i])
 	{
 		if (ft_strlen(cmd->args[i]) == 1 && cmd->args[i][0] == '=')
 		{
 			printf("export: `=': not a valid identifier\n");
+			err++;
 			i++;
 		}
 		else
 		{
-			set_in_export(data, cmd->args[i]);
-			set_in_env(data, cmd->args[i]);
+			err += set_in_export(data, cmd->args[i]);
+			err += set_in_env(data, cmd->args[i]);
 			i++;
 		}
 	}
+	return (err > 0);
 }
 
 void	free_export(t_export *node)
