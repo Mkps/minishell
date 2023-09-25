@@ -6,36 +6,35 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 13:42:53 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 16:43:24 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:53:52 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_cmd	*find_unset_command(t_data *data)
+t_cmd *find_unset_command(t_data *data)
 {
-	t_cmd	**cmd_list;
-	int		i;
-	t_cmd	*cmd;
+	t_cmd **cmd_list;
+	int i;
+	t_cmd *cmd;
 
 	cmd_list = data->cmd_list;
 	i = 0;
 	while (cmd_list && cmd_list[i])
 	{
 		cmd = cmd_list[i];
-		if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0], "unset",
-				ft_strlen("unset")) == 0)
+		if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0], "unset", ft_strlen("unset")) == 0)
 			return (cmd);
 		i++;
 	}
 	return (NULL);
 }
-
-void		execute_unset(t_data *data, t_cmd *cmd)
+/*
+void execute_unset(t_data *data, t_cmd *cmd)
 {
-	int			i;
-	t_export	*prev;
-	t_export	*current_export;
+	int i;
+	t_export *prev;
+	t_export *current_export;
 
 	i = 1;
 	prev = NULL;
@@ -47,7 +46,7 @@ void		execute_unset(t_data *data, t_cmd *cmd)
 		while (current_export)
 		{
 			if (ft_strncmp(current_export->key, cmd->args[i],
-					ft_strlen(cmd->args[i])) == 0)
+						   ft_strlen(cmd->args[i])) == 0)
 			{
 				if (prev == NULL)
 				{
@@ -63,20 +62,58 @@ void		execute_unset(t_data *data, t_cmd *cmd)
 					free(current_export->value);
 					free(current_export);
 				}
-				break ;
+				break;
 			}
 			prev = current_export;
 			current_export = current_export->next;
 		}
 		i++;
 	}
+}*/
+
+void execute_unset(t_data *data, t_cmd *cmd)
+{
+    int i;
+    t_export *prev;
+    t_export *current_export;
+
+    i = 1;
+    prev = NULL;
+    current_export = NULL;
+    while (cmd->args[i])
+    {
+        prev = NULL;
+        current_export = *data->env_export;
+        while (current_export)
+        {
+            if (ft_strncmp(current_export->key, cmd->args[i], ft_strlen(cmd->args[i])) == 0 &&
+                ft_strlen(current_export->key) == ft_strlen(cmd->args[i]))
+            {
+                if (prev == NULL)
+                {
+                    *data->env_export = current_export->next;
+                }
+                else
+                {
+                    prev->next = current_export->next;
+                }
+                free(current_export->key);
+                free(current_export->value);
+                free(current_export);
+                break;
+            }
+            prev = current_export;
+            current_export = current_export->next;
+        }
+        i++;
+    }
 }
 
-void	execute_env(t_data *data, t_cmd *cmd)
+void execute_env(t_data *data, t_cmd *cmd)
 {
-	int		i;
-	t_env	*prev;
-	t_env	*current_export;
+	int i;
+	t_env *prev;
+	t_env *current_export;
 
 	i = 1;
 	while (cmd->args[i])
@@ -86,7 +123,7 @@ void	execute_env(t_data *data, t_cmd *cmd)
 		while (current_export)
 		{
 			if (ft_strncmp(current_export->key, cmd->args[i],
-					ft_strlen(cmd->args[i])) == 0)
+						   ft_strlen(cmd->args[i])) == 0)
 			{
 				if (prev == NULL)
 				{
@@ -102,7 +139,7 @@ void	execute_env(t_data *data, t_cmd *cmd)
 					free(current_export->value);
 					free(current_export);
 				}
-				break ;
+				break;
 			}
 			prev = current_export;
 			current_export = current_export->next;
@@ -111,9 +148,9 @@ void	execute_env(t_data *data, t_cmd *cmd)
 	}
 }
 
-int	ft_unset(t_data *data)
+int ft_unset(t_data *data)
 {
-	t_cmd	*cmd_lst;
+	t_cmd *cmd_lst;
 
 	cmd_lst = NULL;
 	cmd_lst = find_unset_command(data);
@@ -128,10 +165,10 @@ int	ft_unset(t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-void	remove_export(t_data *data, const char *key_to_remove)
+void remove_export(t_data *data, const char *key_to_remove)
 {
-	t_export	*prev;
-	t_export	*current_export;
+	t_export *prev;
+	t_export *current_export;
 
 	prev = NULL;
 	current_export = NULL;
@@ -139,7 +176,7 @@ void	remove_export(t_data *data, const char *key_to_remove)
 	while (current_export)
 	{
 		if (ft_strncmp(current_export->key, key_to_remove,
-				ft_strlen(current_export->key)) == 0)
+					   ft_strlen(current_export->key)) == 0)
 		{
 			if (prev == NULL)
 				*data->env_export = current_export->next;
@@ -148,14 +185,14 @@ void	remove_export(t_data *data, const char *key_to_remove)
 			free(current_export->key);
 			free(current_export->value);
 			free(current_export);
-			break ;
+			break;
 		}
 		prev = current_export;
 		current_export = current_export->next;
 	}
 }
 
-void	remove_env(t_data *data, const char *key_to_remove)
+void remove_env(t_data *data, const char *key_to_remove)
 {
 	t_env *prev = NULL;
 	t_env *current_env = NULL;
@@ -164,7 +201,7 @@ void	remove_env(t_data *data, const char *key_to_remove)
 	while (current_env)
 	{
 		if (ft_strncmp(current_env->key, key_to_remove,
-				ft_strlen(current_env->key)) == 0)
+					   ft_strlen(current_env->key)) == 0)
 		{
 			if (prev == NULL)
 			{
@@ -177,7 +214,7 @@ void	remove_env(t_data *data, const char *key_to_remove)
 			free(current_env->key);
 			free(current_env->value);
 			free(current_env);
-			break ;
+			break;
 		}
 		prev = current_env;
 		current_env = current_env->next;

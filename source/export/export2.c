@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 13:25:06 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:46:24 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 void	env_update(t_data *data)
 {
-	int		num_env;
-	int		i;
-	t_env	*current_env;
-	size_t	key_len;
-	size_t	value_len;
-	size_t	entry_len;
+	int i;
+	t_env *current_env;
+	size_t key_len;
+	size_t value_len;
+	size_t entry_len;
 
-	num_env = 0;
+	key_len = 0;
 	i = 0;
 	current_env = NULL;
 	if (data->envv)
@@ -34,13 +33,14 @@ void	env_update(t_data *data)
 		}
 		free(data->envv);
 	}
-	num_env = ft_lstsize_env(data->env_cpy);
-	data->envv = (char **)malloc((num_env + 1) * sizeof(char *));
+	key_len = ft_lstsize_env(data->env_cpy);
+	data->envv = (char **)malloc((key_len + 1) * sizeof(char *));
 	if (!data->envv)
 	{
 		perror("Malloc failed");
 		exit(EXIT_FAILURE);
 	}
+	key_len = 0;
 	current_env = *data->env_cpy;
 	i = 0;
 	while (current_env)
@@ -63,12 +63,12 @@ void	env_update(t_data *data)
 	data->envv[i] = NULL;
 }
 
-int	set_in_env(t_data *data, char *variable)
+int set_in_env(t_data *data, char *variable)
 {
-	char	**variable_split;
-	char	*key;
-	char	*value;
-	t_env	*new_env;
+	char **variable_split;
+	char *key;
+	char *value;
+	t_env *new_env;
 
 	variable_split = NULL;
 	key = NULL;
@@ -97,7 +97,6 @@ int	set_in_env(t_data *data, char *variable)
 	}
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
-		printf("\n key existe deja \n");
 		if (value[0] != '\0')
 		{
 			remove_env(data, key);
@@ -118,13 +117,13 @@ int	set_in_env(t_data *data, char *variable)
 	return (EXIT_SUCCESS);
 }
 
-int	set_in_export(t_data *data, char *variable)
+int set_in_export(t_data *data, char *variable)
 {
-	char		**variable_split;
-	char		*key;
-	char		*value;
-	t_export	*new_export;
-	int			flag;
+	char **variable_split;
+	char *key;
+	char *value;
+	t_export *new_export;
+	int flag;
 
 	flag = 0;
 	variable_split = ft_split2(variable, '=');
@@ -134,19 +133,19 @@ int	set_in_export(t_data *data, char *variable)
 	{
 		if (key[0] == '\0')
 			printf("export `': not a valid identifier\n");
-		else
+		else if (value[0] != '\0')
 			printf("export: `%s=%s': not a valid identifier\n", key, value);
+		else
+			printf("export: `%s': not a valid identifier\n", key);
 		free(key);
 		free(value);
 		ft_free_tab(variable_split);
 		return (EXIT_FAILURE);
 	}
-	//printf("123\n");
 	if (ft_strrchr(variable, '=') == NULL)
 		flag++;
 	if (value[0] != '\0')
 		value = add_quotes(value);
-	//printf("234\n");
 	if (export_key_exists(*data->env_export, key) == 1)
 	{
 		if (value[0] != '\0')
@@ -176,10 +175,10 @@ int	set_in_export(t_data *data, char *variable)
 	return (EXIT_SUCCESS);
 }
 
-int	execute_export(t_data *data, t_cmd *cmd)
+int execute_export(t_data *data, t_cmd *cmd)
 {
-	int	i;
-	int	err;
+	int i;
+	int err;
 
 	i = 1;
 	err = 0;
@@ -201,7 +200,7 @@ int	execute_export(t_data *data, t_cmd *cmd)
 	return (err > 0);
 }
 
-void	free_export(t_export *node)
+void free_export(t_export *node)
 {
 	t_export *next;
 

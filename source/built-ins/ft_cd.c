@@ -6,25 +6,25 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 15:53:28 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:18:00 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_cd(t_cmd *cmd, t_data *data)
+int ft_cd(t_cmd *cmd, t_data *data)
 {
-	char	*dir;
-	char	*pwd;
-	t_env	*current;
-	char	*tmp;
-	char	*old_pwd;
+	char *dir;
+	char *pwd;
+	t_env *current;
+	char *tmp;
+	char *old_pwd;
 
 	dir = NULL;
 	pwd = NULL;
 	current = *data->env_cpy;
 	tmp = NULL;
-	old_pwd = NULL; //getcwd(NULL, 0);
+	old_pwd = NULL; // getcwd(NULL, 0);
 	if (cmd->args[2] != NULL)
 		return (output_err_ret(1, "minishell: cd: too many arguments\n", NULL));
 	if (cmd->args[1] == NULL)
@@ -63,7 +63,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		{
 			free(current->value);
 			current->value = ft_strdup(pwd);
-			break ;
+			break;
 		}
 		current = current->next;
 	}
@@ -74,7 +74,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		{
 			free(current->value);
 			current->value = ft_strdup(pwd);
-			break ;
+			break;
 		}
 		current = current->next;
 	}
@@ -84,7 +84,7 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-void	handle_parent_directory(void)
+void handle_parent_directory(void)
 {
 	if (chdir("..") != 0)
 	{
@@ -92,15 +92,15 @@ void	handle_parent_directory(void)
 	}
 }
 
-void	handle_previous_directory(t_data *data, char **old_pwd)
+void handle_previous_directory(t_data *data, char **old_pwd)
 {
-	char	*old_pwd_env;
+	char *old_pwd_env;
 
 	old_pwd_env = ft_getenv(data->envv, "OLDPWD");
 	if (old_pwd_env == NULL)
 	{
 		printf("cd: OLDPWD not set\n");
-		return ;
+		return;
 	}
 	*old_pwd = ft_strdup(old_pwd_env);
 	if (chdir(old_pwd_env) != 0)
@@ -110,16 +110,16 @@ void	handle_previous_directory(t_data *data, char **old_pwd)
 	}
 }
 
-void	handle_home_directory(t_data *data, const char *dir)
+void handle_home_directory(t_data *data, const char *dir)
 {
 	char *home_dir = ft_getenv(data->envv, "HOME");
 	if (home_dir == NULL)
 	{
 		printf("cd: HOME not set\n");
-		return ;
+		return;
 	}
 	size_t full_path_len = strlen(home_dir) + strlen(dir) - 1;
-	char full_path[full_path_len + 1]; 
+	char full_path[full_path_len + 1];
 	ft_strlcpy(full_path, home_dir, sizeof(full_path));
 	ft_strlcat(full_path, dir + 1, sizeof(full_path));
 	if (chdir(full_path) != 0)
