@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <readline/readline.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -188,6 +189,7 @@ void	minishell_prompt(t_data *data)
 
 	while (1)
 	{
+		rl_set_signals();
 		signals_interact();
 		prompt_user(data);
 		signals_no_interact();

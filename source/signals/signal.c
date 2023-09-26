@@ -20,7 +20,8 @@ void	redisplay_prompt(int signum)
 	if (signum == SIGINT)
 	{
 		g_exit_code = signum + 128;
-		write(1, "\n", 1);
+		rl_echo_signal_char(signum);
+		printf("\n");
 		rl_reset_line_state();
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -46,8 +47,10 @@ void	signal_sigint_heredoc(int signum)
 	if (signum == SIGINT)
 	{
 		g_exit_code = signum + 128;
-		write(1, "\n", 1);
+		rl_echo_signal_char(signum);
+		printf("\n");
 		rl_reset_line_state();
+		rl_free_line_state();
 		rl_cleanup_after_signal();
 		rl_replace_line("", 0);
 	}

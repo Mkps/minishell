@@ -44,13 +44,24 @@ void	ft_str_swap(char **s1, char **s2)
 	*s2 = tmp;
 }
 
+char	*chrtostr(char c)
+{
+	char	*ret;
+
+	ret = (char *)ft_calloc(2, sizeof(char));
+	if (!ret)
+		return (NULL);
+	ret[0] = c;
+	return (ret);
+}
+
 char	*sort_str(char *str)
 {
 	int		i;
 	char	*ret;
 	char	**split;
 
-	split = ft_split(str, '/');
+	split = ft_split(str, 3);
 	if (split[1] == NULL)
 	{
 		ft_free_tab(split);

@@ -313,6 +313,7 @@ int		ft_true(void);
 int		ft_false(void);
 
 /**		wildcard_find.c	**/
+char	*find_dirpath(char *f_wc, int *flag);
 int		show_hidden(char *search, char *str);
 char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 			char *, int), int mode);
@@ -321,6 +322,7 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 char	*ft_strjoin_tab(char **tab, int i, char join);
 void	ft_str_swap(char **s1, char **s2);
 char	*sort_str(char *str);
+char	*chrtostr(char c);
 
 /**		wildcard_strutils2.c **/
 char	*ft_strend(char *big, char *little, char n);
