@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 14:33:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/26 15:45:00 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,10 @@ int		ft_cd(t_cmd *cmd, t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_env(t_data *data);
 void	ft_exit(t_data *data);
-
+void    handle_regular_directory(char *dir);
+void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);//), char *old_pwd);
+void	handle_directory_change(t_data *data, char **old_pwd, char *dir);
+int		set_pwd(char *pwd);
 /**		minishell_cmd.c	**/
 int		set_fd(t_data *data, t_cmd *cmd);
 void	set_pipes(t_data *data, t_cmd *cmd);
@@ -292,7 +295,7 @@ void		free_env_lst(t_env **cpy);
 void 	handle_parent_directory();
 void 	handle_previous_directory(t_data *data, char **old_pwd);
 void 	update_oldpwd(char **old_pwd, char *new_pwd);
-void 	update_pwd_and_oldpwd(t_data *data, char *new_pwd);
+//void 	update_pwd_and_oldpwd(t_data *data, char *new_pwd);
 void 	handle_home_directory(t_data *data, const char *dir);
 /***	unset	***/
 int		ft_lstsize_env(t_env **lst);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
+#    By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/25 14:33:31 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/26 12:31:46 by uaupetit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC_NAME = 	built-ins/unset.c \
 			built-ins/dummies.c \
 			built-ins/built_in.c \
 			built-ins/ft_cd.c \
+			built-ins/ft_cd_utils.c \
 			cmd_list/cmd_list_find.c \
 			cmd_list/cmd_list_add.c \
 			cmd_list/cmd_list_utils.c \
