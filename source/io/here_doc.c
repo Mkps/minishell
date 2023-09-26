@@ -12,6 +12,8 @@
 
 #include "../../include/minishell.h"
 #include <readline/readline.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file (wanted `"
@@ -44,7 +46,7 @@ char	*heredoc_var_expand(t_data *data, char *str)
 	i = 0;
 	n = 1;
 	ret = ft_strdup(str);
-	exit_code = ft_itoa(g_exit_code);
+	exit_code = ft_itoa(data->exit_status);
 	while (ret[i])
 	{
 		if (ret[i] == '$')
@@ -122,6 +124,39 @@ int	here_doc_input(t_data *data, char *limiter, int fd)
 	return (-1);
 }
 
+// Generates a unique heredoc tmp filename
+char	*generate_heredoc_filename(void)
+{
+    char 		*filename;
+	char		*basename;
+	int			attempt;
+    struct stat	buffer;
+
+	basename = "/heredoc-tmp";
+	attempt = 0;
+	stat("/tmp", &buffer);
+	if (!(buffer.st_mode & (S_IRUSR)) || !(buffer.st_mode & (S_IWUSR)))
+		filename = ft_strappend(".", basename, 0);
+	else
+		filename = ft_strappend("/tmp", basename, 0);
+	while (attempt < 5)
+	{
+		filename = ft_strappend(filename, "_", 2);
+		filename = ft_strappend(filename, ft_itoa(attempt), 3);
+        if (filename == NULL)
+		{
+            perror("minishell: allocation error:");
+			return (NULL);
+        }
+        if (stat(filename, &buffer) == -1)
+            return filename;
+        free(filename);
+        attempt++;
+    }
+	ft_putstr_fd("minishell: Error unable to generate a heredoc after 5 tries.\n", 2);
+	return (NULL);
+}
+
 // Creates a child process to get the heredoc and then duplicates the read end of the pipe on the STDIN_FILENO
 int	here_doc_handler(t_data *data, t_io_node *io_node)
 {
@@ -131,8 +166,7 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	rl_getc_function = getc;
    	rl_catch_sigwinch = 0;
 	rl_catch_signals = 0;
-	heredoc_tmp = "./tmp_fd";
-	unlink(heredoc_tmp);
+	heredoc_tmp = generate_heredoc_filename();
 	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
 	if (io_node->fd == -1)
 		return (output_err_ret(-1, "Error while opening file for heredoc", NULL));
