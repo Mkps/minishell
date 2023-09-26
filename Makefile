@@ -40,6 +40,7 @@ SRC_NAME =	built-ins/unset.c \
 			export/export.c \
 			free.c \
 			io/here_doc.c \
+			io/here_doc_var.c \
 			io/io.c \
 			lexer.c \
 			lexer_token.c \
