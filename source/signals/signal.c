@@ -19,41 +19,37 @@ void	redisplay_prompt(int signum)
 {
 	if (signum == SIGINT)
 	{
+		g_exit_code = signum + 128;
 		write(1, "\n", 1);
 		rl_reset_line_state();
-		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_forced_update_display();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
 void	signal_quit(int signum)
 {
-	write(1, "Quit\n", 5);
 	g_exit_code = signum + 128;
+	write(1, "Quit\n", 5);
 }
 
 void	signal_nl(int signum)
 {
-	write(1, "\n", 1);
 	g_exit_code = signum + 128;
+	write(1, "\n", 1);
+	rl_on_new_line();
 }
 
 void	signal_sigint_heredoc(int signum)
 {
-	g_exit_code = signum + 128;
-	rl_reset_line_state();
-	rl_replace_line("",0);
-	rl_cleanup_after_signal();
-	rl_on_new_line();
-	rl_forced_update_display();
 	if (signum == SIGINT)
 	{
-		//write(1, "\n", 1);
-		//rl_reset_line_state();
-		//rl_replace_line("", 0);
-		//rl_on_new_line();
-		//rl_forced_update_display();
+		g_exit_code = signum + 128;
+		write(1, "\n", 1);
+		rl_reset_line_state();
+		rl_cleanup_after_signal();
+		rl_replace_line("", 0);
 	}
 }
 

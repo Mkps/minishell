@@ -12,6 +12,7 @@
 
 #include "../../include/minishell.h"
 #include <readline/readline.h>
+#include <unistd.h>
 
 #define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file (wanted `"
 
@@ -95,33 +96,29 @@ int	here_doc_input(t_data *data, char *limiter, int fd)
 	int		flag;
 
 	flag = get_flag(limiter);
-	str = "str";
+	str = readline("heredoc> ");
 	while (str)
 	{
-		str = readline("heredoc> ");
-		if (str)
+		if (!flag)
+			str = heredoc_var_expand(data, str);
+		if (str == NULL || (!ft_strncmp(str, limiter + flag, (ft_strlen(limiter + flag ))) && ft_strlen(str) == ft_strlen(limiter + flag)))
 		{
-			str = ft_strappend(str, "\n", 2);
-			if (!flag)
-				str = heredoc_var_expand(data, str);
-		}
-		if (str == NULL || (!ft_strncmp(str, limiter + flag, ft_strlen(limiter
-						+ flag)) && (ft_strlen(limiter + flag) == ft_strlen(str)
-					- 1)))
-		{
-			if (str)
-			{
-				free(str);
-				return (0);
-			}
-			return (1);
-		}
-		if (str)
-		{
-			ft_putstr_fd(str, fd);
+			if (!str)
+				return (1);
 			free(str);
+			return (0);
 		}
+		ft_putendl_fd(str, fd);
+		free(str);
+		str = readline("heredoc> ");
 	}
+	if (str && !ft_strncmp(str, limiter + flag, (ft_strlen(limiter + flag))))
+	{
+		free(str);
+		return (0);
+	}
+	if (!str && g_exit_code < 128)
+		return (1);
 	return (-1);
 }
 
@@ -133,6 +130,7 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	signals_here_doc();
 	rl_getc_function = getc;
    	rl_catch_sigwinch = 0;
+	rl_catch_signals = 0;
 	heredoc_tmp = "./tmp_fd";
 	unlink(heredoc_tmp);
 	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
@@ -140,19 +138,15 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 		return (output_err_ret(-1, "Error while opening file for heredoc", NULL));
 	if (here_doc_input(data, io_node->filename, io_node->fd) == 1) 
 		printf("here-document delimited by end-of-file (wanted '%s')\n", io_node->filename);
-	//rl_clear_signals ();
 	rl_getc_function = rl_getc;
-	//rl_catch_signals = 1;
-	rl_catch_sigwinch = 1;
-	//rl_done = 1;
+	rl_done = 1;
 	signals_no_interact();
-	close(io_node->fd);
 	io_node->fd = open_fd(0, heredoc_tmp);
 	io_node->filename = heredoc_tmp;
 	if (g_exit_code > 128)
 	{
-		//close(io_node->fd);
-		//unlink(io_node->filename);
+		close(io_node->fd);
+		unlink(io_node->filename);
 		return (-1);
 	}
 	return (io_node->fd);

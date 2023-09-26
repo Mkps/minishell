@@ -52,10 +52,8 @@ int	ft_get_word(char *input, t_data *data)
 {
 	int	i;
 	int	current_status;
-	int	par_count;
 
 	i = 0;
-	par_count = 0;
 	current_status = data->parse_status;
 	if (data->parse_status != NONE)
 		i = get_quote_as_word(input, data);
