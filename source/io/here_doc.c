@@ -65,7 +65,7 @@ char	*generate_heredoc_filename(void)
 	while (attempt < 5)
 	{
 		filename = ft_strappend(dirpath, "_", 0);
-		filename = ft_strappend(filename, ft_itoa(attempt), 3);
+		filename = ft_strappend(filename, ft_itoa((unsigned long)&filename), 3);
 		if (filename == NULL)
 		{
 			perror("minishell: allocation error:");
@@ -92,7 +92,7 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	char	*heredoc_tmp;
 
 	signals_here_doc();
-	// rl_getc_function = getc;
+	rl_getc_function = getc;
 	rl_catch_sigwinch = 0;
 	rl_catch_signals = 0;
 	heredoc_tmp = generate_heredoc_filename();
@@ -103,8 +103,8 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 				NULL));
 	if (here_doc_input(data, io_node->filename, io_node->fd) == 1)
 		printf("%s%s')\n", HEREDOC_EOF, io_node->filename);
-	// rl_getc_function = rl_getc;
-	// rl_done = 1;
+	rl_getc_function = rl_getc;
+	rl_done = 1;
 	signals_no_interact();
 	io_node->fd = open_fd(0, heredoc_tmp);
 	io_node->filename = heredoc_tmp;
