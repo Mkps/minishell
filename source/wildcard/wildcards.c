@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 13:59:38 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/26 22:24:18 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	set_wc(t_data *data)
 	{
 		if (cmd->type == CMD)
 		{
+			cmd->cmd = ft_wildcard(cmd->cmd);
 			i = -1;
 			while (cmd->args[++i])
 				cmd->args[i] = ft_wildcard(cmd->args[i]);
