@@ -33,8 +33,8 @@ void	signals_here_doc(void)
 {
 	struct sigaction	act;
 
-	act.sa_flags = SA_RESTART;
 	ft_memset(&act, 0, sizeof(act));
+	act.sa_flags = 0;
 	act.sa_handler = &signal_sigint_heredoc;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = SIG_IGN;
@@ -47,6 +47,7 @@ void	signals_no_interact(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
+	act.sa_flags = 0;
 	act.sa_handler = &signal_nl;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;
