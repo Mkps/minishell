@@ -198,7 +198,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		if (is_unpiped(cmd) == 1 && cmd->is_term)
+		if (is_unpiped(cmd) == 1 && cmd->is_term && (!cmd->prev || (cmd->prev && cmd->prev->is_term)))
 		{
 			set_fd(data, cmd);
 			cmd->pid = -2;
