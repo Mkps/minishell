@@ -12,25 +12,32 @@
 
 #include "../../include/minishell.h"
 
-char	*build_wc_cd(void)
+char	*build_wc_cd(char *f_wc)
 {
 	DIR				*d;
 	struct dirent	*dir;
 	char			*str;
+	char			*dirpath;
+	int				flag;
 
 	str = ft_strdup("");
-	d = opendir(".");
-	if (d)
+	flag = 0;
+	dirpath = find_dirpath(f_wc, &flag);
+	d = opendir(dirpath);
+	if (!d)
+		return (NULL);
+	dir = readdir(d);
+	if (!flag)
+		dirpath = ft_strappend(dirpath, "/", 2);
+	while (dir != NULL)
 	{
+		if (!flag)
+			str = ft_strappend(str, dirpath, 2);
+		str = ft_strappend(str, dir->d_name, 2);
+		str = ft_strappend(str, chrtostr(3), 2);
 		dir = readdir(d);
-		while (dir != NULL)
-		{
-			str = ft_strappend(str, dir->d_name, 2);
-			str = ft_strappend(str, "/", 2);
-			dir = readdir(d);
-		}
-		closedir(d);
 	}
+	closedir(d);
 	return (str);
 }
 
@@ -48,7 +55,9 @@ char	*get_wc_data(char *search, char *src, int mode)
 		select = &strstr;
 	if (!src)
 	{
-		str = build_wc_cd();
+		str = build_wc_cd(search);
+		if (!str)
+			return (NULL);
 		ret = find_matching(search, str, select, mode);
 	}
 	else

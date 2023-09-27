@@ -12,12 +12,32 @@
 
 #include "../../include/minishell.h"
 
+int	wc_in_dirpath(char *filepath)
+{
+	int	i;
+
+	i = 0;
+	while (filepath[i])
+		i++;
+	while (i && filepath[i] != '/')
+		i--;
+	if (!i)
+		return (0);
+	while (i && filepath[i] != '*')
+		i--;
+	if (!i)
+		return (0);
+	return (1);
+}
+
 char	*get_fwc(char *str)
 {
 	char	*f_wc;
 	char	*ret;
 	int		i;
 
+	if (wc_in_dirpath(str))
+		return (NULL);
 	f_wc = get_front_wc(str);
 	if (f_wc)
 		i = ft_strlen(f_wc) + 1;
@@ -41,6 +61,8 @@ char	*get_wildcard(char *str)
 	char	*ret;
 
 	ret = get_fwc(str);
+	if (!ret)
+		return (str);
 	b_wc = get_back_wc(str);
 	if (b_wc)
 	{

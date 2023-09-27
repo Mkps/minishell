@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 18:38:23 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 09:52:31 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ int	here_doc_input(t_data *data, char *limiter, int fd)
 	{
 		if (!flag)
 			str = heredoc_var_expand(data, str);
-		if (str == NULL || (!ft_strncmp(str, limiter + flag, (ft_strlen(limiter + flag ))) && ft_strlen(str) == ft_strlen(limiter + flag)))
+		if (str == NULL || (!ft_strncmp(str, limiter + flag, (ft_strlen(limiter
+							+ flag))) && ft_strlen(str) == ft_strlen(limiter
+					+ flag)))
 		{
 			if (!str)
 				return (1);
@@ -127,51 +129,60 @@ int	here_doc_input(t_data *data, char *limiter, int fd)
 // Generates a unique heredoc tmp filename
 char	*generate_heredoc_filename(void)
 {
-    char 		*filename;
+	char		*filename;
 	char		*basename;
+	char		*dirpath;
 	int			attempt;
-    struct stat	buffer;
+	struct stat	buffer;
 
 	basename = "/heredoc-tmp";
 	attempt = 0;
 	stat("/tmp", &buffer);
 	if (!(buffer.st_mode & (S_IRUSR)) || !(buffer.st_mode & (S_IWUSR)))
-		filename = ft_strappend(".", basename, 0);
+		dirpath = ft_strappend(".", basename, 0);
 	else
-		filename = ft_strappend("/tmp", basename, 0);
+		dirpath = ft_strappend("/tmp", basename, 0);
 	while (attempt < 5)
 	{
-		filename = ft_strappend(filename, "_", 2);
-		filename = ft_strappend(filename, ft_itoa(attempt), 3);
-        if (filename == NULL)
+		filename = ft_strappend(dirpath, "_", 0);
+		filename = ft_strappend(filename, ft_itoa((unsigned long)&filename), 3);
+		if (filename == NULL)
 		{
-            perror("minishell: allocation error:");
+			perror("minishell: allocation error:");
 			return (NULL);
-        }
-        if (stat(filename, &buffer) == -1)
-            return filename;
-        free(filename);
-        attempt++;
-    }
-	ft_putstr_fd("minishell: Error unable to generate a heredoc after 5 tries.\n", 2);
+		}
+		if (stat(filename, &buffer) == -1)
+		{
+			free(dirpath);
+			return (filename);
+		}
+		free(filename);
+		attempt++;
+	}
+	ft_putstr_fd("minishell: Error unable to generate a \
+heredoc after 5 tries.\n", 2);
+	free(dirpath);
 	return (NULL);
 }
 
-// Creates a child process to get the heredoc and then duplicates the read end of the pipe on the STDIN_FILENO
+// Creates a tmp file to get the heredoc 
+// then writes to it
 int	here_doc_handler(t_data *data, t_io_node *io_node)
 {
 	char	*heredoc_tmp;
 
 	signals_here_doc();
 	rl_getc_function = getc;
-   	rl_catch_sigwinch = 0;
+	rl_catch_sigwinch = 0;
 	rl_catch_signals = 0;
 	heredoc_tmp = generate_heredoc_filename();
-	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
+	io_node->fd = open(heredoc_tmp, O_CREAT | O_TRUNC | O_WRONLY,
+			S_IRUSR | S_IWUSR);
 	if (io_node->fd == -1)
-		return (output_err_ret(-1, "Error while opening file for heredoc", NULL));
-	if (here_doc_input(data, io_node->filename, io_node->fd) == 1) 
-		printf("here-document delimited by end-of-file (wanted '%s')\n", io_node->filename);
+		return (output_err_ret(-1, "Error while opening file for heredoc",
+				NULL));
+	if (here_doc_input(data, io_node->filename, io_node->fd) == 1)
+		printf("%s%s')\n", HEREDOC_EOF, io_node->filename);
 	rl_getc_function = rl_getc;
 	rl_done = 1;
 	signals_no_interact();

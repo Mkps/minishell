@@ -6,7 +6,7 @@
 #    By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/27 09:39:43 by uaupetit         ###   ########.fr        #
+#    Updated: 2023/09/27 09:48:17 by uaupetit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRC_NAME =	built-ins/unset.c \
 			export/export.c \
 			free.c \
 			io/here_doc.c \
+			io/here_doc_var.c \
 			io/io.c \
 			lexer.c \
 			lexer_token.c \

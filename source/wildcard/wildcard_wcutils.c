@@ -17,7 +17,7 @@ char	*get_front_wc(char *str)
 	int	i;
 
 	i = 0;
-	if (*str == 0)
+	if (!str || !*str)
 		return (NULL);
 	while (str[i] && str[i] != '*')
 		i++;

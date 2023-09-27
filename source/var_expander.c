@@ -94,10 +94,11 @@ int	var_expander(t_data *data, char *str, t_token *token)
 			i++;
 	}
 	free(str);
-	if (flag_retokenize > 0 && token->quote_status == NONE)
+	if (token && flag_retokenize > 0 && token->quote_status == NONE)
 		if (retokenize(data, *ret_ptr, token) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
-	token->value = ft_strdup(*ret_ptr);
+	if (token)
+		token->value = ft_strdup(*ret_ptr);
 	free(*ret_ptr);
 	free(ret_ptr);
 	return (flag_retokenize != 0);
