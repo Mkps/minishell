@@ -76,29 +76,42 @@ int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
 }
 
 // Replaces the $VAR with its' corresponding value stored in env if it exists.
-int	var_expander(t_data *data, char *str, t_token *token)
+int	var_expander(t_data *data, char *str, t_token **token)
 {
 	int		i;
 	char	**ret_ptr;
+	t_token	*current;
 	int		flag_retokenize;
 
 	flag_retokenize = 0;
 	i = 0;
 	ret_ptr = malloc(sizeof(char **));
 	*ret_ptr = ft_strdup(str);
+	current = *token;
 	while (*(*ret_ptr + i))
 	{
 		if (*(*ret_ptr + i) == '$')
-			flag_retokenize += var_expand_dollar(data, ret_ptr, &i, token);
+			flag_retokenize += var_expand_dollar(data, ret_ptr, &i, current);
 		else
 			i++;
 	}
 	free(str);
-	if (token && flag_retokenize > 0 && token->quote_status == NONE)
-		if (retokenize(data, *ret_ptr, token) == EXIT_SUCCESS)
+	if (current && flag_retokenize > 0 && current->quote_status == NONE)
+	{
+		if (retokenize(data, *ret_ptr, current) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
-	if (token)
-		token->value = ft_strdup(*ret_ptr);
+	}
+	if (*ret_ptr && **ret_ptr)
+	{
+		if (current)
+			current->value = ft_strdup(*ret_ptr);
+	}
+	else if (current)
+	{
+		current->value = "";
+	}
+	*token = current;
+	printf("current %s\n", current->value);
 	free(*ret_ptr);
 	free(ret_ptr);
 	return (flag_retokenize != 0);

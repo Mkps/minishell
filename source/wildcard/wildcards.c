@@ -34,10 +34,11 @@ char	*build_wc_cd(char *f_wc)
 		if (!flag)
 			str = ft_strappend(str, dirpath, 2);
 		str = ft_strappend(str, dir->d_name, 2);
-		str = ft_strappend(str, chrtostr(3), 2);
+		str = ft_strappend(str, chrtostr(3), 3);
 		dir = readdir(d);
 	}
 	closedir(d);
+	free(dirpath);
 	return (str);
 }
 

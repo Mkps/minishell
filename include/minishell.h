@@ -345,8 +345,7 @@ int						init_io_redir(t_data *data);
 /**		var.c			**/
 int						is_valid_var(char *str);
 char					*get_var(t_data *data, char *str);
-int						var_expander(t_data *data, char *str, t_token *token);
-int						retokenize(t_data *data, char *str, t_token *token);
+int						var_expander(t_data *data, char *str, t_token **token);
 
 /**		var_expander	**/
 void					var_expand_exitcode(t_data *data, char **ret, int *i);

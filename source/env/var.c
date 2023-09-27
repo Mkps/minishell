@@ -66,7 +66,7 @@ int	retokenize(t_data *data, char *str, t_token *token)
 	split = ft_split(str, ' ');
 	if (!split)
 		return (EXIT_FAILURE);
-	token->value = split[0];
+	token->value = ft_strdup(split[0]);
 	i = 1;
 	while (split[i])
 	{
@@ -74,5 +74,6 @@ int	retokenize(t_data *data, char *str, t_token *token)
 		current = current->next;
 		i++;
 	}
+	ft_free_tab(split);
 	return (EXIT_SUCCESS);
 }

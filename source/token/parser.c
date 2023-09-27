@@ -29,7 +29,7 @@ void	manage_expand(t_data *data, t_token **current)
 	t_token	*tmp;
 
 	tmp = *current;
-	var_expander(data, tmp->value, tmp);
+	var_expander(data, tmp->value, &tmp);
 	if (tmp->quote_status == NONE && tmp->next
 		&& (!tmp->value || (tmp->value
 				&& tmp->value[0] == 0)))
@@ -37,7 +37,7 @@ void	manage_expand(t_data *data, t_token **current)
 		tmp = tmp->next;
 		lst_del_prev(&tmp);
 		if (tmp->prev == NULL)
-			data->token_root = &tmp;
+			*data->token_root = tmp;
 	}
 	else if (tmp->quote_status == NONE
 		&& tmp->prev && (!tmp->value

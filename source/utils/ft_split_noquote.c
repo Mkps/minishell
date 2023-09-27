@@ -69,10 +69,8 @@ static char	*ft_string_extract(char *src, char separator)
 static char	**ft_cycle_str(char **tab, char *str, char c)
 {
 	int	i;
-	int	quote_status;
 
 	i = 0;
-	quote_status = 0;
 	while (*str)
 	{
 		while (*str && *str == c)
