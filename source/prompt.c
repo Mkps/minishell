@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 17:34:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 11:42:20 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*set_prompt(t_data *data)
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, ":", 2);
 	prompt = ft_strappend(prompt, CYAN, 2);
-	pwd = get_var(data, "PWD");
+	pwd = prompt_pwd(data);
 	prompt = ft_strappend(prompt, glob_home(data, pwd), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, "\n$ ", 2);

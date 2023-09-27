@@ -6,18 +6,18 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:23:33 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 17:17:41 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 17:19:37 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void insert_sorted(t_export **sorted, t_export *new_export)
+void	insert_sorted(t_export **sorted, t_export *new_export)
 {
-	t_export *current;
+	t_export	*current;
 
 	if (*sorted == NULL || ft_strncmp(new_export->key, (*sorted)->key,
-									  ft_strlen(new_export->key)) < 0)
+			ft_strlen(new_export->key)) < 0)
 	{
 		new_export->next = *sorted;
 		*sorted = new_export;
@@ -26,18 +26,18 @@ void insert_sorted(t_export **sorted, t_export *new_export)
 	{
 		current = *sorted;
 		while (current->next != NULL && ft_strncmp(new_export->key,
-												   current->next->key, ft_strlen(new_export->key)) >= 0)
+				current->next->key, ft_strlen(new_export->key)) >= 0)
 			current = current->next;
 		new_export->next = current->next;
 		current->next = new_export;
 	}
 }
 
-char **ft_split2(char *s, char c)
+char	**ft_split2(char *s, char c)
 {
-	int i;
-	int j;
-	char **res;
+	int		i;
+	int		j;
+	char	**res;
 
 	if (!s)
 		return (NULL);
@@ -61,12 +61,12 @@ char **ft_split2(char *s, char c)
 	return (res);
 }
 
-void ft_lstadd_back_export(t_export **lst, t_export *new)
+void	ft_lstadd_back_export(t_export **lst, t_export *new)
 {
-	t_export *temp;
+	t_export	*temp;
 
 	if (!lst || !new)
-		return;
+		return ;
 	new->next = NULL;
 	if (*lst)
 	{
@@ -79,9 +79,9 @@ void ft_lstadd_back_export(t_export **lst, t_export *new)
 		*lst = new;
 }
 
-t_export *ft_lstnew_export(char *key, char *value, int flag)
+t_export	*ft_lstnew_export(char *key, char *value, int flag)
 {
-	t_export *new_export;
+	t_export	*new_export;
 
 	new_export = (t_export *)malloc(sizeof(t_export));
 	if (!new_export)
@@ -93,10 +93,10 @@ t_export *ft_lstnew_export(char *key, char *value, int flag)
 	return (new_export);
 }
 
-void free_export_list(t_export **export_lst)
+void	free_export_list(t_export **export_lst)
 {
-	t_export *current;
-	t_export *next;
+	t_export	*current;
+	t_export	*next;
 
 	current = *export_lst;
 	while (current != NULL)

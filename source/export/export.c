@@ -6,16 +6,16 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 17:17:29 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 13:20:18 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void env_to_export(t_data *data)
+void	env_to_export(t_data *data)
 {
-	t_env *current;
-	t_export *new_export;
+	t_env		*current;
+	t_export	*new_export;
 
 	current = *data->env_cpy;
 	new_export = NULL;
@@ -32,23 +32,24 @@ void env_to_export(t_data *data)
 	}
 }
 
-t_cmd *find_export_command(t_data *data)
+t_cmd	*find_export_command(t_data *data)
 {
-	t_cmd *cmd;
+	t_cmd	*cmd;
 
 	cmd = *data->cmd_list;
 	while (cmd)
 	{
-		if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0], "export", ft_strlen("export")) == 0)
+		if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0],
+				"export", ft_strlen("export")) == 0)
 			return (cmd);
 		cmd = cmd->next;
 	}
 	return (NULL);
 }
 
-int ft_export(t_data *data)
+int	ft_export(t_data *data)
 {
-	t_cmd *cmd_lst;
+	t_cmd	*cmd_lst;
 
 	cmd_lst = NULL;
 	if (data->env_export == NULL)
@@ -68,9 +69,9 @@ int ft_export(t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-void print_export(t_data *data)
+void	print_export(t_data *data)
 {
-	t_export *current;
+	t_export	*current;
 
 	current = *data->env_export;
 	while (current != NULL)
@@ -85,11 +86,11 @@ void print_export(t_data *data)
 	}
 }
 
-void sort_export_list(t_data *data)
+void	sort_export_list(t_data *data)
 {
-	t_export *sorted;
-	t_export *current;
-	t_export *next;
+	t_export	*sorted;
+	t_export	*current;
+	t_export	*next;
 
 	sorted = NULL;
 	current = *data->env_export;

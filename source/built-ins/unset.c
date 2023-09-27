@@ -6,39 +6,18 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 13:42:53 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/27 11:16:09 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 13:14:03 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_cmd	*find_unset_command(t_data *data)
+void	execute_unset(t_data *data, t_cmd *cmd, int i)
 {
-	int		i;
-	t_cmd	*cmd;
-	t_cmd	**cmd_list;
-
-	cmd_list = data->cmd_list;
-	i = 0;
-	while (cmd_list && cmd_list[i])
-	{
-		cmd = cmd_list[i];
-		if (cmd->args && cmd->args[0] && ft_strncmp(cmd->args[0],
-				"unset", ft_strlen("unset")) == 0)
-			return (cmd);
-		i++;
-	}
-	return (NULL);
-}
-
-void	execute_unset(t_data *data, t_cmd *cmd)
-{
-	int			i;
 	t_export	*prev;
 	t_export	*current_export;
 
-	i = 1;
-	while (cmd->args[i++])
+	while (cmd->args[++i])
 	{
 		prev = NULL;
 		current_export = *data->env_export;
@@ -62,21 +41,14 @@ void	execute_unset(t_data *data, t_cmd *cmd)
 	}
 }
 
-void	export_unset_free(t_export *current)
-{
-		free(current_export->key);
-		free(current_export->value);
-		free(current_export);
-}
-
 void	execute_env(t_data *data, t_cmd *cmd)
 {
 	int		i;
 	t_env	*prev;
 	t_env	*current_export;
 
-	i = 1;
-	while (cmd->args[i++])
+	i = 0;
+	while (cmd->args[++i])
 	{
 		prev = NULL;
 		current_export = *data->env_cpy;
@@ -89,7 +61,7 @@ void	execute_env(t_data *data, t_cmd *cmd)
 					*data->env_cpy = current_export->next;
 				else
 					prev->next = current_export->next;
-				unset_free(current_export);
+				env_unset_free(current_export);
 				break ;
 			}
 			prev = current_export;
@@ -98,24 +70,19 @@ void	execute_env(t_data *data, t_cmd *cmd)
 	}
 }
 
-void	env_unset_free(t_env *current)
-{
-	free(current_export->key);
-	free(current_export->value);
-	free(current_export);
-}
-
 int	ft_unset(t_data *data)
 {
 	t_cmd	*cmd_lst;
+	int		i;
 
+	i = 0;
 	cmd_lst = NULL;
 	cmd_lst = find_unset_command(data);
 	if (cmd_lst->args[1] == NULL)
 		return (EXIT_FAILURE);
 	else
 	{
-		execute_unset(data, cmd_lst);
+		execute_unset(data, cmd_lst, i);
 		execute_env(data, cmd_lst);
 		env_update(data);
 	}
@@ -162,16 +129,10 @@ void	remove_env(t_data *data, const char *key_to_remove)
 				ft_strlen(current_env->key)) == 0)
 		{
 			if (prev == NULL)
-			{
 				*data->env_cpy = current_env->next;
-			}
 			else
-			{
 				prev->next = current_env->next;
-			}
-			free(current_env->key);
-			free(current_env->value);
-			free(current_env);
+			env_unset_free(current_env);
 			break ;
 		}
 		prev = current_env;

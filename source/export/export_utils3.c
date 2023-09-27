@@ -6,15 +6,15 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:25:55 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 17:17:44 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 17:21:20 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int ft_wordsize(char *s, char c, int pos)
+int	ft_wordsize(char *s, char c, int pos)
 {
-	int wsize;
+	int	wsize;
 
 	wsize = 0;
 	while (s[pos] != c && s[pos])
@@ -25,10 +25,10 @@ int ft_wordsize(char *s, char c, int pos)
 	return (wsize);
 }
 
-char *add_quotes(char *str)
+char	*add_quotes(char *str)
 {
-	size_t len;
-	char *result;
+	size_t	len;
+	char	*result;
 
 	len = ft_strlen(str);
 	result = (char *)malloc(len + 3);
@@ -42,23 +42,8 @@ char *add_quotes(char *str)
 	free(str);
 	return (result);
 }
-/*
-int	export_key_existsbis(t_export *export, char *key_to_check)
-{
-	while (export != NULL)
-	{
-		if (ft_strncmp(export->key, key_to_check, ft_strlen(key_to_check)) == 0)
-		{
-			printf("key existe\n");
-			return (1);
-		}
-		export = export->next;
-	}
-	printf("key exsiste pas \n");
-	return (0);
-}*/
 
-int export_key_exists(t_export *export, char *key_to_check)
+int	export_key_exists(t_export *export, char *key_to_check)
 {
 	while (export != NULL)
 	{
@@ -74,9 +59,9 @@ int export_key_exists(t_export *export, char *key_to_check)
 	return (0);
 }
 
-int key_is_valid(char *chaine)
+int	key_is_valid(char *chaine)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (chaine[i] == '\0')

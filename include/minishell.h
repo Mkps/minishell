@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 11:11:22 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:54:36 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,7 +336,7 @@ char					*str_replace_strs(char **src, int r_index, int n,
 
 /**			export			**/
 void					env_update(t_data *data);
-int						set_in_env(t_data *data, char *variable);
+int						set_in_env(t_data *data, char *variable, char **variable_split);
 int						set_in_export(t_data *data, char *variable);
 int						execute_export(t_data *data, t_cmd *cmd);
 void					print_export(t_data *data);
@@ -373,7 +373,7 @@ void 	handle_home_directory(t_data *data, const char *dir);
 /***	unset	***/
 int						ft_lstsize_env(t_env **lst);
 void					env_update(t_data *data);
-void					execute_unset(t_data *data, t_cmd *cmd);
+void					execute_unset(t_data *data, t_cmd *cmd, int i);
 void					execute_env(t_data *data, t_cmd *cmd);
 t_cmd					*find_unset_command(t_data *data);
 int						ft_unset(t_data *data);
@@ -439,4 +439,11 @@ void					prompt_user(t_data *data);
 /**		parse_near_quote.c	**/
 void					parse_near_quote(t_data *data);
 
+char*	prompt_pwd(t_data *data);
+void    free_envv(t_data *data);
+void    free_set_in(char *key, char *value, char **variable_split);
+void    invalid_export_print(char *key, char *value, char **variable_split);
+void    env_update_utils(t_env *current_env, size_t key_len, t_data *data);
+int	set_in_export_utils(t_data *data, char *key, char *value);
+void    env_assign(char ***variable_split, char *variable, char **key, char **value);
 #endif

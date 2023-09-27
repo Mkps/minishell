@@ -6,7 +6,7 @@
 #    By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/27 09:48:17 by uaupetit         ###   ########.fr        #
+#    Updated: 2023/09/27 17:27:28 by uaupetit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ INCDIR = ./include/
 
 OBJ_DIR = ./build
 
-SRC_NAME =	built-ins/unset.c \
+SRC_NAME =		built-ins/unset.c \
+			built-ins/unset_utils.c \
 			built-ins/dummies.c \
 			built-ins/built_in.c \
 			built-ins/ft_cd.c \
@@ -37,6 +38,9 @@ SRC_NAME =	built-ins/unset.c \
 			execute_error.c \
 			execute_selector.c \
 			export/export2.c \
+			export/export3.c \
+			export/export4.c \
+			export/export_utils4.c \
 			export/export_utils3.c \
 			export/export_utils.c \
 			export/export_utils2.c \

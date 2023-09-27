@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 09:52:31 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 11:25:46 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,78 +19,6 @@
 #define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file (wanted `"
 
 /** Gets the input */
-int	get_flag(char *limiter)
-{
-	int	i;
-	int	quote_status;
-
-	quote_status = 0;
-	i = -1;
-	while (limiter[++i])
-	{
-		if (limiter[i] == '\'')
-			quote_status++;
-	}
-	return (!(quote_status % 2 == 0));
-}
-
-char	*heredoc_var_expand(t_data *data, char *str)
-{
-	int		i;
-	int		n;
-	char	*ret;
-	char	*tmp;
-	char	*tmp_str;
-	char	*exit_code;
-
-	i = 0;
-	n = 1;
-	ret = ft_strdup(str);
-	exit_code = ft_itoa(data->exit_status);
-	while (ret[i])
-	{
-		if (ret[i] == '$')
-		{
-			if (ft_isalpha(ret[i + 1]) || ret[i + 1] == '_')
-			{
-				n = 1;
-				while (*(ret + i + n) && (ft_isalnum(ret[i + n]) || ret[i
-						+ n] == '_'))
-					n++;
-				if (n != 1)
-				{
-					tmp = ret;
-					tmp_str = ft_str_extract(ret + i + 1, n - 1);
-					ret = str_replace(ret, i, n, get_var(data, tmp_str));
-					free(tmp_str);
-					free(tmp);
-				}
-				i = 0;
-			}
-			else if (ft_isdigit(ret[i + 1]))
-			{
-				tmp = ret;
-				ret = str_replace(ret, i, 2, "");
-				free(tmp);
-				i = 0;
-			}
-			else if (ret[i + 1] == '?')
-			{
-				tmp = ret;
-				ret = str_replace(ret, i, 2, exit_code);
-				free(tmp);
-				i = 0;
-			}
-			else
-				i++;
-		}
-		else
-			i++;
-	}
-	free(exit_code);
-	free(str);
-	return (ret);
-}
 
 int	here_doc_input(t_data *data, char *limiter, int fd)
 {
