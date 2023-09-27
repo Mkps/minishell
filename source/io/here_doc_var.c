@@ -38,13 +38,15 @@ int	var_expand_dollar_notoken(t_data *data, char **ret, int *i)
 	return (flag_retokenize);
 }
 
-char	*heredoc_var_expand(t_data *data, char *str)
+char	*heredoc_var_expand(t_data *data, char *str, int flag)
 {
 	int		i;
 	char	*ret;
 	char	**ret_ptr;
 
 	i = 0;
+	if (flag)
+		return (str);
 	ret_ptr = malloc(sizeof(char **));
 	*ret_ptr = ft_strdup(str);
 	while (*(*ret_ptr + i))

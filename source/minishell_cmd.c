@@ -12,24 +12,6 @@
 
 #include "../include/minishell.h"
 
-// static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
-// {
-// 	char	**sq;
-//
-// 	sq = NULL;
-// 	if (cmd_split[0][1])
-// 	{
-// 		if (cmd_split[0][1][0] == 34 || cmd_split[0][1][0] == 39)
-// 		{
-// 			*sep = cmd_split[0][1][0];
-// 			free(cmd_split[0][1]);
-// 			sq = ft_split(cmd, *sep);
-// 			cmd_split[0][1] = sq[1];
-// 			cmd_split[0][2] = NULL;
-// 		}
-// 	}
-// 	return (sq);
-// }
 int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 {
 	(void)data;
@@ -50,18 +32,13 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 		fd->fd = here_doc_handler(data, fd);
 		if (fd->fd > 0)
 		{
+			printf("fd is %i\n", fd->fd);
 			if (cmd->fd[0] >= 0)
 				close(cmd->fd[0]);
 			cmd->fd[0] = fd->fd;
+
 			return (0);
 		}
-		// if (fd->fd > 0)
-		// {
-		// 	if (cmd->fd[0] >= 0)
-		// 		close(cmd->fd[0]);
-		// 	cmd->fd[0] = fd->fd;
-		// 	return (0);
-		// }
 		return (1);
 	}
 	if (fd->mode == IO_TRUNC)
@@ -229,10 +206,6 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 	char	*cmd_p;
 	char	**env_p;
 
-	//if (wsstr(cmd_node->cmd))
-	//    extract_cmd(cmd_node, data);
-	//else
-	//{
 	env_p = get_path(data->envv);
 	cmd_p = get_cmd(cmd_node->cmd, env_p);
 	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
@@ -241,7 +214,6 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 		if (cmd_p)
 			free(cmd_p);
 	}
-	//}
 }
 
 char	*get_cmd(char *cmd, char **env_p)

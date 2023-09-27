@@ -78,8 +78,14 @@ void	free_cmd_list(t_data *data)
 				next_io = io->next;
 				if (io->fd > -1)
 					close(io->fd);
-				if (io->fd > -1 && io->mode == IO_HEREDOC)
-					unlink(io->filename);
+				if (io->mode == IO_HEREDOC)
+				{
+					if (io->filename)
+					{
+						unlink(io->filename);
+						free(io->filename);
+					}
+				}
 				free(io);
 				io = next_io;
 			}
