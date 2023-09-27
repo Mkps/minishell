@@ -3,42 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 13:27:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:18:34 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
 
-static char	**escape_quote(char *cmd, char ***cmd_split, char *sep)
-{
-	char	**sq;
-
-	sq = NULL;
-	if (cmd_split[0][1])
-	{
-		if (cmd_split[0][1][0] == 34 || cmd_split[0][1][0] == 39)
-		{
-			*sep = cmd_split[0][1][0];
-			free(cmd_split[0][1]);
-			sq = ft_split(cmd, *sep);
-			cmd_split[0][1] = sq[1];
-			cmd_split[0][2] = NULL;
-		}
-	}
-	return (sq);
-}
 int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 {
-	int		tmp_fd;
-	int		status;
-	pid_t	pid;
+	(void)data;
 	if (fd->mode == IO_INPUT)
 	{
 		fd->fd = open_fd(0, fd->filename);
@@ -48,24 +24,20 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 				close(cmd->fd[0]);
 			cmd->fd[0] = fd->fd;
 			return (0);
-		}		
+		}
 		return (1);
 	}
 	if (fd->mode == IO_HEREDOC)
 	{
-		if (!here_doc_handler(data, fd->filename))
+		fd->fd = here_doc_handler(data, fd);
+		if (fd->fd > 0)
 		{
-			fd->fd=-42;
+			if (cmd->fd[0] >= 0)
+				close(cmd->fd[0]);
+			cmd->fd[0] = fd->fd;
+
 			return (0);
 		}
-
-		// if (fd->fd > 0)
-		// {
-		// 	if (cmd->fd[0] >= 0)
-		// 		close(cmd->fd[0]);
-		// 	cmd->fd[0] = fd->fd;
-		// 	return (0);
-		// }
 		return (1);
 	}
 	if (fd->mode == IO_TRUNC)
@@ -77,7 +49,7 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 				close(cmd->fd[1]);
 			cmd->fd[1] = fd->fd;
 			return (0);
-		}		
+		}
 		return (1);
 	}
 	if (fd->mode == IO_APPEND)
@@ -89,11 +61,10 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 				close(cmd->fd[1]);
 			cmd->fd[1] = fd->fd;
 			return (0);
-		}		
+		}
 		return (1);
 	}
 	return (0);
-
 }
 int	set_fd(t_data *data, t_cmd *cmd)
 {
@@ -117,7 +88,7 @@ int	set_fd(t_data *data, t_cmd *cmd)
 	return (0);
 }
 
-int		init_io_redir(t_data *data)
+int	init_io_redir(t_data *data)
 {
 	t_cmd	*current;
 
@@ -141,22 +112,23 @@ void	close_fd(t_data *data, t_cmd *cmd)
 {
 	t_io_node	*current;
 
+	(void)data;
 	current = *cmd->io_list;
 	while (current)
 	{
 		close_fd_node(cmd, current);
 		current = current->next;
 	}
-	if (cmd->fd[0] > 0)
+	if (cmd->fd[0] > -1)
 		close(cmd->fd[0]);
-	if (cmd->fd[1] > 0)
+	if (cmd->fd[1] > -1)
 		close(cmd->fd[1]);
 }
 void	close_pipes(t_cmd **root, t_cmd *cmd, t_cmd *last)
 {
 	t_cmd	*current;
-	current = *root;
 
+	current = *root;
 	last = NULL;
 	if (last)
 		last = last->next;
@@ -185,7 +157,49 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	}
 	close_pipes(data->cmd_list, cmd, NULL);
 }
+char	*ft_strs_join(char **tab)
+{
+	int		i;
+	char	*ret;
 
+	i = -1;
+	ret = ft_strdup(" ");
+	while (tab[++i])
+	{
+		ret = ft_strappend(ret, tab[i], 2);
+		ret = ft_strappend(ret, " ", 2);
+	}
+	return (ret);
+}
+
+int	wsstr(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		if (ft_is_ws(str[i]))
+			return (1);
+	return (0);
+}
+void	extract_cmd(t_cmd *cmd_node, t_data *data)
+{
+	char	*cmd_p;
+	char	**env_p;
+	char	**cmd_split;
+	char	*arg_str;
+
+	env_p = get_path(data->envv);
+	arg_str = ft_strs_join(cmd_node->args);
+	cmd_split = ft_split(arg_str, ' ');
+	cmd_p = get_cmd(cmd_split[0], env_p);
+	if (!cmd_p || execve(cmd_p, cmd_split, data->envv) == -1)
+	{
+		ft_free_tab(env_p);
+		if (cmd_p)
+			free(cmd_p);
+	}
+}
 void	exec_cmd(t_cmd *cmd_node, t_data *data)
 {
 	char	*cmd_p;
@@ -208,6 +222,8 @@ char	*get_cmd(char *cmd, char **env_p)
 	char	*cmd_tmp;
 
 	i = -1;
+	if (!ft_strncmp(cmd, ".", 2) || !ft_strncmp(cmd, "..", 3))
+		return (NULL);
 	while (env_p[++i])
 	{
 		cmd_dir = ft_strjoin(env_p[i], "/");

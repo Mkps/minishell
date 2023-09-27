@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 13:05:19 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:30:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,127 +54,31 @@ void	print_token(t_token **root)
 	current = *root;
 	while (current != NULL)
 	{
-		printf("token type %i | value %s | qs %i\n", current->token_type, current->value, current->quote_status);
+		printf("token type %i | value %s | qs %i | nq %i\n", current->token_type,
+		 current->value, current->quote_status, current->near_quote);
 		current = current->next;
 	}
 }
 
-void	free_token(t_data *data)
-{
-	t_token	*current;
-	t_token	*tmp;
-
-	if (*data->token_root == NULL)
-		return ;
-	current = *data->token_root;
-	while (current != NULL)
-	{
-		tmp = current;
-		current = current->next;
-		if (tmp->value)
-			free(tmp->value);
-		free(tmp);
-	}
-	*data->token_root = NULL;
-}
-void	free_var(t_data *data, t_cmd *cmd)
-{
-	t_env	*current;
-	t_env	*next;
-	
-	if (cmd->assign)
-	{
-		current = *cmd->assign;
-		while (current)
-		{
-			free(current->value);
-			current = current->next;
-		}
-	}
-}
-void	free_cmd_list(t_data *data)
-{
-	t_cmd	*current;
-	t_cmd	*tmp;
-
-	if (*data->cmd_list == NULL)
-		return ;
-	current = *data->cmd_list;
-	while (current != NULL)
-	{
-		tmp = current;
-		current = current->next;
-		if (tmp->type != EMPTY && tmp->args)
-			ft_free_tab(tmp->args);
-		if (tmp->type != EMPTY && tmp->cmd)
-			free(tmp->cmd);
-		if (tmp->pipe_status)
-			free(tmp->pipe_fd);
-		if (tmp->assign)
-		{
-			t_env *env = *tmp->assign;
-			while (env)
-			{
-				t_env *next = env->next;
-				free(env->key);
-				free(env);
-				env = next;
-			}
-			free(tmp->assign);
-		}
-		if (tmp->io_list)
-		{
-			t_io_node *io = *tmp->io_list;
-			while (io)
-			{
-				t_io_node *next_io = io->next;
-				free(io);
-				io = next_io;
-			}
-			free(tmp->io_list);
-		}
-		free(tmp);
-	}
-	*data->cmd_list = NULL;
-}
-
-
-int	free_data(t_data *data)
-{
-	free_token(data);
-	// free_env_list(data->env_cpy);
-	free_cmd_list(data);
-	if (data->user_input)
-		free(data->user_input);
-	if (data->raw_input)
-		free(data->raw_input);
-	return (EXIT_SUCCESS);
-}
 int	g_exit_code;
 int	main(int ac, char **av, char **envv)
 {
 	t_data	data;
-	char	*input;
-	pid_t	pid;		
-	t_token **tmp;
-	t_cmd	*tmp_cmd;
-	int		status;
-	int		exit_status;
 
 	g_exit_code = 0;
 	init_data(&data);
 	import_envv(&data, envv);
 	copy_env_to_list(&data);
+	env_to_export(&data);
 	sort_export_list(&data);
 
-	//print_env_list(data.export);
-	t_cmd *cmd = *data.cmd_list;
+	// print_env_list(data.export);
 	if (!arg_check(ac, av))
 		return (EXIT_FAILURE);
 	if (ac == 3)
 		minishell_inline(&data, av[2]);
 	else if (ac == 1)
 		minishell_prompt(&data);
-	data_cleanup(&data);
+	free_shell(&data);
 	return (g_exit_code);
 }

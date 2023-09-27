@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:23:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/11 13:28:46 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:30:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_readline(char *str)
 int	open_fd(int mode, char *filename)
 {
 	int	fd;
-	
+
 	fd = -3;
 	if (mode == 0)
 		fd = open(filename, O_RDONLY, 0664);

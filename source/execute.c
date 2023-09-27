@@ -5,128 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/21 11:41:18 by uaupetit         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2023/09/27 11:18:32 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
 #include "../include/minishell.h"
-#include <readline/readline.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-int		execute_builtin(t_cmd *cmd, t_data *data)
-{
-	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-	    ft_echo(cmd);
-		return (1);
-	}
-	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
-    {
-		ft_cd(cmd, data);
-		return (1);
-	}
-	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		ft_pwd(data);
-		return (1);
-	}
-	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-	    ft_env(data);
-		return (1);
-	}
-    else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
-    {
-	    ft_export(data);
-		return (1);
-	}
-	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
-	{
-		return (1);
-		ft_unset(data);
-	}
-	/*else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd + 1)) == 0)
-        exit(0);*/
-	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_true();
-	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_false();	
-	return (0);
-}
-
-int		is_builtin(t_cmd *cmd, t_data *data)
-{
-	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
-		return (0);
-	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
-		return (0);
-	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd->cmd) + 1) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
-		return (0);
-	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
-		return (0);
-	return (0);
-}
-
-int	cmd_is_dir(t_cmd *cmd, t_data *data)
-{
-	struct stat	stat_var;
-
-	ft_memset(&stat_var, 0, sizeof(stat_var));
-	stat(cmd->cmd, &stat_var);
-	return (S_ISDIR(stat_var.st_mode));
-}
-
-int	is_cmd_fko(t_cmd *cmd, t_data *data)
-{
-	char	**env_p;
-	char	*tmp;
-	int		ret;
-
-	env_p = get_path(data->envv);
-	tmp = get_cmd(cmd->cmd, env_p);
-	ret = 0;
-	if (tmp == NULL)
-		ret = 1;
-	else
-	{
-		if (access(tmp, F_OK | X_OK))
-		 	ret = 2;
-	}
-	ft_free_tab(env_p);
-	if (tmp)
-		free(tmp);
-	return (ret);
-}
-int	get_cmd_ecode(t_cmd *cmd, t_data *data)
-{
-	if (is_cmd_fko(cmd, data) == 1 || (cmd->type == WORD && cmd->cmd[0] == 0))
-	{
-		output_err_cmd("command not found", cmd->cmd);
-		return (CMD_ERR_FKO);
-	}
-	if (is_cmd_fko(cmd, data) == 2)
-	{
-		output_err_cmd(strerror(errno), cmd->cmd);
-		return (CMD_ERR_XKO);
-	}
-	if (cmd_is_dir(cmd, data))
-	{
-		output_err_cmd("Is a directory", cmd->cmd);
-		return (CMD_ERR_XKO);
-	}
-	return (EXIT_FAILURE);
-}
 void	set_var_cmd(t_data *data, t_cmd *cmd)
 {
 	t_env	*start;
@@ -140,139 +29,234 @@ void	set_var_cmd(t_data *data, t_cmd *cmd)
 		start = start->next;
 	}
 }
-void	execute_cmd(t_cmd *cmd, t_data *data)
-{
-	int	exit_code;
 
-	if (cmd->type == EMPTY)
+void	execute_empty(t_cmd *cmd, t_data *data)
+{
+	set_var_cmd(data, cmd);
+	cmd->pid = fork();
+	if (cmd->pid == 0)
 	{
-		set_var_cmd(data, cmd);
-		cmd->pid = fork();
-		if (cmd->pid == 0)
-		{		
-			cmd->pipe_status = 0;
-			set_pipes(data, cmd);
-			set_fd(data, cmd);
-			exit (0);
-		}
-		return ;
-	}
-	free_var(data, cmd);
-	if (cmd->type == O_PAR)
-	{
-		cmd->pid = fork();
-		if (cmd->pid == 0)
-		{		
-			set_pipes(data, cmd);
-			set_fd(data, cmd);
-			close_pipes(data->cmd_list, NULL, NULL);
-			minishell_subshell(data, cmd->cmd);
-		}
-	}
-	else
-	{
-		if (is_builtin(cmd, data) == 1)
+		close(data->old_fd[0]);
+		close(data->old_fd[1]);
+		cmd->pipe_status = 0;
+		set_pipes(data, cmd);
+		if (cmd->fd[0] > -1)
 		{
-			set_fd(data, cmd);
-			cmd->pid = -2;
-			execute_builtin(cmd, data);
+			dup2(cmd->fd[0], STDIN_FILENO);
+			close(cmd->fd[0]);
 		}
-		else
+		if (cmd->fd[1] > -1)
 		{
-			cmd->pid = fork();
-			if (cmd->pid == 0)
-			{
-				set_pipes(data, cmd);		
-				if (cmd->fd[0] > -1)
-				{
-					dup2(cmd->fd[0], STDIN_FILENO);
-					close(cmd->fd[0]);
-				}
-				if (cmd->fd[1] > -1)
-				{
-					dup2(cmd->fd[1], STDOUT_FILENO);
-					close(cmd->fd[1]);
-				}
-				close_pipes(data->cmd_list, NULL, NULL);
-				if (!execute_builtin(cmd,data))
-					exec_cmd(cmd, data);
-				exit_code = get_cmd_ecode(cmd, data);
-				free_data(data);
-				free(data->token_root);
-				free(data->cmd_list);
-				ft_free_tab(data->cmd_split);
-				ft_free_tab(data->envv);
-				exit (exit_code);
-			}
+			dup2(cmd->fd[1], STDOUT_FILENO);
+			close(cmd->fd[1]);
 		}
+		close_pipes(data->cmd_list, NULL, NULL);
+		free_child(data);
+		exit(0);
+	}
+	return ;
+}
+
+void	execute_subshell(t_cmd *cmd, t_data *data)
+{
+	cmd->pid = fork();
+	if (cmd->pid == 0)
+	{
+		close(data->old_fd[0]);
+		close(data->old_fd[1]);
+		set_pipes(data, cmd);
+		if (cmd->fd[0] > -1)
+		{
+			dup2(cmd->fd[0], STDIN_FILENO);
+			close(cmd->fd[0]);
+		}
+		if (cmd->fd[1] > -1)
+		{
+			dup2(cmd->fd[1], STDOUT_FILENO);
+			close(cmd->fd[1]);
+		}
+		close_pipes(data->cmd_list, NULL, NULL);
+		minishell_subshell(data, cmd->cmd);
 	}
 }
 
-void	execute(t_data *data)	
+int	is_standalone(t_cmd *cmd)
 {
-	int		status;
-	int		eval;
+	if (is_unpiped(cmd) == 1 && cmd->is_term
+		&& (!cmd->prev || (cmd->prev && cmd->prev->is_term)))
+		return (1);
+	return (0);
+}
+
+void	execute_parent(t_cmd *cmd, t_data *data)
+{
+	set_fd(data, cmd);
+	cmd->pid = -2;
+	data->exit_status = execute_builtin(cmd, data);
+}
+
+int	close_fd_set(int fdin, int fdout)
+{
+	if (fdin > -1)
+		close(fdin);
+	if (fdout > -1)
+		close(fdout);
+	return (EXIT_SUCCESS);
+}
+
+int	close_cmd_fd(t_cmd *cmd)
+{
+	t_io_node	*io;
+	t_io_node	*next;
+
+	if (cmd->io_list)
+	{
+		io = *cmd->io_list;
+		while (io)
+		{
+			next = io->next;
+			if (io->fd > -1)
+				close(io->fd);
+			io = next;
+		}
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	dup_close_fd_set(int fdin, int fdout)
+{
+	if (fdin > -1)
+	{
+		dup2(fdin, STDIN_FILENO);
+		close(fdin);
+	}
+	if (fdout > -1)
+	{
+		dup2(fdout, STDOUT_FILENO);
+		close(fdout);
+	}
+	return (EXIT_SUCCESS);
+}
+
+void	execute_child(t_cmd *cmd, t_data *data)
+{
+	int	exit_code;
+
+	cmd->pid = fork();
+	if (cmd->pid == 0)
+	{
+		close_fd_set(data->old_fd[0], data->old_fd[1]);
+		set_pipes(data, cmd);
+		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
+		close_pipes(data->cmd_list, NULL, NULL);
+		exit_code = execute_builtin(cmd, data);
+		if (exit_code == -1)
+		{
+			exec_cmd(cmd, data);
+			exit_code = get_cmd_ecode(cmd, data);
+		}
+		free_child(data);
+		exit(exit_code);
+	}
+	else
+		close_cmd_fd(cmd);
+}
+
+void	execute_cmd(t_cmd *cmd, t_data *data)
+{
+	if (cmd->type == EMPTY)
+		return (execute_empty(cmd, data));
+	free_var(data, cmd);
+	if (cmd->type == O_PAR)
+		execute_subshell(cmd, data);
+	else
+	{
+		if (is_standalone(cmd))
+			execute_parent(cmd, data);
+		else
+			execute_child(cmd, data);
+	}
+}
+
+t_cmd	*conditional(t_data *data, t_cmd *current)
+{
+	(void)data;
+	while ((current && g_exit_code == 0
+			&& current->prev->is_term == TERM_OR)
+		|| (current && g_exit_code > 0
+			&& current->prev->is_term == TERM_2AND))
+	{
+		if (current->is_term)
+			current = current->next;
+		else
+		{
+			while (!current->is_term)
+				current = current->next;
+			current = current->next;
+		}
+	}
+	return (current);
+}
+
+t_cmd	*start_exec(t_data *data, t_cmd *cmd)
+{
+	int		i;
+	t_cmd	*last;
+
+	i = 1;
+	while (i > 0 && cmd)
+	{
+		i -= cmd->is_term;
+		execute_cmd(cmd, data);
+		cmd = cmd->next;
+	}
+	if (cmd == NULL)
+		last = last_cmd(data->cmd_list);
+	else
+		last = cmd;
+	return (last);
+}
+
+t_cmd	*end_exec(t_data *data, t_cmd *cmd, t_cmd *last)
+{
+	int	i;
+	int	status;
+
+	(void)data;
+	i = 1;
+	status = 0;
+	while (i > 0 && cmd)
+	{
+		i -= cmd->is_term;
+		close_fd_set(cmd->fd[0], cmd->fd[1]);
+		close_pipes(&cmd, NULL, last);
+		if (cmd->pid > 0)
+			waitpid(cmd->pid, &status, 0);
+		if (cmd->is_term != 0)
+		{
+			if (WIFEXITED(status) && g_exit_code < 128)
+				g_exit_code = WEXITSTATUS(status);
+		}
+		cmd = cmd->next;
+	}
+	return (cmd);
+}
+
+void	execute(t_data *data)
+{
 	t_cmd	*cmd;
 	t_cmd	*start;
 	t_cmd	*last;
-	int		i;
-	int		wpid;
 
-	status = 0;
 	g_exit_code = 0;
-	eval = 0;
 	start = *data->cmd_list;
-	if (!start)
-		return ;
-	i = 1;
-	while(start) 
+	while (start)
 	{
 		cmd = start;
-		i = 1;
-		while(i > 0 && cmd) 
-		{
-			i -= cmd->is_term;
-			execute_cmd(cmd, data);
-			cmd = cmd->next;
-		}
-		if (cmd == NULL)
-			last = last_cmd(data->cmd_list);
-		else
-			last = cmd;
-		wpid = 0;
-		cmd = start;
-		i = 1;
-		while(i > 0 && cmd)
-		{
-			i -= cmd->is_term;
-			if (cmd->fd[0] > -1)
-				close(cmd->fd[0]);
-			if (cmd->fd[1] > -1)
-				close(cmd->fd[1]);
-			close_pipes(&start, NULL, last);
-			if (cmd->pid > 0)
-				wpid = waitpid(cmd->pid, &status, 0);
-			if (cmd->is_term != 0)
-			{
-				if (!g_exit_code)
-					g_exit_code = WEXITSTATUS(status);
-				eval = g_exit_code;
-			}
-			cmd = cmd->next;
-		}
+		last = start_exec(data, cmd);
+		cmd = end_exec(data, cmd, last);
 		if (g_exit_code > 127)
 			break ;
-		while ((cmd && eval == 0 && cmd->prev->is_term == TERM_OR) || (cmd && eval > 0 && cmd->prev->is_term == TERM_2AND))
-		{
-			if (cmd->is_term)
-				cmd = cmd->next;
-			else
-			{
-				while (!cmd->is_term)
-					cmd = cmd->next;
-				cmd = cmd->next;
-			}
-		}
-		start = cmd;
+		start = conditional(data, cmd);
 	}
 }

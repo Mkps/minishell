@@ -12,7 +12,7 @@ fi
 echo > ./tmp_b ; echo > ./tmp_m ; echo > ./err_b ; echo > ./err_m
 bash -c "$1" > ./tmp_b 2> ./err_b
 exit_code_b=$?
-./mshell -c "$1" > ./tmp_m 2> ./err_m
+./minishell -c "$1" > ./tmp_m 2> ./err_m
 exit_code_m=$?
 diff ./tmp_b ./tmp_m
 exit_code=$?

@@ -1,26 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 14:36:35 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/25 15:26:47 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-char	evaluate_bslash(char	*str, t_data *data)
+int	ft_is_ws(char c)
 {
-	if (*(str + 1) == 0 && data->parse_status > 1)
-		return ('\n');	
-	else if (*(str + 1) == '\\')
-		return ('\\');
-	else if (*(str + 1) == '\"')
-		return ('\"');
-	else if (*(str + 1) == '\'')
-		return ('\'');
-	else
-		return (0);
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (1);
+	return (0);
 }
 
-// Return 1 if a symbol corresponding to escape type is found.
-int	ft_escape_seq(char *str)
-{
-	return (NONE);
-}
-
-// Duplicates the string from the starting position to n char then null-terminates it.
+// Duplicates the string from the starting position
+// to n char then null-terminates it.
 char	*ft_str_extract(char *str, int n)
 {
 	char	*ret;
@@ -54,28 +54,9 @@ char	*ft_str_extract_free(char *str, int n)
 	return (ret);
 }
 
-//	Returns 0 if not a separator. token_type otherwise.
-int	ft_get_sep_type(char *str)
+int	ft_get_sep_type_expand(char *str)
 {
-	if ((*str > 8 && *str < 14) || *str == 32)
-		return (WSPACE);
-	else if (*str == '\'')
-		return (SQUOTE);
-	else if (*str == '"')
-		return (DQUOTE);
-	else if (*str == '(')
-		return (O_PAR);
-	else if (*str == ')')
-		return (C_PAR);
-	else if (*str == '|' && *(str + 1) == '&')
-		return (PIPE_STDERR);
-	else if (*str == '&' && *(str + 1) == '&')
-			return (TERM_2AND);
-	else if (*str == '|' && *(str + 1) == '|')
-		return (TERM_OR);
-	else if (*str == '<' && *(str + 1) == '<')
-		return (IO_HEREDOC);
-	else if (*str == '>' && *(str + 1) == '>')
+	if (*str == '>' && *(str + 1) == '>')
 		return (IO_APPEND);
 	else if (*str == '|')
 		return (PIPE);
@@ -95,4 +76,29 @@ int	ft_get_sep_type(char *str)
 		return (WORD);
 	else
 		return (0);
+}
+
+//	Returns 0 if not a separator. token_type otherwise.
+int	ft_get_sep_type(char *str)
+{
+	if ((*str > 8 && *str < 14) || *str == 32)
+		return (WSPACE);
+	else if (*str == '\'')
+		return (SQUOTE);
+	else if (*str == '"')
+		return (DQUOTE);
+	else if (*str == '(')
+		return (O_PAR);
+	else if (*str == ')')
+		return (C_PAR);
+	else if (*str == '|' && *(str + 1) == '&')
+		return (PIPE_STDERR);
+	else if (*str == '&' && *(str + 1) == '&')
+		return (TERM_2AND);
+	else if (*str == '|' && *(str + 1) == '|')
+		return (TERM_OR);
+	else if (*str == '<' && *(str + 1) == '<')
+		return (IO_HEREDOC);
+	else
+		return (ft_get_sep_type_expand(str));
 }

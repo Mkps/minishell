@@ -1,59 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 14:19:22 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/25 14:19:47 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
-#include <stdlib.h>
 
-void	output_err(char *msg, t_token *token, int squotes)
-{
-	char	*name_str;
-	char	*tmp_str;
-	char	*token_str;
+int	check_par_error(t_token **root);
 
-	name_str = "minishell: ";
-	if (!token)
-	{
-		tmp_str = ft_strappend(name_str, msg, 0);
-		ft_putendl_fd(tmp_str, 2);
-		free(tmp_str);
-		return ;
-	}
-	token_str = token->value;
-	if (token->token_type == TERM_END)
-		token_str = "newline";
-	tmp_str = ft_strappend(name_str, msg, 0);
-	if (squotes == 1)
-		tmp_str = ft_strappend(tmp_str, "'", 2);
-	tmp_str = ft_strappend(tmp_str, token_str, 2);
-	if (squotes == 1)
-		tmp_str = ft_strappend(tmp_str, "'", 2);
-	tmp_str = ft_strappend(tmp_str, "\n", 2);
-	ft_putstr_fd(tmp_str, 2);
-	free(tmp_str);
-
-
-}
-void	output_err_cmd(char *msg, char *cmd_str)
-{
-	char	*name_str;
-	char	*tmp_str;
-
-	name_str = PROG_NAME;
-	if (!cmd_str)
-	{
-		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
-		return ;
-	}
-	tmp_str = ft_strappend(name_str, cmd_str, 0);
-	tmp_str = ft_strappend(tmp_str, ": ", 2);
-	tmp_str = ft_strappend(tmp_str, msg, 2);
-	tmp_str = ft_strappend(tmp_str, "\n", 2);
-	ft_putstr_fd(tmp_str, 2);
-	free(tmp_str);
-}
 int	is_wc(char *str)
 {
 	while (*str)
-		if (*str++ == '*') return (1);
+		if (*str++ == '*')
+			return (1);
 	return (0);
 }
+
 int	check_io_error(t_token **root)
 {
 	t_token	*tmp;
@@ -63,12 +31,14 @@ int	check_io_error(t_token **root)
 	{
 		if (token_is_io(tmp))
 		{
-			if (tmp->next && (tmp->next->token_type != WORD && !token_is_quote(tmp->next)))
+			if (tmp->next && (tmp->next->token_type != WORD
+					&& !token_is_quote(tmp->next)))
 			{
 				output_err("syntax error near unexpected token ", tmp->next, 1);
 				return (SYNTAX_ERROR);
 			}
-			if (tmp->next && (tmp->next->token_type == WORD && is_wc(tmp->next->value)))
+			if (tmp->next && (tmp->next->token_type == WORD
+					&& is_wc(tmp->next->value)))
 			{
 				output_err_cmd("ambiguous redirect", tmp->next->value);
 				return (EXIT_FAILURE);
@@ -110,72 +80,13 @@ int	check_term_error(t_token **root)
 	tmp = *root;
 	while (tmp)
 	{
-		if (token_is_term(tmp) && tmp->token_type != TERM_END && !tmp->prev)
+		if (token_is_term(tmp) && tmp->token_type != TERM_END
+			&& (!tmp->prev || (tmp->prev && token_is_term(tmp->prev))))
 		{
 			output_err("syntax error near unexpected token ", tmp, 1);
 			return (EXIT_FAILURE);
 		}
 		tmp = tmp->next;
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	check_par_error(t_token **root)
-{
-	t_token *tmp;
-	int		par_status;
-
-	par_status= 0;
-	tmp = *root;
-	while (tmp)
-	{
-		if (tmp->token_type == O_PAR)
-		{
-			par_status++;
-			tmp = tmp->next;
-			while (tmp && par_status > 0)
-			{
-				if (tmp->token_type == O_PAR)
-					par_status++;
-				if (tmp->token_type == C_PAR)
-					par_status--;
-				tmp = tmp->next;
-				if (!tmp && par_status != 0)
-				{
-					output_err("unexpected EOF while looking for matching ')'", NULL, 0);
-					return (EXIT_FAILURE);
-				}
-		}
-		}
-		if (par_status == 0 && tmp->token_type == C_PAR)
-		{
-			output_err("syntax error near unexpected token `)'", NULL, 0);
-			return (EXIT_FAILURE);
-		}
-		if ((tmp->prev && !token_is_term(tmp->prev)) && tmp->token_type == O_PAR 
-				&& !token_is_term(tmp->prev) && tmp->prev->token_type != O_PAR)
-		{
-			if (!tmp->prev->prev && tmp->prev->token_type == WORD)
-				output_err("syntax error near unexpected token ", tmp->next , 1);
-			else
-				output_err("syntax error near unexpected token `('", NULL, 0);
-			return (EXIT_FAILURE);
-		}
-		if (tmp->token_type == C_PAR)
-		{
-			if (tmp->prev->token_type == O_PAR)
-			{
-				output_err("syntax error near unexpected token `)'", NULL, 0);
-				return (EXIT_FAILURE);
-			}
-			par_status--;
-		}
-		tmp = tmp->next;
-	}
-	if (par_status != 0)
-	{
-		output_err("unexpected EOF while looking for matching ')'", NULL, 0);
-		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }

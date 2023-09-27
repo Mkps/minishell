@@ -3,55 +3,98 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+         #
+#    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/18 16:32:48 by uaupetit         ###   ########.fr        #
+#    Updated: 2023/09/25 16:07:51 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = mshell
+NAME = minishell
 
-SRCDIR = source/
+SRCDIR = ./source
 
-INCDIR = include/
+INCDIR = ./include/
 
-OBJ_DIR = build
+OBJ_DIR = ./build
 
-SRC = $(SRCDIR)/main.c $(SRCDIR)/signal.c
+SRC_NAME =	built-ins/unset.c \
+			built-ins/dummies.c \
+			built-ins/built_in.c \
+			built-ins/ft_cd.c \
+			cmd_list/cmd_list_find.c \
+			cmd_list/cmd_list_add.c \
+			cmd_list/cmd_list_utils.c \
+			cmd_list/cmd_list.c \
+			env/copy_env.c \
+			env/env.c \
+			env/env_utils.c \
+			env/copy_env_utils.c \
+			error.c \
+			error_par.c \
+			execute.c \
+			execute_error.c \
+			execute_selector.c \
+			export/export2.c \
+			export/export_utils3.c \
+			export/export_utils.c \
+			export/export_utils2.c \
+			export/export.c \
+			free.c \
+			io/here_doc.c \
+			io/here_doc_filename.c \
+			io/here_doc_var.c \
+			io/io.c \
+			lexer.c \
+			lexer_token.c \
+			lexer_utils.c \
+			lexer_word.c \
+			main.c \
+			minishell_cmd.c \
+			minishell_launcher.c \
+			output_error.c \
+			parse_near_quote.c \
+			parser.c \
+			pipex_utils.c \
+			prompt.c \
+			signals/signal.c \
+			signals/signal_handlers.c \
+			token.c \
+			token_utils.c \
+			utils/ft_split_noquote.c \
+			utils/data_utils.c \
+			var.c \
+			var_expander.c \
+			var_utils.c \
+			wildcard/wildcard_strutils2.c \
+			wildcard/wildcard_strutils.c \
+			wildcard/wildcard_utils.c \
+			wildcard/wildcards.c \
+			wildcard/wildcard_find.c \
+			wildcard/wildcard_wcutils.c \
+			wildcard/wildcard_get.c \
 
-SRC_NAME = here_doc.c env_utils.c\
-	  main.c minishell_cmd.c \
-	  pipex_utils.c signal.c \
-	  lexer.c parser.c token_utils.c \
-	  execute.c data_utils.c \
-	  minishell_launcher.c token.c \
-	  env.c cmd_io.c var.c lexer_utils.c \
-	  error.c built_in.c  copy_env.c export.c \
-	  dummies.c export_utils.c \
-	  unset.c wildcards.c export2.c export_utils2.c \
-	  export_utils3.c \
-	  
-SRC = $(addprefix $(SRCDIR), $(SRC_NAME))
-OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
+SRC = $(addprefix $(SRCDIR)/, $(SRC_NAME))
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_NAME:c=o))
 
 CC = cc
 
 LIBFT = libft/libft.a
 LIB = $(LIBFT) -lreadline
 
-CFLAGS = -Wall -Wextra -Werror $(LIB) -I$(INCDIR)
+CFLAGS = -Wall -Wextra -Werror 
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "Compiling objects for mandatory part"
 	@make -s all -C libft
-	$(CC) -o $(NAME) $(OBJ) $(LIB)
-	
+	$(CC) -o $(NAME) $(OBJ) $(LIB) -I$(INCDIR)
+
 $(OBJ_DIR)/%.o:	$(SRCDIR)/%.c
-	@mkdir -p '$(@D)'
-	@$(CC) -c $(CFLAGS) $< -o $@
+	mkdir -p '$(@D)'
+	echo $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
 	@echo "Cleaning object files..."

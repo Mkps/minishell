@@ -3,48 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_launcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/19 22:58:06 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/23 04:28:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <readline/readline.h>
 #include <stdlib.h>
+#include <unistd.h>
 
+int		check_error_raw(t_data *data);
 void	minishell_inline(t_data *data, char *user_input)
 {
-	char	**cmd_list;
+	char	*tmp;
 	int		i;
 
 	if (user_input)
 	{
-		cmd_list = ft_split(user_input, ';');
-		data->raw_input = ft_strdup(user_input);
+		tmp = ft_strdup(user_input);
+		data->user_input = tmp;
+		data->raw_input = tmp;
+		data->cmd_split = ft_split(user_input, ';');
 	}
 	else
 	{
-		cmd_list = NULL;	
+		data->user_input = NULL;
+		data->cmd_split = NULL;
 		data->raw_input = NULL;
 	}
-	i = -1; 
-	while (cmd_list[++i])
+	if (check_error_raw(data))
+		exit(g_exit_code);
+	i = -1;
+	while (data->cmd_split[++i])
 	{
-		data->user_input = cmd_list[i];
-		if (i > 0)
+		data->user_input = ft_strdup(data->cmd_split[i]);
+		if (i == 1)
+		{
+			free(data->raw_input);
 			data->raw_input = NULL;
+		}
 		scan_input(data);
+		//print_token(data->token_root);
 		if (check_error(data) == EXIT_SUCCESS)
 		{
 			parse_token(data);
 			parse_near_quote(data);
 			build_cmd_list(data, *data->token_root);
-			execute(data);
+			if (init_io_redir(data) == EXIT_SUCCESS)
+				execute(data);
+			else
+				close_pipes(data->cmd_list, NULL, NULL);
 		}
 		free_data(data);
+		dup2(data->old_fd[0], STDIN_FILENO);
+		dup2(data->old_fd[1], STDOUT_FILENO);
 	}
-	free(cmd_list);
+	ft_free_tab(data->cmd_split);
 	exit(g_exit_code);
 }
 void	minishell_subshell(t_data *data, char *user_input)
@@ -54,108 +71,50 @@ void	minishell_subshell(t_data *data, char *user_input)
 
 	init_data(&new_data);
 	import_envv(&new_data, data->envv);
-	new_data.user_input = user_input;
-	new_data.raw_input = NULL;
-	new_data.cmd_split = ft_split(new_data.user_input, ';');
-	free_data(data);
-	i = -1; 
+	new_data.user_input = ft_strdup(user_input);
+	new_data.raw_input = new_data.user_input;
+	new_data.cmd_split = ft_split_noquote(new_data.user_input, ';');
+	free_child(data);
+	// printf("entered subshell\n");
+	if (check_error_raw(&new_data))
+		exit (g_exit_code);
+	i = -1;
 	while (new_data.cmd_split[++i])
 	{
 		new_data.user_input = ft_strdup(new_data.cmd_split[i]);
+		if (i == 0)
+		{
+			free(new_data.raw_input);
+			new_data.raw_input = NULL;
+		}
 		scan_input(&new_data);
 		if (check_error(&new_data) == EXIT_SUCCESS)
 		{
 			parse_token(&new_data);
 			parse_near_quote(&new_data);
+			// print_token(new_data.token_root);
 			build_cmd_list(&new_data, *new_data.token_root);
 			if (init_io_redir(&new_data) == EXIT_SUCCESS)
 				execute(&new_data);
+			else
+				close_pipes(new_data.cmd_list, NULL, NULL);
 		}
 		free_data(&new_data);
-		dup2(new_data.old_fd[0], 0);
+		dup2(new_data.old_fd[0], STDIN_FILENO);
+		dup2(new_data.old_fd[1], STDOUT_FILENO);
 	}
 	ft_free_tab(new_data.cmd_split);
-	exit (g_exit_code);
-}
-
-char	*glob_home(t_data *data, char *str)
-{
-	char	*home;
-	char	*ret;
-	int		i;
-
-	home = get_var(data, "HOME");
-	i = 0;
-	while (str[i] && home[i] && str[i] == home[i])
-		i++;
-	if (i > 0)
-	{
-		ret = ft_strdup(str + (i - 1));
-		ret[0] = '~';
-		return(ret);
-	}
-	return (ft_strdup(str));
-}
-char	*get_session(t_data *data)
-{
-	char	*tmp;
-	char	*ret;
-	int		s_idx;
-	int		e_idx;
-
-	if ((tmp = get_var(data, "SESSION_MANAGER")) != NULL)
-	{
-		s_idx = 0;
-		while (tmp[s_idx] && tmp[s_idx] != '/')
-			s_idx++;
-		s_idx++;
-		e_idx = s_idx;
-		while (tmp[e_idx] && tmp[e_idx] != ':' && tmp[e_idx] != '.')
-			e_idx++;
-		ret = ft_strdup(&tmp[s_idx]);
-		ret = ft_str_extract_free(ret, (e_idx - s_idx));
-		return (ret);
-	}	
-	else
-		return (ft_strdup("localhost"));
-}
-char	*set_prompt(t_data *data)
-{
-	char	*prompt;
-  
-	prompt = ft_strappend(GREEN, get_var(data, "USER"), 0);
-	prompt = ft_strappend(prompt, "@", 2);
-	prompt = ft_strappend(prompt, get_session(data), 3);
-	prompt = ft_strappend(prompt, RESET, 2);
-	prompt = ft_strappend(prompt, ":", 2);
-	prompt = ft_strappend(prompt, CYAN, 2);
-	prompt = ft_strappend(prompt, glob_home(data, get_var(data, "PWD")), 3);
-	prompt = ft_strappend(prompt, RESET, 2);
-	prompt = ft_strappend(prompt, "\n$ ", 2);
-	return (prompt);
-}
-
-void	prompt_user(t_data *data)
-{
-	char	*prompt;
-
-	prompt = set_prompt(data);
-	signal(SIGINT, (void (*) (int))redisplay_prompt);
-	redisplay_prompt(42, prompt);
-	data->user_input = NULL;
-	data->raw_input = NULL;
-	data->user_input = readline(prompt);
-	free(prompt);
-	if ((data->user_input != NULL && (!strcmp(data->user_input, "exit")) || data->user_input == NULL))
-	{
-		if (!data->user_input)
-			write(1, "exit\n", 5);
-		exit(0);
-	}
+	new_data.cmd_split = NULL;
+	if (new_data.old_fd[0] > -1)
+		close(new_data.old_fd[0]);
+	if (new_data.old_fd[1] > -1)
+		close(new_data.old_fd[1]);
+	free_shell(&new_data);
+	exit(g_exit_code);
 }
 
 int		ft_get_token_err(char *input, t_data *data);
-int		check_err(char *input, t_data *data)
+int	check_err(char *input, t_data *data)
 {
 	int	i;
 	int	input_length;
@@ -168,7 +127,8 @@ int		check_err(char *input, t_data *data)
 		add_history(data->raw_input);
 		return (EXIT_FAILURE);
 	}
-	while (*input && ft_is_ws(*input)) input++;
+	while (*input && ft_is_ws(*input))
+		input++;
 	if (input == NULL || *input == 0 || *input == '#')
 		return (EXIT_FAILURE);
 	if (data->raw_input)
@@ -178,16 +138,15 @@ int		check_err(char *input, t_data *data)
 		data->raw_input = NULL;
 	}
 	input_length = ft_strlen(input);
-	while(i <= input_length)
-		i += ft_get_token_err(input + i, data); 
+	while (i <= input_length)
+		i += ft_get_token_err(input + i, data);
 	return (check_error(data));
 }
-int		check_error_raw(t_data *data)
+int	check_error_raw(t_data *data)
 {
-	int	i;
+	int		i;
 	char	*tmp;
 
-	i = -1;
 	tmp = ft_strdup(data->raw_input);
 	data->raw_input = ft_strdup(data->user_input);
 	if (check_err(data->raw_input, data))
@@ -195,6 +154,7 @@ int		check_error_raw(t_data *data)
 		free(tmp);
 		free_data(data);
 		ft_free_tab(data->cmd_split);
+		data->cmd_split = NULL;
 		return (1);
 	}
 	else
@@ -203,15 +163,18 @@ int		check_error_raw(t_data *data)
 		free_token(data);
 		free(data->user_input);
 	}
+	i = -1;
 	while (data->cmd_split[++i])
 	{
 		data->user_input = ft_strdup(data->cmd_split[i]);
 		scan_input(data);
+		// print_token(data->token_root);
 		if (check_error(data) != EXIT_SUCCESS)
 		{
 			free(tmp);
 			free_data(data);
 			ft_free_tab(data->cmd_split);
+			data->cmd_split = NULL;
 			return (1);
 		}
 		free(data->user_input);
@@ -219,23 +182,24 @@ int		check_error_raw(t_data *data)
 	data->raw_input = tmp;
 	free_token(data);
 	return (0);
-
 }
 void	minishell_prompt(t_data *data)
 {
-	char	**cmd_list;
 	int		i;
 
-	while(1)
+	while (1)
 	{
+		rl_set_signals();
 		signals_interact();
 		prompt_user(data);
 		signals_no_interact();
+		data->exit_status = g_exit_code;
+		g_exit_code = 0;
 		data->raw_input = data->user_input;
-		data->cmd_split = ft_split(data->user_input, ';');
+		data->cmd_split = ft_split_noquote(data->user_input, ';');
 		if (check_error_raw(data))
-			continue;
-		i = -1; 
+			continue ;
+		i = -1;
 		while (data->cmd_split[++i])
 		{
 			data->user_input = ft_strdup(data->cmd_split[i]);
@@ -245,19 +209,22 @@ void	minishell_prompt(t_data *data)
 				data->raw_input = NULL;
 			}
 			scan_input(data);
-			// print_token(data->token_root);
 			if (check_error(data) == EXIT_SUCCESS)
 			{
 				parse_token(data);
+				// print_token(data->token_root);
 				parse_near_quote(data);
 				build_cmd_list(data, *data->token_root);
 				if (init_io_redir(data) == EXIT_SUCCESS)
 					execute(data);
+				else
+					close_pipes(data->cmd_list, NULL, NULL);
 			}
 			free_data(data);
-			dup2(data->old_fd[0], 0);
-			// dup2(data->old_fd[1], 1);
+			dup2(data->old_fd[0], STDIN_FILENO);
+			dup2(data->old_fd[1], STDOUT_FILENO);
 		}
 		ft_free_tab(data->cmd_split);
+		data->cmd_split = NULL;
 	}
 }
