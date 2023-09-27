@@ -111,7 +111,6 @@ int	var_expander(t_data *data, char *str, t_token **token)
 		current->value = "";
 	}
 	*token = current;
-	printf("current %s\n", current->value);
 	free(*ret_ptr);
 	free(ret_ptr);
 	return (flag_retokenize != 0);

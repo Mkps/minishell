@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 12:08:10 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 21:07:44 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	free_token(t_data *data)
 	t_token	*current;
 	t_token	*tmp;
 
-	print_token(data->token_root);
 	if (*data->token_root == NULL)
 		return ;
 	current = *data->token_root;

@@ -17,7 +17,6 @@ void	minishell_core(t_data *data)
 	scan_input(data);
 	if (check_error(data) == EXIT_SUCCESS)
 	{
-		//print_token(data->token_root);
 		parse_token(data);
 		parse_near_quote(data);
 		build_cmd_list(data, *data->token_root);
@@ -25,8 +24,6 @@ void	minishell_core(t_data *data)
 			execute(data);
 		else
 			close_pipes(data->cmd_list, NULL, NULL);
-		//printf("\n");
-		//print_token(data->token_root);
 	}
 }
 
