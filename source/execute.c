@@ -123,7 +123,6 @@ int	close_cmd_fd(t_cmd *cmd)
 
 int	dup_close_fd_set(int fdin, int fdout)
 {
-	printf("fdin is %i\n", fdin);
 	if (fdin > -1)
 	{
 		dup2(fdin, STDIN_FILENO);

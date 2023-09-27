@@ -32,7 +32,6 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 		fd->fd = here_doc_handler(data, fd);
 		if (fd->fd > 0)
 		{
-			printf("fd is %i\n", fd->fd);
 			if (cmd->fd[0] >= 0)
 				close(cmd->fd[0]);
 			cmd->fd[0] = fd->fd;
