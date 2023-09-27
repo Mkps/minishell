@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 16:48:05 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:45:45 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	ft_echo(t_cmd *cmd)
 	if (i > 1)
 		flag++;
 	while (cmd->args[i] != NULL)
-	{	
+	{
 		ft_printf("%s", cmd->args[i]);
 		i++;
 		if (cmd->args[i] != NULL)
@@ -80,8 +80,8 @@ int	ft_pwd(t_data *data)
 		}
 		current = current->next;
 	}
-	return (output_err_ret(EXIT_FAILURE,
-			"ERROR Could not find PWD in env", ""));
+	return (output_err_ret(EXIT_FAILURE, "ERROR Could not find PWD in env",
+			""));
 }
 
 void	ft_exit(t_data *data)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split_noquote.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/27 15:07:52 by aloubier          #+#    #+#             */
+/*   Updated: 2023/09/27 18:47:17 by aloubier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 static char	**ft_cleartab(char **tab)
@@ -18,7 +30,6 @@ static int	ft_count_strings(char *str, char separator)
 {
 	size_t	i;
 	size_t	str_count;
-	int		quote_status;
 
 	i = 0;
 	str_count = 0;
@@ -28,23 +39,7 @@ static int	ft_count_strings(char *str, char separator)
 			i++;
 		if (str[i])
 			str_count++;
-		while (str[i] && str[i] != separator)
-		{
-			if (ft_get_sep_type(&str[i]) == DQUOTE
-				|| ft_get_sep_type(&str[i]) == SQUOTE
-				|| ft_get_sep_type(&str[i]) == O_PAR)
-			{
-				if (ft_get_sep_type(&str[i]) == O_PAR)
-					quote_status = C_PAR;
-				else
-					quote_status = ft_get_sep_type(&str[i]);
-				i++;
-				while (str[i] && ft_get_sep_type(&str[i]) != quote_status)
-					i++;
-			}
-			else if (str[i])
-				i++;
-		}
+		i = cycle_count_strings(i, str, separator);
 	}
 	return (str_count);
 }
@@ -54,28 +49,8 @@ static char	*ft_string_extract(char *src, char separator)
 	int		i;
 	char	*dest;
 	int		str_len;
-	int		quote_status;
 
-	str_len = 0;
-	quote_status = 0;
-	while (src[str_len] && src[str_len] != separator)
-	{
-		if (ft_get_sep_type(&src[str_len]) == DQUOTE
-			|| ft_get_sep_type(&src[str_len]) == SQUOTE
-			|| ft_get_sep_type(&src[str_len]) == O_PAR)
-		{
-			if (ft_get_sep_type(&src[str_len]) == O_PAR)
-				quote_status = C_PAR;
-			else
-				quote_status = ft_get_sep_type(&src[str_len]);
-			str_len++;
-			while (src[str_len]
-				&& ft_get_sep_type(&src[str_len]) != quote_status)
-				str_len++;
-		}
-		else if (src[str_len])
-			str_len++;
-	}
+	str_len = get_extracted_strlen(src, separator);
 	if (str_len == 0)
 		return (0);
 	dest = malloc(sizeof(char) * (str_len + 1));
@@ -110,22 +85,7 @@ static char	**ft_cycle_str(char **tab, char *str, char c)
 			if (ft_count_strings(str, c) != 0)
 				i++;
 		}
-		while (*str && *str != c)
-		{
-			if (ft_get_sep_type(str) == DQUOTE || ft_get_sep_type(str) == SQUOTE
-				|| ft_get_sep_type(str) == O_PAR)
-			{
-				if (ft_get_sep_type(str) == O_PAR)
-					quote_status = C_PAR;
-				else
-					quote_status = ft_get_sep_type(str);
-				str++;
-				while (*str && ft_get_sep_type(str) != quote_status)
-					str++;
-			}
-			else if (*str)
-				str++;
-		}
+		str += cycle_through(str, c);
 	}
 	tab[i] = NULL;
 	return (tab);

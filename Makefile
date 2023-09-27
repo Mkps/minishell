@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/25 16:07:51 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/27 17:29:53 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,50 +22,68 @@ SRC_NAME =	built-ins/unset.c \
 			built-ins/dummies.c \
 			built-ins/built_in.c \
 			built-ins/ft_cd.c \
+			cmd_list/cmd_list_init.c \
+			cmd_list/cmd_list_assign.c \
 			cmd_list/cmd_list_find.c \
 			cmd_list/cmd_list_add.c \
 			cmd_list/cmd_list_utils.c \
 			cmd_list/cmd_list.c \
+			data/free_shell.c \
+			data/data_utils.c \
+			data/free_cmd.c \
+			data/prompt.c \
+			data/free_utils.c \
+			data/free.c \
 			env/copy_env.c \
+			env/var.c \
+			env/var_utils.c \
+			env/var_expander.c \
 			env/env.c \
 			env/env_utils.c \
 			env/copy_env_utils.c \
-			error.c \
-			error_par.c \
-			execute.c \
-			execute_error.c \
-			execute_selector.c \
+			error/output_error.c \
+			error/error.c \
+			error/error_par.c \
+			error/check_error.c \
+			execute/execute.c \
+			execute/execute_std.c \
+			execute/execute_error.c \
+			execute/exec_cmd.c \
+			execute/execute_selector.c \
+			execute/execute_nstd.c \
 			export/export2.c \
 			export/export_utils3.c \
 			export/export_utils.c \
 			export/export_utils2.c \
 			export/export.c \
-			free.c \
-			io/here_doc.c \
+			io/pipe.c \
+			io/open_io.c \
 			io/here_doc_filename.c \
-			io/here_doc_var.c \
+			io/redir_utils.c \
+			io/here_doc.c \
 			io/io.c \
-			lexer.c \
-			lexer_token.c \
-			lexer_utils.c \
-			lexer_word.c \
+			io/redir.c \
+			io/here_doc_var.c \
+			lexer/lexer.c \
+			lexer/lexer_utils.c \
+			lexer/lexer_token.c \
+			lexer/lexer_word.c \
 			main.c \
-			minishell_cmd.c \
-			minishell_launcher.c \
-			output_error.c \
-			parse_near_quote.c \
-			parser.c \
-			pipex_utils.c \
-			prompt.c \
+			shell/subshell.c \
+			shell/minishell_launcher.c \
+			shell/inline_shell.c \
 			signals/signal.c \
 			signals/signal_handlers.c \
-			token.c \
-			token_utils.c \
+			token/token_lst.c \
+			token/token_utils2.c \
+			token/token_utils.c \
+			token/parser.c \
+			token/parse_near_quote.c \
+			token/token.c \
+			utils/pipex_utils.c \
 			utils/ft_split_noquote.c \
-			utils/data_utils.c \
-			var.c \
-			var_expander.c \
-			var_utils.c \
+			utils/ft_split_noquote_utils.c \
+			utils/strutils_find.c \
 			wildcard/wildcard_strutils2.c \
 			wildcard/wildcard_strutils.c \
 			wildcard/wildcard_utils.c \
@@ -92,8 +110,8 @@ $(NAME): $(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LIB) -I$(INCDIR)
 
 $(OBJ_DIR)/%.o:	$(SRCDIR)/%.c
-	mkdir -p '$(@D)'
-	echo $(@D)
+	@mkdir -p '$(@D)'
+	@echo $(@D)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:

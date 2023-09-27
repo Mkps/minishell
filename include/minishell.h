@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/26 16:55:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 17:25:59 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,37 +150,41 @@ typedef struct s_data
 	char				*raw_input;
 }						t_data;
 
-void					argc_error(int error_code);
-void					error_exit(int exit_code);
-int						open_fd(int mode, char *filename);
-void					exec_cmd(t_cmd *cmd, t_data *data);
-char					*get_cmd(char *cmd, char **env_p);
-char					**get_path(char **envv);
-char					*ft_readline(char *str);
-void					ft_lstadd_back_env(t_env **lst, t_env *new_node);
-void					free_env_list(t_env **env);
-void					free_var(t_data *data, t_cmd *cmd);
-void					print_token(t_token **root);
-void					free_token(t_data *data);
-char					**ft_split_noquote(char *str, char c);
-int						var_is_multiple(char *var);
-
+void	argc_error(int error_code);
+void	error_exit(int exit_code);
+int		open_fd(int mode, char *filename);
+void	exec_cmd(t_cmd *cmd, t_data *data);
+char	*get_cmd(char *cmd, char **env_p);
+char	**get_path(char **envv);
+char	*ft_readline(char *str);
+void	ft_lstadd_back_env(t_env **lst, t_env *new_node);
+void	free_env_list(t_env **env);
+void	free_var(t_data *data, t_cmd *cmd);
+void	print_token(t_token **root);
+void	free_token(t_data *data);
+char	**ft_split_noquote(char *str, char c);
+int		var_is_multiple(char *var);
+char	*chrtostr(char c);
+int		check_error_raw(t_data *data);
+char	*ft_strs_join(char **tab);
 /**		here_doc		**/
-int						here_doc_handler(t_data *data, t_io_node *io_node);
-char					*heredoc_var_expand(t_data *data, char *str, int flag);
-int						get_flag(char *limiter);
-char					*generate_heredoc_filename(void);
+int		here_doc_handler(t_data *data, t_io_node *io_node);
+char	*heredoc_var_expand(t_data *data, char *str, int flag);
+int		get_flag(char *limiter);
+char	*generate_heredoc_filename(void);
+int		open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd);
 
 /**		cmd_list.c		**/
-void					build_cmd_list(t_data *data, t_token *token);
-int						handle_assign(t_data *data, t_token *token, t_cmd *cmd);
-char					*set_assign(t_token *token);
-t_cmd					*create_cmd(t_data *data);
+void	build_cmd_list(t_data *data, t_token *token);
+int		handle_assign(t_data *data, t_token *token, t_cmd *cmd);
+char	*set_assign(t_token *token);
+t_cmd	*create_cmd(t_data *data);
 
 /**		cmd_list_add.c	**/
 void					add_cmd_back(t_data *data);
 void					add_empty_cmd(t_data *data);
 t_token					*add_cmd(t_data *data, t_token *token);
+char					*cmd_get_args(t_token *token);
 
 /**		cmd_list_find.c	**/
 t_token					*get_cmd_first(t_token *current_t);
@@ -192,6 +196,10 @@ int						is_assign(char *str);
 int						is_empty_cmd(t_token *start);
 int						set_pipe(t_cmd *cmd);
 int						get_cmd_type(t_token *token);
+
+/**		cmd_list_init.c	 */
+t_cmd		*init_new_cmd(t_data *data, t_token *token);
+int		handle_assign(t_data *data, t_token *token, t_cmd *cmd);
 
 /** 	signal.c		**/
 void					signals_interact(void);
@@ -239,12 +247,45 @@ void					free_env_lst(t_env **env_lst);
 /**		execute.c		**/
 void	execute(t_data *data);
 int		get_cmd_ecode(t_cmd *cmd, t_data *data);
-int		is_unpiped(t_cmd *cmd);
-int		is_builtin(t_cmd *cmd);
+
 
 /**		data_utils.c	**/
 int						init_data(t_data *data);
 void					data_cleanup(t_data *data);
+int						execute_builtin(t_cmd *cmd, t_data *data);
+
+/**		data			**/
+void	free_cmd_list(t_data *data);
+
+/**		env				**/
+int	retokenize(t_data *data, char *str, t_token *token);
+
+/**		execute			**/
+void	execute_empty(t_cmd *cmd, t_data *data);
+void	execute_subshell(t_cmd *cmd, t_data *data);
+int		is_standalone(t_cmd *cmd);
+void	execute_parent(t_cmd *cmd, t_data *data);
+void	execute_child(t_cmd *cmd, t_data *data);
+int		is_unpiped(t_cmd *cmd);
+int		is_builtin(t_cmd *cmd);
+
+/**		io				**/
+int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd);
+int	close_fd_set(int fdin, int fdout);
+int	close_cmd_fd(t_cmd *cmd);
+int	dup_close_fd_set(int fdin, int fdout);
+t_token	*wc_tokenize(t_token *start, char *str, t_data *data);
+
+/**	utils		*/
+int	cycle_count_strings(int i, char *str, char separator);
+int	get_extracted_strlen(char *src, char separator);
+int	cycle_through(char *str, char c);
+
+/**		shell	**/
+void	minishell_core(t_data *data);
+void	minishell_inline(t_data *data, char *user_input);
+void	minishell_prompt(t_data *data);
+void	minishell_subshell(t_data *data, char *user_input);
 
 /**		minishell_launcher.c	**/ void minishell_prompt(t_data *data);
 void					minishell_inline(t_data *data, char *user_input);
@@ -348,13 +389,14 @@ void					remove_env(t_data *data, const char *key_to_remove);
 void					ft_lstadd_back_env(t_env **lst, t_env *new_elem);
 t_env					*ft_lstnew_env(char *key, char *value);
 void					free_env_lst(t_env **cpy);
-/***	temp	*/
+/**	temp	**/
 void					handle_parent_directory(void);
 void					handle_previous_directory(t_data *data, char **old_pwd);
 void					update_oldpwd(char **old_pwd, char *new_pwd);
 void					update_pwd_and_oldpwd(t_data *data, char *new_pwd);
 void					handle_home_directory(t_data *data, const char *dir);
-/***	unset	***/
+
+/**	unset	**/
 int						ft_lstsize_env(t_env **lst);
 void					env_update(t_data *data);
 void					execute_unset(t_data *data, t_cmd *cmd);

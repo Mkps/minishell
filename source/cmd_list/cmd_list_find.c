@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_list_find.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:41:32 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 11:41:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:45:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token	*get_next_cmd(t_token *src)
 					&& current->prev != NULL && !token_is_io(current->prev)))
 				return (current);
 			else if (current->prev != NULL && current->quote_status != NONE
-					&& !token_is_io(current->prev->prev))
+				&& !token_is_io(current->prev->prev))
 				return (current);
 		}
 		current = current->next;

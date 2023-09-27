@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:51:01 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 18:34:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 12:27:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,3 @@ void	signal_sigint_heredoc(int signum)
 		rl_replace_line("", 0);
 	}
 }
-
