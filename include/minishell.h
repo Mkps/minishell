@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/26 15:45:00 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 09:42:14 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,12 @@ char	*ft_str_extract(char *str, int n);
 int		ft_get_word(char *input, t_data *data);
 int		ft_get_sep_type(char *str);
 int		ft_is_ws(char c);
+int		ft_get_token(char *input, t_data *data);
+int		ft_get_token_err(char *input, t_data *data);
+int		ft_get_sep(char *input, t_data *data);
+int		ft_get_quote(char *input, t_data *data);
+void	set_parse_status_quote(t_data *data, char *input);
+void	set_parse_status_par(t_data *data, char *input);
 
 /**		parser.c		**/
 void	parse_token(t_data *data);

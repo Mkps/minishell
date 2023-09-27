@@ -42,8 +42,7 @@ void	var_expand_exitcode(t_data *data, char **ret, int *i)
 	char	*tmp;
 	char	*exit_code;
 
-	(void)data;
-	exit_code = ft_itoa(g_exit_code);
+	exit_code = ft_itoa(data->exit_status);
 	tmp = *ret;
 	*ret = str_replace(*ret, *i, 2, exit_code);
 	free(tmp);

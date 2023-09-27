@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 12:07:35 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/25 17:56:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		if (is_unpiped(cmd) == 1)
+		if (is_unpiped(cmd) == 1 && cmd->is_term && (!cmd->prev || (cmd->prev && cmd->prev->is_term)))
 		{
 			set_fd(data, cmd);
 			cmd->pid = -2;
