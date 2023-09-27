@@ -193,6 +193,7 @@ void	minishell_prompt(t_data *data)
 		signals_interact();
 		prompt_user(data);
 		signals_no_interact();
+		data->exit_status = g_exit_code;
 		g_exit_code = 0;
 		data->raw_input = data->user_input;
 		data->cmd_split = ft_split_noquote(data->user_input, ';');
@@ -225,6 +226,5 @@ void	minishell_prompt(t_data *data)
 		}
 		ft_free_tab(data->cmd_split);
 		data->cmd_split = NULL;
-		data->exit_status = g_exit_code;
 	}
 }

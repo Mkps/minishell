@@ -59,7 +59,6 @@ int	ft_get_token(char *input, t_data *data)
 	return (i);
 }
 
-
 int	ft_get_token_err(char *input, t_data *data)
 {
 	int	i;

@@ -34,6 +34,8 @@ SRC_NAME =	built-ins/unset.c \
 			error.c \
 			error_par.c \
 			execute.c \
+			execute_error.c \
+			execute_selector.c \
 			export/export2.c \
 			export/export_utils3.c \
 			export/export_utils.c \
@@ -41,6 +43,7 @@ SRC_NAME =	built-ins/unset.c \
 			export/export.c \
 			free.c \
 			io/here_doc.c \
+			io/here_doc_filename.c \
 			io/here_doc_var.c \
 			io/io.c \
 			lexer.c \

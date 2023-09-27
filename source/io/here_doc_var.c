@@ -38,25 +38,27 @@
 // 	return (flag_retokenize);
 // }
 
-// char	*heredoc_var_expand(t_data *data, char *str)
-// {
-// 	int		i;
-// 	char	*ret;
-// 	char	**ret_ptr;
+char	*heredoc_var_expand(t_data *data, char *str, int flag)
+{
+	int		i;
+	char	*ret;
+	char	**ret_ptr;
 
-// 	i = 0;
-// 	ret_ptr = malloc(sizeof(char **));
-// 	*ret_ptr = ft_strdup(str);
-// 	while (*(*ret_ptr + i))
-// 	{
-// 		if (*(*ret_ptr + i) == '$')
-// 			var_expand_dollar_notoken(data, ret_ptr, &i);
-// 		else
-// 			i++;
-// 	}
-// 	free(str);
-// 	ret = ft_strdup(*ret_ptr);
-// 	free(*ret_ptr);
-// 	free(ret_ptr);
-// 	return (ret);
-// }
+	i = 0;
+	if (flag)
+		return (str);
+	ret_ptr = malloc(sizeof(char **));
+	*ret_ptr = ft_strdup(str);
+	while (*(*ret_ptr + i))
+	{
+		if (*(*ret_ptr + i) == '$')
+			var_expand_dollar_notoken(data, ret_ptr, &i);
+		else
+			i++;
+	}
+	free(str);
+	ret = ft_strdup(*ret_ptr);
+	free(*ret_ptr);
+	free(ret_ptr);
+	return (ret);
+}

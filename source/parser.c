@@ -61,35 +61,12 @@ int	token_wc(char *input, t_token *current, t_data *data)
 t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 {
 	char	*tmp;
-	int		i;
-	t_token	*node;
-	t_token	*ret;
-	t_token	*swap;
-	t_token	*next;
 
 	(void)str;
-	i = 0;
 	tmp = ft_wildcard(start->value);
-	node = start;
-	while (tmp[i])
-	{
-		i += token_wc(tmp + i, node, data);
-		node = node->next;
-	}
-	ret = node;
-	if (!ret)
-		return (start);
-	swap = start->prev;
-	next = start->next;
-	if (next)
-	{
-		swap->next = next;
-		next->prev = swap;
-		free(start);
-		start = NULL;
-	}
+	retokenize(data, tmp, start);
 	free(tmp);
-	return (ret);
+	return (start);
 }
 
 //	Parses tokens looking for things to expand.
@@ -123,15 +100,8 @@ void	parse_token(t_data *data)
 				*data->token_root = NULL;
 			}
 		}
-		if (current->token_type == WORD && current->quote_status == NONE)
-		{
-			if (current->prev && current->prev->token_type == WORD
-				&& !is_assign(current->prev->value)
-				&& wc_present(current->value))
-			{
-				current = wc_tokenize(current, current->value, data);
-			}
-		}
+		if (current->token_type == WORD && current->quote_status == NONE && wc_present(current->value))
+			current = wc_tokenize(current, current->value, data);
 		if (current->token_type == IO_HEREDOC && current->next
 			&& ((current->next->token_type == WORD)
 				|| (token_is_quote(current->next)

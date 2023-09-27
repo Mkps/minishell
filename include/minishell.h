@@ -167,8 +167,9 @@ int						var_is_multiple(char *var);
 
 /**		here_doc		**/
 int						here_doc_handler(t_data *data, t_io_node *io_node);
-char					*heredoc_var_expand(t_data *data, char *str);
+char					*heredoc_var_expand(t_data *data, char *str, int flag);
 int						get_flag(char *limiter);
+char					*generate_heredoc_filename(void);
 
 /**		cmd_list.c		**/
 void					build_cmd_list(t_data *data, t_token *token);
@@ -247,7 +248,10 @@ void					ft_lstadd_back_two(t_env **lst, t_env *new_node);
 void					free_env_lst(t_env **env_lst);
 
 /**		execute.c		**/
-void					execute(t_data *data);
+void	execute(t_data *data);
+int		get_cmd_ecode(t_cmd *cmd, t_data *data);
+int		is_unpiped(t_cmd *cmd);
+int		is_builtin(t_cmd *cmd);
 
 /**		data_utils.c	**/
 int						init_data(t_data *data);
