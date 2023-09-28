@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 10:49:14 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:36:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	find_first_word(t_cmd *cmd)
 	int	j;
 
 	i = 1;
-	while (cmd->args[i][0] == '-')
+	while (cmd->args[i] && cmd->args[i][0] == '-')
 	{
 		j = 1;
 		while (cmd->args[i][j] && cmd->args[i][j] == 'n')

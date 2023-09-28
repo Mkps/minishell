@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 16:09:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:25:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	minishell_inline(t_data *data, char *user_input)
 {
 	inline_setup_input(data, user_input);
 	if (check_error_raw(data))
-		exit(g_exit_code);
+		exit(data->exit_status);
 	inline_core(data);
 	free_shell(data);
-	exit(g_exit_code);
+	exit(data->exit_status);
 }
