@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:52:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:28:53 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*glob_home(t_data *data, char *str)
 	i = 0;
 	while (str[i] && home[i] && str[i] == home[i])
 		i++;
-	if (str[i] == '/' && i > 0)
+	if ((str[i] == '/' || (!home[i] && !str[i])) && i > 0)
 	{
 		ret = ft_strdup(str + (i - 1));
 		ret[0] = '~';
@@ -77,7 +77,7 @@ char	*set_prompt(t_data *data)
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, ":", 2);
 	prompt = ft_strappend(prompt, CYAN, 2);
-	pwd = get_var(data, "PWD");
+	pwd = prompt_pwd(data);
 	prompt = ft_strappend(prompt, glob_home(data, pwd), 3);
 	prompt = ft_strappend(prompt, RESET, 2);
 	prompt = ft_strappend(prompt, "\n$ ", 2);

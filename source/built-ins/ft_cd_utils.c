@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 12:29:45 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/26 15:47:17 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:29:11 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,18 @@ void	handle_previous_directory(t_data *data, char **old_pwd)
 		perror("cd");
 		free(*old_pwd);
 	}
+}
+
+void	ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd)
+{
+	char	*temp;
+
+	if (pwd)
+		free(pwd);
+	pwd = getcwd(NULL, 0);
+	temp = pwd;
+	update_pwd_and_oldpwd(data, pwd, temp);
+	ft_setenv(data, tmp);
+	free(pwd);
+	free(old_pwd);
 }

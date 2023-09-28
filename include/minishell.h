@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 14:15:48 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:26:24 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,7 @@ void		print_env_list(t_env **env_lst);
 int			execute_builtin(t_cmd *cmd, t_data *data);
 int			ft_echo(t_cmd *cmd);
 int			ft_cd(t_cmd *cmd, t_data *data);
+void		ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd);
 int			ft_pwd(t_data *data);
 int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
@@ -290,6 +291,7 @@ char		*str_replace_strs(char **src, int r_index, int n, char *str);
 /**			export			**/
 void		env_update(t_data *data);
 int			set_in_env(t_data *data, char *variable, char **variable_split);
+void		end_split(char **variable_split);
 int			set_in_export(t_data *data, char *variable, t_cmd *cmd);
 int			execute_export(t_data *data, t_cmd *cmd);
 void		print_export(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 14:14:22 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 17:49:51 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 
 	key = NULL;
 	value = NULL;
-	new_env = NULL;
 	if (data->flag > 0)
 		return (EXIT_FAILURE);
 	env_assign(&variable_split, variable, &key, &value);
@@ -56,6 +55,7 @@ int	parse_and_validate_export(char *var, char **key, char **val, int *flag)
 		(*flag)++;
 	if ((*val)[0] != '\0')
 		*val = add_quotes(*val);
+	ft_free_tab(variable_split);
 	return (EXIT_SUCCESS);
 }
 

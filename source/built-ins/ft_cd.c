@@ -3,41 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 13:18:07 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:26:13 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 int	ft_cd(t_cmd *cmd, t_data *data)
-{
+{	
 	char	*dir;
 	char	*pwd;
 	char	*tmp;
 	char	*old_pwd;
-	char	*temp;
 
-	dir = cmd->args[1];
+	if (cmd->args[1] && cmd->args[1][0])
+		dir = cmd->args[1];
+	else
+		dir = "~";
 	pwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", pwd);
 	old_pwd = NULL;
-	if (cmd->args[2] != NULL)
+	if (cmd->args[1] && cmd->args[2] != NULL)
 		return (output_err_ret(1,
 				"minishell: cd: too many arguments", NULL));
-	if (cmd->args[1] == NULL)
-		return (output_err_ret(1,
-				"minishell: cd: need absolute or relative path", NULL));
 	handle_directory_change(data, &old_pwd, dir);
 	if (set_pwd(pwd) == 1)
+	{
+		free(pwd);
 		return (EXIT_FAILURE);
-	pwd = getcwd(NULL, 0);
-	temp = pwd;
-	update_pwd_and_oldpwd(data, pwd, temp);
-	ft_setenv(data, tmp);
-	free(pwd);
+	}
+	ft_cd_next(pwd, tmp, data, old_pwd);
 	return (EXIT_SUCCESS);
 }
 
