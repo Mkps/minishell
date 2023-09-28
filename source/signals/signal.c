@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:51:01 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 09:53:10 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:55:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,3 @@ void	signal_sigint_heredoc(int signum)
 		rl_replace_line("", 0);
 	}
 }
-

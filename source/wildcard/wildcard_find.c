@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_find.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:41:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 13:10:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:47:21 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ char	*find_dirpath(char *f_wc, int *flag)
 		i--;
 	if (dirpath[i] == '/')
 		dirpath = ft_str_extract_free(dirpath, i);
-	else 
+	else
 	{
 		*flag = 1;
 		if (!ft_strncmp(dirpath, "./", 2))
 			*flag = 0;
 		free(dirpath);
-		dirpath = ft_strdup("."); 
+		dirpath = ft_strdup(".");
 	}
 	return (dirpath);
 }

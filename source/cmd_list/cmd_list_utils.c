@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_list_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:41:38 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 11:41:39 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:45:55 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	is_empty_cmd(t_token *start)
 	}
 	return (0);
 }
+
 // Sets up the pipe and sets pipe_status to 1.
 int	set_pipe(t_cmd *cmd)
 {

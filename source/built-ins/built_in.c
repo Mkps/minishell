@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 17:51:36 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:51:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	find_first_word(t_cmd *cmd)
 	int	j;
 
 	i = 1;
-	while (cmd->args[i][0] == '-')
+	while (cmd->args[i] && cmd->args[i][0] == '-')
 	{
 		j = 1;
 		while (cmd->args[i][j] && cmd->args[i][j] == 'n')
@@ -46,7 +46,7 @@ int	ft_echo(t_cmd *cmd)
 	if (i > 1)
 		flag++;
 	while (cmd->args[i] != NULL)
-	{	
+	{
 		ft_printf("%s", cmd->args[i]);
 		i++;
 		if (cmd->args[i] != NULL)
@@ -74,8 +74,8 @@ int	ft_pwd(t_data *data)
 		}
 		current = current->next;
 	}
-	return (output_err_ret(EXIT_FAILURE,
-			"ERROR Could not find PWD in env", ""));
+	return (output_err_ret(EXIT_FAILURE, "ERROR Could not find PWD in env",
+			""));
 }
 
 char	*prompt_pwd(t_data *data)
@@ -97,9 +97,13 @@ char	*prompt_pwd(t_data *data)
 	return (NULL);
 }
 
-void	ft_exit(t_data *data)
+int	ft_exit(t_data *data, t_cmd *cmd)
 {
-	write(1, "exit\n", 5);
-	free_shell(data);
-	exit(g_exit_code);
+	if (!cmd->args[1] || (cmd->args[1] && cmd->args[1] == 0))
+	{
+		write(1, "exit\n", 5);
+		free_shell(data);
+		exit(data->exit_status);
+	}
+	return (EXIT_SUCCESS);
 }

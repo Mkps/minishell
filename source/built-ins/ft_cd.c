@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/27 09:40:56 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:52:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+int	ft_cd(t_cmd *cmd, t_data *data)
 int	ft_cd(t_cmd *cmd, t_data *data)
 {
 	char	*dir;
@@ -66,6 +67,7 @@ void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
 			free(current->value);
 			current->value = ft_strdup(pwd);
 			break ;
+			break ;
 		}
 		current = current->next;
 	}
@@ -99,7 +101,13 @@ void	handle_regular_directory(char *dir)
 }
 
 void	handle_home_directory(t_data *data, const char *dir)
+void	handle_home_directory(t_data *data, const char *dir)
 {
+	char	*home_dir;
+	size_t	full_path_len;
+	char	*full_path;
+
+	home_dir = ft_getenv(data->envv, "HOME");
 	char	*home_dir;
 	size_t	full_path_len;
 	char	*full_path;
@@ -108,6 +116,7 @@ void	handle_home_directory(t_data *data, const char *dir)
 	if (home_dir == NULL)
 	{
 		printf("cd: HOME not set\n");
+		return ;
 		return ;
 	}
 	full_path_len = strlen(home_dir) + strlen(dir) - 1;

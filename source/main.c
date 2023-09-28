@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/23 04:30:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 10:48:30 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,32 +49,31 @@ int	arg_check(int ac, char **av)
 
 void	print_token(t_token **root)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = *root;
 	while (current != NULL)
 	{
 		printf("token type %i | value %s | qs %i | nq %i\n", current->token_type,
-		 current->value, current->quote_status, current->near_quote);
+			current->value, current->quote_status, current->near_quote);
 		current = current->next;
 	}
 }
 
 int	g_exit_code;
+
 int	main(int ac, char **av, char **envv)
 {
 	t_data	data;
 
+	if (!arg_check(ac, av))
+		return (EXIT_FAILURE);
 	g_exit_code = 0;
 	init_data(&data);
 	import_envv(&data, envv);
 	copy_env_to_list(&data);
 	env_to_export(&data);
 	sort_export_list(&data);
-
-	// print_env_list(data.export);
-	if (!arg_check(ac, av))
-		return (EXIT_FAILURE);
 	if (ac == 3)
 		minishell_inline(&data, av[2]);
 	else if (ac == 1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_list_add.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:41:26 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 11:41:27 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:45:50 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,51 +42,55 @@ void	add_empty_cmd(t_data *data)
 	new_cmd->fd[1] = -1;
 }
 
-// Main function to add_cmd to the cmd_list. Currently works straight out ouf the data structure.
-t_token	*add_cmd(t_data *data, t_token *token)
+char	*cmd_get_args(t_token *token)
 {
-	t_cmd	*new_cmd;
-	t_token	*current;
 	char	*tmp;
-	int		i;
-	char	sep[2];
-	char test[2];
+	t_token	*current;
 
-	add_cmd_back(data);
-	new_cmd = last_cmd(data->cmd_list);
-	new_cmd->cmd = ft_strdup(token->value);
-	new_cmd->type = get_cmd_type(token);
-	new_cmd->fd[0] = -2;
-	new_cmd->fd[1] = -2;
 	tmp = "";
+	tmp = ft_strappend(tmp, chrtostr(2), 1);
 	current = token;
-	sep[0] = 2;
-	sep[1] = 0;
-	tmp = ft_strappend(tmp, sep, 0);
 	while (current->token_type == WORD)
 	{
-		tmp = ft_strappend(tmp, sep, 2);
-		test[0] = 1;
-		test[1] = 0;
+		tmp = ft_strappend(tmp, chrtostr(2), 3);
 		if (current->value[0] == 0)
-			tmp = ft_strappend(tmp, test, 2);
+			tmp = ft_strappend(tmp, chrtostr(1), 3);
 		else
 			tmp = ft_strappend(tmp, current->value, 2);
 		if (current->next->token_type == SQUOTE
 			|| current->next->token_type == DQUOTE)
-		{
 			current = current->next->next;
-		}
 		else
 			current = current->next;
 	}
-	new_cmd->args = ft_split(tmp, 2);
-	i = -1;
-	while (new_cmd->args[++i])
+	return (tmp);
+}
+
+t_token	*cmd_get_token(t_token *token)
+{
+	t_token	*current;
+
+	current = token;
+	while (current->token_type == WORD)
 	{
-		if (new_cmd->args[i][0] == 1)
-			new_cmd->args[i][0] = '\0';
+		if (current->next->token_type == SQUOTE
+			|| current->next->token_type == DQUOTE)
+			current = current->next->next;
+		else
+			current = current->next;
 	}
-	free(tmp);
 	return (current);
+}
+
+// Main function to add_cmd to the cmd_list.
+// Currently works straight out ouf the data structure.
+t_token	*add_cmd(t_data *data, t_token *token)
+{
+	t_cmd	*new_cmd;
+
+	add_cmd_back(data);
+	new_cmd = init_new_cmd(data, token);
+	if (!new_cmd)
+		return (NULL);
+	return (cmd_get_token(token));
 }

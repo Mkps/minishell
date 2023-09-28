@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/26 22:24:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:47:25 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ char	*build_wc_cd(char *f_wc)
 		if (!flag)
 			str = ft_strappend(str, dirpath, 2);
 		str = ft_strappend(str, dir->d_name, 2);
-		str = ft_strappend(str, chrtostr(3), 2);
+		str = ft_strappend(str, chrtostr(3), 3);
 		dir = readdir(d);
 	}
 	closedir(d);
+	free(dirpath);
 	return (str);
 }
 
