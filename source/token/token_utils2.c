@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:55:09 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:12 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 17:21:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,5 @@ t_token	*wc_tokenize(t_token *start, char *str, t_data *data)
 	(void)str;
 	tmp = ft_wildcard(start->value);
 	retokenize(data, tmp, start);
-	free(tmp);
 	return (start);
 }

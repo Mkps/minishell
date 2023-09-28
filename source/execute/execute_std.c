@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:29:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:09:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:08:41 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void	execute_child(t_cmd *cmd, t_data *data)
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
-		signal(SIGPIPE, SIG_IGN);
 		set_pipes(data, cmd);
 		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		close_pipes(data->cmd_list, NULL, NULL);
 		exit_code = execute_builtin(cmd, data);
+		signal(SIGPIPE, SIG_DFL);
 		if (exit_code == -1)
 		{
 			exec_cmd(cmd, data);

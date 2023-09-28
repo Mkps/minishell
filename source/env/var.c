@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:50:23 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:52:31 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 16:17:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	retokenize(t_data *data, char *str, t_token *token)
 		current = current->next;
 		i++;
 	}
+	free(str);
 	ft_free_tab(split);
 	return (EXIT_SUCCESS);
 }
