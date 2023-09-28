@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:50:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 17:12:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:21:59 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
 		*i = 0;
 	}
 	else if ((*(*ret + *i + 1) == 0) && token->near_quote == 1 && (!token->next
-			|| (token->next && token->next->token_type == SQUOTE)))
+			|| (token->next && token_is_quote(token->next))))
 		*(*ret + *i) = 0;
 	else if (*(*ret + *i + 1) == '?')
 		var_expand_exitcode(data, ret, i);

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:05 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:09 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:11:36 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ void	free_env_lst(t_env **env_lst)
 		free(current);
 		current = next;
 	}
+}
+
+void	free_env_node(t_env *env_node)
+{
+	free(env_node->key);
+	free(env_node->value);
+	free(env_node);
 }
 
 void	ft_lstadd_back_two(t_env **lst, t_env *new)
