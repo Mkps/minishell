@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:19:22 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 10:47:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,6 @@ int	check_error(t_data *data)
 	if (!err && check_term_error(data->token_root) == EXIT_FAILURE)
 		err = SYNTAX_ERROR;
 	if (err)
-		g_exit_code = err;
+		data->exit_status = err;
 	return (err);
 }

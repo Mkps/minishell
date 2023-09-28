@@ -1,0 +1,11 @@
+`{
+	"cmake.configureOnOpen": false,
+	"files.associations": {
+		"minishell.h": "c"
+	}
+	{
+		"[c]": {
+			"editor.defaultFormatter": "keyhr.42-c-format"
+		},
+	}
+}

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:45:45 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 10:49:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	ft_exit(t_data *data, t_cmd *cmd)
 	{
 		write(1, "exit\n", 5);
 		free_shell(data);
-		exit(g_exit_code);
+		exit(data->exit_status);
 	}
 	return (EXIT_SUCCESS);
 }

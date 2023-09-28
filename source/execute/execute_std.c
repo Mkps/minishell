@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_std.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:29:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:09:08 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:03:05 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	execute_parent(t_cmd *cmd, t_data *data)
 {
 	set_fd(data, cmd);
 	cmd->pid = -2;
-	g_exit_code = execute_builtin(cmd, data);
+	data->exit_status = execute_builtin(cmd, data);
 }
 
 void	execute_child(t_cmd *cmd, t_data *data)
@@ -46,6 +46,11 @@ void	execute_child(t_cmd *cmd, t_data *data)
 			exit_code = get_cmd_ecode(cmd, data);
 		}
 		free_child(data);
+		if (g_exit_code > 127)
+		{
+			exit_code = g_exit_code;
+			g_exit_code = 0;
+		}
 		exit(exit_code);
 	}
 	else

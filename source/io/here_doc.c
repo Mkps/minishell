@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:43 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 10:48:30 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	io_node->filename = heredoc_tmp;
 	if (g_exit_code > 128)
 	{
+		data->exit_status = g_exit_code;
 		close(io_node->fd);
 		unlink(io_node->filename);
 		return (-1);

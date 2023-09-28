@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:09:01 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:10:49 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 t_cmd	*conditional(t_data *data, t_cmd *current)
 {
 	(void)data;
-	while ((current && g_exit_code == 0
+	while ((current && data->exit_status == 0
 			&& current->prev->is_term == TERM_OR)
-		|| (current && g_exit_code > 0
+		|| (current && data->exit_status > 0
 			&& current->prev->is_term == TERM_2AND))
 	{
 		if (current->is_term)
@@ -84,10 +84,18 @@ t_cmd	*end_exec(t_data *data, t_cmd *cmd, t_cmd *last)
 		close_pipes(&start, NULL, last);
 		if (cmd->pid > 0)
 			waitpid(cmd->pid, &status, 0);
+		if (cmd->is_term == 0)
+		{
+			g_exit_code = 0;
+		}
 		if (cmd->is_term != 0 && !is_standalone(cmd))
 		{
-			if (WIFEXITED(status) && g_exit_code < 128)
-				g_exit_code = WEXITSTATUS(status);
+			if (g_exit_code > 127)
+				data->exit_status = g_exit_code;
+			else if (WIFEXITED(status))
+				data->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_status = WTERMSIG(status);
 		}
 		cmd = cmd->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:35:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:05 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 10:58:42 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,11 @@ void	prompt_user(t_data *data)
 			|| data->user_input == NULL))
 		if (!data->user_input)
 			data->user_input = ft_strdup("exit");
-	data->exit_status = g_exit_code;
-	g_exit_code = 0;
+	if (g_exit_code > 127)
+	{
+		data->exit_status = g_exit_code;
+		g_exit_code = 0;
+	}
 	data->raw_input = data->user_input;
 	data->cmd_split = ft_split_noquote(data->user_input, ';');
 }
