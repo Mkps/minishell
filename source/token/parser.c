@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:34:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:09 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 06:27:36 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	manage_expand(t_data *data, t_token **current)
 				&& tmp->value[0] == 0)))
 	{
 		tmp = tmp->next;
+		free(tmp->prev->value);
 		lst_del_prev(&tmp);
 		if (tmp->prev == NULL)
 			*data->token_root = tmp;
@@ -44,12 +45,14 @@ void	manage_expand(t_data *data, t_token **current)
 			|| (tmp->value && tmp->value[0] == 0)))
 	{
 		tmp = tmp->prev;
+		free(tmp->next->value);
 		lst_del_next(&tmp);
 	}
 	else if (tmp->quote_status == NONE
 		&& (!tmp->value || (tmp->value
 				&& tmp->value[0] == 0)))
 	{
+		free(tmp->value);
 		lst_del_token(&tmp);
 		data->token_root = NULL;
 	}

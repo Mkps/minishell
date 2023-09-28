@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:31 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 06:44:12 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_cmd	*end_exec(t_data *data, t_cmd *cmd, t_cmd *last)
 		close_pipes(&start, NULL, last);
 		if (cmd->pid > 0)
 			waitpid(cmd->pid, &status, 0);
-		if (cmd->is_term != 0)
+		if (cmd->is_term != 0 && !is_standalone(cmd))
 		{
 			if (WIFEXITED(status) && g_exit_code < 128)
 				g_exit_code = WEXITSTATUS(status);

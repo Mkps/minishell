@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 15:28:54 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:00 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 06:06:12 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ void	free_cmd_cmd(t_cmd *tmp)
 		free(tmp->cmd);
 	if (tmp->pipe_status)
 		free(tmp->pipe_fd);
+	tmp->args = NULL;
+	tmp->cmd = NULL;
+	tmp->pipe_status = 0;
 }
 
 void	free_cmd_assign(t_cmd *cmd)

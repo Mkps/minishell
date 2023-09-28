@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   subshell.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 16:10:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 06:17:36 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void	subshell_core(t_data *data)
 
 void	subshell_cleanup(t_data *data)
 {
-	ft_free_tab(data->cmd_split);
-	data->cmd_split = NULL;
 	if (data->old_fd[0] > -1)
 		close(data->old_fd[0]);
 	if (data->old_fd[1] > -1)
@@ -61,6 +59,6 @@ void	minishell_subshell(t_data *data, char *user_input)
 	if (check_error_raw(&new_data))
 		exit (g_exit_code);
 	subshell_core(&new_data);
-	subshell_cleanup(data);
+	subshell_cleanup(&new_data);
 	exit(new_data.exit_status);
 }
