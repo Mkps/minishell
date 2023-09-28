@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 11:54:29 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 14:14:22 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	parse_and_validate_export(char *var, char **key, char **val, int *flag)
 	return (EXIT_SUCCESS);
 }
 
-int	set_in_export(t_data *data, char *variable)
+int	set_in_export(t_data *data, char *variable, t_cmd *cmd)
 {
 	char		*key;
 	char		*value;
@@ -72,7 +72,7 @@ int	set_in_export(t_data *data, char *variable)
 		return (EXIT_FAILURE);
 	if (export_key_exists(*data->env_export, key) == 1)
 	{
-		if (set_in_export_utils(data, key, value) == 0)
+		if (set_in_export_utils(data, key, value, cmd) == 0)
 			return (EXIT_SUCCESS);
 		else
 			return (EXIT_FAILURE);
@@ -88,7 +88,7 @@ int	set_in_export(t_data *data, char *variable)
 	return (EXIT_SUCCESS);
 }
 
-int	set_in_export_utils(t_data *data, char *key, char *value)
+int	set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd)
 {
 	(void)data;
 	(void)key;
@@ -97,6 +97,8 @@ int	set_in_export_utils(t_data *data, char *key, char *value)
 	{
 		remove_export(data, key);
 		free_set_in(key, value, NULL);
+		execute_export(data, cmd);
+		env_update(data);
 		return (0);
 	}
 	else
@@ -125,7 +127,7 @@ int	execute_export(t_data *data, t_cmd *cmd)
 		}
 		else
 		{
-			err += set_in_export(data, cmd->args[i]);
+			err += set_in_export(data, cmd->args[i], cmd);
 			err += set_in_env(data, cmd->args[i], variable_split);
 			i++;
 		}

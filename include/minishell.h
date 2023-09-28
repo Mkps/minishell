@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 13:48:16 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 14:15:48 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,7 @@ void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
 int			set_pwd(char *pwd);
 void		env_unset_free(t_env *current);
 void		export_unset_free(t_export *current);
+
 /**		minishell_cmd.c	**/
 int			set_fd(t_data *data, t_cmd *cmd);
 void		set_pipes(t_data *data, t_cmd *cmd);
@@ -289,7 +290,7 @@ char		*str_replace_strs(char **src, int r_index, int n, char *str);
 /**			export			**/
 void		env_update(t_data *data);
 int			set_in_env(t_data *data, char *variable, char **variable_split);
-int			set_in_export(t_data *data, char *variable);
+int			set_in_export(t_data *data, char *variable, t_cmd *cmd);
 int			execute_export(t_data *data, t_cmd *cmd);
 void		print_export(t_data *data);
 void		sort_export_list(t_data *data);
@@ -351,7 +352,7 @@ void		free_envv(t_data *data);
 void		free_set_in(char *key, char *value, char **variable_split);
 void		invalid_export_print(char *key, char *value, char **variable_split);
 void		env_update_utils(t_env *current_env, size_t key_len, t_data *data);
-int			set_in_export_utils(t_data *data, char *key, char *value);
+int			set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd);
 void		env_assign(char ***variable_split, char *variable, char **key,
 				char **value);
 /***		unsorted		***/
