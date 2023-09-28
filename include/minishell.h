@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:56:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:00:11 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ int		ft_echo(t_cmd *cmd);
 int		ft_cd(t_cmd *cmd, t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_env(t_data *data);
-void	ft_exit(t_data *data);
+int		ft_exit(t_data *data, t_cmd *cmd);
 void    handle_regular_directory(char *dir);
 void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);//), char *old_pwd);
 void	handle_directory_change(t_data *data, char **old_pwd, char *dir);
@@ -286,13 +286,12 @@ void		free_env_lst(t_env **cpy);
 void		handle_parent_directory(void);
 void		handle_previous_directory(t_data *data, char **old_pwd);
 void		update_oldpwd(char **old_pwd, char *new_pwd);
-void		update_pwd_and_oldpwd(t_data *data, char *new_pwd);
 void		handle_home_directory(t_data *data, const char *dir);
 
 /**	unset	**/
 int			ft_lstsize_env(t_env **lst);
 void		env_update(t_data *data);
-void		execute_unset(t_data *data, t_cmd *cmd);
+void		execute_unset(t_data *data, t_cmd *cmd, int i);
 void		execute_env(t_data *data, t_cmd *cmd);
 t_cmd		*find_unset_command(t_data *data);
 int			ft_unset(t_data *data);
