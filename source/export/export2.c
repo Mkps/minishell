@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 16:32:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:15:17 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
 		if (value[0] != '\0')
-			return (remove_env(data, key), EXIT_SUCCESS);
+			return (remove_env(data, key), free_env_node(new_env),
+				free_set_in(key, value, variable_split), EXIT_SUCCESS);
 		return (free_set_in(key, value, variable_split), EXIT_FAILURE);
 	}
 	return (ft_lstadd_back_env(data->env_cpy, new_env),
