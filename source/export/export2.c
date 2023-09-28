@@ -47,9 +47,9 @@ int	parse_and_validate_export(char *var, char **key, char **val, int *flag)
 	variable_split = ft_split2(var, '=');
 	*key = ft_strdup(variable_split[0]);
 	*val = ft_strdup(variable_split[1]);
-	ft_free_tab(variable_split);
 	if (key_is_valid(*key) == 1)
 	{
+		ft_free_tab(variable_split);
 		invalid_export_print(*key, *val, variable_split);
 		return (EXIT_FAILURE);
 	}

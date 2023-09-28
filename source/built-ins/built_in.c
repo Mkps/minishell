@@ -96,14 +96,3 @@ char	*prompt_pwd(t_data *data)
 	}
 	return (NULL);
 }
-
-int	ft_exit(t_data *data, t_cmd *cmd)
-{
-	if (!cmd->args[1] || (cmd->args[1] && cmd->args[1] == 0))
-	{
-		write(1, "exit\n", 5);
-		free_shell(data);
-		exit(data->exit_status);
-	}
-	return (EXIT_SUCCESS);
-}

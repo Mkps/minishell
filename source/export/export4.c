@@ -14,7 +14,6 @@
 
 void	env_update(t_data *data)
 {
-	int		i;
 	size_t	key_len;
 	t_env	*current_env;
 
@@ -31,7 +30,6 @@ void	env_update(t_data *data)
 	}
 	key_len = 0;
 	current_env = *data->env_cpy;
-	i = 0;
 	env_update_utils(current_env, key_len, data);
 }
 
