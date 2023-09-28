@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 14:15:48 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:19:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@
 # include <unistd.h>
 
 extern int	g_exit_code;
-
-
 
 /**		built-ins		**/
 /***		execution builtin	***/
@@ -352,7 +350,8 @@ void		free_envv(t_data *data);
 void		free_set_in(char *key, char *value, char **variable_split);
 void		invalid_export_print(char *key, char *value, char **variable_split);
 void		env_update_utils(t_env *current_env, size_t key_len, t_data *data);
-int			set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd);
+int			set_in_export_utils(t_data *data, char *key,
+				char *value, t_cmd *cmd);
 void		env_assign(char ***variable_split, char *variable, char **key,
 				char **value);
 /***		unsorted		***/

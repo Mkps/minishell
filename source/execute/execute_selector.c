@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:30:50 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:07:35 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_cmd	*conditional(t_data *data, t_cmd *current)
 
 int	execute_builtin(t_cmd *cmd, t_data *data)
 {
+	signal(SIGPIPE, SIG_IGN);
 	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_echo(cmd));
 	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
