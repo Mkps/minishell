@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 17:07:44 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 17:17:08 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:37:10 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ void	end_split(char **variable_split)
 	int	i;
 
 	i = -1;
-	while(variable_split[++i])
+	while (variable_split[++i])
 	variable_split[i] = NULL;
 }
