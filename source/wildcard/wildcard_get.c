@@ -6,11 +6,35 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:59:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:23:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+char	*build_str(char *dirpath, char *str, int flag)
+{
+	DIR				*d;
+	struct dirent	*dir;
+
+	d = opendir(dirpath);
+	if (!d)
+		return (NULL);
+	dir = readdir(d);
+	if (!flag)
+		dirpath = ft_strappend(dirpath, "/", 2);
+	while (dir != NULL)
+	{
+		if (!flag)
+			str = ft_strappend(str, dirpath, 2);
+		str = ft_strappend(str, dir->d_name, 2);
+		str = ft_strappend(str, chrtostr(3), 3);
+		dir = readdir(d);
+	}
+	closedir(d);
+	free(dirpath);
+	return (str);
+}
 
 int	wc_in_dirpath(char *filepath)
 {

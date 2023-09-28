@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:25 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:51:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 char	*build_wc_cd(char *f_wc)
 {
-	DIR				*d;
-	struct dirent	*dir;
 	char			*str;
 	char			*dirpath;
 	int				flag;
@@ -23,22 +21,7 @@ char	*build_wc_cd(char *f_wc)
 	str = ft_strdup("");
 	flag = 0;
 	dirpath = find_dirpath(f_wc, &flag);
-	d = opendir(dirpath);
-	if (!d)
-		return (NULL);
-	dir = readdir(d);
-	if (!flag)
-		dirpath = ft_strappend(dirpath, "/", 2);
-	while (dir != NULL)
-	{
-		if (!flag)
-			str = ft_strappend(str, dirpath, 2);
-		str = ft_strappend(str, dir->d_name, 2);
-		str = ft_strappend(str, chrtostr(3), 3);
-		dir = readdir(d);
-	}
-	closedir(d);
-	free(dirpath);
+	str = build_str(dirpath, str, flag);
 	return (str);
 }
 

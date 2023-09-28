@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:00:11 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 13:48:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,125 +33,78 @@
 
 extern int	g_exit_code;
 
-void		argc_error(int error_code);
-void		error_exit(int exit_code);
-int			open_fd(int mode, char *filename);
-void		exec_cmd(t_cmd *cmd, t_data *data);
-char		*get_cmd(char *cmd, char **env_p);
-char		**get_path(char **envv);
-char		*ft_readline(char *str);
-void		ft_lstadd_back_env(t_env **lst, t_env *new_node);
-void		free_env_list(t_env **env);
-void		free_var(t_data *data, t_cmd *cmd);
-void		print_token(t_token **root);
-void		free_token(t_data *data);
-char		**ft_split_noquote(char *str, char c);
-int			var_is_multiple(char *var);
-char		*chrtostr(char c);
-int			check_error_raw(t_data *data);
-char		*ft_strs_join(char **tab);
-/**		here_doc		**/
-int			here_doc_handler(t_data *data, t_io_node *io_node);
-char		*heredoc_var_expand(t_data *data, char *str, int flag);
-int			get_flag(char *limiter);
-char		*generate_heredoc_filename(void);
-int			open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd);
 
-/**		cmd_list.c		**/
+
+/**		built-ins		**/
+/***		execution builtin	***/
+int			execute_builtin(t_cmd *cmd, t_data *data);
+int			ft_echo(t_cmd *cmd);
+int			ft_cd(t_cmd *cmd, t_data *data);
+int			ft_pwd(t_data *data);
+int			ft_env(t_data *data);
+int			ft_exit(t_data *data, t_cmd *cmd);
+void		handle_regular_directory(char *dir);
+void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
+void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
+int			set_pwd(char *pwd);
+void		env_unset_free(t_env *current);
+
+/**		cmd_list		**/
+/***		cmd_list.c		***/
 void		build_cmd_list(t_data *data, t_token *token);
 int			handle_assign(t_data *data, t_token *token, t_cmd *cmd);
 char		*set_assign(t_token *token);
 t_cmd		*create_cmd(t_data *data);
-
-/**		cmd_list_add.c	**/
+/***		cmd_list_add.c	***/
 void		add_cmd_back(t_data *data);
 void		add_empty_cmd(t_data *data);
 t_token		*add_cmd(t_data *data, t_token *token);
 char		*cmd_get_args(t_token *token);
-
-/**		cmd_list_find.c	**/
+/***		cmd_list_find.c	***/
 t_token		*get_cmd_first(t_token *current_t);
 t_token		*get_next_cmd(t_token *src);
 t_cmd		*last_cmd(t_cmd **root);
-
-/**		cmd_list_utils.c **/
+/***		cmd_list_utils.c ***/
 int			is_assign(char *str);
 int			is_empty_cmd(t_token *start);
 int			set_pipe(t_cmd *cmd);
 int			get_cmd_type(t_token *token);
-
-/**		cmd_list_init.c		*/
+/***		cmd_list_init.c		**/
 t_cmd		*init_new_cmd(t_data *data, t_token *token);
 int			handle_assign(t_data *data, t_token *token, t_cmd *cmd);
 
-/** 	signal.c		**/
-void		signals_interact(void);
-void		signals_no_interact(void);
-void		signals_here_doc(void);
+/**		data			**/
+void		free_cmd_list(t_data *data);
+/***		data_utils.c	***/
+int			init_data(t_data *data);
+void		data_cleanup(t_data *data);
+int			execute_builtin(t_cmd *cmd, t_data *data);
+/***		prompt.c			***/
+char		*set_prompt(t_data *data);
+void		prompt_user(t_data *data);
 
-/**		lexer.c			**/
-int		scan_input(t_data *data);
-char	*ft_str_extract(char *str, int n);
-int		ft_get_word(char *input, t_data *data);
-int		ft_get_sep_type(char *str);
-int		ft_is_ws(char c);
-int		ft_get_token(char *input, t_data *data);
-int		ft_get_token_err(char *input, t_data *data);
-int		ft_get_sep(char *input, t_data *data);
-int		ft_get_quote(char *input, t_data *data);
-void	set_parse_status_quote(t_data *data, char *input);
-void	set_parse_status_par(t_data *data, char *input);
-int						scan_input(t_data *data);
-char					*ft_str_extract(char *str, int n);
-int						ft_get_word(char *input, t_data *data);
-int						ft_get_sep_type(char *str);
-int						ft_is_ws(char c);
-int						ft_get_token(char *input, t_data *data);
-int						ft_get_token_err(char *input, t_data *data);
-int						ft_get_sep(char *input, t_data *data);
-int						ft_get_quote(char *input, t_data *data);
-void					set_parse_status_quote(t_data *data, char *input);
-void					set_parse_status_par(t_data *data, char *input);
-
-/**		parser.c		**/
-void		parse_token(t_data *data);
-void		parse_near_quote(t_data *data);
-char		*ft_strappend(char *s1, char *s2, int mode);
-void		var_expand(t_data *data, t_cmd *cmd);
-
-/**		token_utils.c	**/
-int			token_is_quote(t_token *token);
-int			token_is_io(t_token *token);
-int			token_is_term(t_token *token);
-void		lst_del_prev(t_token **node);
-void		lst_del_next(t_token **node);
-void		lst_del_token(t_token **node);
-
-/**		env_utils.c		**/
+/**		env				**/
+int			retokenize(t_data *data, char *str, t_token *token);
+/***		env_utils.c		***/
 int			import_envv(t_data *data, char **envv);
 char		*ft_getenv(char **env, const char *str);
 void		ft_setenv(t_data *data, char *value);
 char		**ft_strsdup(char **strs);
-
-/**		cpy_env_utils.c	**/
+/***		cpy_env_utils.c	***/
 t_env		*ft_lstnew_two(char *key, char *value);
 void		ft_lstadd_back_two(t_env **lst, t_env *new_node);
 void		free_env_lst(t_env **env_lst);
 
-/**		execute.c		**/
-void		execute(t_data *data);
-int			get_cmd_ecode(t_cmd *cmd, t_data *data);
-
-/**		data_utils.c	**/
-int			init_data(t_data *data);
-void		data_cleanup(t_data *data);
-int			execute_builtin(t_cmd *cmd, t_data *data);
-
-/**		data			**/
-void		free_cmd_list(t_data *data);
-
-/**		env				**/
-int			retokenize(t_data *data, char *str, t_token *token);
+/**		error			**/
+/***		error.c			***/
+int			check_error(t_data *data);
+int			check_error_raw(t_data *data);
+/***		error_par.c		***/
+int			check_par_error(t_token **root);
+/***		output_error.c	***/
+void		output_err(char *msg, t_token *token, int squotes);
+void		output_err_cmd(char *msg, char *cmd_str);
+int			output_err_ret(int return_value, char *msg, char *cmd_str);
 
 /**		execute			**/
 void		execute_empty(t_cmd *cmd, t_data *data);
@@ -161,6 +114,14 @@ void		execute_parent(t_cmd *cmd, t_data *data);
 void		execute_child(t_cmd *cmd, t_data *data);
 int			is_unpiped(t_cmd *cmd);
 int			is_builtin(t_cmd *cmd);
+void		exec_cmd(t_cmd *cmd, t_data *data);
+/***		execute.c		***/
+void		execute(t_data *data);
+int			get_cmd_ecode(t_cmd *cmd, t_data *data);
+t_cmd		*conditional(t_data *data, t_cmd *current);
+
+/**		export			**/
+void		export_unset_free(t_export *current);
 
 /**		io				**/
 int			open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd);
@@ -168,22 +129,94 @@ int			close_fd_set(int fdin, int fdout);
 int			close_cmd_fd(t_cmd *cmd);
 int			dup_close_fd_set(int fdin, int fdout);
 t_token		*wc_tokenize(t_token *start, char *str, t_data *data);
+/***		here_doc		***/
+int			here_doc_handler(t_data *data, t_io_node *io_node);
+char		*heredoc_var_expand(t_data *data, char *str, int flag);
+int			get_flag(char *limiter);
+char		*generate_heredoc_filename(void);
+int			open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd);
 
-/**	utils		*/
+/**		lexer			**/
+int			scan_input(t_data *data);
+char		*ft_str_extract(char *str, int n);
+int			ft_get_word(char *input, t_data *data);
+int			ft_get_sep_type(char *str);
+int			ft_is_ws(char c);
+int			ft_get_token(char *input, t_data *data);
+int			ft_get_token_err(char *input, t_data *data);
+int			ft_get_sep(char *input, t_data *data);
+int			ft_get_quote(char *input, t_data *data);
+
+/**		shell		**/
+void		minishell_inline(t_data *data, char *user_input);
+void		minishell_subshell(t_data *data, char *user_input);
+void		minishell_prompt(t_data *data);
+void		minishell_core(t_data *data);
+
+/**		signals		**/
+/*** 		signal_hanlers.c	***/
+void		signals_interact(void);
+void		signals_no_interact(void);
+void		signals_here_doc(void);
+/***		signal.c			***/
+void		redisplay_prompt(int signum);
+void		signal_quit(int signum);
+void		signal_nl(int signum);
+void		signal_sigint_heredoc(int signum);
+
+/**		token		**/
+/**		parser.c		**/
+void		parse_token(t_data *data);
+char		*ft_strappend(char *s1, char *s2, int mode);
+void		var_expand(t_data *data, t_cmd *cmd);
+void		set_parse_status_quote(t_data *data, char *input);
+void		set_parse_status_par(t_data *data, char *input);
+void		parse_near_quote(t_data *data);
+/***		token_utils.c	***/
+int			token_is_quote(t_token *token);
+int			token_is_io(t_token *token);
+int			token_is_term(t_token *token);
+void		lst_del_prev(t_token **node);
+void		lst_del_next(t_token **node);
+void		lst_del_token(t_token **node);
+
+/**		utils		**/
 int			cycle_count_strings(int i, char *str, char separator);
 int			get_extracted_strlen(char *src, char separator);
 int			cycle_through(char *str, char c);
+void		error_exit(int exit_code);
+int			open_fd(int mode, char *filename);
 
-/**		shell	**/
-void		minishell_core(t_data *data);
-void		minishell_inline(t_data *data, char *user_input);
-void		minishell_prompt(t_data *data);
-void		minishell_subshell(t_data *data, char *user_input);
-
-/**		minishell_launcher.c	**/ 
-void		minishell_prompt(t_data *data);
-void		minishell_inline(t_data *data, char *user_input);
-void		minishell_subshell(t_data *data, char *user_input);
+/**		wildcard	**/
+/***		wildcard_find.c	**/
+char		*find_dirpath(char *f_wc, int *flag);
+int			show_hidden(char *search, char *str);
+char		*find_matching(char *search, char *src,
+				char *(*function_ptr)(char *, char *, int), int mode);
+char		*build_str(char *dirpath, char *str, int flag);
+/***		wildcard_strutils.c */
+char		*ft_strjoin_tab(char **tab, int i, char join);
+void		ft_str_swap(char **s1, char **s2);
+char		*sort_str(char *str);
+char		*chrtostr(char c);
+/***		wildcard_strutils2.c **/
+char		*ft_strend(char *big, char *little, char n);
+char		*str_replace_free(char *src, int r_index, int n, char *str);
+int			find_length(char *str, char *src, int r_index, int n);
+/***		wildcard_utils.c */
+int			get_start_index(char *str, int i);
+int			get_end_index(char *str, int i);
+char		*str_tolower(char *str);
+int			ft_strcmp_no_case(const char *s1, const char *s2);
+/***		wildcard_wcutils.c	**/
+char		*get_front_wc(char *str);
+char		*get_back_wc(char *str);
+int			wc_present(char *str);
+/***		wildcards.c			**/
+char		*ft_wildcard(char *str);
+int			wc_present(char *str);
+char		*get_wildcard(char *str);
+char		*get_wc_data(char *search, char *src, int mode);
 
 /**		token.c			**/
 t_token		*create_token(int type, char *value);
@@ -220,18 +253,18 @@ void		ft_lstadd_back_two(t_env **lst, t_env *new_elem);
 void		print_env_list(t_env **env_lst);
 
 /**		execution builtin	**/
-int		execute_builtin(t_cmd *cmd, t_data *data);
-int		ft_echo(t_cmd *cmd);
-int		ft_cd(t_cmd *cmd, t_data *data);
-int		ft_pwd(t_data *data);
-int		ft_env(t_data *data);
-int		ft_exit(t_data *data, t_cmd *cmd);
-void    handle_regular_directory(char *dir);
-void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);//), char *old_pwd);
-void	handle_directory_change(t_data *data, char **old_pwd, char *dir);
-int		set_pwd(char *pwd);
-void	env_unset_free(t_env *current);
-void	export_unset_free(t_export *current);
+int			execute_builtin(t_cmd *cmd, t_data *data);
+int			ft_echo(t_cmd *cmd);
+int			ft_cd(t_cmd *cmd, t_data *data);
+int			ft_pwd(t_data *data);
+int			ft_env(t_data *data);
+int			ft_exit(t_data *data, t_cmd *cmd);
+void		handle_regular_directory(char *dir);
+void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
+void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
+int			set_pwd(char *pwd);
+void		env_unset_free(t_env *current);
+void		export_unset_free(t_export *current);
 /**		minishell_cmd.c	**/
 int			set_fd(t_data *data, t_cmd *cmd);
 void		set_pipes(t_data *data, t_cmd *cmd);
@@ -299,41 +332,6 @@ int			ft_unset(t_data *data);
 /**		dummies.c			**/
 int			ft_true(void);
 int			ft_false(void);
-
-/**		wildcard_find.c	**/
-char		*find_dirpath(char *f_wc, int *flag);
-int			show_hidden(char *search, char *str);
-char		*find_matching(char *search, char *src,
-				char *(*function_ptr)(char *, char *, int), int mode);
-
-/**		wildcard_strutils.c */
-char		*ft_strjoin_tab(char **tab, int i, char join);
-void		ft_str_swap(char **s1, char **s2);
-char		*sort_str(char *str);
-char		*chrtostr(char c);
-
-/**		wildcard_strutils2.c **/
-char		*ft_strend(char *big, char *little, char n);
-char		*str_replace_free(char *src, int r_index, int n, char *str);
-int			find_length(char *str, char *src, int r_index, int n);
-
-/**		wildcard_utils.c */
-int			get_start_index(char *str, int i);
-int			get_end_index(char *str, int i);
-char		*str_tolower(char *str);
-int			ft_strcmp_no_case(const char *s1, const char *s2);
-
-/**		wildcard_wcutils.c	**/
-char		*get_front_wc(char *str);
-char		*get_back_wc(char *str);
-int			wc_present(char *str);
-
-/**		wildcards.c			**/
-char		*ft_wildcard(char *str);
-int			wc_present(char *str);
-char		*get_wildcard(char *str);
-char		*get_wc_data(char *search, char *src, int mode);
-
 int			print_envp(t_data *data);
 
 /**		free.c				**/
@@ -346,18 +344,29 @@ int			free_data(t_data *data);
 int			free_return(int return_value, void *ptr_1, void *ptr_2, void *ptr3);
 void		multi_free(void *ptr_1, void *ptr_2, void *ptr_3, void *ptr_4);
 
-/**		prompt.c			**/
-char		*set_prompt(t_data *data);
-void		prompt_user(t_data *data);
-
 /**		parse_near_quote.c	**/
 void		parse_near_quote(t_data *data);
+char		*prompt_pwd(t_data *data);
+void		free_envv(t_data *data);
+void		free_set_in(char *key, char *value, char **variable_split);
+void		invalid_export_print(char *key, char *value, char **variable_split);
+void		env_update_utils(t_env *current_env, size_t key_len, t_data *data);
+int			set_in_export_utils(t_data *data, char *key, char *value);
+void		env_assign(char ***variable_split, char *variable, char **key,
+				char **value);
+/***		unsorted		***/
+char		*get_cmd(char *cmd, char **env_p);
+char		**get_path(char **envv);
+char		*ft_readline(char *str);
+void		ft_lstadd_back_env(t_env **lst, t_env *new_node);
+void		free_env_list(t_env **env);
+void		free_var(t_data *data, t_cmd *cmd);
+void		print_token(t_token **root);
+void		free_token(t_data *data);
+char		**ft_split_noquote(char *str, char c);
+int			var_is_multiple(char *var);
+char		*chrtostr(char c);
+int			check_error_raw(t_data *data);
+char		*ft_strs_join(char **tab);
 
-char*	prompt_pwd(t_data *data);
-void    free_envv(t_data *data);
-void    free_set_in(char *key, char *value, char **variable_split);
-void    invalid_export_print(char *key, char *value, char **variable_split);
-void    env_update_utils(t_env *current_env, size_t key_len, t_data *data);
-int	set_in_export_utils(t_data *data, char *key, char *value);
-void    env_assign(char ***variable_split, char *variable, char **key, char **value);
 #endif

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:29:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:03:05 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:09:33 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ void	execute_child(t_cmd *cmd, t_data *data)
 			exit_code = get_cmd_ecode(cmd, data);
 		}
 		free_child(data);
-		if (g_exit_code > 127)
-		{
-			exit_code = g_exit_code;
-			g_exit_code = 0;
-		}
 		exit(exit_code);
 	}
 	else

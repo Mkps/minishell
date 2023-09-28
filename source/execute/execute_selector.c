@@ -6,11 +6,31 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:32:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:30:50 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+t_cmd	*conditional(t_data *data, t_cmd *current)
+{
+	(void)data;
+	while ((current && data->exit_status == 0
+			&& current->prev->is_term == TERM_OR)
+		|| (current && data->exit_status > 0
+			&& current->prev->is_term == TERM_2AND))
+	{
+		if (current->is_term)
+			current = current->next;
+		else
+		{
+			while (!current->is_term)
+				current = current->next;
+			current = current->next;
+		}
+	}
+	return (current);
+}
 
 int	execute_builtin(t_cmd *cmd, t_data *data)
 {

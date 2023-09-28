@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 12:01:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 13:18:07 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
 		{
 			free(current->value);
 			current->value = ft_strdup(pwd);
-			break ;
 			break ;
 		}
 		current = current->next;

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:33:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:31:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,6 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 	}
 }
 
-t_cmd	*conditional(t_data *data, t_cmd *current)
-{
-	(void)data;
-	while ((current && data->exit_status == 0
-			&& current->prev->is_term == TERM_OR)
-		|| (current && data->exit_status > 0
-			&& current->prev->is_term == TERM_2AND))
-	{
-		if (current->is_term)
-			current = current->next;
-		else
-		{
-			while (!current->is_term)
-				current = current->next;
-			current = current->next;
-		}
-	}
-	return (current);
-}
-
 t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 {
 	int		i;
@@ -67,13 +47,25 @@ t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 	return (last);
 }
 
+void	set_exit_code(t_data *data, int status, t_cmd *cmd)
+{
+	if (cmd->is_term == 0)
+		g_exit_code = 0;
+	if (cmd->is_term != 0 && !is_standalone(cmd))
+	{
+		if (g_exit_code > 127)
+			data->exit_status = g_exit_code;
+		else if (WIFEXITED(status))
+			data->exit_status = WEXITSTATUS(status);
+	}
+}
+
 t_cmd	*end_exec(t_data *data, t_cmd *cmd, t_cmd *last)
 {
 	int		i;
 	int		status;
 	t_cmd	*start;
 
-	(void)data;
 	i = 1;
 	status = 0;
 	start = cmd;
@@ -84,17 +76,7 @@ t_cmd	*end_exec(t_data *data, t_cmd *cmd, t_cmd *last)
 		close_pipes(&start, NULL, last);
 		if (cmd->pid > 0)
 			waitpid(cmd->pid, &status, 0);
-		if (cmd->is_term == 0)
-		{
-			g_exit_code = 0;
-		}
-		if (cmd->is_term != 0 && !is_standalone(cmd))
-		{
-			if (g_exit_code > 127)
-				data->exit_status = g_exit_code;
-			else if (WIFEXITED(status))
-				data->exit_status = WEXITSTATUS(status);
-		}
+		set_exit_code(data, status, cmd);
 		cmd = cmd->next;
 	}
 	return (cmd);

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:54:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:26:09 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define HEREDOC_WARNING_EOF "minishell: warning: here-document delimited by end-of-file (wanted `"
+#define HEREDOC_WARNING_EOF "minishell: warning:i \
+here-document delimited by end-of-file (wanted `"
 
 /** Gets the input */
 

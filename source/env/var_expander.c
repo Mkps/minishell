@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:50:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:09:19 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:36:27 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,31 +80,25 @@ int	var_expander(t_data *data, char *str, t_token **token)
 {
 	int		i;
 	char	**ret_ptr;
-	t_token	*current;
 	int		flag_retokenize;
 
 	flag_retokenize = 0;
 	i = 0;
 	ret_ptr = malloc(sizeof(char **));
 	*ret_ptr = ft_strdup(str);
-	current = *token;
 	while (*(*ret_ptr + i))
 	{
 		if (*(*ret_ptr + i) == '$')
-			flag_retokenize += var_expand_dollar(data, ret_ptr, &i, current);
+			flag_retokenize += var_expand_dollar(data, ret_ptr, &i, *token);
 		else
 			i++;
 	}
 	free(str);
-	if (current && flag_retokenize > 0 && current->quote_status == NONE)
-	{
-		if (retokenize(data, *ret_ptr, current) == EXIT_SUCCESS)
+	if (*token && flag_retokenize > 0 && (*token)->quote_status == NONE)
+		if (retokenize(data, *ret_ptr, *token) == EXIT_SUCCESS)
 			return (EXIT_SUCCESS);
-	}
-	if (current)
-		current->value = ft_strdup(*ret_ptr);
-	*token = current;
-	free(*ret_ptr);
-	free(ret_ptr);
+	if (*token)
+		(*token)->value = ft_strdup(*ret_ptr);
+	multi_free(*ret_ptr, ret_ptr, NULL, NULL);
 	return (flag_retokenize != 0);
 }
