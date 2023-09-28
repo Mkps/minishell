@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 13:42:53 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/25 17:53:52 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:45:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void execute_unset(t_data *data, t_cmd *cmd)
 			{
 				if (prev == NULL)
 				{
-					*data->env_export = current_export->next;
+					*data->env_export = current_expozzrt->next;
 					free(current_export->key);
 					free(current_export->value);
 					free(current_export);
