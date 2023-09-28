@@ -84,9 +84,13 @@ int	ft_pwd(t_data *data)
 			""));
 }
 
-void	ft_exit(t_data *data)
+int	ft_exit(t_data *data, t_cmd *cmd)
 {
-	write(1, "exit\n", 5);
-	free_shell(data);
-	exit(g_exit_code);
+	if (!cmd->args[1] || (cmd->args[1] && cmd->args[1] == 0))
+	{
+		write(1, "exit\n", 5);
+		free_shell(data);
+		exit(g_exit_code);
+	}
+	return (EXIT_SUCCESS);
 }

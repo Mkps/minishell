@@ -214,7 +214,7 @@ int			ft_echo(t_cmd *cmd);
 int			ft_cd(t_cmd *cmd, t_data *data);
 int			ft_pwd(t_data *data);
 int			ft_env(t_data *data);
-void		ft_exit(t_data *data);
+int			ft_exit(t_data *data, t_cmd *cmd);
 
 /**		minishell_cmd.c	**/
 int			set_fd(t_data *data, t_cmd *cmd);

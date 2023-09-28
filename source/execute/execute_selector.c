@@ -27,7 +27,7 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_unset(data));
 	else if (ft_strncmp(cmd->cmd, "exit", ft_strlen(cmd->cmd) + 1) == 0)
-		ft_exit(data);
+		return (ft_exit(data, cmd));
 	else if (ft_strncmp(cmd->cmd, ":", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_true());
 	else if (ft_strncmp(cmd->cmd, "!", ft_strlen(cmd->cmd) + 1) == 0)
