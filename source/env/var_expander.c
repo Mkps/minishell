@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expander.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:50:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:36:27 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 17:12:55 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	var_expander(t_data *data, char *str, t_token **token)
 	free(str);
 	if (*token && flag_retokenize > 0 && (*token)->quote_status == NONE)
 		if (retokenize(data, *ret_ptr, *token) == EXIT_SUCCESS)
-			return (EXIT_SUCCESS);
+			return (free_return(EXIT_SUCCESS, ret_ptr, 0, 0));
 	if (*token)
 		(*token)->value = ft_strdup(*ret_ptr);
 	multi_free(*ret_ptr, ret_ptr, NULL, NULL);
