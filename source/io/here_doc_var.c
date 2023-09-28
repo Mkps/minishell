@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-/** Gets the input */
+// /** Gets the input **/ 
 int	get_flag(char *limiter)
 {
 	int	i;

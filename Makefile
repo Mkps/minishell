@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/27 17:29:53 by aloubier         ###   ########.fr        #
+#    Updated: 2023/09/28 11:49:57 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,12 @@ INCDIR = ./include/
 
 OBJ_DIR = ./build
 
-SRC_NAME =	built-ins/unset.c \
+SRC_NAME =		built-ins/unset.c \
+			built-ins/unset_utils.c \
 			built-ins/dummies.c \
 			built-ins/built_in.c \
 			built-ins/ft_cd.c \
+			built-ins/ft_cd_utils.c \
 			cmd_list/cmd_list_init.c \
 			cmd_list/cmd_list_assign.c \
 			cmd_list/cmd_list_find.c \
@@ -52,6 +54,9 @@ SRC_NAME =	built-ins/unset.c \
 			execute/execute_selector.c \
 			execute/execute_nstd.c \
 			export/export2.c \
+			export/export3.c \
+			export/export4.c \
+			export/export_utils4.c \
 			export/export_utils3.c \
 			export/export_utils.c \
 			export/export_utils2.c \

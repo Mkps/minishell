@@ -6,11 +6,20 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 10:48:30 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:26:09 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <readline/readline.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#define HEREDOC_WARNING_EOF "minishell: warning:i \
+here-document delimited by end-of-file (wanted `"
+
+/** Gets the input */
 
 int	here_doc_input(t_data *data, char *limiter, int fd)
 {

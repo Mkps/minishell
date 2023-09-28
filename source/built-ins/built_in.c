@@ -6,17 +6,11 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 11:36:28 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:51:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <stdlib.h>
-
-int	ft_env(t_data *data)
-{
-	return (print_envp(data));
-}
 
 int	find_first_word(t_cmd *cmd)
 {
@@ -82,6 +76,25 @@ int	ft_pwd(t_data *data)
 	}
 	return (output_err_ret(EXIT_FAILURE, "ERROR Could not find PWD in env",
 			""));
+}
+
+char	*prompt_pwd(t_data *data)
+{
+	char	*pwd_value;
+	t_env	*current;
+
+	pwd_value = NULL;
+	current = *data->env_cpy;
+	while (current != NULL)
+	{
+		if (ft_strncmp(current->key, "PWD", 3) == 0)
+		{
+			pwd_value = current->value;
+			return (pwd_value);
+		}
+		current = current->next;
+	}
+	return (NULL);
 }
 
 int	ft_exit(t_data *data, t_cmd *cmd)

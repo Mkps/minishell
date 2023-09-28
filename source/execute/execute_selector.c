@@ -6,14 +6,35 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:32:02 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:07:35 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+t_cmd	*conditional(t_data *data, t_cmd *current)
+{
+	(void)data;
+	while ((current && data->exit_status == 0
+			&& current->prev->is_term == TERM_OR)
+		|| (current && data->exit_status > 0
+			&& current->prev->is_term == TERM_2AND))
+	{
+		if (current->is_term)
+			current = current->next;
+		else
+		{
+			while (!current->is_term)
+				current = current->next;
+			current = current->next;
+		}
+	}
+	return (current);
+}
+
 int	execute_builtin(t_cmd *cmd, t_data *data)
 {
+	signal(SIGPIPE, SIG_IGN);
 	if (ft_strncmp(cmd->cmd, "echo", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_echo(cmd));
 	else if (ft_strncmp(cmd->cmd, "cd", ft_strlen(cmd->cmd) + 1) == 0)
@@ -21,7 +42,7 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 	else if (ft_strncmp(cmd->cmd, "pwd", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_pwd(data));
 	else if (ft_strncmp(cmd->cmd, "env", ft_strlen(cmd->cmd) + 1) == 0)
-		return (ft_env(data));
+		return (print_envp(data));
 	else if (ft_strncmp(cmd->cmd, "export", ft_strlen(cmd->cmd) + 1) == 0)
 		return (ft_export(data));
 	else if (ft_strncmp(cmd->cmd, "unset", ft_strlen(cmd->cmd) + 1) == 0)
