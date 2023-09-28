@@ -36,6 +36,7 @@ void	execute_child(t_cmd *cmd, t_data *data)
 	{
 		signal(SIGPIPE, SIG_IGN);
 		set_pipes(data, cmd);
+		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		close_pipes(data->cmd_list, NULL, NULL);
 		exit_code = execute_builtin(cmd, data);
@@ -44,7 +45,6 @@ void	execute_child(t_cmd *cmd, t_data *data)
 			exec_cmd(cmd, data);
 			exit_code = get_cmd_ecode(cmd, data);
 		}
-		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		free_child(data);
 		exit(exit_code);
 	}

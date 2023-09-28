@@ -42,15 +42,6 @@ void	subshell_core(t_data *data)
 	}
 }
 
-void	subshell_cleanup(t_data *data)
-{
-	if (data->old_fd[0] > -1)
-		close(data->old_fd[0]);
-	if (data->old_fd[1] > -1)
-		close(data->old_fd[1]);
-	free_shell(data);
-}
-
 void	minishell_subshell(t_data *data, char *user_input)
 {
 	t_data	new_data;
@@ -59,6 +50,6 @@ void	minishell_subshell(t_data *data, char *user_input)
 	if (check_error_raw(&new_data))
 		exit (g_exit_code);
 	subshell_core(&new_data);
-	subshell_cleanup(&new_data);
+	free_shell(&new_data);
 	exit(new_data.exit_status);
 }

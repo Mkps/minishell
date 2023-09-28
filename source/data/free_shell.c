@@ -15,6 +15,7 @@
 void	free_shell(t_data *data)
 {
 	free_data(data);
+	close_fd_set(data->old_fd[0], data->old_fd[1]);
 	if (data->token_root)
 		free(data->token_root);
 	if (data->cmd_list)
