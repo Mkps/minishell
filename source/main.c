@@ -66,14 +66,14 @@ int	main(int ac, char **av, char **envv)
 {
 	t_data	data;
 
+	if (!arg_check(ac, av))
+		return (EXIT_FAILURE);
 	g_exit_code = 0;
 	init_data(&data);
 	import_envv(&data, envv);
 	copy_env_to_list(&data);
 	env_to_export(&data);
 	sort_export_list(&data);
-	if (!arg_check(ac, av))
-		return (EXIT_FAILURE);
 	if (ac == 3)
 		minishell_inline(&data, av[2]);
 	else if (ac == 1)

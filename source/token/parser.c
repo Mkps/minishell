@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:34:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:08:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 07:41:59 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,37 +24,44 @@ int	can_expand(t_token *current)
 	return (0);
 }
 
+int	del_empty(t_token *tmp)
+{
+	if (tmp && tmp->quote_status == NONE
+		&& (!tmp->value || (tmp->value
+				&& tmp->value[0] == 0)))
+				return (1);
+	return (0);
+}
+
 void	manage_expand(t_data *data, t_token **current)
 {
 	t_token	*tmp;
 
 	tmp = *current;
 	var_expander(data, tmp->value, &tmp);
-	if (tmp->quote_status == NONE && tmp->next
-		&& (!tmp->value || (tmp->value
-				&& tmp->value[0] == 0)))
+	if (del_empty(tmp))
 	{
-		tmp = tmp->next;
-		free(tmp->prev->value);
-		lst_del_prev(&tmp);
-		if (tmp->prev == NULL)
-			*data->token_root = tmp;
-	}
-	else if (tmp->quote_status == NONE
-		&& tmp->prev && (!tmp->value
-			|| (tmp->value && tmp->value[0] == 0)))
-	{
-		tmp = tmp->prev;
-		free(tmp->next->value);
-		lst_del_next(&tmp);
-	}
-	else if (tmp->quote_status == NONE
-		&& (!tmp->value || (tmp->value
-				&& tmp->value[0] == 0)))
-	{
-		free(tmp->value);
-		lst_del_token(&tmp);
-		data->token_root = NULL;
+		if (tmp->value)
+			free(tmp->value);
+		if (tmp->next)
+		{
+			tmp = tmp->next;
+			lst_del_prev(&tmp);
+			if (tmp->prev == NULL)
+				*data->token_root = tmp;
+		}
+		else if (tmp->prev)
+		{
+			tmp = tmp->prev;
+			free(tmp->next->value);
+			lst_del_next(&tmp);
+		}
+		else
+		{
+			free(tmp->value);
+			lst_del_token(&tmp);
+			data->token_root = NULL;
+		}
 	}
 	*current = tmp;
 }
