@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 15:19:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:11:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ char		**ft_strsdup(char **strs);
 t_env		*ft_lstnew_two(char *key, char *value);
 void		ft_lstadd_back_two(t_env **lst, t_env *new_node);
 void		free_env_lst(t_env **env_lst);
+void		free_env_node(t_env *env_node);
 
 /**		error			**/
 /***		error.c			***/
