@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:28:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 16:31:05 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:09:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	execute_empty(t_cmd *cmd, t_data *data)
 	{
 		close(data->old_fd[0]);
 		close(data->old_fd[1]);
-		cmd->pipe_status = 0;
-		free(cmd->pipe_fd);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
