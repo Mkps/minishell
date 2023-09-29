@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:59:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:01:17 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:43:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*build_str(char *dirpath, char *str, int flag)
 	if (!d)
 		return (NULL);
 	dir = readdir(d);
-	if (flag && dirpath[1])
+	if (!flag && dirpath[1])
 		dirpath = ft_strappend(dirpath, "/", 2);
 	while (dir != NULL)
 	{
