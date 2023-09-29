@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:25:55 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:46 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:21:27 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	open_input_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	fd->fd = open_fd(0, fd->filename);
 	if (fd->fd > 0)
 	{
-		if (cmd->fd[0] >= 0)
-			close(cmd->fd[0]);
 		cmd->fd[0] = fd->fd;
 		return (0);
 	}
@@ -32,8 +30,6 @@ int	open_heredoc_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	fd->fd = here_doc_handler(data, fd);
 	if (fd->fd > 0)
 	{
-		if (cmd->fd[0] >= 0)
-			close(cmd->fd[0]);
 		cmd->fd[0] = fd->fd;
 		return (0);
 	}
@@ -60,8 +56,6 @@ int	open_append_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 	fd->fd = open_fd(2, fd->filename);
 	if (fd->fd > 0)
 	{
-		if (cmd->fd[1] >= 0)
-			close(cmd->fd[1]);
 		cmd->fd[1] = fd->fd;
 		return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:41:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:44:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:21:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 				free_null(&split[i]);
 		}
 		else
-			free_null(&split[i]);
+			free_null(&split[i]);	
 		i++;
 	}
 	ret = ft_strjoin_tab(split, i, 3);

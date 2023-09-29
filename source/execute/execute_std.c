@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:29:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:05:12 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:21:52 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	is_standalone(t_cmd *cmd)
 
 void	execute_parent(t_cmd *cmd, t_data *data)
 {
-	set_fd(data, cmd);
 	cmd->pid = -2;
 	data->exit_status = execute_builtin(cmd, data);
 }
