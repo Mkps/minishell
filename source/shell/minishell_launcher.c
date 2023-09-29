@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:08:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 14:03:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ void	minishell_core(t_data *data)
 		parse_token(data);
 		parse_near_quote(data);
 		build_cmd_list(data, *data->token_root);
-		if (init_io_redir(data) == EXIT_SUCCESS)
-			execute(data);
-		else
-			close_pipes(data->cmd_list, NULL, NULL);
+		init_io_redir(data);
+		execute(data);
 	}
 }
 

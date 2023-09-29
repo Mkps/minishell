@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:59:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:23:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:01:17 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*build_str(char *dirpath, char *str, int flag)
 	if (!d)
 		return (NULL);
 	dir = readdir(d);
-	if (!flag && dirpath[1])
+	if (flag && dirpath[1])
 		dirpath = ft_strappend(dirpath, "/", 2);
 	while (dir != NULL)
 	{
@@ -79,6 +79,8 @@ char	*get_fwc(char *str)
 	return (ret);
 }
 
+size_t	wc_minlen(char *str);
+
 char	*get_wildcard(char *str)
 {
 	char	*b_wc;
@@ -93,7 +95,7 @@ char	*get_wildcard(char *str)
 		ret = get_wc_data(b_wc, ret, 1);
 		free(b_wc);
 	}
-	if (ret[0] == 0)
+	if (ret[0] == 0 || (ret && ft_strlen(ret) < wc_minlen(str)))
 	{
 		free(ret);
 		return (str);
