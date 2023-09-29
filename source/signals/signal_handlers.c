@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 16:05:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 12:28:04 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 14:04:42 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	signals_no_interact(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_flags = 0;
+	act.sa_flags = SA_RESTART;
 	act.sa_handler = &signal_nl;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;

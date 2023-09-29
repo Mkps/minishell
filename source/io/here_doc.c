@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:26:09 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:49:29 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,15 @@ void	signal_set_heredoc(void)
 	rl_catch_signals = 0;
 }
 
+void	handle_sigint(t_data *data, t_io_node *io_node, char *heredoc_tmp)
+{
+	close (io_node->fd);
+	io_node->fd = -2;
+	unlink(io_node->filename);
+	free(heredoc_tmp);
+	data->exit_status = g_exit_code;
+}
+
 // Creates a tmp file to get the heredoc 
 // then writes to it
 int	here_doc_handler(t_data *data, t_io_node *io_node)
@@ -81,9 +90,7 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	io_node->filename = heredoc_tmp;
 	if (g_exit_code > 128)
 	{
-		data->exit_status = g_exit_code;
-		close(io_node->fd);
-		unlink(io_node->filename);
+		handle_sigint(data, io_node, heredoc_tmp);
 		return (-1);
 	}
 	return (io_node->fd);

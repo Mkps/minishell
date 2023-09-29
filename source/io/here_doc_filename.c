@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:27:06 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:41 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:13:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ char	*generate_dirpath(void)
 	return (dirpath);
 }
 
-char	*generate_filename(char *dirpath)
+char	*generate_filename(char *dirpath, int attempt)
 {
 	char		*filename;
 	struct stat	buffer;
 
 	filename = ft_strappend(dirpath, "_", 0);
-	filename = ft_strappend(filename, ft_itoa((unsigned long)&filename), 3);
+	filename = ft_strappend(filename, ft_itoa(attempt), 3);
 	if (filename == NULL)
 	{
 		perror("minishell: allocation error:");
@@ -45,6 +45,7 @@ char	*generate_filename(char *dirpath)
 		return (filename);
 	}
 	free(filename);
+	free(dirpath);
 	return (NULL);
 }
 
@@ -56,10 +57,10 @@ char	*generate_heredoc_filename(void)
 	int			attempt;
 
 	attempt = 0;
-	while (attempt < 5)
+	while (attempt < 5000)
 	{
 		dirpath = generate_dirpath();
-		filename = generate_filename(dirpath);
+		filename = generate_filename(dirpath, attempt);
 		if (filename)
 			return (filename);
 		attempt++;

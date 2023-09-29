@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 16:12:38 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:53:13 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void		exec_cmd(t_cmd *cmd, t_data *data);
 void		execute(t_data *data);
 int			get_cmd_ecode(t_cmd *cmd, t_data *data);
 t_cmd		*conditional(t_data *data, t_cmd *current);
+int			fd_valid(t_cmd *cmd);
 
 /**		export			**/
 void		export_unset_free(t_export *current);
@@ -148,7 +149,7 @@ int			ft_get_quote(char *input, t_data *data);
 
 /**		shell		**/
 void		minishell_inline(t_data *data, char *user_input);
-void		minishell_subshell(t_data *data, char *user_input);
+int			minishell_subshell(t_data *data, char *user_input);
 void		minishell_prompt(t_data *data);
 void		minishell_core(t_data *data);
 

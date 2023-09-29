@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_wcutils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:23:50 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/25 13:31:51 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:36:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,27 @@ int	wc_present(char *str)
 		if (*str++ == '*')
 			return (1);
 	return (0);
+}
+
+size_t	wc_minlen(char *str)
+{
+	size_t	count;
+	int		len;
+	int		i;
+
+	i = -1;
+	count = 0;
+	len = 0;
+	while (str[++i])
+	{
+		if (str[i] == '/')
+		{
+			len = 0;
+			count = 0;
+		}
+		if (str[i] == '*')
+			count++;
+		len++;
+	}
+	return (len - count);
 }

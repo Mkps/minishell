@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 10:30:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 10:30:44 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:58:38 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	exit_error(t_data *data, t_cmd *cmd)
 
 	if (cmd->args[1] && !cmd->args[2])
 	{
-		write(1, "exit\n", 5);
 		if (str_is_digit(cmd->args[1]))
 			e_value = ft_atoi(cmd->args[1]);
 		else
@@ -48,9 +47,10 @@ int	exit_error(t_data *data, t_cmd *cmd)
 
 int	ft_exit(t_data *data, t_cmd *cmd)
 {
+	if (is_standalone(cmd))
+		write(1, "exit\n", 5);
 	if (!cmd->args[1] || (cmd->args[1] && cmd->args[1] == 0))
 	{
-		write(1, "exit\n", 5);
 		free_shell(data);
 		exit(data->exit_status);
 	}

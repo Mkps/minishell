@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 15:28:54 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:09:33 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:44:04 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	free_io_list(t_io_node *io)
 			close(io->fd);
 		if (io->mode == IO_HEREDOC)
 		{
-			if (io->filename)
+			if (io->filename && (io->fd > -1))
 			{
 				unlink(io->filename);
 				free(io->filename);
