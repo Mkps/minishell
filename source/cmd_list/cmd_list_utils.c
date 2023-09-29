@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:41:38 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:45:55 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:16:07 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	is_empty_cmd(t_token *start)
 // Sets up the pipe and sets pipe_status to 1.
 int	set_pipe(t_cmd *cmd)
 {
+	if (cmd->type == EMPTY)
+		return (EXIT_SUCCESS);
 	cmd->pipe_status = 1;
 	cmd->pipe_fd = (int *)malloc(sizeof(int *) * 2);
 	if (cmd->pipe_fd && pipe(cmd->pipe_fd) != -1)
