@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:29:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 15:08:41 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:05:12 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,22 @@ void	execute_parent(t_cmd *cmd, t_data *data)
 	data->exit_status = execute_builtin(cmd, data);
 }
 
+int	fd_valid(t_cmd *cmd)
+{
+	if (cmd->fd[0] == -1)
+		return (EXIT_FAILURE);
+	if (cmd->fd[1] == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+void	set_sigign(void)
+{
+	signal(SIGPIPE, SIG_DFL);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 void	execute_child(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
@@ -38,16 +54,18 @@ void	execute_child(t_cmd *cmd, t_data *data)
 		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		close_pipes(data->cmd_list, NULL, NULL);
-		exit_code = execute_builtin(cmd, data);
-		signal(SIGPIPE, SIG_DFL);
+		exit_code = fd_valid(cmd);
+		if (!exit_code)
+			exit_code = execute_builtin(cmd, data);
+		set_sigign();
 		if (exit_code == -1)
 		{
 			exec_cmd(cmd, data);
+			signals_no_interact();
 			exit_code = get_cmd_ecode(cmd, data);
 		}
 		free_child(data);
 		exit(exit_code);
 	}
-	else
-		close_cmd_fd(cmd);
+	close_cmd_fd(cmd);
 }

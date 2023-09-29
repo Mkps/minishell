@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 16:10:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:08:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:28:56 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ void	subshell_core(t_data *data)
 	}
 }
 
-void	minishell_subshell(t_data *data, char *user_input)
+int	minishell_subshell(t_data *data, char *user_input)
 {
 	t_data	new_data;
 
 	subshell_init(&new_data, data, user_input);
 	if (check_error_raw(&new_data))
-		exit (g_exit_code);
+		return (g_exit_code);
 	subshell_core(&new_data);
 	free_shell(&new_data);
-	exit(new_data.exit_status);
+	return (new_data.exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 12:08:10 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 07:09:24 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:21:21 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	free_data(t_data *data)
 {
-	free_token(data);
 	free_cmd_list(data);
+	free_token(data);
 	if (data->user_input)
 	{
 		free(data->user_input);

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:19:35 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 12:51:32 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:27:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_wc_data(char *search, char *src, int mode)
 	else if (mode == 1)
 		select = &ft_strend;
 	else if (mode == 2)
-		select = &strstr;
+		select = &ft_strnstr;
 	if (!src)
 	{
 		str = build_wc_cd(search);

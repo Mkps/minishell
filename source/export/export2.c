@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 18:15:17 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:53:06 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 
 	key = NULL;
 	value = NULL;
-	new_env = NULL;
 	if (data->flag > 0)
 		return (EXIT_FAILURE);
 	env_assign(&variable_split, variable, &key, &value);
@@ -33,7 +32,7 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
 		if (value[0] != '\0')
-			return (remove_env(data, key), free_env_node(new_env),
+			return (env_update(data), free_env_node(new_env),
 				free_set_in(key, value, variable_split), EXIT_SUCCESS);
 		return (free_set_in(key, value, variable_split), EXIT_FAILURE);
 	}
@@ -48,7 +47,6 @@ int	parse_and_validate_export(char *var, char **key, char **val, int *flag)
 	variable_split = ft_split2(var, '=');
 	*key = ft_strdup(variable_split[0]);
 	*val = ft_strdup(variable_split[1]);
-	ft_free_tab(variable_split);
 	if (key_is_valid(*key) == 1)
 	{
 		invalid_export_print(*key, *val, variable_split);
@@ -58,6 +56,8 @@ int	parse_and_validate_export(char *var, char **key, char **val, int *flag)
 		(*flag)++;
 	if ((*val)[0] != '\0')
 		*val = add_quotes(*val);
+	if (variable_split)
+		ft_free_tab(variable_split);
 	return (EXIT_SUCCESS);
 }
 

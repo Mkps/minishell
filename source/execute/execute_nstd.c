@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:28:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:28 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:09:48 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,50 +28,40 @@ void	set_var_cmd(t_data *data, t_cmd *cmd)
 
 void	execute_empty(t_cmd *cmd, t_data *data)
 {
+	int	exit_code;
+
 	set_var_cmd(data, cmd);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
 		close(data->old_fd[0]);
 		close(data->old_fd[1]);
-		cmd->pipe_status = 0;
-		set_pipes(data, cmd);
-		if (cmd->fd[0] > -1)
-		{
-			dup2(cmd->fd[0], STDIN_FILENO);
-			close(cmd->fd[0]);
-		}
-		if (cmd->fd[1] > -1)
-		{
-			dup2(cmd->fd[1], STDOUT_FILENO);
-			close(cmd->fd[1]);
-		}
+		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
+		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
 		free_child(data);
-		exit(0);
+		exit(exit_code);
 	}
 	return ;
 }
 
 void	execute_subshell(t_cmd *cmd, t_data *data)
 {
+	int	exit_code;
+	int	ss_code;
+
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
 		close(data->old_fd[0]);
 		close(data->old_fd[1]);
 		set_pipes(data, cmd);
-		if (cmd->fd[0] > -1)
-		{
-			dup2(cmd->fd[0], STDIN_FILENO);
-			close(cmd->fd[0]);
-		}
-		if (cmd->fd[1] > -1)
-		{
-			dup2(cmd->fd[1], STDOUT_FILENO);
-			close(cmd->fd[1]);
-		}
+		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
+		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
-		minishell_subshell(data, cmd->cmd);
+		ss_code = minishell_subshell(data, cmd->cmd);
+		if (exit_code)
+			exit(exit_code);
+		exit(ss_code);
 	}
 }

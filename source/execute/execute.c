@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 14:26:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:23:39 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	set_exit_code(t_data *data, int status, t_cmd *cmd)
 			data->exit_status = g_exit_code;
 		else if (WIFEXITED(status))
 			data->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			data->exit_status = 128 + WTERMSIG(status);
 	}
 }
 

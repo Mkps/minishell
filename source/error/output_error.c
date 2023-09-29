@@ -49,7 +49,9 @@ void	output_err_cmd(char *msg, char *cmd_str)
 	name_str = PROG_NAME;
 	if (!cmd_str)
 	{
-		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
+		tmp_str = ft_strappend(name_str, msg, 0);
+		ft_putendl_fd(tmp_str, 2);
+		free(tmp_str);
 		return ;
 	}
 	tmp_str = ft_strappend(name_str, cmd_str, 0);
@@ -68,7 +70,9 @@ int	output_err_ret(int return_value, char *msg, char *cmd_str)
 	name_str = PROG_NAME;
 	if (!cmd_str)
 	{
-		ft_putendl_fd(ft_strappend(name_str, msg, 0), 2);
+		tmp_str = ft_strappend(name_str, msg, 0);
+		ft_putendl_fd(tmp_str, 2);
+		free(tmp_str);
 		return (return_value);
 	}
 	tmp_str = ft_strappend(name_str, cmd_str, 0);

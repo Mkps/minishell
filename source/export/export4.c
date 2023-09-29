@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 17:07:44 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/27 17:13:20 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:49:13 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	env_update(t_data *data)
 {
-	int		i;
 	size_t	key_len;
 	t_env	*current_env;
 
@@ -31,7 +30,6 @@ void	env_update(t_data *data)
 	}
 	key_len = 0;
 	current_env = *data->env_cpy;
-	i = 0;
 	env_update_utils(current_env, key_len, data);
 }
 
@@ -62,4 +60,13 @@ void	env_update_utils(t_env *current_env, size_t key_len, t_data *data)
 		i++;
 	}
 	data->envv[i] = NULL;
+}
+
+void	end_split(char **variable_split)
+{
+	int	i;
+
+	i = -1;
+	while (variable_split[++i])
+	variable_split[i] = NULL;
 }

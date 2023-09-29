@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 18:11:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 18:00:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
 void		handle_regular_directory(char *dir);
 void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
-void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
 int			set_pwd(char *pwd);
 void		env_unset_free(t_env *current);
 
@@ -77,6 +76,7 @@ void		free_cmd_list(t_data *data);
 int			init_data(t_data *data);
 void		data_cleanup(t_data *data);
 int			execute_builtin(t_cmd *cmd, t_data *data);
+void		free_null(char **str);
 /***		prompt.c			***/
 char		*set_prompt(t_data *data);
 void		prompt_user(t_data *data);
@@ -118,6 +118,7 @@ void		exec_cmd(t_cmd *cmd, t_data *data);
 void		execute(t_data *data);
 int			get_cmd_ecode(t_cmd *cmd, t_data *data);
 t_cmd		*conditional(t_data *data, t_cmd *current);
+int			fd_valid(t_cmd *cmd);
 
 /**		export			**/
 void		export_unset_free(t_export *current);
@@ -148,7 +149,7 @@ int			ft_get_quote(char *input, t_data *data);
 
 /**		shell		**/
 void		minishell_inline(t_data *data, char *user_input);
-void		minishell_subshell(t_data *data, char *user_input);
+int			minishell_subshell(t_data *data, char *user_input);
 void		minishell_prompt(t_data *data);
 void		minishell_core(t_data *data);
 
@@ -255,6 +256,7 @@ void		print_env_list(t_env **env_lst);
 int			execute_builtin(t_cmd *cmd, t_data *data);
 int			ft_echo(t_cmd *cmd);
 int			ft_cd(t_cmd *cmd, t_data *data);
+void		ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd);
 int			ft_pwd(t_data *data);
 int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
@@ -289,6 +291,7 @@ char		*str_replace_strs(char **src, int r_index, int n, char *str);
 /**			export			**/
 void		env_update(t_data *data);
 int			set_in_env(t_data *data, char *variable, char **variable_split);
+void		end_split(char **variable_split);
 int			set_in_export(t_data *data, char *variable, t_cmd *cmd);
 int			execute_export(t_data *data, t_cmd *cmd);
 void		print_export(t_data *data);
@@ -369,5 +372,7 @@ int			var_is_multiple(char *var);
 char		*chrtostr(char c);
 int			check_error_raw(t_data *data);
 char		*ft_strs_join(char **tab);
+
+char		*ft_getenvcpy(t_data *data, char *key);
 
 #endif

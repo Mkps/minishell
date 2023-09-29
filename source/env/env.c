@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:39:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:11 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:15:14 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/** Get the env variable from envp specified by str. */
 char	*ft_getenv(char **env, const char *str)
 {
 	int		i;
@@ -107,8 +106,6 @@ char	**replace_env_value(char **envv, char *value)
 	return (envv);
 }
 
-// Takes a value and checks if it exists in envv. 
-// If it does it replaces it, else it adds it.
 void	ft_setenv(t_data *data, char *value)
 {
 	int		i;

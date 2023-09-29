@@ -6,18 +6,16 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:41:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:21 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:44:18 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*find_dirpath(char *f_wc, int *flag)
+int	get_dirpath_start(char *dirpath)
 {
-	int		i;
-	char	*dirpath;
+	int	i;
 
-	dirpath = ft_strdup(f_wc);
 	i = 0;
 	while (dirpath[i])
 		i++;
@@ -25,8 +23,23 @@ char	*find_dirpath(char *f_wc, int *flag)
 		i--;
 	while (i && dirpath[i] != '/')
 		i--;
-	if (dirpath[i] == '/')
+	return (i);
+}
+
+char	*find_dirpath(char *f_wc, int *flag)
+{
+	int		i;
+	char	*dirpath;
+
+	dirpath = ft_strdup(f_wc);
+	i = get_dirpath_start(dirpath);
+	if (i > 0 && dirpath[i] == '/')
 		dirpath = ft_str_extract_free(dirpath, i);
+	else if (i == 0 && dirpath[i] == '/')
+	{
+		free(dirpath);
+		dirpath = ft_strdup("/");
+	}
 	else
 	{
 		*flag = 1;
@@ -66,12 +79,6 @@ int	show_hidden(char *search, char *str)
 	return (1);
 }
 
-void	free_null(char **str)
-{
-	free(*str);
-	*str = NULL;
-}
-
 char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 			char *, int), int mode)
 {
@@ -80,7 +87,6 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 	char	**split;
 
 	split = ft_split(src, 3);
-	free(src);
 	i = 0;
 	while (split[i])
 	{
@@ -95,5 +101,5 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 		i++;
 	}
 	ret = ft_strjoin_tab(split, i, 3);
-	return (ret);
+	return (free(src), ret);
 }
