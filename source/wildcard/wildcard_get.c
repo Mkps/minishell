@@ -21,7 +21,7 @@ char	*build_str(char *dirpath, char *str, int flag)
 	if (!d)
 		return (NULL);
 	dir = readdir(d);
-	if (!flag)
+	if (!flag && dirpath[1])
 		dirpath = ft_strappend(dirpath, "/", 2);
 	while (dir != NULL)
 	{

@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <string.h>
 
 int	set_pwd(char *pwd)
 {
 	if (pwd == NULL)
 	{
-		perror("getcwd");
+		output_err_cmd(strerror(errno), "getcwd");
 		return (1);
 	}
 	return (0);
@@ -25,7 +26,7 @@ int	set_pwd(char *pwd)
 void	handle_parent_directory(void)
 {
 	if (chdir("..") != 0)
-		perror("cd");
+		output_err_cmd(strerror(errno), "cd");
 }
 
 void	handle_previous_directory(t_data *data, char **old_pwd)
@@ -35,13 +36,13 @@ void	handle_previous_directory(t_data *data, char **old_pwd)
 	old_pwd_env = ft_getenv(data->envv, "OLDPWD");
 	if (old_pwd_env == NULL)
 	{
-		printf("cd: OLDPWD not set\n");
+		output_err_cmd("OLDPWD not set", "cd");
 		return ;
 	}
 	*old_pwd = ft_strdup(old_pwd_env);
 	if (chdir(old_pwd_env) != 0)
 	{
-		perror("cd");
+		output_err_cmd(strerror(errno), "cd");
 		free(*old_pwd);
 	}
 }

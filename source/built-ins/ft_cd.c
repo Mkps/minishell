@@ -23,18 +23,18 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		dir = cmd->args[1];
 	else
 		dir = "~";
-	pwd = getcwd(NULL, 0);
-	tmp = ft_strjoin("PWD=", pwd);
-	old_pwd = NULL;
 	if (cmd->args[1] && cmd->args[2] != NULL)
 		return (output_err_ret(1,
-				"minishell: cd: too many arguments", NULL));
-	handle_directory_change(data, &old_pwd, dir);
+				"cd: too many arguments", NULL));
+	pwd = getcwd(NULL, 0);
 	if (set_pwd(pwd) == 1)
 	{
 		free(pwd);
 		return (EXIT_FAILURE);
 	}
+	tmp = ft_strjoin("PWD=", pwd);
+	old_pwd = NULL;
+	handle_directory_change(data, &old_pwd, dir);
 	ft_cd_next(pwd, tmp, data, old_pwd);
 	return (EXIT_SUCCESS);
 }
@@ -92,7 +92,7 @@ void	handle_regular_directory(char *dir)
 	else
 	{
 		if (chdir(dir) != 0)
-			perror("cd");
+			output_err_cmd(strerror(errno), "cd");
 	}
 }
 
@@ -105,19 +105,20 @@ void	handle_home_directory(t_data *data, const char *dir)
 	home_dir = ft_getenv(data->envv, "HOME");
 	if (home_dir == NULL)
 	{
-		printf("cd: HOME not set\n");
+		output_err_cmd(strerror(errno), "cd");
+		printf("minishell: cd: HOME not set\n");
 		return ;
 	}
 	full_path_len = strlen(home_dir) + strlen(dir) - 1;
 	full_path = (char *)malloc(full_path_len + 1);
 	if (full_path == NULL)
 	{
-		perror("malloc");
+		output_err_cmd(strerror(errno), "cd: malloc:");
 		return ;
 	}
 	ft_strlcpy(full_path, home_dir, full_path_len + 1);
 	ft_strlcat(full_path, dir + 1, full_path_len + 1);
 	if (chdir(full_path) != 0)
-		perror("cd");
+		output_err_cmd(strerror(errno), "cd");
 	free(full_path);
 }

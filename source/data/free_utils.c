@@ -34,3 +34,10 @@ void	multi_free(void *ptr_1, void *ptr_2, void *ptr_3, void *ptr_4)
 	if (ptr_4 != NULL)
 		free(ptr_4);
 }
+
+void	free_null(char **str)
+{
+	free(*str);
+	*str = NULL;
+}
+

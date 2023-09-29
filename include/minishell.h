@@ -77,6 +77,7 @@ void		free_cmd_list(t_data *data);
 int			init_data(t_data *data);
 void		data_cleanup(t_data *data);
 int			execute_builtin(t_cmd *cmd, t_data *data);
+void		free_null(char **str);
 /***		prompt.c			***/
 char		*set_prompt(t_data *data);
 void		prompt_user(t_data *data);
