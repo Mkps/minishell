@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 15:25:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 10:31:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ void	free_null(char **str)
 	free(*str);
 	*str = NULL;
 }
-
