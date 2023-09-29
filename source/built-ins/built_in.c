@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 16:36:34 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:59:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	ft_pwd(t_data *data)
 	if (pwd_value != NULL)
 	{
 		printf("%s\n", pwd_value);
+		free(pwd_value);
 		return (EXIT_SUCCESS);
 	}
 	return (output_err_ret(EXIT_FAILURE, "ERROR Could not find PWD in env",

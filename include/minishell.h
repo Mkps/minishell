@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 17:53:13 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 18:00:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,6 +373,6 @@ char		*chrtostr(char c);
 int			check_error_raw(t_data *data);
 char		*ft_strs_join(char **tab);
 
-char *ft_getenvcpy(t_data *data, char *key);
+char		*ft_getenvcpy(t_data *data, char *key);
 
 #endif
