@@ -6,12 +6,11 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 12:29:45 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 18:29:11 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:44:36 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <string.h>
 
 int	set_pwd(char *pwd)
 {
@@ -33,18 +32,30 @@ void	handle_previous_directory(t_data *data, char **old_pwd)
 {
 	char	*old_pwd_env;
 
-	old_pwd_env = ft_getenv(data->envv, "OLDPWD");
+	(void)old_pwd;
+	old_pwd_env = ft_getenvcpy(data, "OLDPWD");
 	if (old_pwd_env == NULL)
 	{
 		output_err_cmd("OLDPWD not set", "cd");
 		return ;
 	}
-	*old_pwd = ft_strdup(old_pwd_env);
+	printf("old pwd = %s\n", old_pwd_env);
 	if (chdir(old_pwd_env) != 0)
-	{
 		output_err_cmd(strerror(errno), "cd");
-		free(*old_pwd);
+}
+
+char	*ft_getenvcpy(t_data *data, char *key)
+{
+	t_env	*current;
+
+	current = *data->env_cpy;
+	while (current != NULL)
+	{
+		if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
+			return (current->value);
+		current = current->next;
 	}
+	return (NULL);
 }
 
 void	ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd)
@@ -54,7 +65,7 @@ void	ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd)
 	if (pwd)
 		free(pwd);
 	pwd = getcwd(NULL, 0);
-	temp = pwd;
+	temp = old_pwd;
 	update_pwd_and_oldpwd(data, pwd, temp);
 	ft_setenv(data, tmp);
 	free(pwd);

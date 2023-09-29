@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 18:26:13 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:38:16 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		dir = cmd->args[1];
 	else
 		dir = "~";
+	if (ft_strncmp(dir, ".", 2) == 0)
+		return (EXIT_SUCCESS);
 	if (cmd->args[1] && cmd->args[2] != NULL)
 		return (output_err_ret(1,
 				"cd: too many arguments", NULL));
@@ -41,10 +43,9 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 
 void	handle_directory_change(t_data *data, char **old_pwd, char *dir)
 {
+	(void)old_pwd;
 	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
 		handle_home_directory(data, dir);
-	else if (ft_strncmp(dir, "-", ft_strlen(dir)) == 0)
-		handle_previous_directory(data, old_pwd);
 	else if (ft_strncmp(dir, "..", ft_strlen(dir)) == 0)
 		handle_parent_directory();
 	else

@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 18:34:30 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:12:38 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
 void		handle_regular_directory(char *dir);
 void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
-void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
 int			set_pwd(char *pwd);
 void		env_unset_free(t_env *current);
 
@@ -372,5 +371,7 @@ int			var_is_multiple(char *var);
 char		*chrtostr(char c);
 int			check_error_raw(t_data *data);
 char		*ft_strs_join(char **tab);
+
+char *ft_getenvcpy(t_data *data, char *key);
 
 #endif
