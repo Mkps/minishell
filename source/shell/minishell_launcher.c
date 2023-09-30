@@ -11,7 +11,25 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-#include <unistd.h>
+
+// Called once at init
+void	set_shlevel(t_data *data)
+{
+	int		shlvl;	
+	char	*ret;
+	char	*tmp;
+
+	ret = ft_getenv(data->envv, "SHLVL");
+	if (!ret)
+	{
+		tmp = ft_strappend("SHLVL=", ft_itoa(1), 1);
+		ft_setenv(data, tmp);
+		return ;
+	}
+	shlvl = ft_atoi(ret);
+	tmp = ft_strappend("SHLVL=", ft_itoa(shlvl + 1), 1);
+	ft_setenv(data, tmp);
+}
 
 void	minishell_core(t_data *data)
 {

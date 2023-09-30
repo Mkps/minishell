@@ -43,8 +43,9 @@ int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
 void		handle_regular_directory(char *dir);
 void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
-int			set_pwd(char *pwd);
+int			set_pwd(char *pwd, char *dir);
 void		env_unset_free(t_env *current);
+char		*ft_getenvcpy(t_data *data, char *key);
 
 /**		cmd_list		**/
 /***		cmd_list.c		***/
@@ -148,6 +149,7 @@ int			ft_get_sep(char *input, t_data *data);
 int			ft_get_quote(char *input, t_data *data);
 
 /**		shell		**/
+void		set_shlevel(t_data *data);
 void		minishell_inline(t_data *data, char *user_input);
 int			minishell_subshell(t_data *data, char *user_input);
 void		minishell_prompt(t_data *data);
@@ -264,7 +266,6 @@ int			ft_exit(t_data *data, t_cmd *cmd);
 void		handle_regular_directory(char *dir);
 void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
 void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
-int			set_pwd(char *pwd);
 void		env_unset_free(t_env *current);
 void		export_unset_free(t_export *current);
 

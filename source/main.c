@@ -71,6 +71,7 @@ int	main(int ac, char **av, char **envv)
 	g_exit_code = 0;
 	init_data(&data);
 	import_envv(&data, envv);
+	set_shlevel(&data);
 	copy_env_to_list(&data);
 	env_to_export(&data);
 	sort_export_list(&data);

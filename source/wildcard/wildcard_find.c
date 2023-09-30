@@ -35,16 +35,17 @@ char	*find_dirpath(char *f_wc, int *flag)
 	i = get_dirpath_start(dirpath);
 	if (i > 0 && dirpath[i] == '/')
 		dirpath = ft_str_extract_free(dirpath, i);
-	else if (i == 0 && dirpath[i] == '/')
+	else if (i == 0 && dirpath[0] == '/')
 	{
+		*flag = 1;
 		free(dirpath);
 		dirpath = ft_strdup("/");
 	}
 	else
 	{
-		*flag = 1;
 		if (!ft_strncmp(dirpath, "./", 2))
 			*flag = 0;
+		*flag = 1;
 		free(dirpath);
 		dirpath = ft_strdup(".");
 	}
@@ -97,7 +98,7 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 				free_null(&split[i]);
 		}
 		else
-			free_null(&split[i]);	
+			free_null(&split[i]);
 		i++;
 	}
 	ret = ft_strjoin_tab(split, i, 3);

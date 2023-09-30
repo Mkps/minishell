@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stddef.h>
 
 char	*get_front_wc(char *str)
 {
@@ -51,7 +52,7 @@ int	wc_present(char *str)
 size_t	wc_minlen(char *str)
 {
 	size_t	count;
-	int		len;
+	size_t	len;
 	int		i;
 
 	i = -1;
@@ -68,5 +69,7 @@ size_t	wc_minlen(char *str)
 			count++;
 		len++;
 	}
+	if (len == count && count != 0)
+		return (0);
 	return (len - count);
 }

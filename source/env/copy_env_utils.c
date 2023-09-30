@@ -65,3 +65,17 @@ t_env	*ft_lstnew_two(char *key, char *value)
 	list->next = NULL;
 	return (list);
 }
+
+char	*ft_getenvcpy(t_data *data, char *key)
+{
+	t_env	*current;
+
+	current = *data->env_cpy;
+	while (current != NULL)
+	{
+		if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
+}

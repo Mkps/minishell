@@ -13,12 +13,13 @@
 #include "../../include/minishell.h"
 
 int	ft_cd(t_cmd *cmd, t_data *data)
-{	
+{
 	char	*dir;
 	char	*pwd;
 	char	*tmp;
 	char	*old_pwd;
 
+	tmp = NULL;
 	if (cmd->args[1] && cmd->args[1][0])
 		dir = cmd->args[1];
 	else
@@ -29,34 +30,35 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 		return (output_err_ret(1,
 				"cd: too many arguments", NULL));
 	pwd = getcwd(NULL, 0);
-	if (set_pwd(pwd) == 1)
-	{
-		free(pwd);
-		return (EXIT_FAILURE);
-	}
-	tmp = ft_strjoin("PWD=", pwd);
+	if (set_pwd(pwd, dir) == 1)
+		return (free(pwd), EXIT_FAILURE);
+	else if (pwd)
+		tmp = ft_strjoin("PWD=", pwd);
 	old_pwd = NULL;
 	handle_directory_change(data, &old_pwd, dir);
 	ft_cd_next(pwd, tmp, data, old_pwd);
 	return (EXIT_SUCCESS);
 }
 
-void	handle_directory_change(t_data *data, char **old_pwd, char *dir)
+void	ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd)
 {
-	(void)old_pwd;
-	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
-		handle_home_directory(data, dir);
-	else if (ft_strncmp(dir, "..", ft_strlen(dir)) == 0)
-		handle_parent_directory();
-	else
-		handle_regular_directory(dir);
+	char	*temp;
+
+	if (pwd)
+		free(pwd);
+	pwd = getcwd(NULL, 0);
+	temp = old_pwd;
+	update_pwd_and_oldpwd(data, pwd, temp);
+	if (tmp)
+		ft_setenv(data, tmp);
+	free(pwd);
+	free(old_pwd);
 }
 
-void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
+void	update_pwd(t_data *data, char *pwd)
 {
 	t_env	*current;
 
-	temp = pwd;
 	current = *data->env_cpy;
 	while (current != NULL)
 	{
@@ -68,58 +70,25 @@ void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
 		}
 		current = current->next;
 	}
+}
+
+void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *old_pwd)
+{
+	t_env	*current;
+
+	if (pwd)
+		update_pwd(data, pwd);
+	if (!old_pwd)
+		old_pwd = "";
 	current = *data->env_cpy;
 	while (current != NULL)
 	{
 		if (ft_strncmp(current->key, "OLDPWD", 6) == 0)
 		{
 			free(current->value);
-			current->value = ft_strdup(temp);
+			current->value = ft_strdup(old_pwd);
 			break ;
 		}
 		current = current->next;
 	}
-}
-
-void	handle_regular_directory(char *dir)
-{
-	if (dir[0] == '"' && dir[ft_strlen(dir) - 1] == '"')
-	{
-		ft_memmove(dir, dir + 1, ft_strlen(dir) - 2);
-		dir[ft_strlen(dir) - 2] = '\0';
-	}
-	if (access(dir, F_OK) == -1)
-		printf("minishell: cd: %s: No such file or directory\n", dir);
-	else
-	{
-		if (chdir(dir) != 0)
-			output_err_cmd(strerror(errno), "cd");
-	}
-}
-
-void	handle_home_directory(t_data *data, const char *dir)
-{
-	char	*home_dir;
-	size_t	full_path_len;
-	char	*full_path;
-
-	home_dir = ft_getenv(data->envv, "HOME");
-	if (home_dir == NULL)
-	{
-		output_err_cmd(strerror(errno), "cd");
-		printf("minishell: cd: HOME not set\n");
-		return ;
-	}
-	full_path_len = strlen(home_dir) + strlen(dir) - 1;
-	full_path = (char *)malloc(full_path_len + 1);
-	if (full_path == NULL)
-	{
-		output_err_cmd(strerror(errno), "cd: malloc:");
-		return ;
-	}
-	ft_strlcpy(full_path, home_dir, full_path_len + 1);
-	ft_strlcat(full_path, dir + 1, full_path_len + 1);
-	if (chdir(full_path) != 0)
-		output_err_cmd(strerror(errno), "cd");
-	free(full_path);
 }

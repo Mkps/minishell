@@ -18,7 +18,7 @@ static char	*glob_home(t_data *data, char *str)
 	char	*ret;
 	int		i;
 
-	home = get_var(data, "HOME");
+	home = ft_getenvcpy(data, "HOME");
 	if (!str)
 		return (ft_strdup("???"));
 	if (!home || !*home)
@@ -42,7 +42,7 @@ static char	*get_session(t_data *data)
 	int		s_idx;
 	int		e_idx;
 
-	tmp = get_var(data, "SESSION_MANAGER");
+	tmp = ft_getenvcpy(data, "SESSION_MANAGER");
 	if (tmp != NULL)
 	{
 		s_idx = 0;
@@ -68,7 +68,7 @@ char	*set_prompt(t_data *data)
 	char	*username;
 	char	*pwd;
 
-	username = get_var(data, "USER");
+	username = ft_getenvcpy(data, "USER");
 	if (!username || !*username)
 		username = "user";
 	prompt = ft_strappend(GREEN, username, 0);

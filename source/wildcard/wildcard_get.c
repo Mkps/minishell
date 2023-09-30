@@ -21,11 +21,11 @@ char	*build_str(char *dirpath, char *str, int flag)
 	if (!d)
 		return (NULL);
 	dir = readdir(d);
-	if (!flag && dirpath[1])
+	if (!flag || (!flag && dirpath[0] == '/' && !dirpath[1]))
 		dirpath = ft_strappend(dirpath, "/", 2);
 	while (dir != NULL)
 	{
-		if (!flag)
+		if (!flag || !ft_strncmp(dirpath, "/", 2))
 			str = ft_strappend(str, dirpath, 2);
 		str = ft_strappend(str, dir->d_name, 2);
 		str = ft_strappend(str, chrtostr(3), 3);
@@ -95,7 +95,7 @@ char	*get_wildcard(char *str)
 		ret = get_wc_data(b_wc, ret, 1);
 		free(b_wc);
 	}
-	if (ret[0] == 0 || (ret && ft_strlen(ret) < wc_minlen(str)))
+	if (ret[0] == 0 || (ret && ft_strlen(ret) <= wc_minlen(str)))
 	{
 		free(ret);
 		return (str);
