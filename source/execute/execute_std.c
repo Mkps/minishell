@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <signal.h>
 
 int	is_standalone(t_cmd *cmd)
 {
@@ -38,14 +39,14 @@ int	fd_valid(t_cmd *cmd)
 void	set_sigign(void)
 {
 	signal(SIGPIPE, SIG_DFL);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	signals_no_interact();
 }
 
 void	execute_child(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
 
+	signal_parent();
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
@@ -60,7 +61,6 @@ void	execute_child(t_cmd *cmd, t_data *data)
 		if (exit_code == -1)
 		{
 			exec_cmd(cmd, data);
-			signals_no_interact();
 			exit_code = get_cmd_ecode(cmd, data);
 		}
 		free_child(data);

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdlib.h>
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
@@ -49,6 +50,10 @@ t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 
 void	set_exit_code(t_data *data, int status, t_cmd *cmd)
 {
+	if (g_exit_code == 130 && !WIFEXITED(status))
+		write(1, "\n", 1);
+	else if (g_exit_code == 131 && !WIFEXITED(status))
+		printf("Quit (core dumped)\n");
 	if (cmd->is_term == 0)
 		g_exit_code = 0;
 	if (cmd->is_term != 0 && !is_standalone(cmd))
@@ -58,7 +63,9 @@ void	set_exit_code(t_data *data, int status, t_cmd *cmd)
 		else if (WIFEXITED(status))
 			data->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
 			data->exit_status = 128 + WTERMSIG(status);
+		}
 	}
 }
 

@@ -158,6 +158,7 @@ void		minishell_core(t_data *data);
 void		signals_interact(void);
 void		signals_no_interact(void);
 void		signals_here_doc(void);
+void		signal_parent(void);
 /***		signal.c			***/
 void		redisplay_prompt(int signum);
 void		signal_quit(int signum);
