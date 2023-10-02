@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/29 16:53:06 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:13:50 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	envcpy_update(t_data *data, t_env *new_node);
 
 int	set_in_env(t_data *data, char *variable, char **variable_split)
 {
@@ -32,8 +34,9 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
 		if (value[0] != '\0')
-			return (env_update(data), free_env_node(new_env),
-				free_set_in(key, value, variable_split), EXIT_SUCCESS);
+			return (envcpy_update(data, new_env), env_update(data),
+				free_env_node(new_env), free_set_in(key, value, variable_split),
+				EXIT_SUCCESS);
 		return (free_set_in(key, value, variable_split), EXIT_FAILURE);
 	}
 	return (ft_lstadd_back_env(data->env_cpy, new_env),
