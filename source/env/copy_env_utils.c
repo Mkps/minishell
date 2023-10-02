@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:05 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 18:11:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 12:25:45 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*ft_getenvcpy(t_data *data, char *key)
 	current = *data->env_cpy;
 	while (current != NULL)
 	{
-		if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
+		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
 			return (current->value);
 		current = current->next;
 	}
