@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:41:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 19:21:32 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:14:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ int	show_hidden(char *search, char *str)
 	i = get_file_namepath(search);
 	if (!search || !str)
 		return (0);
-	if (ft_strncmp(str + i, ".", 2) == 0 || ft_strncmp(str + i, "..", 3) == 0)
-		return (0);
 	if (search[i] != '.' && str[i] == '.')
 		return (0);
 	return (1);
@@ -91,7 +89,10 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 	i = 0;
 	while (split[i])
 	{
-		if (search && (function_ptr(split[i], search,
+		if (mode == 2 && search && (function_ptr(split[i], search,
+					ft_strlen(split[i])) != NULL))
+			(void)mode;
+		else if (mode != 2 && search && (function_ptr(split[i], search,
 					ft_strlen(search)) != NULL))
 		{
 			if (mode == 0 && !show_hidden(search, split[i]))

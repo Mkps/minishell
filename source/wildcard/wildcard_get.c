@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:59:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/02 13:04:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:02:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char	*get_fwc(char *str)
 	char	*ret;
 	int		i;
 
+	i = 0;
 	if (wc_in_dirpath(str))
 		return (NULL);
 	f_wc = get_front_wc(str);
