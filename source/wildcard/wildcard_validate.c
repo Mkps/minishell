@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:03:37 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/03 16:07:36 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 17:25:09 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,22 @@ int	ft_stristr(const char *big, const char *little, size_t len)
 	return (-1);
 }
 
+char	*tmp_wc(int *i, char *wc)
+{
+	int		j;
+	char	*tmp;
+
+	j = 0;
+	while (wc[*i + j] && wc[*i + j] != '*')
+		j++;
+	tmp = ft_str_extract(wc + *i, j);
+	*i += j;
+	return (tmp);
+}
+
 int	is_order_matching(char *str, char *wc)
 {
 	int		i;
-	int		j;
 	int		index;
 	char	*tmp;
 
@@ -53,18 +65,11 @@ int	is_order_matching(char *str, char *wc)
 			i++;
 		else
 		{
-			j = 0;
-			while (wc[i + j] && wc[i + j] != '*')
-				j++;
-			tmp = ft_str_extract(wc + i, j);
+			tmp = tmp_wc(&i, wc);
 			if (ft_stristr(str + index, tmp, ft_strlen(str)) == -1)
-			{
-				free(tmp);
-				return (0);
-			}
+				return (free(tmp), 0);
 			else
 				index += ft_stristr(str + index, tmp, ft_strlen(str + index));
-			i += j;
 			free(tmp);
 		}
 	}

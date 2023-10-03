@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/02 12:22:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 16:35:47 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	set_in_export(t_data *data, char *variable, t_cmd *cmd)
 
 int	set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd)
 {
+	int	err;
+
 	(void)data;
 	(void)key;
 	(void)value;
@@ -102,9 +104,9 @@ int	set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd)
 	{
 		remove_export(data, key);
 		free_set_in(key, value, NULL);
-		execute_export(data, cmd);
+		err = execute_export(data, cmd);
 		env_update(data);
-		return (0);
+		return (err);
 	}
 	else
 	{
@@ -124,9 +126,9 @@ int	execute_export(t_data *data, t_cmd *cmd)
 	err = 0;
 	while (cmd->args[i])
 	{
-		if (ft_strlen(cmd->args[i]) == 1 && cmd->args[i][0] == '=')
+		if (cmd->args[i] && !is_valid_var(cmd->args[i]))
 		{
-			printf("export: `=': not a valid identifier\n");
+			printf("export: `%s': not a valid identifier\n", cmd->args[i]);
 			err++;
 			i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:50:23 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 16:17:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 17:55:34 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	retokenize(t_data *data, char *str, t_token *token)
 	while (split[i])
 	{
 		insert_token_next(current, WORD, ft_strdup(split[i]));
+		current->next->near_quote = current->near_quote;
+		current->near_quote = 0;
 		current = current->next;
 		i++;
 	}
