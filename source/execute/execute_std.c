@@ -36,12 +36,6 @@ int	fd_valid(t_cmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-void	set_sigign(void)
-{
-	signal(SIGPIPE, SIG_DFL);
-	signals_no_interact();
-}
-
 void	execute_child(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;

@@ -24,9 +24,7 @@ char	**get_path(char **envv)
 
 	env = ft_getenv(envv, "PATH");
 	if (env == NULL)
-	{
 		return (NULL);
-	}
 	env_p = ft_split(env, ':');
 	return (env_p);
 }
@@ -69,16 +67,10 @@ int	main(int ac, char **av, char **envv)
 		return (EXIT_FAILURE);
 	g_exit_code = 0;
 	init_data(&data);
-	if (envv[0] == 0)
-		printf("env null\n");
 	import_envv(&data, envv);
-	printf("test\n");
 	set_shlevel(&data);
-	printf("test2\n");
 	copy_env_to_list(&data);
-	printf("test3\n");
 	env_to_export(&data);
-	printf("test4\n");
 	sort_export_list(&data);
 	if (ac == 3)
 		minishell_inline(&data, av[2]);

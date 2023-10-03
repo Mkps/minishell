@@ -32,15 +32,22 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 {
 	int		i;
+	t_cmd	*start;
 	t_cmd	*last;
 
+	start = cmd;
 	i = 1;
-	while (i > 0 && cmd)
+	if (!start->is_term)
 	{
-		i -= cmd->is_term;
-		execute_cmd(cmd, data);
 		cmd = cmd->next;
+		while (i > 0 && cmd)
+		{
+			i -= cmd->is_term;
+			execute_cmd(cmd, data);
+			cmd = cmd->next;
+		}
 	}
+	execute_cmd(start, data);
 	if (cmd == NULL)
 		last = last_cmd(data->cmd_list);
 	else

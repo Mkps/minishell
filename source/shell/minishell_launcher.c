@@ -19,7 +19,6 @@ void	set_shlevel(t_data *data)
 	char	*ret;
 	char	*tmp;
 
-	printf("testget\n");
 	ret = ft_getenv(data->envv, "SHLVL");
 	if (!ret)
 	{
@@ -29,7 +28,6 @@ void	set_shlevel(t_data *data)
 	}
 	shlvl = ft_atoi(ret);
 	tmp = ft_strappend("SHLVL=", ft_itoa(shlvl + 1), 1);
-	printf("testset\n");
 	ft_setenv(data, tmp);
 }
 

@@ -166,6 +166,7 @@ void		redisplay_prompt(int signum);
 void		signal_quit(int signum);
 void		signal_nl(int signum);
 void		signal_sigint_heredoc(int signum);
+void		set_sigign(void);
 
 /**		token		**/
 /**		parser.c		**/

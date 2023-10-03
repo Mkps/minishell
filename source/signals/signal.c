@@ -54,3 +54,9 @@ void	signal_sigint_heredoc(int signum)
 		rl_replace_line("", 0);
 	}
 }
+
+void	set_sigign(void)
+{
+	signal(SIGPIPE, SIG_DFL);
+	signals_no_interact();
+}

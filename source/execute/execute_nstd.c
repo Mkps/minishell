@@ -26,19 +26,22 @@ void	set_var_cmd(t_data *data, t_cmd *cmd)
 	}
 }
 
+
 void	execute_empty(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
 
 	set_var_cmd(data, cmd);
+	signal_parent();
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
-		close(data->old_fd[0]);
-		close(data->old_fd[1]);
+		set_pipes(data, cmd);
+		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
-		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
+		exit_code = fd_valid(cmd);
+		set_sigign();
 		free_child(data);
 		exit(exit_code);
 	}
@@ -50,6 +53,7 @@ void	execute_subshell(t_cmd *cmd, t_data *data)
 	int	exit_code;
 	int	ss_code;
 
+	signal_parent();
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
@@ -59,6 +63,7 @@ void	execute_subshell(t_cmd *cmd, t_data *data)
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
+		set_sigign();
 		ss_code = minishell_subshell(data, cmd->cmd);
 		if (exit_code)
 			exit(exit_code);

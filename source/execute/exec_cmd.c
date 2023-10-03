@@ -40,7 +40,8 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 	cmd_p = get_cmd(cmd_node->cmd, env_p);
 	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
 	{
-		ft_free_tab(env_p);
+		if (env_p)
+			ft_free_tab(env_p);
 		if (cmd_p)
 			free(cmd_p);
 	}
@@ -53,6 +54,8 @@ char	*get_cmd(char *cmd, char **env_p)
 	char	*cmd_tmp;
 
 	i = -1;
+	if (!env_p)
+		return (NULL);
 	if (!ft_strncmp(cmd, ".", 2) || !ft_strncmp(cmd, "..", 3))
 		return (NULL);
 	while (env_p[++i])

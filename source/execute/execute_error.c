@@ -37,7 +37,8 @@ int	is_cmd_fko(t_cmd *cmd, t_data *data)
 		if (access(tmp, F_OK | X_OK))
 			ret = 2;
 	}
-	ft_free_tab(env_p);
+	if (env_p)
+		ft_free_tab(env_p);
 	if (tmp)
 		free(tmp);
 	return (ret);
