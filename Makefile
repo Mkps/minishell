@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/10/02 11:31:39 by aloubier         ###   ########.fr        #
+#    Updated: 2023/10/03 16:08:07 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,6 +93,7 @@ SRC_NAME =	built-ins/unset.c \
 			utils/strutils_find.c \
 			wildcard/wildcard_strutils2.c \
 			wildcard/wildcard_strutils.c \
+			wildcard/wildcard_validate.c \
 			wildcard/wildcard_utils.c \
 			wildcard/wildcards.c \
 			wildcard/wildcard_find.c \
