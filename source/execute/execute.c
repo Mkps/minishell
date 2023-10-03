@@ -42,6 +42,7 @@ t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 		cmd = cmd->next;
 		while (i > 0 && cmd)
 		{
+			// fprintf(stderr, "cmd %s\n", cmd->args[1]);
 			i -= cmd->is_term;
 			execute_cmd(cmd, data);
 			cmd = cmd->next;

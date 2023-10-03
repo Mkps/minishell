@@ -46,6 +46,7 @@ void	execute_child(t_cmd *cmd, t_data *data)
 	{
 		set_pipes(data, cmd);
 		close_fd_set(data->old_fd[0], data->old_fd[1]);
+		set_fd(data, cmd);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		close_pipes(data->cmd_list, NULL, NULL);
 		exit_code = fd_valid(cmd);

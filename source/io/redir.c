@@ -34,6 +34,37 @@ int	set_fd(t_data *data, t_cmd *cmd)
 	return (0);
 }
 
+int	open_heredoc_node(t_data *data, t_cmd *cmd, t_io_node *fd);
+
+int	open_hd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
+{
+	if (fd->mode == IO_HEREDOC)
+		return (open_heredoc_node(data, cmd, fd));
+	return (0);
+}
+
+int	set_hd(t_data *data, t_cmd *cmd)
+{
+	t_io_node	*current;
+
+	current = *cmd->io_list;
+	while (current)
+	{
+		if (open_hd_node(data, cmd, current))
+		{
+			if (cmd->fd[0] > -1)
+				close(cmd->fd[0]);
+			if (cmd->fd[1] > -1)
+				close(cmd->fd[1]);
+			cmd->fd[0] = -1;
+			cmd->fd[1] = -1;
+			return (1);
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
 int	init_io_redir(t_data *data)
 {
 	t_cmd	*current;
@@ -41,7 +72,7 @@ int	init_io_redir(t_data *data)
 	current = *data->cmd_list;
 	while (current)
 	{
-		if (set_fd(data, current) == EXIT_FAILURE)
+		if (set_hd(data, current) == EXIT_FAILURE)
 			return (1);
 		current = current->next;
 	}

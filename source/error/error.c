@@ -86,6 +86,11 @@ int	check_term_error(t_token **root)
 			output_err("syntax error near unexpected token ", tmp, 1);
 			return (EXIT_FAILURE);
 		}
+		if (tmp->token_type == PIPE && token_is_term(tmp->next))
+		{
+			output_err("syntax error near unexpected token ", tmp->next, 1);
+			return (EXIT_FAILURE);
+		}
 		tmp = tmp->next;
 	}
 	return (EXIT_SUCCESS);

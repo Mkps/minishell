@@ -66,8 +66,8 @@ int	open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
 {
 	if (fd->mode == IO_INPUT)
 		return (open_input_node(data, cmd, fd));
-	if (fd->mode == IO_HEREDOC)
-		return (open_heredoc_node(data, cmd, fd));
+	if (fd->mode == IO_HEREDOC && fd->fd > -1)
+		return (open_input_node(data, cmd, fd));
 	if (fd->mode == IO_TRUNC)
 		return (open_trunc_node(data, cmd, fd));
 	if (fd->mode == IO_APPEND)
