@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/29 16:38:16 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/03 15:07:21 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,57 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-void	handle_directory_change(t_data *data, char **old_pwd, char *dir)
+void	ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd)
 {
-	(void)old_pwd;
-	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
-		handle_home_directory(data, dir);
-	else if (ft_strncmp(dir, "..", ft_strlen(dir)) == 0)
-		handle_parent_directory();
-	else
-		handle_regular_directory(dir);
+	char	*temp;
+
+	(void)tmp;
+	if (pwd)
+		free(pwd);
+	pwd = getcwd(NULL, 0);
+	temp = old_pwd;
+	update_pwd_and_oldpwd(data, pwd, temp);
+	free(pwd);
+	free(old_pwd);
 }
 
-void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
+void	cd_env_update(t_data *data, size_t i, size_t env_count)
+{
+	size_t		key_len;
+	size_t		value_len;
+	size_t		len;
+	t_env		*current;
+
+	current = *data->env_cpy;
+	if (data->envv)
+		free(data->envv);
+	data->envv = (char **)malloc((env_count + 1) * sizeof(char *));
+	if (data->envv == NULL)
+	{
+		printf("cd_env_update: Malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
+	while (current != NULL)
+	{
+		key_len = strlen(current->key);
+		value_len = strlen(current->value);
+		len = key_len + value_len + 2;
+		data->envv[i] = (char *)malloc(len);
+		if (data->envv[i] == NULL)
+		{
+			printf("cd_env_update: Malloc failed\n");
+			exit(EXIT_FAILURE);
+		}
+		ft_strlcpy(data->envv[i], current->key, key_len + 1);
+		data->envv[i][key_len] = '=';
+		ft_strlcpy(data->envv[i] + key_len + 1, current->value, value_len + 1);
+		i++;
+		current = current->next;
+	}
+	data->envv[env_count] = NULL;
+}
+
+void	update_pwd(t_data *data, char *pwd)
 {
 	t_env	*current;
 
@@ -68,6 +107,20 @@ void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
 		}
 		current = current->next;
 	}
+}
+
+void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *old_pwd)
+{
+	t_env		*current;
+	size_t		env_count;
+	size_t		i;
+
+	env_count = ft_lstsize_env(data->env_cpy);
+	i = 0;
+	if (pwd)
+		update_pwd(data, pwd);
+	if (!old_pwd)
+		old_pwd = "";
 	current = *data->env_cpy;
 	while (current != NULL)
 	{
@@ -79,47 +132,5 @@ void	update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp)
 		}
 		current = current->next;
 	}
-}
-
-void	handle_regular_directory(char *dir)
-{
-	if (dir[0] == '"' && dir[ft_strlen(dir) - 1] == '"')
-	{
-		ft_memmove(dir, dir + 1, ft_strlen(dir) - 2);
-		dir[ft_strlen(dir) - 2] = '\0';
-	}
-	if (access(dir, F_OK) == -1)
-		printf("minishell: cd: %s: No such file or directory\n", dir);
-	else
-	{
-		if (chdir(dir) != 0)
-			output_err_cmd(strerror(errno), "cd");
-	}
-}
-
-void	handle_home_directory(t_data *data, const char *dir)
-{
-	char	*home_dir;
-	size_t	full_path_len;
-	char	*full_path;
-
-	home_dir = ft_getenv(data->envv, "HOME");
-	if (home_dir == NULL)
-	{
-		output_err_cmd(strerror(errno), "cd");
-		printf("minishell: cd: HOME not set\n");
-		return ;
-	}
-	full_path_len = strlen(home_dir) + strlen(dir) - 1;
-	full_path = (char *)malloc(full_path_len + 1);
-	if (full_path == NULL)
-	{
-		output_err_cmd(strerror(errno), "cd: malloc:");
-		return ;
-	}
-	ft_strlcpy(full_path, home_dir, full_path_len + 1);
-	ft_strlcat(full_path, dir + 1, full_path_len + 1);
-	if (chdir(full_path) != 0)
-		output_err_cmd(strerror(errno), "cd");
-	free(full_path);
+	cd_env_update(data, i, env_count);
 }
