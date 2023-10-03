@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 13:23:39 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:51:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 		cmd = cmd->next;
 		while (i > 0 && cmd)
 		{
-			// fprintf(stderr, "cmd %s\n", cmd->args[1]);
 			i -= cmd->is_term;
 			execute_cmd(cmd, data);
 			cmd = cmd->next;

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:26:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 19:21:50 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:54:13 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,35 @@ int	dup_close_fd_set(int fdin, int fdout)
 		close(fdout);
 	}
 	return (EXIT_SUCCESS);
+}
+
+int	open_heredoc_node(t_data *data, t_cmd *cmd, t_io_node *fd);
+
+int	open_hd_node(t_data *data, t_cmd *cmd, t_io_node *fd)
+{
+	if (fd->mode == IO_HEREDOC)
+		return (open_heredoc_node(data, cmd, fd));
+	return (0);
+}
+
+int	set_hd(t_data *data, t_cmd *cmd)
+{
+	t_io_node	*current;
+
+	current = *cmd->io_list;
+	while (current)
+	{
+		if (open_hd_node(data, cmd, current))
+		{
+			if (cmd->fd[0] > -1)
+				close(cmd->fd[0]);
+			if (cmd->fd[1] > -1)
+				close(cmd->fd[1]);
+			cmd->fd[0] = -1;
+			cmd->fd[1] = -1;
+			return (1);
+		}
+		current = current->next;
+	}
+	return (0);
 }

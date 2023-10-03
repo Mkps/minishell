@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 10:30:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:58:38 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:55:24 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static int	str_is_digit(char *str)
 long	ft_atol(const char *str)
 {
 	unsigned long	atol;
-	int		sign;
-	int		i;
+	int				sign;
+	int				i;
 
 	atol = 0;
 	sign = 1;
@@ -44,7 +44,7 @@ long	ft_atol(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		atol = (atol * 10) + str[i] - 48;
-		if (atol > (LONG_MAX ))
+		if (atol > (LONG_MAX))
 			return (-2);
 		i++;
 	}
