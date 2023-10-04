@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 12:04:36 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:06:43 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ int	execute_export(t_data *data, t_cmd *cmd)
 	{
 		if (cmd->args[i] && !is_valid_var(cmd->args[i]))
 		{
+			//a changer
 			printf("export: `%s': not a valid identifier\n", cmd->args[i]);
 			err++;
 			i++;
