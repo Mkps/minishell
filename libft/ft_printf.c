@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 15:55:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/03/25 13:56:21 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:53:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	ft_printf(const char *src, ...)
 	va_list	args;
 	size_t	i;
 	size_t	written_char;
+	int		tmp;
 
 	i = 0;
 	written_char = 0;
@@ -47,11 +48,21 @@ int	ft_printf(const char *src, ...)
 	{
 		if (src[i] == '%')
 		{
-			written_char += ft_select_type(args, src[i + 1]);
+			tmp = ft_select_type(args, src[i + 1]);
+			if (tmp == -1)
+				return (-1);
+			else
+				written_char += tmp;
 			i++;
 		}
 		else
-			written_char += ft_char(src[i]);
+		{
+			tmp = ft_char(src[i]);
+			if (tmp == -1)
+				return (-1);
+			else
+				written_char += tmp;		
+		}
 		i++;
 	}
 	va_end(args);

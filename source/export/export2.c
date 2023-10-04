@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 12:06:43 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:21:53 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,20 @@ int	set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd)
 	(void)data;
 	(void)key;
 	(void)value;
-	if (value[0] != '\0')
-	{
+	// if (value[0] != '\0')
+	// {
 		remove_export(data, key);
 		free_set_in(key, value, NULL);
 		err = execute_export(data, cmd);
 		env_update(data);
 		return (err);
-	}
-	else
-	{
-		free_set_in(key, value, NULL);
-		return (1);
-	}	
+	// }
+	// else
+	// {
+	// 	printf("set_in_export-utils value 0 = 0\n");
+	// 	free_set_in(key, value, NULL);
+	// 	return (1);
+	// }	
 }
 
 int	execute_export(t_data *data, t_cmd *cmd)
@@ -127,7 +128,7 @@ int	execute_export(t_data *data, t_cmd *cmd)
 		if (cmd->args[i] && !is_valid_var(cmd->args[i]))
 		{
 			//a changer
-			printf("export: `%s': not a valid identifier\n", cmd->args[i]);
+			ft_putstr_fd(2, "export: `%s': not a valid identifier\n", cmd->args[i]);
 			err++;
 			i++;
 		}

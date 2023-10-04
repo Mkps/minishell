@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 17:59:46 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:07:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	ft_echo(t_cmd *cmd)
 	flag = 0;
 	if (cmd->args[1] == NULL)
 	{
-		printf("\n");
+		if (ft_printf("\n") == -1)
+			return (perror("minishell: echo"), EXIT_FAILURE);
 		return (EXIT_SUCCESS);
 	}
 	i = find_first_word(cmd);
@@ -47,13 +48,16 @@ int	ft_echo(t_cmd *cmd)
 		flag++;
 	while (cmd->args[i] != NULL)
 	{
-		ft_printf("%s", cmd->args[i]);
+		if (ft_printf("%s", cmd->args[i]) == -1)
+			return (perror("minishell: echo"), EXIT_FAILURE);
 		i++;
 		if (cmd->args[i] != NULL)
-			ft_printf(" ", cmd->args[i]);
+			if (ft_printf(" ") == -1)
+				return (perror("minishell: echo"), EXIT_FAILURE);
 	}
 	if (!flag)
-		ft_printf("\n");
+		if (ft_printf("\n") == -1)
+			return (perror("minishell: echo"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -65,7 +69,8 @@ int	ft_pwd(t_data *data)
 	(void)data;
 	if (pwd_value != NULL)
 	{
-		printf("%s\n", pwd_value);
+		if (ft_printf("%s\n", pwd_value) == -1)
+			return (perror("minishell: echo"), free(pwd_value), EXIT_FAILURE);
 		free(pwd_value);
 		return (EXIT_SUCCESS);
 	}

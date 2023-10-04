@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/03 16:37:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:27:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	ft_export(t_data *data)
 	return (err);
 }
 
-void	print_export(t_data *data)
+int	print_export(t_data *data)
 {
 	t_export	*current;
 
@@ -75,11 +75,14 @@ void	print_export(t_data *data)
 	while (current != NULL)
 	{
 		if (current->value[0] == '\0' && current->flag == 1)
-			printf("%s %s\n", EXPORT_MSG, current->key);
+			if (ft_printf("%s %s\n", EXPORT_MSG, current->key) == -1)
+				return (EXIT_FAILURE);
 		else if (current->value[0] == '\0' && current->flag == 0)
-			printf("%s %s=\"\"\n", EXPORT_MSG, current->key);
+			if (ft_printf("%s %s=\"\"\n", EXPORT_MSG, current->key) == -1)
+				return (EXIT_FAILURE);
 		else
-			printf("%s %s=%s\n", EXPORT_MSG, current->key, current->value);
+			if (ft_printf("%s %s=%s\n", EXPORT_MSG, current->key, current->value) == -1)
+				return (EXIT_FAILURE);
 		current = current->next;
 	}
 }
