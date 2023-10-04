@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 17:24:09 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/27 17:28:31 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:42:18 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	print_envp(t_data *data)
 	i = 0;
 	while (data->envv[i])
 	{
-		printf("%s\n", data->envv[i]);
+		if (ft_printf("%s\n", data->envv[i]) == -1)
+			return (perror("minishell: env"), 125);
 		i++;
 	}
 	return (EXIT_SUCCESS);
