@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:28:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 17:09:48 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:56:01 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,17 @@ void	execute_empty(t_cmd *cmd, t_data *data)
 	int	exit_code;
 
 	set_var_cmd(data, cmd);
+	signal_parent();
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
-		close(data->old_fd[0]);
-		close(data->old_fd[1]);
+		set_fd(data, cmd);
+		set_pipes(data, cmd);
+		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
-		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
+		exit_code = fd_valid(cmd);
+		set_sigign();
 		free_child(data);
 		exit(exit_code);
 	}
@@ -50,15 +53,17 @@ void	execute_subshell(t_cmd *cmd, t_data *data)
 	int	exit_code;
 	int	ss_code;
 
+	signal_parent();
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
-		close(data->old_fd[0]);
-		close(data->old_fd[1]);
+		set_fd(data, cmd);
 		set_pipes(data, cmd);
+		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		exit_code = fd_valid(cmd);
 		close_pipes(data->cmd_list, NULL, NULL);
+		set_sigign();
 		ss_code = minishell_subshell(data, cmd->cmd);
 		if (exit_code)
 			exit(exit_code);

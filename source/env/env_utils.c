@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:34:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:54:51 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ char	**ft_strsdup(char	**strs)
 * 	allowing it to be modified in the future. **/
 int	import_envv(t_data *data, char **envv)
 {
+	char	*tmp;
+	char	**tmp_envv;
+
+	if (!envv[0])
+	{
+		tmp_envv = (char **)ft_calloc(2, sizeof(char *));
+		tmp = "";
+		tmp_envv[0] = ft_strdup(tmp);
+		tmp_envv[1] = NULL;
+		data->envv = tmp_envv;
+		return (EXIT_FAILURE);
+	}
 	data->envv = ft_strsdup(envv);
 	if (!data->envv)
 		return (EXIT_FAILURE);

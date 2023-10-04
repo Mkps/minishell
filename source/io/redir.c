@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:15:15 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:51 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:53:57 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	init_io_redir(t_data *data)
 	current = *data->cmd_list;
 	while (current)
 	{
-		if (set_fd(data, current) == EXIT_FAILURE)
+		if (set_hd(data, current) == EXIT_FAILURE)
 			return (1);
 		current = current->next;
 	}

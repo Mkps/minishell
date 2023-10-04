@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 15:20:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/28 15:20:26 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 09:22:03 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_data
 	t_cmd				**cmd_list;
 	char				*user_input;
 	int					flag;
+	int					dir_flag;
 	char				*raw_input;
 }						t_data;
 

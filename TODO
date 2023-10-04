@@ -1,1 +1,10 @@
-Trouver une facon de recuperer l' UID
+code retour de cd
+cd devrait mettre a jour $PWD et $OLDPWD
+crash avec env -i
+export a= devrait mettre a="" dans l'export
+retirer les PATH back-up
+echo 1 >> outfile | echo 2 >> outfile devrait donner
+>2
+>1
+<<top >test1 | wc -c
+ne devrait pas etre bloquant

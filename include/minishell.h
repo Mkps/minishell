@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/03 14:07:25 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:24:20 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ int			ft_cd(t_cmd *cmd, t_data *data);
 int			ft_pwd(t_data *data);
 int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
-void		handle_regular_directory(char *dir);
-void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
-int			set_pwd(char *pwd);
+int			update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
+int			set_pwd(char *pwd, char *dir);
 void		env_unset_free(t_env *current);
+char		*ft_getenvcpy(t_data *data, char *key);
 
 /**		cmd_list		**/
 /***		cmd_list.c		***/
@@ -128,6 +128,7 @@ int			open_fd_node(t_data *data, t_cmd *cmd, t_io_node *fd);
 int			close_fd_set(int fdin, int fdout);
 int			close_cmd_fd(t_cmd *cmd);
 int			dup_close_fd_set(int fdin, int fdout);
+int			set_hd(t_data *data, t_cmd *cmd);
 t_token		*wc_tokenize(t_token *start, char *str, t_data *data);
 /***		here_doc		***/
 int			here_doc_handler(t_data *data, t_io_node *io_node);
@@ -148,6 +149,7 @@ int			ft_get_sep(char *input, t_data *data);
 int			ft_get_quote(char *input, t_data *data);
 
 /**		shell		**/
+void		set_shlevel(t_data *data);
 void		minishell_inline(t_data *data, char *user_input);
 int			minishell_subshell(t_data *data, char *user_input);
 void		minishell_prompt(t_data *data);
@@ -158,11 +160,13 @@ void		minishell_core(t_data *data);
 void		signals_interact(void);
 void		signals_no_interact(void);
 void		signals_here_doc(void);
+void		signal_parent(void);
 /***		signal.c			***/
 void		redisplay_prompt(int signum);
 void		signal_quit(int signum);
 void		signal_nl(int signum);
 void		signal_sigint_heredoc(int signum);
+void		set_sigign(void);
 
 /**		token		**/
 /**		parser.c		**/
@@ -256,14 +260,13 @@ void		print_env_list(t_env **env_lst);
 int			execute_builtin(t_cmd *cmd, t_data *data);
 int			ft_echo(t_cmd *cmd);
 int			ft_cd(t_cmd *cmd, t_data *data);
-void		ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd);
+int			ft_cd_next(char *pwd, char *dir, t_data *data, char *old_pwd);
 int			ft_pwd(t_data *data);
 int			ft_env(t_data *data);
 int			ft_exit(t_data *data, t_cmd *cmd);
-void		handle_regular_directory(char *dir);
-void		update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
-void		handle_directory_change(t_data *data, char **old_pwd, char *dir);
-int			set_pwd(char *pwd);
+int			handle_regular_directory(char *dir, t_data *data);
+int			update_pwd_and_oldpwd(t_data *data, char *pwd, char *temp);
+int			handle_directory_change(t_data *data, char **old_pwd, char *dir);
 void		env_unset_free(t_env *current);
 void		export_unset_free(t_export *current);
 
@@ -319,10 +322,10 @@ t_env		*ft_lstnew_env(char *key, char *value);
 void		free_env_lst(t_env **cpy);
 
 /**	temp	**/
-void		handle_parent_directory(void);
-void		handle_previous_directory(t_data *data, char **old_pwd);
+int			handle_parent_directory(void);
+int			handle_previous_directory(t_data *data, char **old_pwd);
 void		update_oldpwd(char **old_pwd, char *new_pwd);
-void		handle_home_directory(t_data *data, const char *dir);
+int			handle_home_directory(t_data *data, const char *dir);
 
 /**	unset	**/
 int			ft_lstsize_env(t_env **lst);
@@ -374,6 +377,6 @@ int			check_error_raw(t_data *data);
 char		*ft_strs_join(char **tab);
 
 char		*ft_getenvcpy(t_data *data, char *key);
-void		cd_env_update(t_data *data, size_t i, size_t env_count);
-
+int			cd_env_update(t_data *data, size_t i, size_t env_count);
+int			cd_env_update_utils(t_data *data, size_t i, size_t env_count);
 #endif

@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_launcher.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 17:38:13 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 19:13:02 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+// Called once at init
+void	set_shlevel(t_data *data)
+{
+	int		shlvl;	
+	char	*ret;
+	char	*tmp;
+
+	ret = ft_getenv(data->envv, "SHLVL");
+	if (!ret)
+	{
+		tmp = ft_strappend("SHLVL=", ft_itoa(1), 1);
+		ft_setenv(data, tmp);
+		return ;
+	}
+	shlvl = ft_atoi(ret);
+	tmp = ft_strappend("SHLVL=", ft_itoa(shlvl + 1), 1);
+	ft_setenv(data, tmp);
+}
 
 void	minishell_core(t_data *data)
 {

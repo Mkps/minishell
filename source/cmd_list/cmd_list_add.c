@@ -38,8 +38,8 @@ void	add_empty_cmd(t_data *data)
 	new_cmd = last_cmd(data->cmd_list);
 	new_cmd->cmd = NULL;
 	new_cmd->type = EMPTY;
-	new_cmd->fd[0] = -1;
-	new_cmd->fd[1] = -1;
+	new_cmd->fd[0] = -2;
+	new_cmd->fd[1] = -2;
 }
 
 char	*cmd_get_args(t_token *token)

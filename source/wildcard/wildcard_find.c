@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:41:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:44:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:14:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ char	*find_dirpath(char *f_wc, int *flag)
 	i = get_dirpath_start(dirpath);
 	if (i > 0 && dirpath[i] == '/')
 		dirpath = ft_str_extract_free(dirpath, i);
-	else if (i == 0 && dirpath[i] == '/')
+	else if (i == 0 && dirpath[0] == '/')
 	{
+		*flag = 1;
 		free(dirpath);
 		dirpath = ft_strdup("/");
 	}
 	else
 	{
-		*flag = 1;
 		if (!ft_strncmp(dirpath, "./", 2))
 			*flag = 0;
+		*flag = 1;
 		free(dirpath);
 		dirpath = ft_strdup(".");
 	}
@@ -72,8 +73,6 @@ int	show_hidden(char *search, char *str)
 	i = get_file_namepath(search);
 	if (!search || !str)
 		return (0);
-	if (ft_strncmp(str + i, ".", 2) == 0 || ft_strncmp(str + i, "..", 3) == 0)
-		return (0);
 	if (search[i] != '.' && str[i] == '.')
 		return (0);
 	return (1);
@@ -90,7 +89,10 @@ char	*find_matching(char *search, char *src, char *(*function_ptr)(char *,
 	i = 0;
 	while (split[i])
 	{
-		if (search && (function_ptr(split[i], search,
+		if (mode == 2 && search && (function_ptr(split[i], search,
+					ft_strlen(split[i])) != NULL))
+			(void)mode;
+		else if (mode != 2 && search && (function_ptr(split[i], search,
 					ft_strlen(search)) != NULL))
 		{
 			if (mode == 0 && !show_hidden(search, split[i]))

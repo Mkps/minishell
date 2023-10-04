@@ -16,6 +16,7 @@ void	subshell_init(t_data *new_data, t_data *data, char *user_input)
 {
 	init_data(new_data);
 	import_envv(new_data, data->envv);
+	set_shlevel(new_data);
 	new_data->user_input = ft_strdup(user_input);
 	new_data->raw_input = new_data->user_input;
 	new_data->cmd_split = ft_split_noquote(new_data->user_input, ';');

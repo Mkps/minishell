@@ -6,11 +6,12 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:31:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 13:23:39 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:51:14 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stdlib.h>
 
 void	execute_cmd(t_cmd *cmd, t_data *data)
 {
@@ -31,15 +32,22 @@ void	execute_cmd(t_cmd *cmd, t_data *data)
 t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 {
 	int		i;
+	t_cmd	*start;
 	t_cmd	*last;
 
+	start = cmd;
 	i = 1;
-	while (i > 0 && cmd)
+	if (!start->is_term)
 	{
-		i -= cmd->is_term;
-		execute_cmd(cmd, data);
 		cmd = cmd->next;
+		while (i > 0 && cmd)
+		{
+			i -= cmd->is_term;
+			execute_cmd(cmd, data);
+			cmd = cmd->next;
+		}
 	}
+	execute_cmd(start, data);
 	if (cmd == NULL)
 		last = last_cmd(data->cmd_list);
 	else
@@ -49,6 +57,10 @@ t_cmd	*start_exec(t_data *data, t_cmd *cmd)
 
 void	set_exit_code(t_data *data, int status, t_cmd *cmd)
 {
+	if (g_exit_code == 130 && !WIFEXITED(status))
+		write(1, "\n", 1);
+	else if (g_exit_code == 131 && !WIFEXITED(status))
+		printf("Quit (core dumped)\n");
 	if (cmd->is_term == 0)
 		g_exit_code = 0;
 	if (cmd->is_term != 0 && !is_standalone(cmd))
@@ -58,7 +70,9 @@ void	set_exit_code(t_data *data, int status, t_cmd *cmd)
 		else if (WIFEXITED(status))
 			data->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
 			data->exit_status = 128 + WTERMSIG(status);
+		}
 	}
 }
 

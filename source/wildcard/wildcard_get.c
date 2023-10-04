@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:59:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:43:03 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:02:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,17 @@ char	*build_str(char *dirpath, char *str, int flag)
 
 	d = opendir(dirpath);
 	if (!d)
+	{
+		free(str);
+		free(dirpath);
 		return (NULL);
+	}
 	dir = readdir(d);
-	if (!flag && dirpath[1])
+	if (!flag || (!flag && dirpath[0] == '/' && !dirpath[1]))
 		dirpath = ft_strappend(dirpath, "/", 2);
 	while (dir != NULL)
 	{
-		if (!flag)
+		if (!flag || !ft_strncmp(dirpath, "/", 2))
 			str = ft_strappend(str, dirpath, 2);
 		str = ft_strappend(str, dir->d_name, 2);
 		str = ft_strappend(str, chrtostr(3), 3);
@@ -60,6 +64,7 @@ char	*get_fwc(char *str)
 	char	*ret;
 	int		i;
 
+	i = 0;
 	if (wc_in_dirpath(str))
 		return (NULL);
 	f_wc = get_front_wc(str);
@@ -95,7 +100,7 @@ char	*get_wildcard(char *str)
 		ret = get_wc_data(b_wc, ret, 1);
 		free(b_wc);
 	}
-	if (ret[0] == 0 || (ret && ft_strlen(ret) < wc_minlen(str)))
+	if (ret[0] == 0 || (ret && ft_strlen(ret) <= wc_minlen(str)))
 	{
 		free(ret);
 		return (str);

@@ -6,11 +6,12 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 12:23:50 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 15:36:58 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:37:27 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <stddef.h>
 
 char	*get_front_wc(char *str)
 {
@@ -51,7 +52,7 @@ int	wc_present(char *str)
 size_t	wc_minlen(char *str)
 {
 	size_t	count;
-	int		len;
+	size_t	len;
 	int		i;
 
 	i = -1;
@@ -68,5 +69,7 @@ size_t	wc_minlen(char *str)
 			count++;
 		len++;
 	}
+	if (len == count && count != 0)
+		return (0);
 	return (len - count);
 }

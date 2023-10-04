@@ -6,15 +6,15 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 12:29:45 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/29 16:44:36 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:28:35 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	set_pwd(char *pwd)
+int	set_pwd(char *pwd, char *dir)
 {
-	if (pwd == NULL)
+	if (pwd == NULL && dir[0] != '/')
 	{
 		output_err_cmd(strerror(errno), "getcwd");
 		return (1);
@@ -22,52 +22,83 @@ int	set_pwd(char *pwd)
 	return (0);
 }
 
-void	handle_parent_directory(void)
+int     cd_env_update(t_data *data, size_t i, size_t env_count)
 {
-	if (chdir("..") != 0)
-		output_err_cmd(strerror(errno), "cd");
+        size_t          key_len;
+        size_t          value_len;
+        size_t          len;
+        t_env           *current;
+
+        current = *data->env_cpy;
+        if (data->envv)
+				ft_free_tab(data->envv);
+        data->envv = (char **)malloc((env_count + 1) * sizeof(char *));
+        if (data->envv == NULL)
+        {
+                printf("cd_env_update: Malloc failed\n");
+                return (1);
+        }
+        while (current != NULL)
+        {
+                key_len = strlen(current->key);
+                value_len = strlen(current->value);
+                len = key_len + value_len + 2;
+                data->envv[i] = (char *)malloc(len);
+                if (data->envv[i] == NULL)
+                {
+                        printf("cd_env_update: Malloc failed\n");
+                        return (1);
+                }
+                ft_strlcpy(data->envv[i], current->key, key_len + 1);
+                data->envv[i][key_len] = '=';
+                ft_strlcpy(data->envv[i] + key_len + 1, current->value, value_len + 1);
+                i++;
+                current = current->next;
+        }
+        data->envv[env_count] = NULL;
+        return (0);
 }
 
-void	handle_previous_directory(t_data *data, char **old_pwd)
+/*
+int scd_env_update_utils(t_data *data, size_t i, size_t env_count)
 {
-	char	*old_pwd_env;
+    t_env *current = *data->env_cpy;
 
-	(void)old_pwd;
-	old_pwd_env = ft_getenvcpy(data, "OLDPWD");
-	if (old_pwd_env == NULL)
+    while (current != NULL)
 	{
-		output_err_cmd("OLDPWD not set", "cd");
-		return ;
-	}
-	printf("old pwd = %s\n", old_pwd_env);
-	if (chdir(old_pwd_env) != 0)
-		output_err_cmd(strerror(errno), "cd");
+        size_t key_len = strlen(current->key);
+        size_t value_len = strlen(current->value);
+        size_t len = key_len + value_len + 2;
+
+        data->envv[i] = (char *)malloc(len);
+        if (data->envv[i] == NULL)
+		{
+            printf("copy_env_to_data: Malloc failed\n");
+            return (1);
+		}
+        ft_strlcpy(data->envv[i], current->key, len);
+        data->envv[i][key_len] = '=';
+        ft_strlcpy(data->envv[i] + key_len + 1, current->value, len - key_len - 1);
+        i++;
+        current = current->next;
+    }
+    data->envv[env_count] = NULL;
+    return (0);
 }
 
-char	*ft_getenvcpy(t_data *data, char *key)
-{
-	t_env	*current;
-
-	current = *data->env_cpy;
-	while (current != NULL)
-	{
-		if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
-			return (current->value);
-		current = current->next;
-	}
-	return (NULL);
-}
-
-void	ft_cd_next(char *pwd, char *tmp, t_data *data, char *old_pwd)
-{
-	char	*temp;
-
-	if (pwd)
-		free(pwd);
-	pwd = getcwd(NULL, 0);
-	temp = old_pwd;
-	update_pwd_and_oldpwd(data, pwd, temp);
-	ft_setenv(data, tmp);
-	free(pwd);
-	free(old_pwd);
-}
+int	csd_env_update(t_data *data, size_t i, size_t env_count) {
+    if (data->envv)
+        ft_free_tab(data->envv);
+    
+    data->envv = (char **)malloc((env_count + 1) * sizeof(char *));
+    if (data->envv == NULL) {
+        printf("cd_env_update: Malloc failed\n");
+        return (1);
+    }
+    
+    // Appel de la fonction pour copier l'environnement
+    if (cd_env_update_utils(data, i, env_count) == 1) {
+        return (1);
+    }
+    return (0);
+}*/

@@ -38,8 +38,7 @@ void	signal_quit(int signum)
 void	signal_nl(int signum)
 {
 	g_exit_code = signum + 128;
-	write(1, "\n", 1);
-	rl_on_new_line();
+	printf("\n");
 }
 
 void	signal_sigint_heredoc(int signum)
@@ -54,4 +53,10 @@ void	signal_sigint_heredoc(int signum)
 		rl_cleanup_after_signal();
 		rl_replace_line("", 0);
 	}
+}
+
+void	set_sigign(void)
+{
+	signal(SIGPIPE, SIG_DFL);
+	signals_no_interact();
 }

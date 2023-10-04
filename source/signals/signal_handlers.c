@@ -22,7 +22,7 @@ void	signals_interact(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_flags = SA_RESTART;
+	act.sa_flags = 0;
 	act.sa_handler = &redisplay_prompt;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = SIG_IGN;
@@ -46,9 +46,28 @@ void	signals_no_interact(void)
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_flags = SA_RESTART;
+	act.sa_flags = 0;
 	act.sa_handler = &signal_nl;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = &signal_quit;
+	sigaction(SIGQUIT, &act, NULL);
+}
+
+void	convert_sig(int signum)
+{
+	if (signum == SIGINT)
+		g_exit_code = 130;
+	else if (signum == SIGQUIT)
+		g_exit_code = 131;
+}
+
+void	signal_parent(void)
+{
+	struct sigaction	act;
+
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_flags = SA_RESTART;
+	act.sa_handler = &convert_sig;
+	sigaction(SIGINT, &act, NULL);
 	sigaction(SIGQUIT, &act, NULL);
 }

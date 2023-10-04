@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:59:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:45:58 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 09:25:13 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ int	init_data(t_data *data)
 	data->user_input = NULL;
 	data->raw_input = NULL;
 	data->flag = 0;
+	data->dir_flag = 0;
 	return (EXIT_SUCCESS);
 }

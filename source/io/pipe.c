@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:14:14 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:47 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:21:24 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	set_pipes(t_data *data, t_cmd *cmd)
 	{
 		dup2(cmd->prev->pipe_fd[0], STDIN_FILENO);
 	}
-	if (cmd && cmd->pipe_status)
+	if (cmd && cmd->pipe_status && cmd->fd[0])
 	{
 		dup2(cmd->pipe_fd[1], STDOUT_FILENO);
 	}

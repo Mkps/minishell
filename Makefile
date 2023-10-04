@@ -6,7 +6,7 @@
 #    By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/24 12:58:01 by aloubier          #+#    #+#              #
-#    Updated: 2023/09/29 10:28:30 by aloubier         ###   ########.fr        #
+#    Updated: 2023/10/02 11:31:39 by aloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC_NAME =	built-ins/unset.c \
 			built-ins/dummies.c \
 			built-ins/built_in.c \
 			built-ins/ft_cd.c \
+			built-ins/ft_cd_chdir.c \
 			built-ins/ft_cd_utils.c \
 			built-ins/ft_exit.c \
 			cmd_list/cmd_list_init.c \

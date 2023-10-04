@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:44:45 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:26 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 13:06:34 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	exec_cmd(t_cmd *cmd_node, t_data *data)
 	cmd_p = get_cmd(cmd_node->cmd, env_p);
 	if (!cmd_p || execve(cmd_p, cmd_node->args, data->envv) == -1)
 	{
-		ft_free_tab(env_p);
+		if (env_p)
+			ft_free_tab(env_p);
 		if (cmd_p)
 			free(cmd_p);
 	}
@@ -55,7 +56,7 @@ char	*get_cmd(char *cmd, char **env_p)
 	i = -1;
 	if (!ft_strncmp(cmd, ".", 2) || !ft_strncmp(cmd, "..", 3))
 		return (NULL);
-	while (env_p[++i])
+	while (env_p && env_p[++i])
 	{
 		cmd_dir = ft_strjoin(env_p[i], "/");
 		cmd_tmp = ft_strjoin(cmd_dir, cmd);
