@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:41:32 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:45:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 16:08:06 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@ t_token	*get_cmd_first(t_token *current_t)
 	return (current);
 }
 
+int	is_invalid_cmd(t_token *current)
+{
+	if ((current->prev && token_is_io(current->prev))
+		|| (current->value && !current->value[0]
+			&& current->quote_status == NONE))
+		return (1);
+	return (0);
+}
+
 // Returns the first encountered cmd token
 t_token	*get_next_cmd(t_token *src)
 {
@@ -33,10 +42,10 @@ t_token	*get_next_cmd(t_token *src)
 	current = src;
 	while (current != NULL && !token_is_term(current))
 	{
-		if (current != NULL && current->token_type == WORD
+		if (current && current->token_type == WORD
 			&& (!is_assign(current->value) || current->quote_status == O_PAR))
 		{
-			if (current->prev && token_is_io(current->prev))
+			if (is_invalid_cmd(current))
 			{
 				current = current->next;
 				continue ;

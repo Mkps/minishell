@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 13:42:53 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/28 11:52:10 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 16:15:28 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_unset(t_data *data)
 	cmd_lst = NULL;
 	cmd_lst = find_unset_command(data);
 	if (cmd_lst->args[1] == NULL)
-		return (EXIT_FAILURE);
+		return (EXIT_SUCCESS);
 	else
 	{
 		execute_unset(data, cmd_lst, i);

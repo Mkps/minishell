@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:34:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 15:36:32 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:13:57 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,12 @@ void	set_heredoc(t_token *current)
 void	parse_token(t_data *data)
 {
 	t_token	*current;
+	t_token	*next;
 
 	current = *data->token_root;
 	while (current != NULL)
 	{
+		next = current->next;
 		if (can_expand(current))
 			manage_expand(data, &current);
 		if (current->token_type == WORD
@@ -70,6 +72,6 @@ void	parse_token(t_data *data)
 				|| (token_is_quote(current->next)
 					&& current->next->next->token_type == WORD)))
 			set_heredoc(current);
-		current = current->next;
+		current = next;
 	}
 }

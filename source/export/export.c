@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 13:51:16 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 16:12:20 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int	ft_export(t_data *data)
 	if (cmd_lst->args[1] == NULL)
 	{
 		sort_export_list(data);
-		print_export(data);
-		return (EXIT_SUCCESS);
+		err = print_export(data);
+		return (err > 0);
 	}
 	err = execute_export(data, cmd_lst);
 	env_update(data);
@@ -77,18 +77,18 @@ int	print_export(t_data *data)
 		if (current->value[0] == '\0' && current->flag == 1)
 		{
 			if (ft_printf("%s %s\n", EXPORT_MSG, current->key) == -1)
-				return (EXIT_FAILURE);
+				return (perror("minishell: export"), EXIT_FAILURE);
 		}
 		else if (current->value[0] == '\0' && current->flag == 0)
 		{
 			if (ft_printf("%s %s=\"\"\n", EXPORT_MSG, current->key) == -1)
-				return (EXIT_FAILURE);
+				return (perror("minishell: export"), EXIT_FAILURE);
 		}
 		else
 		{
 			if (ft_printf("%s %s=%s\n", EXPORT_MSG, current->key,
 					current->value) == -1)
-				return (EXIT_FAILURE);
+				return (perror("minishell: export"), EXIT_FAILURE);
 		}
 		current = current->next;
 	}

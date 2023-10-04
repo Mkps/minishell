@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:41:26 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:45:50 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 16:04:55 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*cmd_get_args(t_token *token)
 	while (current->token_type == WORD)
 	{
 		tmp = ft_strappend(tmp, chrtostr(2), 3);
-		if (current->value[0] == 0)
+		if (current->value[0] == 0 && current->quote_status != NONE)
 			tmp = ft_strappend(tmp, chrtostr(1), 3);
 		else
 			tmp = ft_strappend(tmp, current->value, 2);

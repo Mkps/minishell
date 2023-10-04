@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 10:30:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/03 12:55:24 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:55:42 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	exit_error(t_data *data, t_cmd *cmd)
 	else if (cmd->args[2])
 	{
 		output_err_cmd("too many arguments", "exit");
+		return (2);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -83,6 +84,6 @@ int	ft_exit(t_data *data, t_cmd *cmd)
 		exit(data->exit_status);
 	}
 	else
-		exit_error(data, cmd);
+		return (exit_error(data, cmd));
 	return (EXIT_SUCCESS);
 }

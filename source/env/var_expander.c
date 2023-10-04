@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:50:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/03 17:50:43 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:49:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	var_expand_valid(t_data *data, char **ret, int *i)
 		*ret = str_replace_strs(ret, *i, n, var_id);
 		free(tmp_str);
 	}
-	*i = 0;
+	*i += ft_strlen(var_id);
 	return (flag_retokenize);
 }
 
@@ -47,7 +47,7 @@ void	var_expand_exitcode(t_data *data, char **ret, int *i)
 	*ret = str_replace(*ret, *i, 2, exit_code);
 	free(tmp);
 	free(exit_code);
-	*i = 0;
+	*i += 2;
 }
 
 int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
@@ -63,7 +63,7 @@ int	var_expand_dollar(t_data *data, char **ret, int *i, t_token *token)
 		tmp = *ret;
 		*ret = str_replace(*ret, *i, 2, "");
 		free(tmp);
-		*i = 0;
+		*i += 2;
 	}
 	else if ((*(*ret + *i + 1) == 0) && token->near_quote == 1 && (!token->next
 			|| (token->next && token_is_quote(token->next))))

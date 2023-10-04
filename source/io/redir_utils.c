@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:26:48 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 15:18:51 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:13:08 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,9 @@ int	close_cmd_fd(t_cmd *cmd)
 int	dup_close_fd_set(int fdin, int fdout)
 {
 	if (fdin > -1)
-	{
 		dup2(fdin, STDIN_FILENO);
-		close(fdin);
-	}
 	if (fdout > -1)
-	{
 		dup2(fdout, STDOUT_FILENO);
-		close(fdout);
-	}
 	return (EXIT_SUCCESS);
 }
 

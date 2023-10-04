@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:29:58 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 15:12:13 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:10:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	execute_child(t_cmd *cmd, t_data *data)
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
-		set_fd(data, cmd);
 		set_pipes(data, cmd);
+		set_fd(data, cmd);
 		close_fd_set(data->old_fd[0], data->old_fd[1]);
 		dup_close_fd_set(cmd->fd[0], cmd->fd[1]);
 		close_pipes(data->cmd_list, NULL, NULL);
