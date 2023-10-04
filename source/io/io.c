@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:22:28 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:44 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:23:58 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,12 @@ char	*get_filename(t_token *io_token)
 		}
 	}
 	if (current->next && current->next->token_type == WORD)
-		return (current->next->value);
+	{
+		if (current->next->quote_status == 0 && current->next->value[0] == 0)
+			return (chrtostr(4));		
+		else
+			return (current->next->value);
+	}
 	else if (current->next && token_is_quote(current->next)
 		&& current->next->next && current->next->next->token_type == WORD)
 		return (current->next->next->value);

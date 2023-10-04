@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 13:49:45 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:51:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,13 @@ int	print_export(t_data *data)
 	{
 		if (current->value[0] == '\0' && current->flag == 1)
 		{
-		{
 			if (ft_printf("%s %s\n", EXPORT_MSG, current->key) == -1)
 				return (EXIT_FAILURE);
 		}
-		}
 		else if (current->value[0] == '\0' && current->flag == 0)
-		{
 		{
 			if (ft_printf("%s %s=\"\"\n", EXPORT_MSG, current->key) == -1)
 				return (EXIT_FAILURE);
-		}
 		}
 		else
 		{
@@ -94,10 +90,8 @@ int	print_export(t_data *data)
 					current->value) == -1)
 				return (EXIT_FAILURE);
 		}
-		}
 		current = current->next;
 	}
-	return (EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
 }
 

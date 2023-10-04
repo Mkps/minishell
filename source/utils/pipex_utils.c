@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:23:19 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:47:18 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:39:33 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ int	open_fd(int mode, char *filename)
 	int	fd;
 
 	fd = -3;
+	if (filename[0] == 4)
+	{
+		output_err("ambiguous redirect", NULL, 0);
+		return (-1);
+	}
 	if (mode == 0)
 		fd = open(filename, O_RDONLY, 0664);
 	if (mode == 1)
