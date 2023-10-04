@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:50:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 17:49:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 19:00:21 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	var_expand_valid(t_data *data, char **ret, int *i)
 
 	n = 1;
 	flag_retokenize = 0;
+	var_id = NULL;
 	while (*(*ret + *i + n) && (ft_isalnum(*(*ret + *i + n)) || *(*ret + *i
 				+ n) == '_'))
 		n++;
@@ -33,7 +34,8 @@ int	var_expand_valid(t_data *data, char **ret, int *i)
 		*ret = str_replace_strs(ret, *i, n, var_id);
 		free(tmp_str);
 	}
-	*i += ft_strlen(var_id);
+	if (var_id)
+		*i += ft_strlen(var_id);
 	return (flag_retokenize);
 }
 
