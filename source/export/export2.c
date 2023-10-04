@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 13:50:15 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:47:02 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	parse_and_validate_export(char *var, char **key, char **val, int *flag)
 	return (EXIT_SUCCESS);
 }
 
-int	set_in_export(t_data *data, char *variable, t_cmd *cmd)
+int	set_in_export(t_data *data, char *var, t_cmd *cmd)
 {
 	char		*key;
 	char		*value;
@@ -70,19 +70,15 @@ int	set_in_export(t_data *data, char *variable, t_cmd *cmd)
 	t_export	*new_export;
 
 	flag = 0;
-	if (parse_and_validate_export(variable, &key, &value, &flag)
-		== EXIT_FAILURE)
+	if (parse_and_validate_export(var, &key, &value, &flag) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (export_key_exists(*data->env_export, key) == 1)
 	{
-		if (ft_strrchr(variable, '=') == NULL)
-			data->flag = -1;
-		if (ft_strrchr(variable, '=') == NULL)
+		if (ft_strrchr(var, '=') == NULL)
 			data->flag = -1;
 		if (set_in_export_utils(data, key, value, cmd) == 0)
 			return (EXIT_SUCCESS);
-		else
-			return (EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	new_export = ft_lstnew_export(key, value, flag);
 	if (!new_export)
@@ -100,14 +96,6 @@ int	set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd)
 	int	err;
 
 	if (value[0] != '\0')
-	{
-		remove_export(data, key);
-		free_set_in(key, value, NULL);
-		err = execute_export(data, cmd);
-		env_update(data);
-		return (err);
-	}
-	else if (value[0] == '\0' && data->flag != -1)
 	{
 		remove_export(data, key);
 		free_set_in(key, value, NULL);

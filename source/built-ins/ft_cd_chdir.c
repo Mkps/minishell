@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 11:17:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 11:33:24 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:59:27 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,16 @@ int	handle_regular_directory(char *dir, t_data *data)
 	return (0);
 }
 
-int	handle_home_directory(t_data *data, const char *dir)
+int	handle_home_directory(t_data *data, const char *dir, size_t full_path_len)
 {
 	char	*home_dir;
-	size_t	full_path_len;
 	char	*full_path;
-	
+
 	home_dir = ft_getenv(data->envv, "HOME");
 	if (home_dir == NULL)
 	{
-		printf("minishell: cd: HOME not set\n");	
-		return (1);	
+		printf("minishell: cd: HOME not set\n");
+		return (1);
 	}
 	full_path_len = strlen(home_dir) + strlen(dir) - 1;
 	full_path = (char *)malloc(full_path_len + 1);
@@ -91,14 +90,16 @@ int	handle_parent_directory(void)
 int	handle_directory_change(t_data *data, char **old_pwd, char *dir)
 {
 	char	*current_dir;
+	size_t	full_path_len;
 
+	full_path_len = 0;
 	current_dir = getcwd(NULL, 0);
 	if (*old_pwd)
 		free(*old_pwd);
 	*old_pwd = current_dir;
 	if (ft_strncmp(dir, "~", ft_strlen(dir)) == 0)
 	{
-		if (handle_home_directory(data, dir) == 1)
+		if (handle_home_directory(data, dir, full_path_len) == 1)
 			return (1);
 	}
 	else if (ft_strncmp(dir, "..", ft_strlen(dir)) == 0)

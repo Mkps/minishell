@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 13:07:22 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:29:08 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ int	find_first_word(t_cmd *cmd)
 	return (i);
 }
 
-int	ft_echo(t_cmd *cmd)
+int	ft_echo(t_cmd *cmd, int i)
 {
-	int	i;
 	int	flag;
 
 	flag = 0;

@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 15:55:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 12:53:01 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:34:47 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	ft_printf(const char *src, ...)
 			if (tmp == -1)
 				return (-1);
 			else
-				written_char += tmp;		
+				written_char += tmp;
 		}
 		i++;
 	}

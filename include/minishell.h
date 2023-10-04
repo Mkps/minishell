@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 13:49:00 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:46:58 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ extern int	g_exit_code;
 /**		built-ins		**/
 /***		execution builtin	***/
 int			execute_builtin(t_cmd *cmd, t_data *data);
-int			ft_echo(t_cmd *cmd);
 int			ft_cd(t_cmd *cmd, t_data *data);
 int			ft_pwd(t_data *data);
 int			ft_env(t_data *data);
@@ -262,7 +261,7 @@ void		print_env_list(t_env **env_lst);
 
 /**		execution builtin	**/
 int			execute_builtin(t_cmd *cmd, t_data *data);
-int			ft_echo(t_cmd *cmd);
+int			ft_echo(t_cmd *cmd, int i);
 int			ft_cd(t_cmd *cmd, t_data *data);
 int			ft_cd_next(char *pwd, char *dir, t_data *data, char *old_pwd);
 int			ft_pwd(t_data *data);
@@ -329,7 +328,8 @@ void		free_env_lst(t_env **cpy);
 int			handle_parent_directory(void);
 int			handle_previous_directory(t_data *data, char **old_pwd);
 void		update_oldpwd(char **old_pwd, char *new_pwd);
-int			handle_home_directory(t_data *data, const char *dir);
+int			handle_home_directory(t_data *data, const char *dir,
+				size_t full_path_len);
 
 /**	unset	**/
 int			ft_lstsize_env(t_env **lst);
