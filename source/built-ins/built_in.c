@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 22:34:00 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 14:29:08 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 19:02:16 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_pwd(t_data *data)
 	if (pwd_value != NULL)
 	{
 		if (ft_printf("%s\n", pwd_value) == -1)
-			return (perror("minishell: echo"), free(pwd_value), EXIT_FAILURE);
+			return (perror("minishell: pwd"), free(pwd_value), EXIT_FAILURE);
 		free(pwd_value);
 		return (EXIT_SUCCESS);
 	}
