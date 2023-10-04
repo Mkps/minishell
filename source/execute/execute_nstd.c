@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:28:52 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/03 12:56:01 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:11:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	execute_empty(t_cmd *cmd, t_data *data)
 		free_child(data);
 		exit(exit_code);
 	}
+	close_cmd_fd(cmd);
 	return ;
 }
 
@@ -69,4 +70,5 @@ void	execute_subshell(t_cmd *cmd, t_data *data)
 			exit(exit_code);
 		exit(ss_code);
 	}
+	close_cmd_fd(cmd);
 }

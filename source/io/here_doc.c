@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 17:49:29 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:17:56 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	here_doc_handler(t_data *data, t_io_node *io_node)
 	rl_done = 1;
 	signals_no_interact();
 	close (io_node->fd);
-	io_node->fd = open_fd(0, heredoc_tmp);
+	io_node->fd = 1;
 	io_node->filename = heredoc_tmp;
 	if (g_exit_code > 128)
 	{

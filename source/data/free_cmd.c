@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 15:28:54 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 14:33:52 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:05:46 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	free_io_list(t_io_node *io)
 
 	while (io)
 	{
-		if (io->filename[0] == 4)
+		if (io->filename && io->filename[0] == 4)
 			free (io->filename);
 		next_io = io->next;
 		if (io->fd > -1)

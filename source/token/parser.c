@@ -6,7 +6,7 @@
 /*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:34:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 14:17:23 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 15:36:32 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,6 @@ int	del_empty(t_token *tmp)
 void	manage_expand(t_data *data, t_token **current)
 {
 	var_expander(data, (*current)->value, current);
-	//if (del_empty(*current))
-	//{
-	//    if ((*current)->value)
-	//        free((*current)->value);
-	//    if ((*current)->next)
-	//    {
-	//        *current = (*current)->next;
-	//        lst_del_prev(current);
-	//        if ((*current)->prev == NULL)
-	//            *data->token_root = *current;
-	//    }
-	//    else if ((*current)->prev)
-	//    {
-	//        *current = (*current)->prev;
-	//        lst_del_next(current);
-	//    }
-	//    else
-	//    {
-	//        lst_del_token(current);
-	//        data->token_root = NULL;
-	//    }
-	//}
 }
 
 void	set_heredoc(t_token *current)
