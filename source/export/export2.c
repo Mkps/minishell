@@ -6,13 +6,11 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 12:03:45 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:04:36 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	envcpy_update_utils(t_data *data, t_env *new_node);
 
 int	set_in_env(t_data *data, char *variable, char **variable_split)
 {
@@ -25,7 +23,6 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 	if (data->flag > 0)
 		return (EXIT_FAILURE);
 	env_assign(&variable_split, variable, &key, &value);
-	printf("value = |%s||\n", value);
 	if (key_is_valid(key) == 1 || (value[0] == '\0' && ft_strrchr(variable, '=') == NULL))
 		return (free_set_in(key, value, variable_split), EXIT_FAILURE);
 	new_env = ft_lstnew_env(key, value);
@@ -34,7 +31,7 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 			free_set_in(key, value, variable_split), EXIT_FAILURE);
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
-		if (value[0] != '\0')
+		if (value[0] != '\0' && ft_strrchr(variable, '=') == NULL)
 			return (envcpy_update_utils(data, new_env), env_update(data),
 				free_env_node(new_env), free_set_in(key, value, variable_split),
 				EXIT_SUCCESS);

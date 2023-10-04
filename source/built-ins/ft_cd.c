@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:10:34 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 10:04:49 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:45:27 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	ft_cd_next(char *pwd, char *dir, t_data *data, char *old_pwd)
 		ret = update_pwd_and_oldpwd(data, pwd, temp);
 	free(pwd);
 	free(old_pwd);
+	data->dir_flag = 0;
 	return (ret);
 }
 

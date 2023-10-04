@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 10:59:58 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:46:24 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	output_err_cmd(char *msg, char *cmd_str)
 	char	*name_str;
 	char	*tmp_str;
 
-	printf("av msg\n");
 	name_str = PROG_NAME;
 	if (!cmd_str)
 	{
@@ -60,7 +59,6 @@ void	output_err_cmd(char *msg, char *cmd_str)
 	tmp_str = ft_strappend(tmp_str, msg, 2);
 	tmp_str = ft_strappend(tmp_str, "\n", 2);
 	ft_putstr_fd(tmp_str, 2);
-	printf("ap msg\n");
 	free(tmp_str);
 }
 

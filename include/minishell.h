@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 12:03:30 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:04:31 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,4 +383,5 @@ char		*ft_strs_join(char **tab);
 char		*ft_getenvcpy(t_data *data, char *key);
 int			cd_env_update(t_data *data, size_t i, size_t env_count);
 int			cd_env_update_utils(t_data *data, size_t i, size_t env_count);
+void		envcpy_update_utils(t_data *data, t_env *new_node);
 #endif
