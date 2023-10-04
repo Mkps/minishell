@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 13:27:32 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:42:03 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,24 @@ int	print_export(t_data *data)
 	while (current != NULL)
 	{
 		if (current->value[0] == '\0' && current->flag == 1)
+		{
 			if (ft_printf("%s %s\n", EXPORT_MSG, current->key) == -1)
 				return (EXIT_FAILURE);
+		}
 		else if (current->value[0] == '\0' && current->flag == 0)
+		{
 			if (ft_printf("%s %s=\"\"\n", EXPORT_MSG, current->key) == -1)
 				return (EXIT_FAILURE);
+		}
 		else
-			if (ft_printf("%s %s=%s\n", EXPORT_MSG, current->key, current->value) == -1)
+		{
+			if (ft_printf("%s %s=%s\n", EXPORT_MSG, current->key,
+					current->value) == -1)
 				return (EXIT_FAILURE);
+		}
 		current = current->next;
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	sort_export_list(t_data *data)

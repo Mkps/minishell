@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 12:04:31 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:33:50 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ int			set_in_env(t_data *data, char *variable, char **variable_split);
 void		end_split(char **variable_split);
 int			set_in_export(t_data *data, char *variable, t_cmd *cmd);
 int			execute_export(t_data *data, t_cmd *cmd);
-void		print_export(t_data *data);
+int 		print_export(t_data *data);
 void		sort_export_list(t_data *data);
 t_cmd		*find_export_command(t_data *data);
 void		env_to_export(t_data *data);

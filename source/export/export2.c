@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:19:43 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 13:21:53 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:43:05 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 	char	*value;
 	t_env	*new_env;
 
-	key = NULL;
-	value = NULL;
 	if (data->flag > 0)
 		return (EXIT_FAILURE);
 	env_assign(&variable_split, variable, &key, &value);
-	if (key_is_valid(key) == 1 || (value[0] == '\0' && ft_strrchr(variable, '=') == NULL))
+	if (key_is_valid(key) == 1 || ((value[0] == '\0')
+			&& ft_strrchr(variable, '=') == NULL))
 		return (free_set_in(key, value, variable_split), EXIT_FAILURE);
 	new_env = ft_lstnew_env(key, value);
 	if (!new_env)
@@ -31,11 +30,12 @@ int	set_in_env(t_data *data, char *variable, char **variable_split)
 			free_set_in(key, value, variable_split), EXIT_FAILURE);
 	if (env_key_exists(*data->env_cpy, key) == 1)
 	{
-		if (value[0] != '\0' && ft_strrchr(variable, '=') == NULL)
+		if (value[0] != '\0')
 			return (envcpy_update_utils(data, new_env), env_update(data),
 				free_env_node(new_env), free_set_in(key, value, variable_split),
 				EXIT_SUCCESS);
-		return (free_set_in(key, value, variable_split), EXIT_FAILURE);
+		return (free_env_node(new_env),
+			free_set_in(key, value, variable_split), EXIT_FAILURE);
 	}
 	return (ft_lstadd_back_env(data->env_cpy, new_env),
 		free_set_in(key, value, variable_split), EXIT_SUCCESS);
@@ -75,6 +75,10 @@ int	set_in_export(t_data *data, char *variable, t_cmd *cmd)
 		return (EXIT_FAILURE);
 	if (export_key_exists(*data->env_export, key) == 1)
 	{
+		if (ft_strrchr(variable, '=') == NULL)
+			data->flag = -1;
+		if (ft_strrchr(variable, '=') == NULL)
+			data->flag = -1;
 		if (set_in_export_utils(data, key, value, cmd) == 0)
 			return (EXIT_SUCCESS);
 		else
@@ -95,23 +99,35 @@ int	set_in_export_utils(t_data *data, char *key, char *value, t_cmd *cmd)
 {
 	int	err;
 
-	(void)data;
-	(void)key;
-	(void)value;
-	// if (value[0] != '\0')
-	// {
+	if (value[0] != '\0')
+	{
 		remove_export(data, key);
 		free_set_in(key, value, NULL);
 		err = execute_export(data, cmd);
 		env_update(data);
 		return (err);
-	// }
-	// else
-	// {
-	// 	printf("set_in_export-utils value 0 = 0\n");
-	// 	free_set_in(key, value, NULL);
-	// 	return (1);
-	// }	
+	}
+	else if (value[0] == '\0' && data->flag != -1)
+	{
+		remove_export(data, key);
+		free_set_in(key, value, NULL);
+		err = execute_export(data, cmd);
+		env_update(data);
+		return (err);
+	}
+	else if (value[0] == '\0' && data->flag != -1)
+	{
+		remove_export(data, key);
+		free_set_in(key, value, NULL);
+		err = execute_export(data, cmd);
+		env_update(data);
+		return (err);
+	}
+	else
+	{
+		free_set_in(key, value, NULL);
+		return (1);
+	}
 }
 
 int	execute_export(t_data *data, t_cmd *cmd)
@@ -127,8 +143,7 @@ int	execute_export(t_data *data, t_cmd *cmd)
 	{
 		if (cmd->args[i] && !is_valid_var(cmd->args[i]))
 		{
-			//a changer
-			ft_putstr_fd(2, "export: `%s': not a valid identifier\n", cmd->args[i]);
+			printf("export: `%s': not a valid identifier\n", cmd->args[i]);
 			err++;
 			i++;
 		}
