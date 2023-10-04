@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 13:59:33 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/02 14:02:54 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 16:02:20 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ char	*get_fwc(char *str)
 	return (ret);
 }
 
-size_t	wc_minlen(char *str);
-
 char	*get_wildcard(char *str)
 {
 	char	*b_wc;
@@ -101,12 +99,12 @@ char	*get_wildcard(char *str)
 		free(b_wc);
 	}
 	if (ret[0] == 0 || (ret && ft_strlen(ret) <= wc_minlen(str)))
-	{
-		free(ret);
-		return (str);
-	}
-	free(str);
+		return (free(ret), str);
+	ret = validate_str(ret, str);
+	if (ret[0] == 0)
+		return (free(ret), str);
 	ret = sort_str(ret);
+	free(str);
 	if (ret)
 		ret[ft_strlen(ret) - 1] = 0;
 	return (ret);

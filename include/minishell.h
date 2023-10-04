@@ -6,7 +6,7 @@
 /*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 11:24:20 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:03:30 by uaupetit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int			close_cmd_fd(t_cmd *cmd);
 int			dup_close_fd_set(int fdin, int fdout);
 int			set_hd(t_data *data, t_cmd *cmd);
 t_token		*wc_tokenize(t_token *start, char *str, t_data *data);
+int			set_hd(t_data *data, t_cmd *cmd);
 /***		here_doc		***/
 int			here_doc_handler(t_data *data, t_io_node *io_node);
 char		*heredoc_var_expand(t_data *data, char *str, int flag);
@@ -207,11 +208,14 @@ char		*chrtostr(char c);
 char		*ft_strend(char *big, char *little, char n);
 char		*str_replace_free(char *src, int r_index, int n, char *str);
 int			find_length(char *str, char *src, int r_index, int n);
+size_t		wc_minlen(char *str);
 /***		wildcard_utils.c */
 int			get_start_index(char *str, int i);
 int			get_end_index(char *str, int i);
 char		*str_tolower(char *str);
 int			ft_strcmp_no_case(const char *s1, const char *s2);
+/***		wildcard_validate.c	**/
+char		*validate_str(char *str, char *wc);
 /***		wildcard_wcutils.c	**/
 char		*get_front_wc(char *str);
 char		*get_back_wc(char *str);

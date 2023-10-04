@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/09/29 16:50:18 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/03 16:37:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_cmd	*find_export_command(t_data *data)
 int	ft_export(t_data *data)
 {
 	t_cmd	*cmd_lst;
+	int		err;
 
 	cmd_lst = NULL;
 	if (data->env_export == NULL)
@@ -61,12 +62,9 @@ int	ft_export(t_data *data)
 		print_export(data);
 		return (EXIT_SUCCESS);
 	}
-	else
-	{
-		execute_export(data, cmd_lst);
-		env_update(data);
-	}
-	return (EXIT_SUCCESS);
+	err = execute_export(data, cmd_lst);
+	env_update(data);
+	return (err);
 }
 
 void	print_export(t_data *data)

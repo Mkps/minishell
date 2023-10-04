@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:22:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:16 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/03 17:33:26 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*str_replace_strs(char **src, int r_index, int n, char *str)
 	str_len = find_length(str, *src, r_index, n);
 	ret = (char *)ft_calloc(str_len, sizeof(char));
 	if (!ret)
-		output_err("error allocating mem for return (string\n", NULL, 0);
+		output_err("error allocating mem for return string\n", NULL, 0);
 	i = -1;
 	while (++i < r_index)
 		ret[i] = *(*src + i);
