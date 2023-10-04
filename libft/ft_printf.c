@@ -6,14 +6,15 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 15:55:42 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 14:34:47 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:59:19 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_select_type(va_list args, const char c)
+int	ft_select_type(va_list args, const char c, size_t *i)
 {
+	*i += 1;
 	if (c == 'c')
 		return (ft_char(va_arg(args, int)));
 	if (c == 's')
@@ -41,29 +42,23 @@ int	ft_printf(const char *src, ...)
 	size_t	written_char;
 	int		tmp;
 
-	i = 0;
+	i = -1;
 	written_char = 0;
 	va_start(args, src);
-	while (src[i])
+	while (src[++i])
 	{
 		if (src[i] == '%')
 		{
-			tmp = ft_select_type(args, src[i + 1]);
-			if (tmp == -1)
-				return (-1);
-			else
-				written_char += tmp;
-			i++;
+			tmp = ft_select_type(args, src[i + 1], &i);
+			written_char += tmp;
 		}
 		else
 		{
 			tmp = ft_char(src[i]);
-			if (tmp == -1)
-				return (-1);
-			else
-				written_char += tmp;
+			written_char += tmp;
 		}
-		i++;
+		if (tmp == -1)
+			return (-1);
 	}
 	va_end(args);
 	return (written_char);
