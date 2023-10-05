@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 17:21:51 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 14:38:19 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/05 10:43:06 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ void	minishell_core(t_data *data)
 		build_cmd_list(data, *data->token_root);
 		init_io_redir(data);
 		heredoc_code = g_exit_code;
-		execute(data);
-		if (heredoc_code > 127)
+		if (heredoc_code < 128)
+			execute(data);
+		else
+		{
+			close_pipes(data->cmd_list, NULL, NULL);
 			g_exit_code = heredoc_code;
+		}
 	}
 }
 

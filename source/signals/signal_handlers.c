@@ -6,7 +6,7 @@
 /*   By: aloubier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 16:05:43 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/29 14:04:42 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/05 11:02:03 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	signals_interact(void)
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &act, NULL);
+	sigaction(SIGTSTP, &act, NULL);
 }
 
 void	signals_here_doc(void)
@@ -39,6 +40,7 @@ void	signals_here_doc(void)
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &act, NULL);
+	sigaction(SIGTSTP, &act, NULL);
 }
 
 void	signals_no_interact(void)

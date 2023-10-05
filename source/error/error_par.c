@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:20:11 by aloubier          #+#    #+#             */
-/*   Updated: 2023/09/27 18:46:21 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/05 11:54:39 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ int	par_error_start(t_token *tmp)
 				tmp->next, 1);
 		else
 			output_err("syntax error near unexpected token `('", NULL, 0);
+		return (EXIT_FAILURE);
+	}
+	if (tmp->token_type == O_PAR && token_is_term(tmp->next))
+	{
+		output_err("syntax error near unexpected token ",
+			tmp->next, 1);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

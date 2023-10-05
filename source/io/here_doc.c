@@ -6,7 +6,7 @@
 /*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/03 17:21:08 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 15:17:56 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/05 10:34:54 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	handle_sigint(t_data *data, t_io_node *io_node, char *heredoc_tmp)
 	io_node->fd = -2;
 	unlink(io_node->filename);
 	free(heredoc_tmp);
+	io_node->filename = NULL;
 	data->exit_status = g_exit_code;
 }
 
