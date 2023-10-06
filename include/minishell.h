@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 22:49:41 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 14:46:58 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/06 06:08:30 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,7 @@ int			check_par_error(t_token **root);
 void		output_err(char *msg, t_token *token, int squotes);
 void		output_err_cmd(char *msg, char *cmd_str);
 int			output_err_ret(int return_value, char *msg, char *cmd_str);
+int			ft_printf_error(int error_num, char *cmd);
 
 /**		variable d environnement->liste chainee **/
 void		copy_env_to_list(t_data *data);

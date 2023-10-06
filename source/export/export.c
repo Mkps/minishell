@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloubier <aloubier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:46:26 by uaupetit          #+#    #+#             */
-/*   Updated: 2023/10/04 16:12:20 by aloubier         ###   ########.fr       */
+/*   Updated: 2023/10/06 06:17:10 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,18 @@ int	print_export(t_data *data)
 		if (current->value[0] == '\0' && current->flag == 1)
 		{
 			if (ft_printf("%s %s\n", EXPORT_MSG, current->key) == -1)
-				return (perror("minishell: export"), EXIT_FAILURE);
+				return (ft_printf_error(errno, "export"));
 		}
 		else if (current->value[0] == '\0' && current->flag == 0)
 		{
 			if (ft_printf("%s %s=\"\"\n", EXPORT_MSG, current->key) == -1)
-				return (perror("minishell: export"), EXIT_FAILURE);
+				return (ft_printf_error(errno, "export"));
 		}
 		else
 		{
 			if (ft_printf("%s %s=%s\n", EXPORT_MSG, current->key,
 					current->value) == -1)
-				return (perror("minishell: export"), EXIT_FAILURE);
+				return (ft_printf_error(errno, "export"));
 		}
 		current = current->next;
 	}

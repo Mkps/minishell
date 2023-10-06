@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uaupetit <uaupetit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloubier <alex.loubiere@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 14:21:25 by aloubier          #+#    #+#             */
-/*   Updated: 2023/10/04 11:46:24 by uaupetit         ###   ########.fr       */
+/*   Updated: 2023/10/06 06:19:22 by aloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,21 @@ int	output_err_ret(int return_value, char *msg, char *cmd_str)
 	ft_putstr_fd(tmp_str, 2);
 	free(tmp_str);
 	return (return_value);
+}
+
+int	ft_printf_error(int error_num, char *cmd)
+{
+	char	*tmp;
+
+	if (error_num == 28)
+	{
+		tmp = ft_strappend(PROG_NAME, cmd, 0);
+		errno = error_num;
+		perror(tmp);
+		free(tmp);
+		if (!ft_strncmp(cmd, "env", 4))
+			return (125);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_FAILURE);
 }
